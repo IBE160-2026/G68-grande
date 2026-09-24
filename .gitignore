@@ -50,6 +50,8 @@ _bmad/config.user.toml
 _bmad/custom/*.user.toml
 _bmad/render/
 .claude/settings.local.json
+# Lokale BMAD-utkast og arbeidslogger; endelige dokumenter ligger i docs/
+_bmad-output/
 
 # Operating system / editors
 .DS_Store
