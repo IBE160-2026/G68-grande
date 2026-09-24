@@ -1,3 +1,18 @@
+# ─────────────────────────────────────────────────────────────────
+# .gitignore – liste over filer og mapper Git skal ignorere
+#
+# Alt som står her blir ALDRI lagret i Git eller lastet opp til GitHub.
+# Filen virker automatisk – du trenger ikke starte den.
+#
+# Brukes til:
+#   1. Hemmeligheter (passord, API-nøkler)  -> f.eks. .env
+#   2. Ting som lages automatisk            -> f.eks. node_modules/
+#   3. Personlige/lokale filer              -> f.eks. _bmad-output/
+#
+# Linjer som starter med # er kommentarer og blir ignorert av Git.
+# NB: Gjelder bare filer som IKKE allerede er lastet opp til GitHub.
+# ─────────────────────────────────────────────────────────────────
+
 # Next.js / Node
 node_modules/
 .next/
