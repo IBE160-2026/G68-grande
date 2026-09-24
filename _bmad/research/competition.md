@@ -1,1 +1,0 @@
-Hvilke konkurranse eksisterer?

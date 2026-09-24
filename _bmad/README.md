@@ -1,1 +1,0 @@
-Dette er prosjekt applikasjonen!
