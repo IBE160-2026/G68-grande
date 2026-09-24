@@ -24,7 +24,7 @@ jobs:
       - name: Sjekk at de viktigste filene finnes
         run: |
           test -f README.md
-          test -f docs/product-brief.md
+          test -f my-project/product-brief.md
           echo "Prosjektstrukturen ser bra ut"
 
   frontend:

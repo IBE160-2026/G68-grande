@@ -5,3 +5,7 @@
 #
 # [agents.bmad-agent-pm]
 # description = "Prefers short, bulleted PRDs over narrative drafts."
+
+# Ferdige prosjektdokumenter ligger i my-project/ (ikke docs/).
+[modules.bmm]
+project_knowledge = "{project-root}/my-project"
