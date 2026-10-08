@@ -2,35 +2,45 @@
 title: "Søknadsassistenten"
 status: final
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-10-08
 ---
 
 # Produktbrief: Søknadsassistenten
 
 ## Sammendrag
 
-Søknadsassistenten er et nettbasert verktøy der KI gjør jobben med å skreddersy både CV og søknadsbrev til en konkret stilling. Brukeren laster opp CV-en sin, en stillingsannonse og eventuelt en søknad de allerede har skrevet, og velger mellom to moduser: **Full generering**, der KI-en skriver fra bunnen, eller **Korrektur**, der KI-en forbedrer en tekst brukeren allerede har skrevet. Verktøyet peker i tillegg på manglende kvalifikasjoner gjennom en gap-analyse, og gir en ATS-vurdering. ATS står for Applicant Tracking System — programvaren mange arbeidsgivere bruker til å sortere og filtrere søknader automatisk, før et menneske leser dem.
+Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger mellom to moduser: **Full generering**, der KI-en skriver brevet fra bunnen, eller **Korrektur**, der KI-en forbedrer et brev brukeren har skrevet selv og viser hva som er endret.
 
-Verdien ligger ikke bare i et fungerende produkt, men i å gi en realistisk opplevelse av hvordan KI faktisk brukes i rekrutteringsprosesser i dag — noe som gjør det direkte relevant for målgruppen: studenter på vei ut i arbeidslivet.
+Før brevet skrives, får brukeren en **gap-analyse**, som viser hvilke krav i annonsen CV-en ikke dekker, og et **nøkkelordtreff**, som viser hvor stor andel av annonsens nøkkelord som står i CV-en. Mange arbeidsgivere bruker et ATS (Applicant Tracking System), altså programvare som sorterer søknader automatisk før et menneske leser dem. Nøkkelordtreffet gir studenten en enkel og forståelig pekepinn på hvordan CV-en kan bli vurdert.
+
+Versjon 1 er bevisst avgrenset med kun søknadsbrev, kun norsk, og én tydelig flyt fra opplasting til nedlastet brev.
 
 ## Problemet
 
-Å skrive en god, skreddersydd søknad for hver enkelt stilling er tidkrevende, og de fleste jobbsøkere — spesielt studenter uten mye erfaring — vet ikke hva som faktisk skiller et dokument som blir lest av en rekrutterer fra ett som blir silt ut automatisk. I dag løses dette typisk ved å:
+Det tar tid å skrive en god søknad som er tilpasset hver enkelt stilling. Studenter uten mye arbeidserfaring vet ofte ikke hva som skiller en søknad som blir lest, fra en som blir silt ut. I dag ender mange opp med å:
 
-- Gjenbruke samme søknadsbrev med små justeringer, noe som gir generiske, lite treffsikre søknader
-- Bruke generiske KI-chatboter til å "skrive en søknad", uten kontekst om egen CV eller reell tilbakemelding på hva som mangler
-- Ikke vite at de aller fleste store arbeidsgivere bruker ATS-systemer som automatisk filtrerer bort dårlig formaterte eller dårlig matchede dokumenter — hele 97,8 % av Fortune 500-selskapene gjør dette, og 99,7 % av rekrutterere bruker nøkkelordfiltre aktivt
+- gjenbruke det samme søknadsbrevet med små justeringer, som gir generiske søknader som treffer dårlig
+- be en generell KI-chatbot om å «skrive en søknad», uten at den kjenner CV-en deres eller sier hva som mangler
+- ikke vite at mange arbeidsgivere bruker ATS-systemer som filtrerer søknader på nøkkelord før et menneske ser dem
 
-Kostnaden er søknader som aldri blir lest av et menneske, og studenter som ikke vet *hvorfor* de blir silt ut.
+Resultatet er søknader som aldri blir lest av et menneske, og studenter som ikke forstår *hvorfor* de blir silt ut.
 
 ## Løsningen
 
-Verktøyet kobler brukerens CV, en konkret stillingsannonse og — om den finnes — en søknad brukeren allerede har skrevet, og produserer to typer verdi:
+Brukeren går gjennom én flyt:
 
-1. **Tekstproduksjon** — komplette utkast til søknadsbrev og CV i Full generering-modus, eller konkrete forbedringsforslag til en tekst brukeren selv har skrevet i Korrektur-modus. Alltid tilpasset ønsket tone, stil og språk, norsk eller engelsk.
-2. **Innsikt** — en gap-analyse som viser hvilke kvalifikasjoner i annonsen CV-en ikke dekker, og en ATS-vurdering med tre deler: hvor lett dokumentet lar seg lese av automatiske systemer (dette kalles parsing), hvor godt det treffer nøkkelordene i annonsen, og en samlet treffscore.
+1. **Logg inn** med e-post og passord.
+2. **Legg inn CV og stillingsannonse**, enten som PDF-fil eller som innlimt tekst. Hvis appen ikke klarer å lese en PDF, for eksempel fordi den er skannet, får brukeren beskjed om å lime inn teksten i stedet.
+3. **Få innsikt:**
+   - *Gap-analyse:* hvilke krav i annonsen CV-en ikke dekker.
+   - *Nøkkelordtreff:* KI-en henter ut nøkkelordene fra annonsen, og appen teller hvor mange av dem som finnes i CV-en, for eksempel «7 av 10 = 70 %». Tellingen gjøres med en fast regel, ikke av KI-en, slik at resultatet er forutsigbart og kan testes.
+4. **Velg modus:**
+   - *Full generering:* KI-en skriver et søknadsbrev basert på CV-en og annonsen.
+   - *Korrektur:* Brukeren legger inn sitt eget brev. KI-en lager en forbedret versjon, og appen viser endringene markert i teksten, med fjernet tekst i rødt og ny tekst i grønt. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme.
+   - *Tone og språk:* Brevet skrives alltid på norsk og i en formell tone.
+5. **Last ned brevet** som Word (.docx) for å redigere videre, eller som PDF hvis brevet er ferdig. Word er valgt i stedet for Markdown fordi studenter flest redigerer i Word, og brevet bør kunne finpusses før det sendes.
 
-Resultatet kan lastes ned som DOC, Markdown eller PDF, slik at brukeren kan gå videre og redigere i verktøyet de selv foretrekker.
+Ingenting lagres mellom gangene i versjon 1. Når brukeren logger ut, forsvinner CV, annonse og brev fra appen. Brukeren tar vare på brevet ved å laste det ned.
 
 ## Hva gjør dette annerledes
 
@@ -48,38 +58,46 @@ Suksess for denne brukeren: en søknad som føles som *deres egen stemme*, ikke 
 
 ## Suksesskriterier
 
-Suksess måles på to nivåer:
+Kriteriene er laget for å kunne testes. Til testingen lages 2–3 **fiktive** CV-er og stillingsannonser med en fasit som er skrevet på forhånd. Fasiten sier hvilke krav som mangler, og hva nøkkelordtreffet skal være.
 
-**Funksjonalitet.** Hele flyten fungerer feilfritt fra opplasting til ferdig dokument, med innlogging og kryptert lagring på plass gjennom hele prosessen.
-
-**Brukeropplevelse.** En testbruker skal kunne se en konkret, spesifikk forskjell mellom resultatene for to ulike stillingsannonser med samme CV. Teksten skal altså oppleves som reelt skreddersydd, ikke som en generisk mal.
-
-Kriteriene holdes bevisst kvalitative i denne fasen, uten tallfestede terskelverdier.
+1. **Gap-analyse:** For hver test-CV med tilhørende annonse viser gap-analysen alle kravene som fasiten sier mangler i CV-en.
+2. **Nøkkelordtreff:** Med en fast nøkkelordliste og en gitt CV gir appen nøyaktig den prosenten fasiten sier.
+3. **Skreddersøm:** Samme CV med to ulike annonser gir to søknadsbrev som nevner krav som er spesifikke for hver av annonsene.
+4. **Korrektur:** Når brukeren legger inn et eget brev, vises minst én markert endring, og den nedlastede filen inneholder den ferdige teksten uten markeringer.
+5. **Filer inn og ut:** En test-CV i PDF og den samme CV-en som innlimt tekst gir samme nøkkelordtreff. Brevet kan lastes ned som Word og PDF, og begge filene kan åpnes.
+6. **Innlogging:** En ny bruker kan registrere seg og logge inn. Feil passord gir ikke tilgang. Testbrukeren fra README virker.
+7. **Testmodus:** Appen kan startes lokalt etter README og brukes i testmodus uten API-nøkkel.
 
 ## Omfang
 
-### Inkludert i produktet
-- Opplasting og lesing av CV som PDF, Word-dokument eller ren tekst
-- Registrering av stillingsannonse, nøkkelord og ønsket tone
-- Valgfri opplasting av en søknad brukeren allerede har skrevet
-- To moduser som gjelder både CV og søknadsbrev: Full generering og Korrektur
-- Gap-analyse som viser manglende kvalifikasjoner mot annonsen
-- ATS-vurdering: maskinlesbarhet, nøkkelordtreff og treffscore
-- Nedlasting som DOC, Markdown eller PDF
-- Støtte for norsk og engelsk
-- Innlogging og kryptert lagring av personopplysninger og dokumenter
+### Inkludert i versjon 1
+Funksjonene er beskrevet under «Løsningen». Kort oppsummert:
 
-### Ikke inkludert (bevisst)
-- Ekte betalingsløsning, kjøp eller salg over nettet
+1. Registrering og innlogging
+2. CV og stillingsannonse inn som PDF eller innlimt tekst
+3. Gap-analyse og nøkkelordtreff
+4. Full generering og Korrektur av søknadsbrev
+5. Tone og språk: norsk og formell tone
+6. Nedlasting som Word (.docx) og PDF
+7. Testmodus
+
+### Ikke inkludert i versjon 1
+- **CV og ATS:** skrive og forbedre CV, og vurdere hvor lett et ATS kan lese dokumentet
+- **Flere valg:** engelsk språk, valg av tone, og at brukeren kan rette nøkkelordlisten
+- **Flere filformater:** CV inn som Word, nedlasting som Markdown, «Kopier tekst»-knapp og «spor endringer» i Word-filen
+- **Lagring og sikkerhet:** lagre CV og brev mellom gangene, kryptering, glemt passord og bekreftelse på e-post
+
+### Ikke en del av prosjektet
+- Betalingsløsning
 - Automatisk innsending av søknader til jobbportaler
-- En egen funksjon for å lagre og sammenligne flere tidligere søknader, utover å bruke dem som utgangspunkt for KI-en
-- Mobilapp — nettside først
+- Oversikt over og sammenligning av mange tidligere søknader
+- Mobilapp. Det lages en nettside først.
 
-## Sikkerhet og personvern
+## Teknisk retning, personvern og testdata
 
-Verktøyet håndterer personopplysninger og dokumenter, så innlogging kreves og kryptert lagring anbefales. Dette er ikke en formalitet: CV-er og søknadsbrev er sensitive personopplysninger, og bør behandles som en reell del av produktet.
-
-Sikker innlogging er et krav. Konkret innloggingsmetode og krypteringsløsning avklares i neste fase av prosjektet.
+- **KI-tjeneste:** Claude (Anthropic) via API. Modell, kostnad og håndtering av nøkkelen avklares i arkitekturen. API-nøkkelen ligger bare lokalt og legges aldri i Git.
+- **Testmodus og testdata:** Appen kan kjøre med ferdige, lagrede KI-svar. Det gjør at sensor og automatiske tester ikke trenger nøkkel, og at testing ikke koster penger. README forklarer hvordan appen startes, og gir én ferdig testbruker. Fiktive test-CV-er, annonser og fasiter ligger i en egen mappe i repoet. Ekte CV-er legges aldri i Git.
+- **Personvern:** CV-er og søknader inneholder personopplysninger. Siden de ikke lagres i versjon 1, er det bare brukerkontoen som ligger i den lokale databasen, med passordet lagret trygt (hashet). Brukeren får beskjed i appen om at teksten sendes til en ekstern KI-tjeneste når testmodus ikke er på. Kryptering blir aktuelt når lagring kommer i en senere versjon.
 
 ## Visjon
 

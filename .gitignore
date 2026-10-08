@@ -76,3 +76,8 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Word-filer er bare lesekopier på min PC; originalene er .md-filene
+*.docx
+# Midlertidige filer Word lager mens et dokument er åpent
+~$*
