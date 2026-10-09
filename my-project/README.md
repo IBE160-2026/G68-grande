@@ -16,7 +16,6 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`prd-memlog.md`](2-prd/prd-memlog.md) | Beslutningslogg for PRD-en: hva som ble bestemt og endret, og hvorfor |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
-| `research/` | Research til prosjektet |
 
 **Slik jobber jeg:** BMAD lager arbeidsutkast i `_bmad-output/` på min PC. Når et dokument er klart, legger jeg det her. Viktige mellomversjoner, beslutningslogger og prompts legges også her, slik at prosessen kan følges i Git-historikken.
 
