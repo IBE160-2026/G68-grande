@@ -13,7 +13,7 @@ Under **Actions**-fanen på GitHub. ✅ betyr at alt gikk bra, ❌ betyr at noe 
 ## Hva sjekker `ci.yml`?
 | Sjekk | Hva den gjør |
 |---|---|
-| **Sjekk prosjektet** | Kontrollerer at `README.md` og `my-project/product-brief.md` finnes |
+| **Sjekk prosjektet** | Kontrollerer at `README.md` og `my-project/1-product-brief/product-brief.md` finnes |
 | **Frontend (JavaScript)** | Kjører testene i `frontend/` – hopper over seg selv til mappen finnes |
 | **Backend (Python)** | Kjører testene i `backend/` – hopper over seg selv til mappen finnes |
 
