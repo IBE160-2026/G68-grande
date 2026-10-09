@@ -7,3 +7,9 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 ## Medlemmer
 
 - Kristine Rosland Grande
+
+## Plandokumenter
+
+- [Product brief](my-project/product-brief.md): hva Søknadsassistenten er, og hvem den er for
+- [PRD](my-project/prd.md): kravene til Søknadsassistenten, med nummererte krav (FR og NFR) (under arbeid)
+- [Prompt-logg](my-project/prompt-logg.md): de viktigste forespørslene jeg har gitt KI-en underveis

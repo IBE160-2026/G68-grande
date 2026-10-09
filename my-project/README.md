@@ -5,6 +5,7 @@ Her ligger **alt jeg lager selv** i prosjektet – dokumentene for Søknadsassis
 | Fil/mappe | Hva det er |
 |---|---|
 | `product-brief.md` | Produktbrief: hva Søknadsassistenten er, og hvem den er for (gjeldende versjon) |
+| `prd.md` | PRD: kravene til Søknadsassistenten, med nummererte krav (FR og NFR) som stories og kode viser til (under arbeid) |
 | `forste-utkast-produktbrief.md` | Første utkast av produktbriefen, før faglærers tilbakemelding |
 | `tilbakemelding-product-brief.md` | Faglærers tilbakemelding på første utkast |
 | `.memlog.md` | Beslutningslogg: hva som ble bestemt og endret da briefen ble revidert, og hvorfor |
