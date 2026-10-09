@@ -81,3 +81,6 @@ Thumbs.db
 *.docx
 # Midlertidige filer Word lager mens et dokument er åpent
 ~$*
+
+# Kursmateriell fra faglærer; ikke mitt eget arbeid, og sensor har det allerede
+Sensorveiledning.pdf
