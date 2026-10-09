@@ -41,3 +41,20 @@ Verktøy: Claude Code med BMAD-skillen `bmad-prd` (veiledet vei, inngang: visjon
 | 10 | «Ja det er viktig, KI-en i nettleseren skal ikke komme med antagelser på vegne av brukeren» | Nytt krav FR-37 og suksesskriterium 11 |
 | 11 | «du sier hvis tiden blir kanpp så fjerner vi fra kuttlisten. Men kuttlisten er jo en liste over ting vi allerede har kuttet?» | KI-en hadde formulert risikotiltaket feil; teksten ble rettet |
 | 12 | «min forståelse er at det ikke vil havne i GitHub hvis den ligger i output?» | PRD-en kopiert til `my-project/prd.md`, slik at den committes underveis og sensor kan se historikken |
+
+### 2026-10-09 – Opprydding i repoet (etter PRD-økten)
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 13 | «vi kan endre app til nettside i briefen» | «appen» byttet til «nettsiden» i product brief, slik at brief og PRD bruker samme begrep |
+| 14 | «hva er forskjell på en memlog og en prompt log, for finner inen memlogg for i dag» | Forklaring; beslutningsloggen for PRD-en lagt i repoet, og loggen for briefen fikk navnet `brief-memlog.md` |
+| 15 | «er det sånn at jeg kan rydde mer opp i github repoet mitt? for eksempel samle alle memloggene en plass alle promtloggene en plass eller hva ser du som hensiktsmessig?» | KI-en foreslo mapper etter filtype |
+| 16 | «ja det så veldig bra ut, men burde ikke første utkastet av briefen ligge sammen med den gjeldende?» | Jeg valgte i stedet én mappe per dokument (`1-product-brief/`, `2-prd/`) |
+| 17 | «hva tenker du, bør sensorveiledningen være med så sensor ser jeg har brukt den gjennom oppgaven?» | Sensorveiledningen holdes utenfor repoet (lagt i `.gitignore`), fordi den er kursmateriell |
+| 18 | «jeg fikk en mail fra github om at siste push feilet? står et rødt kryss ved sjekk prosjketet» | KI-en hadde flyttet briefen uten å oppdatere CI-sjekken; stien ble rettet og sjekken ble grønn igjen |
+| 19 | «den research mappen ser jeg egt på som unødvendog» | Tom research-mappe fjernet |
+| 20 | «kan de bli kaldt Productbrief og PRD uten tallene foran?» / «aha det var derfor du hadde tallene, ja vel da må nesten de tallene være der» | Mappene ble omdøpt, men endringen ble angret før push for å beholde rekkefølgen |
+| 21 | «I dag har vi hatt det problemet at når vi jobber her så lagres alt i en mappe, bmadoutput er det vel på PC, men det vil aldri komme over på github, det er jo tungvindt, kan vi gjøre noe med det?» | `_bmad-output/` forblir lokal kladdebok; KI-en kopierer dokumenter og logger til `my-project/` underveis |
+| 22 | «er det noe mer vi har produsert men som ikke har kommet med til github?» | `addendum.md` og loggen fra første brief-økt lagt i repoet |
+| 23 | «jeg tenker A, men at det kan være greit å legge ved en forklaring på hvorfor jeg skrev som jeg skrev […]» | Merknad om bakgrunnen for formuleringen «egeninitiert idé» lagt øverst i loggen fra første utkast |
+| 24 | «alt det som vi har gjort nå, er dette logget noe sted og lagt inn i github? sånn med tanke på oppryddingen?» | Denne delen av prompt-loggen |

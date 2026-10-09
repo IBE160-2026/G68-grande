@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-09T16:51
+updated: 2026-10-09T16:55
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -50,3 +50,4 @@ updated: 2026-10-09T16:51
 - (change) Mapper omdøpt etter brukers ønske: 1-product-brief -> Productbrief, 2-prd -> PRD (uten tall). PRD-kopi nå i my-project/PRD/; CI-sjekk og README-er oppdatert
 - (change) Omdøping til Productbrief/PRD angret før push (bruker vil beholde tallene for rekkefølge); mappene heter fortsatt 1-product-brief og 2-prd
 - (decision) Valgt B: _bmad-output forblir lokal kladdebok; Claude kopierer dokument, addendum og memlog til my-project/<n>-<doc>/. Lagt til: 2-prd/addendum.md, 1-product-brief/forste-utkast-memlog.md (uendret logg fra 16. sep + merknad med brukers forklaring om «egeninitiert idé»), og merknad i prompt-logg om at promptene fra 16. sep mangler
+- (event) Opprydding i repoet logget i prompt-logg (rad 13-24). Ikke tidligere logget her: tom research-mappe fjernet (ee5a034); CI-sjekk feilet etter flytting av briefen og ble rettet (2b81019)
