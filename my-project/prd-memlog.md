@@ -1,0 +1,47 @@
+---
+topic: Søknadsassistenten PRD
+updated: 2026-10-09T16:05
+---
+
+- (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
+- (event) Kilder: my-project/product-brief.md, tilbakemelding-product-brief.md, my-project/.memlog.md, Sensorveiledning.pdf (del 1), kuttliste fra samtale
+- (decision) Veiledet vei (coaching) valgt av bruker
+- (assumption) Nivå: skoleprosjekt som vurderes av sensor etter sensorveiledning del 1; nettside (web) som eneste flate
+- (event) Økten gjenopptatt av bruker samme dag
+- (decision) Inngang: Visjon + funksjoner (A) valgt av bruker; brief har allerede tydelig flyt og fristen er kort
+- (change) Ingen egen kuttliste finnes lagret; «kuttliste fra samtale» i loggen var feil. Kuttlisten lages i PRD-ens omfangsdel med brief-ens «Ikke inkludert i versjon 1» som utgangspunkt
+- (event) Økten gjenopptatt igjen; bruker valgte å fortsette eksisterende PRD. Neste: visjon
+- (decision) Visjon hentet fra brief (sammendrag, problem, målgruppe, suksess for bruker, annerledes) etter brukers ønske «bruk brief-en»; brukerens ordlyd beholdt
+- (decision) Visjon beholdes som den er (full lengde), selv om den overlapper med brief; PRD skal stå på egne ben
+- (decision) Funksjonsgrupper: 6 grupper fra brief-ens 7 v1-punkter; «Norsk og formell tone» slått inn i gruppen Full generering og Korrektur fordi det gjelder brevet i begge moduser
+- (decision) Gruppe 1 Registrering/innlogging: FR-1..FR-7 fra brukers svar (passord min 8 tegn, feilmeldinger, rød ramme, forside etter innlogging, logg ut, sperre uten innlogging); plassering av logg ut-knapp lagt i addendum (UX)
+- (decision) Gruppe 1 avklart: auto-innlogging etter registrering (FR-1); generisk «Feil e-post eller passord» (FR-3); tekst i tillegg til rød ramme for tilgjengelighet (FR-4); egen startside med «Begynn å lage søknad» før CV/annonse-siden (FR-5)
+- (decision) Gruppe 2 PDF/tekst inn: FR-8..FR-13 (to felt CV/annonse, begge påkrevd, feil filtype -> «prøv PDF», uleselig PDF -> lim inn, filstørrelsesgrense, angre). Grenseverdi for filstørrelse utsatt til arkitektur
+- (change) Begrep: produktet kalles «nettside», ikke «app», etter brukers ønske. «appen» byttet ut i FR-6, FR-7, FR-11, FR-12; gjelder resten av PRD-en
+- (decision) Utsatt: rette «appen» til «nettsiden» i product brief etter at PRD er ferdig (bruker sa ja, men senere)
+- (event) Ny kilde (limt inn av bruker) for gruppe 3: nøkkelord hentes ut én gang og lagres i økten; prosent regnes fra lagret liste; listen vises; telleregel skrives ned; gap-analyse merkes KI-generert; forklare at gap (KI) og treff (telling) kan si imot hverandre
+- (decision) Gruppe 3: FR-14..FR-19. Gap viser dekket+mangler (lite ekstraarbeid), merket KI; nøkkelord hentes én gang og lagres i økten; liste vises, kan ikke endres (kuttet fra brief beholdt); telleregel = delstreng, uavhengig av store/små bokstaver; forklaring KI-vurdering vs telling; tilbake-knapp, gjenbruk av nøkkelordliste hvis bare CV endres
+- (decision) Ordstamme-regel (prosjektledelse = prosjektleder) valgt bort i v1 pga. kompleksitet og frist; føres på kuttlisten som neste versjon
+- (change) Flyt endret: modus velges tidlig (FR-20) etter «Begynn å lage søknad»: «Skriv nytt brev» (CV+annonse) eller «Forbedre mitt brev» (CV+eget brev+annonse). Eget brev som PDF eller tekst (FR-8). CV alltid påkrevd (FR-9). Bruker ser analysen og bekrefter før brevet lages (FR-21). Nye ID-er får neste ledige nummer; eksisterende ID-er beholdes
+- (decision) Alternativ «kun søknad» (uten CV) valgt bort i v1: krever analyse mot brev, ekstra prompt-variant og flere tester; KI-delen er høy risiko og fristen kort. Føres på kuttlisten som neste versjon
+- (decision) Gruppe 4: FR-22..FR-28. Nytt forslag tillatt (enkelt: samme KI-kall på nytt; brevet trenger ikke være reproduserbart, i motsetning til nøkkelordtreffet); ingen redigering på nettsiden, gjøres i Word; ventetegn med tekst (utforming i addendum); feilmeldinger: nettverksfeil vs. prøv på nytt
+- (decision) Redigering av brevet i nettleseren valgt bort i v1 (FR-26); føres på kuttlisten. Begrunnelse: studenter redigerer i Word (brief), diff-visning i Korrektur kan ikke enkelt redigeres, nytt forslag ville overskrive endringer, mer å teste
+- (decision) Gruppe 5: FR-29..FR-31 (nedlastingsknapp .docx/PDF, ren tekst uten markeringer, etter nedlasting: startside eller logg ut). Word-begrunnelse fra brief tatt inn. Filnavn ukjent -> antakelse. Topplinje i filen avventer brukers valg
+- (decision) Ingen topp- eller bunntekst i nedlastet fil i v1 (FR-30); føres på kuttlisten (dato, navn, stilling). Brukeren legger til i Word
+- (decision) Gruppe 6 Testmodus/KI: FR-32..FR-36. Bryter på nettsiden; synlig merkelapp; kun testdata virker i testmodus; KI-merknad i hjørnet hele tiden når testmodus er av; samtykke til KI på startsiden (ny, ikke i brief)
+- (decision) Uten API-nøkkel: tvungen testmodus, bryter låst, forklaring «Mangler API-nøkkel, se README» (FR-32). Samtykke til KI gis hver innlogging, lagres ikke på kontoen (FR-36)
+- (event) Alle 6 funksjonsgrupper ferdig (FR-1..FR-36). Neste: NFR, deretter omfang/kuttliste
+- (change) FR-32 presisert: bytte til testmodus allerede på startsiden (i et hjørne, se addendum), og knapp tilbake til vanlig bruk i testmodus. Neste: startsiden (begynn søknad + KI-samtykke) før NFR
+- (decision) Startside: samtykke via avkrysningsboks med forklarende tekst over, før «Begynn å lage søknad»; uten avkrysning -> feilmelding «må samtykke først» (FR-36). Bytte modus kun på startsiden, ikke underveis (FR-32)
+- (decision) NFR-1..NFR-10 fra brief, faglærer og sensorveiledning; bruker bekreftet at nettsiden skal se bra ut og fungere på PC, nettbrett og mobil (NFR-7)
+- (decision) Omfang/kuttliste skrevet: brief-ens 5 punkter (felles begrunnelse «kjerneflyten først») + 4 nye kutt fra i dag med egne begrunnelser; bruker: felles begrunnelse holder foreløpig
+- (decision) Suksesskriterier: brief-ens 7 + 3 nye (stabil prosent, samtykke, feil input). Kriterium 5 utvidet til også eget søknadsbrev (bruker svarte «ja»; tolket som ja til begge spørsmål). FR-henvisninger lagt til per kriterium
+- (decision) Risiko (del 6): 5 risikoer fra bruker (vanskelig analyse/telling, koding tar tid, KI-funksjon for avansert, KI i nettsiden finner på innhold, kode-KI gjør uønskede endringer); tiltak foreslått av Claude, venter på brukers bekreftelse
+- (decision) FR-37 ny: KI skal ikke komme med antakelser på vegne av brukeren; brevet bygger kun på CV, annonse og eget brev, begge moduser. Suksesskriterium 11 lagt til (manuell sjekk mot fasit); risiko 4 viser til FR-37
+- (change) Risiko 2 rettet etter brukers spørsmål: ved tidsnød kuttes flere ikke-kjerne-funksjoner og flyttes TIL kuttlisten (ikke «tas fra kuttlisten»). Bruker bekreftet at tiltakene i risikotabellen passer
+- (decision) PRD kopieres til my-project/prd.md nå og committes underveis i gjennomgangen, slik at sensor ser historikken (faglærer: utkast skal committes). _bmad-output/ er git-ignorert; kopien oppdateres etter hver runde
+- (event) Første utkast av PRD committet (8b250ea) og pushet til GitHub sammen med prompt-logg og README-er. Neste: Finalize (memlog-gjennomgang, kildesjekk, reviewer, antakelser, språkvask, Word-kopi)
+- (change) «appen» byttet til «nettsiden» i my-project/product-brief.md (8 steder, ellers ingen endringer); updated satt til 2026-10-09
+- (event) Brief-endring app->nettside committet og pushet
+- (event) Pause; bruker fortsetter 2026-10-10. Gjenoppta med Finalize steg 1 (memlog-gjennomgang). Åpent: 9 [ASSUMPTION], «Hva jeg lærte» i prompt-logg (brukers ord), valgfritt: prioritert liste over hva som kuttes først ved tidsnød
+- (decision) PRD-memlog kopieres til my-project/prd-memlog.md og committes underveis, slik at sensor ser beslutningene bak PRD-en
