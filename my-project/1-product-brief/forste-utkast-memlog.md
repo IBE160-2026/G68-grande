@@ -3,7 +3,7 @@ topic: AI CV & Job Application Assistant
 updated: 2026-09-16T13:49
 ---
 
-> **Merknad lagt til 2026-10-09:** Idéen er hentet fra eksempel 2 fra faglærer, slik første linje i loggen sier. Linjen om at dokumentet skal «lese som egeninitiert idé» var ikke for å skjule for noen hvor jeg har fått inspirasjon fra, men for at KI-en skulle forstå hvordan jeg ville at formuleringen av teksten skulle være. Jeg ønsket ikke henvisninger til oppgaveteksten i selve produktbriefen, fordi det kræsjet med tekstens innhold. Loggen under er ellers uendret.
+> **Merknad (lagt til 9. oktober 2026):** Prosjektidéen bygger på eksempel 2 i faglærers oppgavetekst, slik det også fremgår av første oppføring i loggen. Formuleringen om at dokumentet skal «lese som egeninitiert idé», var ikke ment å skjule hvor inspirasjonen kom fra. Den var en instruks til KI-verktøyet om hvordan teksten skulle formuleres. Henvisninger til oppgaveteksten ble utelatt fra selve produktbriefen fordi de ikke passet sammen med innholdet i dokumentet. Loggen nedenfor er for øvrig uendret.
 
 - (decision) Idé er lærerforeslått: AI CV & Job Application Assistant, fra oppgavetekst i IBE160-kurset
 - (decision) To moduser, ingen betaling: Full generering (AI skriver fra stikkord) og Korrektur (AI forbedrer brukerens egen tekst) — 'dyrere/billigere'-språk droppet fordi oppgaveteksten krever 'Kjøp/salg over nettet: Nei'
