@@ -8,7 +8,7 @@ Her ligger **alt jeg lager selv** i prosjektet – dokumentene for Søknadsassis
 | `prd.md` | PRD: kravene til Søknadsassistenten, med nummererte krav (FR og NFR) som stories og kode viser til (under arbeid) |
 | `forste-utkast-produktbrief.md` | Første utkast av produktbriefen, før faglærers tilbakemelding |
 | `tilbakemelding-product-brief.md` | Faglærers tilbakemelding på første utkast |
-| `.memlog.md` | Beslutningslogg: hva som ble bestemt og endret da briefen ble revidert, og hvorfor |
+| `brief-memlog.md` | Beslutningslogg: hva som ble bestemt og endret da briefen ble revidert, og hvorfor |
 | `prd-memlog.md` | Beslutningslogg for PRD-en: hva som ble bestemt og endret, og hvorfor |
 | `prompt-logg.md` | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis |
 | `research/` | Research til prosjektet |

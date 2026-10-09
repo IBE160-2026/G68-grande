@@ -4,7 +4,7 @@ De viktigste forespørslene jeg har gitt KI-en (Claude Code) i prosjektet, og hv
 
 ## 2026-10-07/08 – Revisjon av product brief etter faglærers tilbakemelding
 
-Verktøy: Claude Code med BMAD-skillen `bmad-product-brief` (oppdatering). Alle beslutninger er logget i `.memlog.md`.
+Verktøy: Claude Code med BMAD-skillen `bmad-product-brief` (oppdatering). Alle beslutninger er logget i `brief-memlog.md`.
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -23,7 +23,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-product-brief` (oppdatering). Alle 
 
 ## 2026-10-09 – PRD (første utkast)
 
-Verktøy: Claude Code med BMAD-skillen `bmad-prd` (veiledet vei, inngang: visjon + funksjoner). Alle beslutninger er logget i PRD-ens `.memlog.md`.
+Verktøy: Claude Code med BMAD-skillen `bmad-prd` (veiledet vei, inngang: visjon + funksjoner). Alle beslutninger er logget i `prd-memlog.md`.
 
 | # | Min prompt | Resultat |
 |---|---|---|

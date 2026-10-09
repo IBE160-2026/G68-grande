@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-09T16:05
+updated: 2026-10-09T16:12
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -45,3 +45,4 @@ updated: 2026-10-09T16:05
 - (event) Brief-endring app->nettside committet og pushet
 - (event) Pause; bruker fortsetter 2026-10-10. Gjenoppta med Finalize steg 1 (memlog-gjennomgang). Åpent: 9 [ASSUMPTION], «Hva jeg lærte» i prompt-logg (brukers ord), valgfritt: prioritert liste over hva som kuttes først ved tidsnød
 - (decision) PRD-memlog kopieres til my-project/prd-memlog.md og committes underveis, slik at sensor ser beslutningene bak PRD-en
+- (change) my-project/.memlog.md omdøpt til brief-memlog.md (git mv, historikk beholdt); henvisninger i README og prompt-logg oppdatert
