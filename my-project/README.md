@@ -9,10 +9,12 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | **`1-product-brief/`** | |
 | [`product-brief.md`](1-product-brief/product-brief.md) | Produktbrief: hva Søknadsassistenten er, og hvem den er for (gjeldende versjon) |
 | [`forste-utkast-produktbrief.md`](1-product-brief/forste-utkast-produktbrief.md) | Første utkast av produktbriefen, før faglærers tilbakemelding |
+| [`forste-utkast-memlog.md`](1-product-brief/forste-utkast-memlog.md) | Beslutningslogg fra første utkast (16. september), med en merknad om hvorfor oppgaveteksten ikke nevnes i briefen |
 | [`tilbakemelding-product-brief.md`](1-product-brief/tilbakemelding-product-brief.md) | Faglærers tilbakemelding på første utkast |
 | [`brief-memlog.md`](1-product-brief/brief-memlog.md) | Beslutningslogg: hva som ble bestemt og endret da briefen ble revidert, og hvorfor |
 | **`2-prd/`** | |
 | [`prd.md`](2-prd/prd.md) | PRD: kravene til Søknadsassistenten, med nummererte krav (FR og NFR) som stories og kode viser til (under arbeid) |
+| [`addendum.md`](2-prd/addendum.md) | Notater til UX og arkitektur som kom fram under PRD-arbeidet, for eksempel plassering av knapper |
 | [`prd-memlog.md`](2-prd/prd-memlog.md) | Beslutningslogg for PRD-en: hva som ble bestemt og endret, og hvorfor |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |

@@ -2,6 +2,8 @@
 
 De viktigste forespørslene jeg har gitt KI-en (Claude Code) i prosjektet, og hva de førte til. Prompts er gjengitt slik jeg skrev dem. Nye økter legges til nederst.
 
+Promptene fra den første økten med product brief (16. september 2026) er ikke med, fordi jeg ikke visste da at de skulle logges. Avgjørelsene fra den økten står i [beslutningsloggen for første utkast](1-product-brief/forste-utkast-memlog.md).
+
 ## 2026-10-07/08 – Revisjon av product brief etter faglærers tilbakemelding
 
 Verktøy: Claude Code med BMAD-skillen `bmad-product-brief` (oppdatering). Alle beslutninger er logget i `brief-memlog.md`.
