@@ -2,7 +2,7 @@
 title: "Søknadsassistenten"
 status: final
 created: 2026-09-16
-updated: 2026-10-09
+updated: 2026-10-10
 ---
 
 # Produktbrief: Søknadsassistenten
@@ -44,7 +44,7 @@ Ingenting lagres mellom gangene i versjon 1. Når brukeren logger ut, forsvinner
 
 ## Hva gjør dette annerledes
 
-Sammenlignbare verktøy, som Jobscan, Rezi, Teal og Kickresume, dekker typisk enten ATS-matching eller KI-tekstgenerering — sjelden begge deler i samme flyt, og sjelden med et tydelig valg mellom å la KI-en gjøre alt eller å beholde sin egen stemme og bare forbedre den. Det siste er ikke bare en detalj i brukeropplevelsen: helt KI-genererte søknadsbrev har en kjent svakhet — de blir lett gjenkjennelige og generiske. Ved å tilby Korrektur som et likeverdig alternativ til Full generering, anerkjenner produktet det problemet direkte i stedet for å late som det ikke finnes.
+Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj i brukeropplevelsen: helt KI-genererte søknadsbrev har en kjent svakhet — de blir lett gjenkjennelige og generiske. Ved å tilby Korrektur som et likeverdig alternativ til Full generering, anerkjenner produktet det problemet direkte i stedet for å late som det ikke finnes.
 
 Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, men at fokuset på studentmålgruppen og de to modusene gir en enkel, tydelig opplevelse fremfor bredde.
 
@@ -102,3 +102,12 @@ Funksjonene er beskrevet under «Løsningen». Kort oppsummert:
 ## Visjon
 
 Målet er en høyere andel studenter som får søknadene sine reelt vurdert av arbeidsgivere — fordi søknadene er skrevet på en god, akademisk måte som gjør arbeidsgiver oppmerksom og engasjert, i stedet for silt ut før noen har lest dem.
+
+## Kilder
+
+Sjekket 10. oktober 2026.
+
+- Jobscan: [jobscan.co](https://www.jobscan.co/blog/7-reasons-jobscan-is-more-effective-than-word-cloud-tools/), [LMU Career Center](https://careers.lmu.edu/resources/jobscan/)
+- Rezi: [rezi.ai, AI Keyword Targeting](https://www.rezi.ai/docs/ai-keyword-targeting-explained), [rezi.ai](https://rezi.ai/lp/home), [Scoutify, anmeldelse](https://scoutify.com/blog/rezi-review/)
+- Teal: [Teal hjelpeside, Cover Letter Generator](https://tealhq.helpscoutdocs.com/article/68-using-ai-cover-letter-generator)
+- Kickresume: [kickresume.com](https://www.kickresume.com)

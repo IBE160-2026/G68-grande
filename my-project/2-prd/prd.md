@@ -31,7 +31,7 @@ En søknad som føles som *deres egen stemme*, ikke en generisk KI-tekst — og 
 
 ### Hva gjør dette annerledes
 
-Sammenlignbare verktøy, som Jobscan, Rezi, Teal og Kickresume, dekker typisk enten ATS-matching eller KI-tekstgenerering — sjelden begge deler i samme flyt, og sjelden med et tydelig valg mellom å la KI-en gjøre alt eller å beholde sin egen stemme og bare forbedre den. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske.
+Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske.
 
 Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, men at fokuset på studentmålgruppen og de to modusene gir en enkel, tydelig opplevelse fremfor bredde.
 
@@ -225,3 +225,12 @@ Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden
 6. Hele «Forbedre mitt brev» (Korrektur). Den skiller nettsiden fra andre verktøy og kuttes bare når alt annet er prøvd.
 
 **Kuttes aldri:** testmodus, innlogging, gap-analysen, nøkkelordtreffet med telleregelen og testene, Full generering, .docx-nedlasting, samtykke og FR-37.
+
+## Kilder
+
+Sjekket 10. oktober 2026.
+
+- Jobscan: [jobscan.co](https://www.jobscan.co/blog/7-reasons-jobscan-is-more-effective-than-word-cloud-tools/), [LMU Career Center](https://careers.lmu.edu/resources/jobscan/)
+- Rezi: [rezi.ai, AI Keyword Targeting](https://www.rezi.ai/docs/ai-keyword-targeting-explained), [rezi.ai](https://rezi.ai/lp/home), [Scoutify, anmeldelse](https://scoutify.com/blog/rezi-review/)
+- Teal: [Teal hjelpeside, Cover Letter Generator](https://tealhq.helpscoutdocs.com/article/68-using-ai-cover-letter-generator)
+- Kickresume: [kickresume.com](https://www.kickresume.com)

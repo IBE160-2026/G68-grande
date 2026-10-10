@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T21:05
+updated: 2026-10-10T21:18
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -84,3 +84,5 @@ updated: 2026-10-10T21:05
 - (decision) Kildesjekk (sensorveiledning, lite funn h): stabilitet ved gjentatte trykk ikke endret; dekket av antakelsen i FR-27
 - (event) Finalize steg 2 (kildesjekk) ferdig; alle funn behandlet og committet. Neste: steg 3 (reviewer-gjennomgang). Fortsatt åpent: 9 [ASSUMPTION] (steg 4), spørre faglærer om proposal, «Hva jeg lærte» i prompt-logg
 - (event) Åpent punkt (eier: Kristine, tas neste økt før steg 3): kilder for Jobscan, Rezi, Teal og Kickresume i visjonen («Hva gjør dette annerledes»), slik faglærer krevde for tall. Påstanden «sjelden begge deler i samme flyt» kan være utdatert; sjekk verktøyenes nettsider, legg inn lenker med dato, og skriv om setningen i PRD (og evt. brief) hvis den ikke stemmer
+- (change) Åpent punkt om kilder lukket. Sjekket 10.10.2026: Jobscan, Rezi, Teal og Kickresume tilbyr alle både nøkkelordsjekk og KI-søknadsbrev; påstanden «sjelden begge deler» var feil. Visjonen «Hva gjør dette annerledes» (overskrift beholdt) skrevet om: mange funksjoner finnes fra før; mulig forskjell er åpen telleregel og forklaring av begreper for studenter. Ny del «Kilder» nederst i PRD. Bruker valgte første setning og godkjente teksten
+- (change) Product brief rettet tilsvarende: «Hva gjør dette annerledes» bruker samme tekst som PRD; «Det siste er ikke bare en detalj» endret til «Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj» fordi setningen det viste til, ble fjernet; resten av brukerens ordlyd beholdt. Kilder lagt til nederst; updated 2026-10-10. Bruker sa ja
