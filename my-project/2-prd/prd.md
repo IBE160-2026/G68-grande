@@ -82,7 +82,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 ### 2.4 Søknadsbrev: Full generering og Korrektur
 
 - **FR-22:** I «Skriv nytt brev» (Full generering) skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden. [ASSUMPTION: brevet vises på skjermen før brukeren laster det ned]
-- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser endringene markert i teksten: fjernet tekst i rødt og ny tekst i grønt. [ASSUMPTION: fjernet tekst er også gjennomstreket og ny tekst understreket, slik at endringene ikke bare vises med farge]
+- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser endringene markert i teksten: fjernet tekst i rødt og ny tekst i grønt. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. [ASSUMPTION: fjernet tekst er også gjennomstreket og ny tekst understreket, slik at endringene ikke bare vises med farge]
 - **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene.
 - **FR-37:** KI-en skal ikke komme med antakelser på vegne av brukeren. Brevet bygger bare på det som står i CV-en, stillingsannonsen og eventuelt brukerens eget brev. KI-en legger ikke til erfaring, utdanning eller ferdigheter som ikke står der. KI-en får omformulere det som står i CV-en og koble det til kravene i stillingsannonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid». Dette gjelder begge modusene.
 - **FR-25:** Brukeren kan be om et nytt forslag hvis de ikke er fornøyd med brevet. I Korrektur lages det nye forslaget fra brukerens opprinnelige brev.
@@ -124,7 +124,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 - **NFR-1:** Passord lagres hashet, aldri som klartekst.
 - **NFR-2:** API-nøkkelen ligger bare lokalt og havner aldri i Git. Repoet har en `.env.example` som viser hvilke innstillinger som trengs, uten ekte verdier.
-- **NFR-3:** Ekte CV-er havner aldri i Git. Bare fiktive testdata ligger i repoet, i en egen mappe.
+- **NFR-3:** Ekte CV-er havner aldri i Git. Bare fiktive testdata ligger i repoet, i en egen mappe, sammen med en fasit for hver CV og stillingsannonse.
 - **NFR-4:** CV, stillingsannonse, søknadsbrev og nøkkelordliste lagres ikke mellom øktene. Bare brukerkontoen lagres, i en lokal database.
 - **NFR-5:** Innloggingen fungerer lokalt uten noen ekstern tjeneste.
 
@@ -135,7 +135,17 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 ### Kjørbarhet og testing
 
-- **NFR-8:** Sensor kan få nettsiden i gang på 15–20 minutter ved å følge README, med eksakte kommandoer og en testbruker. Første gang nettsiden startes, lages databasen og testbrukeren automatisk. README viser e-post og passord til testbrukeren.
+- **NFR-8:** Sensor kan få nettsiden i gang på 15–20 minutter ved å følge README. Første gang nettsiden startes, lages databasen og testbrukeren automatisk. README har:
+  - en kort beskrivelse av hva nettsiden gjør
+  - forutsetninger med versjoner
+  - eksakte kommandoer for installasjon og oppstart
+  - hvilke innstillinger som trengs, med henvisning til `.env.example` (NFR-2)
+  - e-post og passord til testbrukeren
+  - hvor testdataene og fasiten ligger (NFR-3)
+  - hvordan testene kjøres (NFR-9)
+  - to–tre skjermbilder med ekte KI på (FR-38)
+  - en oversikt over mappestrukturen
+  - lenker til planleggingsdokumentene og prompt-loggen
 - **NFR-9:** Telleregelen for nøkkelordtreff (FR-17) og innloggingen (FR-1, FR-3) har automatiske tester med kjent input og fasit. README viser hvordan testene kjøres.
 - **NFR-10:** KI-instruksene (prompts) ligger i Git, slik at endringer i dem kan følges.
 - **NFR-12:** Det finnes en skrevet testplan med resultat for suksesskriteriene som ikke testes automatisk, også hele flyten fra start til slutt.
@@ -157,10 +167,12 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 | At brukeren kan rette nøkkelordlisten | Kjerneflyten først |
 | CV inn som Word, nedlasting som Markdown, «Kopier tekst»-knapp og «spor endringer» i Word-filen | Kjerneflyten først |
 | Lagre CV og brev mellom gangene, kryptering, glemt passord og bekreftelse på e-post | Kjerneflyten først |
+| Innlogging med Google eller andre eksterne kontoer (OAuth) | Krever en ekstern tjeneste, og innloggingen skal virke lokalt uten det (NFR-5) |
 | Ordstamme-regel, slik at «prosjektledelse» er et treff i «prosjektleder» | Mer komplisert å bygge og mindre forutsigbart enn den enkle telleregelen (FR-17) |
 | «Kun søknad», altså Korrektur uten CV | Krever en ekstra analysevariant (søknad mot annonse), flere KI-instrukser og flere tester. KI-delen er det mest risikable i prosjektet |
 | Redigere brevet i nettleseren | Studenter redigerer i Word. Visningen med markerte endringer i Korrektur er vanskelig å gjøre redigerbar, og «nytt forslag» ville overskrevet endringene |
 | Topp- og bunntekst i den nedlastede filen (dato, navn, stilling) | KI-en kan hente feil navn eller stilling, og det blir mer å teste. Brukeren legger det til i Word |
+| Kontrast som oppfyller WCAG AA, og alternativtekst på bilder og ikoner (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. NFR-6 (god kontrast, tastatur, synlige etiketter) gjelder fortsatt |
 | Automatisk test av hele flyten i testmodus (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
 
 ### Ikke en del av prosjektet

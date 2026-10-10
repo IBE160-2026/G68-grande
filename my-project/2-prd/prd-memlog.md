@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T19:58
+updated: 2026-10-10T20:42
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -74,3 +74,12 @@ updated: 2026-10-10T19:58
 - (decision) Nødliste ved tidsnød lagt til under risiko (åpent punkt lukket). Rekkefølge: FR-19 gjenbruk, PDF-nedlasting, nytt forslag; deretter Korrektur-markeringer, PDF-opplasting; siste utvei hele Korrektur. Kuttes aldri: testmodus, innlogging, gap, nøkkelordtreff+tester, Full generering, .docx, samtykke, FR-37. Claudes forslag, bruker godtok rekkefølgen
 - (change) Kildesjekk (brief): «Den ærlige begrensningen» lagt ordrett inn i visjonen under «Hva gjør dette annerledes». Bruker sa ja
 - (event) Alle høye og middels funn fra kildesjekken behandlet; PRD, addendum og memlog kopiert til my-project/2-prd/ og committet. Neste: små funn fra kildesjekken
+- (change) Kildesjekk (brief-memlog, lite funn a): OAuth (Google o.l.) lagt på kuttlisten; begrunnelse: krever ekstern tjeneste, innlogging skal virke lokalt (NFR-5). Bruker sa ja
+- (change) Kildesjekk (brief, lite funn b): FR-23 fikk begrunnelsen fra brief: brukeren ser hva som er endret og beholder kontrollen over sin egen stemme. Bruker sa ja
+- (change) Kildesjekk (brief, lite funn c): NFR-3 utvidet: fasit for hver CV og annonse ligger sammen med testdataene. Eksempel på mappestruktur (én undermappe per testcase) lagt i addendum under «Til arkitektur». Bruker sa ja
+- (change) Kildesjekk (sensorveiledning kriterium 6, lite funn d): NFR-8 gjort om til samlet sjekkliste for README, med henvisning til NFR-2, NFR-3, NFR-9 og FR-38. Lenker til plandokumenter finnes allerede i README; punktet beholdes fordi nye dokumenter kommer. Bruker sa ja
+- (decision) Kildesjekk (sensorveiledning, lite funn e): ingen proposal finnes; PRD endres ikke, kuttlisten bygger på brief. Åpent punkt (eier: Kristine): spør faglærer om product brief regnes som proposal. Revideres hvis svaret er nei
+- (decision) Kildesjekk (sensorveiledning, lite funn f): WCAG AA-kontrast og alternativtekst ikke lagt i NFR-6, men på kuttlisten som «gjøres hvis det blir tid», etter brukers ønske. NFR-6 uendret
+- (change) Kildesjekk (faglærer, lite funn g): addendum fikk biblioteker for PDF/.docx og CV-er med kolonner under «Til arkitektur», og skisser av modusvalg og resultatside under «Til UX». Bruker sa ja
+- (decision) Kildesjekk (sensorveiledning, lite funn h): stabilitet ved gjentatte trykk ikke endret; dekket av antakelsen i FR-27
+- (event) Finalize steg 2 (kildesjekk) ferdig; alle funn behandlet og committet. Neste: steg 3 (reviewer-gjennomgang). Fortsatt åpent: 9 [ASSUMPTION] (steg 4), spørre faglærer om proposal, «Hva jeg lærte» i prompt-logg
