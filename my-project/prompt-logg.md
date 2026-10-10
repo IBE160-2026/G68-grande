@@ -71,3 +71,31 @@ Verktøy: Claude Code med BMAD-skillen `bmad-prd` (veiledet vei, inngang: visjon
 | 30 | «vi kan bruke stillingsannonse» | Addendumet og PRD-en bruker samme ord |
 | 31 | «push» / «to commits?» | Rettingene pushet; KI-en forklarte hvorfor det ble to commits |
 | 32 | «burde jeg cleare det vinduet her og deretter ta opp arbeidet på nytt?» / «hvordan blir memlog og promt log lagret hvis jeg clearer» | Beslutningsloggen er en fil og overlever `/clear`, men prompt-loggen må skrives inn for hånd. Derfor ble denne delen skrevet før `/clear` |
+
+### 2026-10-10 – Ferdigstilling av PRD, steg 2: kildesjekk
+
+KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en: product brief, faglærers tilbakemelding, sensorveiledningen og beslutningsloggen fra briefen. Funnene ble gått gjennom ett om gangen.
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 33 | «begynn på steg 2» | Fire kilder sjekket mot PRD-en; 2 viktige funn, rundt 10 middels og noen små |
+| 34 | «hva er det du egentlig lurer på under viktig 1 og 2» | KI-en forklarte de to viktigste funnene enklere, med eksempel |
+| 35 | «ja på 1, til nummer to, hva anbefaler du?» | FR-37 sier nå at KI-en får omformulere det som står i CV-en, men ikke legge til noe nytt. KI-en anbefalte ekte KI-svar som testsvar og skjermbilder i README |
+| 36 | «viktig å få med at KI ikke kan finne opp ting, håper det står skrevet.» | KI-en viste de tre stedene i PRD-en der det står |
+| 37 | «viktig 2, vi gjør din anbefaling» | Ny FR-38: testmodus bruker ekte KI-svar, og README har skjermbilder |
+| 38 | «ja, men kan vel være greit at det står i PRD at jeg har tenkt å bruke claude også, bare for å understreke det?» | Ny NFR-11 om Claude i PRD-en, og detaljene i addendumet |
+| 39 | «ja, forslaget ditt var bra» | FR-24 sier nå at tonen skal være formell og akademisk og ikke høres ut som generisk KI-tekst |
+| 40 | «[…] er det riktig at det står CV der? for ATS systemet er vel noe som arbeidsgiverne sender søknadene gjennom?» | KI-en forklarte at ATS leser hele søknaden, men at nøkkelordtreffet bare teller CV-en; ordlyden ble presisert |
+| 41 | «jeg lurer fortsatt på noe angående forrige punkt. for er ATS, gap analyse og nøkkelordtreff tre forskjellige ting?» | KI-en forklarte forskjellen i en tabell. «ATS-delen» fjernet fra risiko 1, fordi nettsiden ikke har en egen ATS-del |
+| 42 | «ja til første, punkt 28 må du spesifisere» | FR-28 lister nå fire tilfeller der et KI-svar ikke kan brukes |
+| 43 | «jeg får ikke dette helt til å stemme» / «skal vi ha med på nettsiden en forklaring på de tre begrepene tenker du?» | FR-18 skrevet om: resultatsiden forklarer kort ATS, nøkkelordtreff og gap-analyse |
+| 44 | «ja ta det med» | Kriterium 1, 3 og 11 testes med ekte KI, ikke i testmodus. Feilmeldingene virker også i testmodus (FR-34) |
+| 45 | «skal det ikke stå i readme hvordan sensor skal gjøre det?» / «automatisk, kan vi skrie i addundet at vi skal oppdatere readme kontinuerlig gjennom hele prosjektet?» | Database og testbruker lages automatisk (NFR-8). Ny del «Arbeidsmåte» i addendumet |
+| 46 | «tror vi må tenke tid her, men at det står til kravene gitt av faglærer i sensorveiledning» / «ut ifra krav 3, skal jeg ha manuell eller automatisk test av flyten? ende til ende?» | KI-en sjekket kriterium 3: én testtype holder. Automatiske tester for telleregel og innlogging, skrevet testplan (NFR-12), automatisk flyttest på kuttlisten |
+| 47 | «har du forslag til hva vi kan kutte ved dårlig tid?» / «jeg trodde det som står under kuttes først allerede var på kuttlisten?» | KI-en foreslo en nødliste og forklarte forskjellen fra kuttlisten. Nødlisten lagt inn under risiko |
+| 48 | «kan vi ta stegene hver for seg?» | De små funnene gått gjennom ett om gangen: OAuth på kuttlisten, begrunnelse i FR-23, fasit ved testdataene |
+| 49 | «mener du det er bra dersom alt ligger i en mappe?» | Eksempel på mappestruktur for testdata lagt i addendumet |
+| 50 | «ja jeg vil ha den med, men står det da også de titngene som PRD allerede dekker?» / «[…] mener at readme allerede nå har lenker til filene?» | NFR-8 gjort om til en samlet sjekkliste for README |
+| 51 | «jeg har ingen proposal så vidt jeg vet» | Ingen endring i PRD-en; åpent punkt: spørre faglærer om product brief regnes som proposal |
+| 52 | «kan vi sette dette på en liste som kan være med hvis vi har tid?» | WCAG AA og alternativtekst på kuttlisten som «gjøres hvis det blir tid», begrunnet med tid |
+| 53 | «kan du sende en litt mer detaljert liste på endringene vi har gjort» / «[…] vil det da si at den er skrevet men bare ikke gjort noe med» | Oversikt over alle endringer i steg 2; KI-en forklarte at gjentatte trykk står som en antakelse i FR-27, som gås gjennom i steg 4 |
