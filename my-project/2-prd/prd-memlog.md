@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T19:08
+updated: 2026-10-10T19:09
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -54,3 +54,4 @@ updated: 2026-10-10T19:08
 - (change) Memlog-gjennomgang (Finalize steg 1): FR-5 rettet etter flytendringen; brukeren går nå fra startsiden til modusvalget (FR-20), ikke rett til CV/annonse. Bruker sa ja
 - (change) Visjon, første avsnitt: rekkefølgen snudd slik at modusvalget kommer først, i tråd med flytendringen (FR-20). Brukerens ord beholdt. Bruker sa ja
 - (change) Addendum (FR-8, FR-13): «portaler» byttet til «opplastingsfelt», «jobbutlysningen» til «jobbannonsen», og tredje felt lagt til for brukerens eget søknadsbrev i «Forbedre mitt brev». Brukerens ordvalg
+- (change) Addendum: «jobbannonsen» byttet til «stillingsannonsen» etter brukers ønske, slik at addendum og PRD bruker samme ord
