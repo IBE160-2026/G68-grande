@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T20:42
+updated: 2026-10-10T21:05
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -83,3 +83,4 @@ updated: 2026-10-10T20:42
 - (change) Kildesjekk (faglærer, lite funn g): addendum fikk biblioteker for PDF/.docx og CV-er med kolonner under «Til arkitektur», og skisser av modusvalg og resultatside under «Til UX». Bruker sa ja
 - (decision) Kildesjekk (sensorveiledning, lite funn h): stabilitet ved gjentatte trykk ikke endret; dekket av antakelsen i FR-27
 - (event) Finalize steg 2 (kildesjekk) ferdig; alle funn behandlet og committet. Neste: steg 3 (reviewer-gjennomgang). Fortsatt åpent: 9 [ASSUMPTION] (steg 4), spørre faglærer om proposal, «Hva jeg lærte» i prompt-logg
+- (event) Åpent punkt (eier: Kristine, tas neste økt før steg 3): kilder for Jobscan, Rezi, Teal og Kickresume i visjonen («Hva gjør dette annerledes»), slik faglærer krevde for tall. Påstanden «sjelden begge deler i samme flyt» kan være utdatert; sjekk verktøyenes nettsider, legg inn lenker med dato, og skriv om setningen i PRD (og evt. brief) hvis den ikke stemmer
