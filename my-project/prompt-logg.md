@@ -58,3 +58,16 @@ Verktøy: Claude Code med BMAD-skillen `bmad-prd` (veiledet vei, inngang: visjon
 | 22 | «er det noe mer vi har produsert men som ikke har kommet med til github?» | `addendum.md` og loggen fra første brief-økt lagt i repoet |
 | 23 | «jeg tenker A, men at det kan være greit å legge ved en forklaring på hvorfor jeg skrev som jeg skrev […]» | Merknad om bakgrunnen for formuleringen «egeninitiert idé» lagt øverst i loggen fra første utkast |
 | 24 | «alt det som vi har gjort nå, er dette logget noe sted og lagt inn i github? sånn med tanke på oppryddingen?» | Denne delen av prompt-loggen |
+
+### 2026-10-10 – Ferdigstilling av PRD, steg 1: gjennomgang av beslutningsloggen
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 25 | «ja fortsett med steg 1» | KI-en sjekket hver linje i beslutningsloggen mot PRD-en og fant tre tekster som ikke stemte med flytendringen fra i går |
+| 26 | «jeg må si jeg ikke henger med på noen av de» | KI-en forklarte flyten på nytt, enklere, og tok ett funn om gangen |
+| 27 | «ja» / «ja» | FR-5 og første avsnitt i visjonen rettet, slik at valget mellom «Skriv nytt brev» og «Forbedre mitt brev» kommer først |
+| 28 | «har du et annet ord for portal?» | KI-en foreslo «felt», «opplastingsfelt» og «boks» |
+| 29 | «opplastingsfelt er bra, videre så vil jeg bytte jobbutlysningen med jobbannonsen og brukeren eget brev med brukerens eget søknadsbrev» | Addendumet bruker nå mine ord, og har med feltet for eget søknadsbrev |
+| 30 | «vi kan bruke stillingsannonse» | Addendumet og PRD-en bruker samme ord |
+| 31 | «push» / «to commits?» | Rettingene pushet; KI-en forklarte hvorfor det ble to commits |
+| 32 | «burde jeg cleare det vinduet her og deretter ta opp arbeidet på nytt?» / «hvordan blir memlog og promt log lagret hvis jeg clearer» | Beslutningsloggen er en fil og overlever `/clear`, men prompt-loggen må skrives inn for hånd. Derfor ble denne delen skrevet før `/clear` |

@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T19:09
+updated: 2026-10-10T19:13
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -55,3 +55,4 @@ updated: 2026-10-10T19:09
 - (change) Visjon, første avsnitt: rekkefølgen snudd slik at modusvalget kommer først, i tråd med flytendringen (FR-20). Brukerens ord beholdt. Bruker sa ja
 - (change) Addendum (FR-8, FR-13): «portaler» byttet til «opplastingsfelt», «jobbutlysningen» til «jobbannonsen», og tredje felt lagt til for brukerens eget søknadsbrev i «Forbedre mitt brev». Brukerens ordvalg
 - (change) Addendum: «jobbannonsen» byttet til «stillingsannonsen» etter brukers ønske, slik at addendum og PRD bruker samme ord
+- (event) Finalize steg 1 (memlog-gjennomgang) ferdig; dagens prompts logget i prompt-logg (rad 25-32). Bruker kan gjøre /clear. Gjenoppta med Finalize steg 2 (kildesjekk mot brief, tilbakemelding fra faglærer, sensorveiledning). Fortsatt åpent: 9 [ASSUMPTION], «Hva jeg lærte» i prompt-logg, valgfri liste over hva som kuttes først
