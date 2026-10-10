@@ -103,3 +103,4 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 55 | «skiller egentlig søknadsassistenten seg fra noen av de andre, for hvis ikke er det ikke noe vits å ha det med?» | KI-en vurderte hvilke forskjeller som holder; den sterkeste er den åpne telleregelen |
 | 56 | «jeg vil ha den originale overskriften, og at teksten under deretter skal forklare at dette ikke nødvendigvis er annereledes» / «jeg likte ikke introduksjonssetningen […]» / «1» | «Hva gjør dette annerledes» skrevet om i PRD-en med kilder nederst |
 | 57 | «ja rett opp produktbrief også» | Samme retting og kildeliste i product brief |
+| 58 | «[…] lurer på om det er ting vi har merket oss som vi skal gjøre senere men som ikke står noe sted?» / «jeg ønsker vi opretter en TO DO liste som vi kan sjekke av […]» | TO DO-liste opprettet (`todo.md`); brief-memlog oppdatert med endringene i briefen fra PRD-arbeidet |

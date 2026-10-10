@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten
-updated: 2026-10-08T13:39
+updated: 2026-10-10T20:00
 ---
 
 - (event) Oppdatering startet etter faglærers tilbakemelding (my-project/tilbakemelding-product-brief.md, commit 38fe879)
@@ -35,3 +35,5 @@ updated: 2026-10-08T13:39
 - (change) Språkvask: 5 forslag godtatt (Problemet-innledning, nøkkelordtreff gjelder CV, presisert sammenligning av tidligere søknader, beskjed i appen om ekstern KI, kun/kun)
 - (event) Brief godkjent av bruker og satt til status final
 - (change) Etter gjennomgang av faglærers punkter: begrunnelse for Word i stedet for Markdown lagt i Løsningen steg 5; README i my-project oppdatert; prompt-logg.md opprettet
+- (change) 2026-10-09, under PRD-arbeidet: «appen» byttet til «nettsiden» (8 steder, ellers ingen endringer), etter brukers ønske om at produktet kalles nettside. Se prd-memlog.md
+- (change) 2026-10-10, under PRD-arbeidet: «Hva gjør dette annerledes» skrevet om fordi påstanden om at sammenlignbare verktøy «sjelden» har både ATS-matching og KI-tekst ikke stemte (sjekket på nett: Jobscan, Rezi, Teal og Kickresume tilbyr begge deler). Kildeliste lagt til nederst. Se prd-memlog.md
