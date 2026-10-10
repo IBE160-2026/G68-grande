@@ -9,7 +9,7 @@ updated: 2026-10-09
 
 ## 1. Visjon
 
-Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, får se hva CV-en mangler, og velger om KI-en skal skrive brevet fra bunnen (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**).
+Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren velger om KI-en skal skrive brevet fra bunnen (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**), legger inn CV-en sin og en stillingsannonse, og får se hva CV-en mangler.
 
 ### Problemet
 
@@ -41,7 +41,7 @@ Sammenlignbare verktøy, som Jobscan, Rezi, Teal og Kickresume, dekker typisk en
 - **FR-2:** Hvis e-posten allerede er registrert, får brukeren en feilmelding som sier at e-posten allerede er registrert.
 - **FR-3:** Brukeren kan logge inn med e-post og passord. Ved feil e-post eller passord får brukeren feilmeldingen «Feil e-post eller passord».
 - **FR-4:** Hvis et felt står tomt, får rammen rundt feltet rød farge, og det vises en kort feilmelding ved feltet, for eksempel «Fyll inn e-post», slik at feilen ikke bare vises med farge.
-- **FR-5:** Etter innlogging havner brukeren på en startside med en tydelig måte å begynne på en ny søknad, for eksempel «Begynn å lage søknad». Derfra går brukeren videre til siden der CV og annonse legges inn.
+- **FR-5:** Etter innlogging havner brukeren på en startside med en tydelig måte å begynne på en ny søknad, for eksempel «Begynn å lage søknad». Derfra går brukeren videre til valget mellom «Skriv nytt brev» og «Forbedre mitt brev» (FR-20).
 - **FR-6:** Brukeren kan logge ut fra nettsiden.
 - **FR-7:** Det er ikke mulig å bruke nettsiden uten å være logget inn. Prøver brukeren å gå til en side på nettsiden uten å være logget inn, kommer de til innloggingen med en feilmelding som sier at de må logge inn først.
 

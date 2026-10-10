@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-09T16:55
+updated: 2026-10-10T19:08
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -51,3 +51,6 @@ updated: 2026-10-09T16:55
 - (change) Omdøping til Productbrief/PRD angret før push (bruker vil beholde tallene for rekkefølge); mappene heter fortsatt 1-product-brief og 2-prd
 - (decision) Valgt B: _bmad-output forblir lokal kladdebok; Claude kopierer dokument, addendum og memlog til my-project/<n>-<doc>/. Lagt til: 2-prd/addendum.md, 1-product-brief/forste-utkast-memlog.md (uendret logg fra 16. sep + merknad med brukers forklaring om «egeninitiert idé»), og merknad i prompt-logg om at promptene fra 16. sep mangler
 - (event) Opprydding i repoet logget i prompt-logg (rad 13-24). Ikke tidligere logget her: tom research-mappe fjernet (ee5a034); CI-sjekk feilet etter flytting av briefen og ble rettet (2b81019)
+- (change) Memlog-gjennomgang (Finalize steg 1): FR-5 rettet etter flytendringen; brukeren går nå fra startsiden til modusvalget (FR-20), ikke rett til CV/annonse. Bruker sa ja
+- (change) Visjon, første avsnitt: rekkefølgen snudd slik at modusvalget kommer først, i tråd med flytendringen (FR-20). Brukerens ord beholdt. Bruker sa ja
+- (change) Addendum (FR-8, FR-13): «portaler» byttet til «opplastingsfelt», «jobbutlysningen» til «jobbannonsen», og tredje felt lagt til for brukerens eget søknadsbrev i «Forbedre mitt brev». Brukerens ordvalg
