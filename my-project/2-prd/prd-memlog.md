@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T19:13
+updated: 2026-10-10T19:58
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -56,3 +56,21 @@ updated: 2026-10-10T19:13
 - (change) Addendum (FR-8, FR-13): «portaler» byttet til «opplastingsfelt», «jobbutlysningen» til «jobbannonsen», og tredje felt lagt til for brukerens eget søknadsbrev i «Forbedre mitt brev». Brukerens ordvalg
 - (change) Addendum: «jobbannonsen» byttet til «stillingsannonsen» etter brukers ønske, slik at addendum og PRD bruker samme ord
 - (event) Finalize steg 1 (memlog-gjennomgang) ferdig; dagens prompts logget i prompt-logg (rad 25-32). Bruker kan gjøre /clear. Gjenoppta med Finalize steg 2 (kildesjekk mot brief, tilbakemelding fra faglærer, sensorveiledning). Fortsatt åpent: 9 [ASSUMPTION], «Hva jeg lærte» i prompt-logg, valgfri liste over hva som kuttes først
+- (event) Finalize steg 2 (kildesjekk) startet: fire kilder sjekkes mot PRD og addendum (product brief, tilbakemelding fra faglærer, sensorveiledning, brief-memlog)
+- (event) Kildesjekk ferdig for alle fire kilder; funn i reconcile-*.md. 2 høye funn (målgruppens oversettelsesbehov mangler; sensor uten API-nøkkel ser bare testmodus), ca. 10 middels, resten lave. Gjennomgås ett om gangen med bruker
+- (change) Kildesjekk (brief): FR-37 utvidet. KI-en får omformulere det som står i CV-en og koble det til kravene i annonsen (oversettelse til kvalifikasjoner, fra brief-ens målgruppe), men ikke legge til noe nytt. Bruker sa ja
+- (decision) Kildesjekk (sensorveiledning): FR-38 ny. Ferdige svar i testmodus er ekte KI-svar fra testdataene; README viser 2-3 skjermbilder med ekte KI på. Grunn: sensor har trolig ingen API-nøkkel og ser ellers aldri ekte KI. Video valgt bort (tar tid, viser ikke mer). Claudes anbefaling, bruker sa ja
+- (decision) Kildesjekk (3 kilder): KI-tjeneste Claude (Anthropic) via API lagt i PRD som NFR-11 (ny del «KI-tjeneste»), etter brukers ønske om å understreke valget. Briefens setning kopiert ordrett til addendum under «Til arkitektur», sammen med at PDF-lesing avklares i arkitekturen. Bruker sa ja
+- (change) Kildesjekk (brief): FR-24 utvidet med tone fra brief: formell og akademisk, gjør arbeidsgiver oppmerksom og engasjert, ikke generisk KI-tekst. Bruker sa ja
+- (change) Kildesjekk (brief): FR-18 utvidet. Nettsiden forklarer hva et ATS er (system arbeidsgivere sender søknadene gjennom) og at nøkkelordtreffet bare er en pekepinn på hvordan CV-en kan bli vurdert, ikke en garanti. Bruker presiserte at ATS vurderer hele søknaden, mens treffet bare teller CV-en; ordlyd justert etter det
+- (change) Kildesjekk (faglærer): risiko 1 omdøpt til «Gap-analysen og nøkkelordtellingen er vanskelig å få til»; «ATS-delen» fjernet fordi nettsiden ikke har noen egen ATS-del. Forskjellen ATS / nøkkelordtreff / gap-analyse forklart for bruker. Bruker sa ja
+- (change) Kildesjekk (faglærer, «usikre svar»): FR-28 utvidet med ubrukelige KI-svar: tom nøkkelordliste, begge gap-lister tomme, tomt brev, svar som ikke kan leses -> ingen resultat, feilmelding om å prøve på nytt. Bare én tom gap-liste er gyldig. Bruker sa ja
+- (change) FR-18 skrevet om: resultatsiden forklarer kort tre begreper (ATS, nøkkelordtreff, gap-analyse) og at gap-analysen og treffet kan si imot hverandre. Grunn: bruker fikk ikke forrige ordlyd til å stemme og spurte om forskjellen på begrepene; målgruppen kjenner ikke ATS. Bruker sa ja
+- (change) Kildesjekk (faglærer): suksesskriterium 1, 3 og 11 testes med ekte KI, ikke i testmodus, fordi testmodus-svar alltid ser riktige ut. Bruker sa ja
+- (change) Kildesjekk (sensorveiledning): FR-34 utvidet. Feilmeldinger (tomme felt, feil filtype, uleselig PDF) virker også i testmodus; testdata dekker begge moduser, med fiktivt søknadsbrev. Bruker sa ja
+- (change) Kildesjekk (sensorveiledning): NFR-8 utvidet. Database og testbruker lages automatisk første gang nettsiden startes; README viser e-post og passord til testbrukeren. Automatisk valgt fremfor manuelt steg (færre steg for sensor). Bruker sa ja
+- (decision) Addendum: ny del «Arbeidsmåte». README oppdateres fortløpende gjennom hele prosjektet. Brukers ønske
+- (decision) Kildesjekk (sensorveiledning kriterium 3): NFR-9 utvidet med automatiske tester for innlogging og at README viser hvordan testene kjøres. NFR-12 ny: skrevet testplan med resultat for manuelle kriterier, også hele flyten. Automatisk flyttest satt på kuttlisten («gjøres hvis det blir tid»), begrunnet med tid. Kriterium 3 krever én testtype, ikke ende-til-ende. Bruker sa ja
+- (decision) Nødliste ved tidsnød lagt til under risiko (åpent punkt lukket). Rekkefølge: FR-19 gjenbruk, PDF-nedlasting, nytt forslag; deretter Korrektur-markeringer, PDF-opplasting; siste utvei hele Korrektur. Kuttes aldri: testmodus, innlogging, gap, nøkkelordtreff+tester, Full generering, .docx, samtykke, FR-37. Claudes forslag, bruker godtok rekkefølgen
+- (change) Kildesjekk (brief): «Den ærlige begrensningen» lagt ordrett inn i visjonen under «Hva gjør dette annerledes». Bruker sa ja
+- (event) Alle høye og middels funn fra kildesjekken behandlet; PRD, addendum og memlog kopiert til my-project/2-prd/ og committet. Neste: små funn fra kildesjekken

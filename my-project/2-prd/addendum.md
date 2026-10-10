@@ -15,3 +15,9 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 ## Til arkitektur
 
 - **Filstørrelse (FR-12):** Kristine vet ikke hvilken grense som passer. Arkitekturen bestemmer tallet.
+- **KI-tjeneste (NFR-11):** Claude (Anthropic) via API. Modell, kostnad og håndtering av nøkkelen avklares i arkitekturen. API-nøkkelen ligger bare lokalt og legges aldri i Git. (Fra product brief.)
+- **Lese tekst fra PDF (FR-11):** Hvordan nettsiden henter teksten ut av PDF-filer, avklares i arkitekturen. (Fra product brief.)
+
+## Arbeidsmåte
+
+- **README (NFR-8):** README oppdateres fortløpende gjennom hele prosjektet, hver gang noe endres som påvirker hvordan nettsiden installeres, startes eller testes.
