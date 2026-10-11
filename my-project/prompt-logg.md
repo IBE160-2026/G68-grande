@@ -113,3 +113,14 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 4. **Krav må kunne testes og passe til tiden.** Jeg kuttet bevisst ting som ordstamme-regel, redigering i nettleseren og automatisk flyttest, la til en nødliste og koblet kravene til sensorveiledningen (46, 47).
 5. **Forskjellen på product brief og PRD.** Har lært at Produktbrief er en kort beskrivelse av hva som skal bli produktet, mens det er i PRD man utdyper hva produktet skal inneholde og gjøre.
 6. **Arbeidsmåte og sporbarhet.** Beslutningslogg og prompt-logg er to forskjellige ting, arbeidet må inn i GitHub underveis, og en TO DO-liste hindrer at ting blir glemt.
+
+### 2026-10-11 – Status for PRD og «Hva jeg lærte» (egen terminal, mens steg 3 pågikk)
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 59 | «hei, nå jobber vi med PRD i naboterminalen, hvor mye er igjen av PRD før denne er ferdig?» | Oversikt over ferdigstillingen: steg 1–2 ferdig, steg 3 i gang, steg 4–7 gjenstår |
+| 60 | «jeg har spurt om dette med proposal, ikke fått svar så ikke huk av ennå. Vi kan skrive hva vi har lært. Men lurer på hva jeg skal dekke, altså hva jeg lærte under skrivingen av PRD?» | Proposal-punktet står åpent; KI-en foreslo seks temaer hentet fra prompt-loggen |
+| 61 | «nei det er ikke vits, jeg liker punktene du har satt opp […] Bruk dette som overskrift: dette har jeg blitt oppmerksom på uner arbeidet med PRD. for punkt 5: Har lært at Produktbrief er en kort beskrivelse av hva som skal bli produktet, mens det er i PRD man utdyer hva produktet skal inneholde og gjøre.» | Delen «Dette har jeg blitt oppmerksom på under arbeidet med PRD» lagt inn over, med min tekst i punkt 5 |
+| 62 | «push» | Pushet til GitHub |
+| 63 | «ligger det prompts og memlog også?» | Alt til og med steg 2 ligger på GitHub; endringene fra steg 3 kopieres når steget er ferdig |
+| 64 | «ja takk» | Denne delen av prompt-loggen |
