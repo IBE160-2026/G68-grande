@@ -60,7 +60,7 @@ Kravene beholder numrene de fikk da de ble skrevet, slik at henvisninger ikke br
 - **FR-9:** Alle feltene som vises, må være fylt ut før brukeren kan gå videre. CV og stillingsannonse er alltid med, fordi gap-analysen og nøkkelordtreffet bygger på dem. Mangler noe, får brukeren en feilmelding som sier hva som mangler.
 - **FR-10:** Hvis brukeren laster opp en fil som ikke er PDF, får brukeren feilmeldingen «Feil filtype, prøv PDF».
 - **FR-11:** Hvis nettsiden ikke klarer å lese teksten i en PDF, for eksempel fordi den er skannet, får brukeren beskjed om å lime inn teksten i stedet.
-- **FR-12:** Nettsiden har en øvre grense for filstørrelse. Er filen for stor, får brukeren en feilmelding som sier dette. [ASSUMPTION: selve grensen bestemmes i arkitekturen]
+- **FR-12:** Nettsiden har en øvre grense for filstørrelse. Er filen for stor, får brukeren en feilmelding som sier dette. Selve grensen bestemmes i arkitekturen.
 - **FR-13:** Brukeren kan angre, altså fjerne eller bytte ut en fil eller tekst de har lagt inn, før de går videre.
 
 ### 2.3 Gap-analyse og nøkkelordtreff
@@ -73,7 +73,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 - **FR-17:** Nøkkelordtreffet regnes ut av nettsiden med en fast regel og vises som «X av Y = Z %», for eksempel «7 av 10 = 70 %».
   - **Telleregel:** Et nøkkelord er et treff hvis det finnes i CV-teksten, også som del av et lengre ord, uavhengig av store og små bokstaver. «Python» er altså et treff i «python-utvikler». Nøkkelord på 1–3 tegn må likevel stå som eget ord, så «C» er et treff i «C, Python», men ikke i «Center».
   - **Kjente begrensninger:** Bøyningsformer fanges ikke opp, så «prosjektledelse» er ikke et treff i «prosjektleder». Et kort nøkkelord kan gi treff inne i et annet ord, for eksempel «Java» i «JavaScript».
-  - [ASSUMPTION: hvert nøkkelord telles bare én gang, og prosenten rundes til nærmeste hele tall]
+  - **Telling og avrunding:** Hvert nøkkelord telles bare én gang, selv om det står flere ganger i CV-en. Prosenten rundes til nærmeste hele tall, så «2 av 3» vises som «67 %».
 - **FR-18:** På resultatsiden forklarer nettsiden kort tre begreper:
   - **ATS:** et system mange arbeidsgivere sender søknadene gjennom før et menneske leser dem.
   - **Nøkkelordtreff:** en ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan CV-en kan bli vurdert av et ATS, ikke en garanti.
@@ -85,8 +85,8 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 
 ### 2.4 Søknadsbrev: Full generering og Korrektur
 
-- **FR-22:** I «Skriv nytt brev» (Full generering) skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden. [ASSUMPTION: brevet vises på skjermen før brukeren laster det ned]
-- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. [ASSUMPTION: endringene vises ikke bare med farge, for eksempel også med understreking]
+- **FR-22:** I «Skriv nytt brev» (Full generering) skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden, slik at brukeren kan lese det før det lastes ned.
+- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. Endringene vises ikke bare med farge, men også på en annen måte, for eksempel med understreking.
 - **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene. Det betyr at brevet:
   - nevner stillingen og arbeidsgiveren ved navn,
   - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en,
@@ -96,7 +96,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 - **FR-37:** KI-en skal ikke komme med antakelser på vegne av brukeren. Brevet bygger bare på det som står i CV-en, stillingsannonsen og eventuelt brukerens eget brev. KI-en legger ikke til erfaring, utdanning eller ferdigheter som ikke står der. KI-en får omformulere det som står i CV-en og koble det til kravene i stillingsannonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid». Dette gjelder begge modusene.
 - **FR-25:** Brukeren kan be om et nytt forslag hvis de ikke er fornøyd med brevet. I Korrektur lages det nye forslaget fra brukerens opprinnelige brev.
 - **FR-26:** Brukeren redigerer ikke brevet på nettsiden. Videre redigering gjøres i Word etter nedlasting.
-- **FR-27:** Mens KI-en jobber, viser nettsiden et ventetegn med en kort tekst. [ASSUMPTION: knappen som startet handlingen kan ikke trykkes på nytt mens brukeren venter, slik at det ikke sendes flere forespørsler samtidig]
+- **FR-27:** Mens KI-en jobber, viser nettsiden et ventetegn med en kort tekst. Knappen som startet handlingen kan ikke trykkes på nytt mens brukeren venter, slik at det ikke sendes flere forespørsler samtidig.
 - **FR-28:** Hvis KI-en ikke svarer, får brukeren en feilmelding:
   - Ved nettverksfeil: «Nettverksfeil, sjekk nettverkstilgangen».
   - Ved andre feil: en feilmelding som ber brukeren prøve på nytt.
@@ -105,15 +105,15 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
     - både «dekker» og «mangler» i gap-analysen er tomme
     - søknadsbrevet er tomt
     - nettsiden ikke klarer å lese svaret
-  - [ASSUMPTION: det brukeren har lagt inn, er fortsatt der etter en feil, slik at de ikke må begynne på nytt]
+  - Etter en feil er det brukeren har lagt inn, fortsatt der, slik at de ikke må begynne på nytt.
 
 ### 2.5 Word og PDF ut
 
 Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter flest redigerer i Word, og brevet bør kunne finpusses før det sendes.
 
-- **FR-29:** Når brevet er ferdig, finnes det en nedlastingsknapp der brukeren kan laste ned brevet som Word (.docx) eller PDF. [ASSUMPTION: filnavnet bestemmes i UX eller arkitektur, for eksempel «Soknad_2026-10-09.docx»]
+- **FR-29:** Når brevet er ferdig, finnes det en nedlastingsknapp der brukeren kan laste ned brevet som Word (.docx) eller PDF. Filnavnet bestemmes i UX.
 - **FR-30:** Den nedlastede filen inneholder bare den ferdige brevteksten, uten markeringene fra Korrektur, og uten topp- eller bunntekst.
-- **FR-31:** Etter nedlasting kan brukeren velge mellom å gå til startsiden eller logge ut. [ASSUMPTION: går brukeren til startsiden, starter de en ny søknad med tomme felt]
+- **FR-31:** Etter nedlasting kan brukeren velge mellom å gå til startsiden eller logge ut. Går brukeren til startsiden, starter de en ny søknad med tomme felt.
 
 ### 2.6 Testmodus og bruk av KI
 
@@ -124,7 +124,8 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 - **FR-36:** Når testmodus er av, må brukeren samtykke til bruk av KI på startsiden før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
   - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn sendes til en ekstern KI.
   - Brukeren huker av boksen og trykker deretter «Begynn å lage søknad».
-  - Trykker brukeren «Begynn å lage søknad» uten å ha huket av, får de en feilmelding som sier at de må samtykke først. [ASSUMPTION: samtykke trengs ikke i testmodus, fordi ingen tekst sendes til en ekstern KI]
+  - Trykker brukeren «Begynn å lage søknad» uten å ha huket av, får de en feilmelding som sier at de må samtykke først.
+  - I testmodus trengs ikke samtykke, fordi ingen tekst sendes til en ekstern KI.
 - **FR-38:** De ferdige svarene i testmodus er ekte KI-svar, laget ved å kjøre de fiktive testdataene gjennom den eksterne KI-en. README viser i tillegg to–tre skjermbilder av nettsiden med ekte KI på.
 
 ## 3. Ikke-funksjonelle krav
@@ -182,6 +183,7 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 | Redigere brevet i nettleseren | Studenter redigerer i Word. Visningen med markerte endringer i Korrektur er vanskelig å gjøre redigerbar, og «nytt forslag» ville overskrevet endringene |
 | Topp- og bunntekst i den nedlastede filen (dato, navn, stilling) | KI-en kan hente feil navn eller stilling, og det blir mer å teste. Brukeren legger det til i Word |
 | Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen (gjøres hvis det blir tid) | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
+| Beholde CV-en når brukeren går til startsiden for å lage en ny søknad, slik at de kan søke på flere stillinger uten å laste opp CV-en på nytt (gjøres hvis det blir tid) | Ny funksjon, prioritert bort på grunn av tid. I versjon 1 starter en ny søknad med tomme felt (FR-31) |
 | Automatisk test av hele flyten i testmodus (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
 
 ### Ikke en del av prosjektet

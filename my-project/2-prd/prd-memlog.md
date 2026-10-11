@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T13:49
+updated: 2026-10-11T14:56
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -115,3 +115,13 @@ updated: 2026-10-11T13:49
 - (change) Gjennomgang (sensor S11): addendum «Til arkitektur» fikk punkt om linter og formatterer sjekket i CI, og å vurdere ett språk for hele nettsiden (repoet er nå satt opp for JS frontend + Python backend). Bruker sa ja
 - (event) Finalize steg 3 (gjennomgang) ferdig: alle funn fra review-rubric.md og review-sensor.md behandlet (6 høye, 11 middels, 7 lave). Neste: steg 4, de 9 [ASSUMPTION]
 - (event) Gjennomganger (review-rubric, review-sensor) og kildesjekker (reconcile-*) kopiert til my-project/2-prd/gjennomganger/ og pushet, som spor for sensor av at PRD-en er sjekket kritisk. Brukers ønske
+- (decision) Steg 4, antakelse 1 (FR-12): utsatt. [ASSUMPTION] fjernet; PRD sier nå at grensen for filstørrelse bestemmes i arkitekturen (eier: Kristine, når arkitekturen lages; ligger allerede i addendum «Til arkitektur»). Brukers valg
+- (decision) Steg 4, antakelse 2 (FR-17): godtatt. Nytt underpunkt «Telling og avrunding»: hvert nøkkelord telles én gang, prosent rundes til nærmeste hele tall («2 av 3» = «67 %»). Gir testbart fasitsvar for NFR-9. Bruker sa ja
+- (decision) Steg 4, antakelse 3 (FR-22): godtatt. Brevet vises på nettsiden så brukeren kan lese det før nedlasting (henger sammen med FR-25 og FR-29). Bruker sa ja
+- (decision) Steg 4, antakelse 4 (FR-23): godtatt. Endringer i Korrektur vises ikke bare med farge, men også på en annen måte (f.eks. understreking); hvordan bestemmes i UX. Begrunnelse: fargeblinde og skjermlesere, WCAG, passer med NFR-6. Bruker sa ja
+- (decision) Steg 4, antakelse 5 (FR-27): godtatt. Knappen som startet handlingen kan ikke trykkes på nytt mens brukeren venter (hindrer ekstra KI-kostnad, doble svar og ny nøkkelordliste i strid med FR-15). Bruker sa ja
+- (decision) Steg 4, antakelse 6 (FR-28): godtatt. Etter en feil er det brukeren har lagt inn, fortsatt der (passer med «prøv på nytt»-meldingene og FR-19). Bruker sa ja
+- (decision) Steg 4, antakelse 7 (FR-29): utsatt til UX (eier: Kristine, når UX lages). PRD sier nå «Filnavnet bestemmes i UX»; nytt punkt i addendum «Til UX»: eksempel Soknad_2026-10-09.docx, vurder arbeidsgiver i navnet, unngå æ/ø/å. Brukers valg
+- (decision) Steg 4, antakelse 8 (FR-31): A + B. A godtatt: går brukeren til startsiden, starter en ny søknad med tomme felt (enklest, tryggest for personvern). B på kuttlisten «gjøres hvis det blir tid»: beholde CV-en ved ny søknad, så brukeren kan søke på flere stillinger uten ny opplasting. Brukers valg
+- (decision) Steg 4, antakelse 9 (FR-36): godtatt. Eget underpunkt: i testmodus trengs ikke samtykke, fordi ingen tekst sendes til ekstern KI (stemmer med «Når testmodus er av» i FR-36). Bruker sa ja
+- (event) Finalize steg 4 ferdig: alle 9 [ASSUMPTION] avgjort (7 godtatt, 2 utsatt: FR-12 til arkitektur, FR-29 til UX). Ingen [NOTE FOR PM]. Åpne spørsmål i del 7 (proposal, KI-fraser, milepælsdatoer) er ikke fasehindre og har eier Kristine. Neste: steg 5, språkvask og struktur

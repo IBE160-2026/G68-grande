@@ -14,6 +14,8 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 
 - **Markeringer i Korrektur (FR-23):** Brukeren skal ikke måtte lese brevet to ganger. Kristines utgangspunkt: brevet vises én gang i den nye versjonen, endrede setninger er markert (for eksempel grønne og understreket), og et klikk på en markert setning viser den gamle. Alternativ som kan prøves på skisse: markering per ord, der bare ordene som er endret vises i rødt og grønt. Avvist: per setning med gammel og ny setning under hverandre, fordi hele brevet da kan bli vist dobbelt.
 
+- **Filnavn (FR-29):** Bestem navnet på den nedlastede filen, for eksempel «Soknad_2026-10-09.docx». Vurder om arbeidsgiveren skal stå i navnet, og unngå æ, ø og å.
+
 - **Skisser (fra faglærer):** Skisser modusvalget (FR-20) og resultatsiden, med gap-analysen, nøkkelordlisten og forklaringen av begrepene (FR-14, FR-16, FR-18).
 
 ## Til arkitektur
