@@ -100,12 +100,14 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 - **FR-28:** Hvis KI-en ikke svarer, får brukeren en feilmelding:
   - Ved nettverksfeil: «Nettverksfeil, sjekk nettverkstilgangen».
   - Ved andre feil: en feilmelding som ber brukeren prøve på nytt.
-  - Hvis KI-en svarer, men svaret ikke kan brukes, viser nettsiden ikke noe resultat. I stedet får brukeren en feilmelding som ber dem prøve på nytt. Et svar kan ikke brukes når:
-    - nøkkelordlisten er tom
-    - både «dekker» og «mangler» i gap-analysen er tomme
-    - søknadsbrevet er tomt
-    - nettsiden ikke klarer å lese svaret
-  - Etter en feil er det brukeren har lagt inn, fortsatt der, slik at de ikke må begynne på nytt.
+
+  Hvis KI-en svarer, men svaret ikke kan brukes, viser nettsiden ikke noe resultat. I stedet får brukeren en feilmelding som ber dem prøve på nytt. Et svar kan ikke brukes når:
+  - nøkkelordlisten er tom
+  - både «dekker» og «mangler» i gap-analysen er tomme
+  - søknadsbrevet er tomt
+  - nettsiden ikke klarer å lese svaret
+
+  Etter en feil er det brukeren har lagt inn, fortsatt der, slik at de ikke må begynne på nytt.
 
 ### 2.5 Word og PDF ut
 
@@ -117,9 +119,15 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 ### 2.6 Testmodus og bruk av KI
 
-- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus. I testmodus finnes det en knapp for å bytte tilbake til vanlig modus. Brukeren kan bare bytte på startsiden, ikke midt i en søknad. I testmodus bruker nettsiden ferdige KI-svar i stedet for å sende tekst til en ekstern KI, slik at nettsiden kan kjøres uten API-nøkkel. Finnes det ingen API-nøkkel, starter nettsiden i testmodus, det er ikke mulig å bytte tilbake til vanlig modus, og det vises en kort forklaring, for eksempel «Mangler API-nøkkel, se README».
+- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus.
+  - I testmodus finnes det en knapp for å bytte tilbake til vanlig modus. Brukeren kan bare bytte på startsiden, ikke midt i en søknad.
+  - I testmodus bruker nettsiden ferdige KI-svar i stedet for å sende tekst til en ekstern KI, slik at nettsiden kan kjøres uten API-nøkkel.
+  - Finnes det ingen API-nøkkel, starter nettsiden i testmodus, det er ikke mulig å bytte tilbake til vanlig modus, og det vises en kort forklaring, for eksempel «Mangler API-nøkkel, se README».
 - **FR-33:** Når testmodus er på, vises en tydelig merkelapp, for eksempel «Testmodus», slik at brukeren ser det.
-- **FR-34:** I testmodus fungerer bare de fiktive testdataene. Legger brukeren inn noe annet, får de beskjed om at bare testdata fungerer i testmodus. Feilmeldingene for tomme felt, feil filtype og uleselig PDF virker også i testmodus. Testdataene dekker begge modusene, også med et fiktivt søknadsbrev til «Forbedre mitt brev». Testdataene har også en skannet PDF og en fil av feil type, slik at sensor kan prøve feilmeldingene.
+- **FR-34:** I testmodus fungerer bare de fiktive testdataene.
+  - Legger brukeren inn noe annet, får de beskjed om at bare testdata fungerer i testmodus.
+  - Feilmeldingene for tomme felt, feil filtype og uleselig PDF virker også i testmodus.
+  - Testdataene dekker begge modusene, også med et fiktivt søknadsbrev til «Forbedre mitt brev». Testdataene har også en skannet PDF og en fil av feil type, slik at sensor kan prøve feilmeldingene.
 - **FR-35:** Når testmodus er av, vises en merknad i et hjørne av nettsiden hele tiden, som sier at nettsiden bruker en ekstern KI.
 - **FR-36:** Når testmodus er av, må brukeren samtykke til bruk av KI på startsiden før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
   - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn sendes til en ekstern KI.
@@ -182,9 +190,35 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 | «Kun søknad», altså Korrektur uten CV | Krever en ekstra analysevariant (søknad mot annonse), flere KI-instrukser og flere tester. KI-delen er det mest risikable i prosjektet |
 | Redigere brevet i nettleseren | Studenter redigerer i Word. Visningen med markerte endringer i Korrektur er vanskelig å gjøre redigerbar, og «nytt forslag» ville overskrevet endringene |
 | Topp- og bunntekst i den nedlastede filen (dato, navn, stilling) | KI-en kan hente feil navn eller stilling, og det blir mer å teste. Brukeren legger det til i Word |
-| Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen (gjøres hvis det blir tid) | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
-| Beholde CV-en når brukeren går til startsiden for å lage en ny søknad, slik at de kan søke på flere stillinger uten å laste opp CV-en på nytt (gjøres hvis det blir tid) | Ny funksjon, prioritert bort på grunn av tid. I versjon 1 starter en ny søknad med tomme felt (FR-31) |
-| Automatisk test av hele flyten i testmodus (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
+
+### Gjøres hvis det blir tid
+
+| Hva | Hvorfor utelatt |
+|---|---|
+| Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
+| Beholde CV-en når brukeren går til startsiden for å lage en ny søknad, slik at de kan søke på flere stillinger uten å laste opp CV-en på nytt | Ny funksjon, prioritert bort på grunn av tid. I versjon 1 starter en ny søknad med tomme felt (FR-31) |
+| Automatisk test av hele flyten i testmodus | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
+
+### Nødliste ved tidsnød
+
+Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden ikke strekker til:
+
+**Kuttes først (lite tap):**
+
+1. Tilbake-knappen gjenbruker ikke nøkkelordlisten. Analysen kjøres bare på nytt. (FR-19)
+2. Bare .docx ved nedlasting, ikke PDF. (FR-29)
+3. Ingen «nytt forslag»-knapp. Brukeren kan gå tilbake og kjøre på nytt. (FR-25)
+
+**Kuttes deretter (merkbart, men flyten virker fortsatt):**
+
+4. Ingen markeringer i Korrektur. Brukeren får det forbedrede brevet uten å se hva som er endret. (FR-23)
+5. Bare innlimt tekst, ikke PDF-opplasting. Suksesskriterium 5 må da endres. (FR-8, FR-10–FR-12)
+
+**Siste utvei:**
+
+6. Hele «Forbedre mitt brev» (Korrektur). Den skiller nettsiden fra andre verktøy og kuttes bare når alt annet er prøvd.
+
+**Kuttes aldri:** testmodus, innlogging, gap-analysen, nøkkelordtreffet med telleregelen og testene, Full generering, .docx-nedlasting, samtykke og FR-37.
 
 ### Ikke en del av prosjektet
 
@@ -213,12 +247,12 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 | Risiko | Hva jeg gjør med det |
 |---|---|
 | **Gap-analysen og nøkkelordtreffet er vanskelig å få til** | Telleregelen (FR-17) bygges først, med automatiske tester. Den er ren kode og lettest å få riktig. Gap-analysen bygges etterpå. |
-| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten under, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
+| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten i del 4, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
 | **KI-funksjonen i nettsiden løser ikke problemet slik den skal, eller blir for avansert** | Hele flyten bygges først med testmodus og ferdige KI-svar. Ekte KI kobles på til slutt, når resten virker. Hver KI-oppgave (nøkkelord, gap-analyse, brev, korrektur) får sin egen enkle instruks (prompt) som kan testes hver for seg. Tellingen gjøres av koden, ikke av KI-en. |
 | **KI-en i nettsiden skriver ting i brevet som ikke stemmer**, for eksempel erfaring som ikke står i CV-en | Eget krav (FR-37). Instruksen til KI-en sier at brevet bare skal bygge på det brukeren har lagt inn. Testes med fiktive CV-er og fasit (suksesskriterium 11). |
 | **KI-en jeg bruker når jeg koder gjør endringer jeg ikke har bedt om, eller legger til ting jeg ikke får med meg** | Én liten oppgave om gangen. Endringene leses gjennom før de committes, og commits gjøres ofte, slik at det er lett å se hva som er endret og gå tilbake. Arbeidet følger stories som viser til FR-numrene i denne PRD-en. Hver story får egen branch og pull request, med en kort kommentar om feil KI-en gjorde og hvordan de ble rettet (se addendum, «Arbeidsmåte»). |
 
-### Milepæler
+## 7. Milepæler
 
 Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på nytt uken etter 11. oktober, når tiden til andre fag er klar.
 
@@ -233,28 +267,7 @@ Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på
 | README testet på en ren klone | 11. desember |
 | Levering | 15. desember |
 
-### Nødliste ved tidsnød
-
-Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden ikke strekker til:
-
-**Kuttes først (lite tap):**
-
-1. Tilbake-knappen gjenbruker ikke nøkkelordlisten. Analysen kjøres bare på nytt. (FR-19)
-2. Bare .docx ved nedlasting, ikke PDF. (FR-29)
-3. Ingen «nytt forslag»-knapp. Brukeren kan gå tilbake og kjøre på nytt. (FR-25)
-
-**Kuttes deretter (merkbart, men flyten virker fortsatt):**
-
-4. Ingen markeringer i Korrektur. Brukeren får det forbedrede brevet uten å se hva som er endret. (FR-23)
-5. Bare innlimt tekst, ikke PDF-opplasting. Suksesskriterium 5 må da endres. (FR-8, FR-10–FR-12)
-
-**Siste utvei:**
-
-6. Hele «Forbedre mitt brev» (Korrektur). Den skiller nettsiden fra andre verktøy og kuttes bare når alt annet er prøvd.
-
-**Kuttes aldri:** testmodus, innlogging, gap-analysen, nøkkelordtreffet med telleregelen og testene, Full generering, .docx-nedlasting, samtykke og FR-37.
-
-## 7. Åpne spørsmål
+## 8. Åpne spørsmål
 
 | Spørsmål | Eier | Når |
 |---|---|---|

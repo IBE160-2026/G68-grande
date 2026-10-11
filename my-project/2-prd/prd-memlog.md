@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T15:00
+updated: 2026-10-11T15:25
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -126,3 +126,19 @@ updated: 2026-10-11T15:00
 - (decision) Steg 4, antakelse 9 (FR-36): godtatt. Eget underpunkt: i testmodus trengs ikke samtykke, fordi ingen tekst sendes til ekstern KI (stemmer med «Når testmodus er av» i FR-36). Bruker sa ja
 - (event) Finalize steg 4 ferdig: alle 9 [ASSUMPTION] avgjort (7 godtatt, 2 utsatt: FR-12 til arkitektur, FR-29 til UX). Ingen [NOTE FOR PM]. Åpne spørsmål i del 7 (proposal, KI-fraser, milepælsdatoer) er ikke fasehindre og har eier Kristine. Neste: steg 5, språkvask og struktur
 - (change) Ny del «Avgjøres i UX og arkitektur» under «7. Åpne spørsmål»: tabell med hva som utsettes, hvor det avgjøres og hvorfor ikke nå (FR-23, FR-29, utseende på knapper o.l. til UX; FR-12, NFR-11, FR-28 ventetid, PDF/Word-biblioteker, CV med kolonner, FR-34/NFR-3 testdata til arkitektur). Begrunnelse: brukeren spurte om det var tydelig; før var det spredt og uten begrunnelse. Begrunnelsene er Claudes formuleringer, godkjent av bruker
+- (event) Finalize steg 5 startet: strukturgjennomgang (bmad-review lens structure) av prd.md og addendum.md først; språkgjennomgang (prose) etterpå, så vi ikke vasker tekst som flyttes. Funn er forslag; bare det bruker godkjenner endres
+- (change) Steg 5 struktur P1: FR-28 delt i tre deler (KI svarer ikke / svar kan ikke brukes / etter alle feil); de to siste var feilaktig underpunkter av «Hvis KI-en ikke svarer». Ordlyd uendret. Bruker sa ja
+- (change) Steg 5 struktur P2: «Nødliste ved tidsnød» flyttet uendret fra del 6 (Risiko) til del 4 (Omfang og kuttliste), etter kuttlisten-tabellen, så alt om omfang står samlet. Risikotabellen: «nødlisten under» → «nødlisten i del 4». Bruker sa ja
+- (change) Steg 5 struktur P3: de tre radene merket «(gjøres hvis det blir tid)» flyttet fra kuttlisten-tabellen til egen underoverskrift «Gjøres hvis det blir tid» i del 4 (før nødlisten), samme kolonner og tekst; merknaden i radene fjernet fordi overskriften sier det. Bruker sa ja
+- (change) Steg 5 struktur P4: Milepæler løftet fra underoverskrift i Risiko til eget kapittel «7. Milepæler» (en plan, ikke en risiko). Åpne spørsmål blir del 8. Ingen henvisninger til del 7 i PRD/addendum. Bruker sa ja
+- (decision) Steg 5 struktur P5: setningen «Utgangspunktet er at brevet vises én gang ...» beholdes i FR-23 (ikke bare i addendum). Grunn: viser sensor brukerens løsning uten å åpne addendum, er merket som utgangspunkt og låser ikke UX. Bruker fulgte Claudes anbefaling
+- (change) Steg 5 struktur P6: FR-32 og FR-34 delt i underpunkter (som FR-36), første setning som innledning. Ordlyd uendret. Bruker sa ja
+- (decision) Steg 5 struktur P7: skjermbildene står både i FR-38 og NFR-8; begge beholdes (FR-38 gir sammenhengen med testmodus, NFR-8 er README-sjekklisten). Brukers valg
+- (change) Steg 5 struktur A1: addendum «Til arkitektur» omsortert uten ny tekst eller overskrifter: PDF og filer (FR-12, FR-11, biblioteker, kolonner), KI-en (NFR-11, FR-28), testdata (NFR-3, FR-34), kodestil, KI-fraser sist. Følger tabellen i PRD del 8. Bruker sa ja
+- (change) Steg 5 struktur A2: «Typiske KI-fraser (FR-24)» flyttet uendret fra «Til arkitektur» til ny seksjon «Til prompten for brevet» i addendum (innhold til prompten, åpent punkt eid av Kristine, ikke et teknisk valg). Bruker sa ja etter enklere forklaring
+- (change) Steg 5 struktur A3: «Skisser (fra faglærer)» flyttet uendret øverst i addendum «Til UX», så det største UX-oppdraget står først. Bruker sa ja
+- (decision) Steg 5 struktur A4: addendum «KI-tjeneste (NFR-11)» beholdes uendret, også det som allerede står i NFR-11/NFR-2 (gir arkitekturen hele bildet samlet). Brukers valg
+- (change) Steg 5 struktur A5: addendum «Kodestil og språk» delt: «Språk» (ett språk for hele nettsiden) blir under Til arkitektur; «Kodestil» (linter, formatterer, CI) flyttet til Arbeidsmåte etter README. Setningene uendret, nye navn i fet skrift. Bruker sa ja
+- (change) Steg 5 struktur A6a: tomme linjer mellom punktene i addendum «Til UX» fjernet, så alle punkter står likt. Ingen tekst endret. Bruker sa ja
+- (change) Steg 5 struktur A6b: kilde skrives likt i addendum: «(Fra product brief.)» til slutt i KI-tjeneste og Lese tekst fra PDF flyttet inn i navnet («..., fra product brief»), som «fra faglærer». Bruker sa ja etter enklere forklaring
+- (event) Steg 5 strukturgjennomgang ferdig: PRD P1-P7 (5 endret, P5 og P7 beholdt), addendum A1-A6 (A4 beholdt). Neste: språkgjennomgang (prose)
