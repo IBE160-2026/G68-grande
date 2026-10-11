@@ -104,3 +104,12 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 56 | «jeg vil ha den originale overskriften, og at teksten under deretter skal forklare at dette ikke nødvendigvis er annereledes» / «jeg likte ikke introduksjonssetningen […]» / «1» | «Hva gjør dette annerledes» skrevet om i PRD-en med kilder nederst |
 | 57 | «ja rett opp produktbrief også» | Samme retting og kildeliste i product brief |
 | 58 | «[…] lurer på om det er ting vi har merket oss som vi skal gjøre senere men som ikke står noe sted?» / «jeg ønsker vi opretter en TO DO liste som vi kan sjekke av […]» | TO DO-liste opprettet (`todo.md`); brief-memlog oppdatert med endringene i briefen fra PRD-arbeidet |
+
+**Dette har jeg blitt oppmerksom på under arbeidet med PRD:**
+
+1. **Spør når du ikke forstår, i stedet for å si ja.** Flere av de viktigste endringene kom fordi jeg sa at jeg ikke skjønte noe. Forskjellen på ATS, gap-analyse og nøkkelordtreff (prompt 40–43) endte med at nettsiden skal forklare begrepene for brukeren. Det hjalp også å be KI-en ta ett funn om gangen (26, 48).
+2. **KI-en tar feil, og jeg må sjekke det.** KI-en formulerte kuttlisten feil (11), flyttet briefen uten å rette CI-sjekken (18) og hadde en påstand om konkurrentene som ikke stemte (54). Alle tre ble oppdaget fordi jeg stilte spørsmål.
+3. **Påstander trenger kilder.** Faglærer påpekte at prosentene i briefen manglet kilder, og det samme gjaldt navnene på verktøyene. Da vi sjekket, viste påstanden seg å være feil.
+4. **Krav må kunne testes og passe til tiden.** Jeg kuttet bevisst ting som ordstamme-regel, redigering i nettleseren og automatisk flyttest, la til en nødliste og koblet kravene til sensorveiledningen (46, 47).
+5. **Forskjellen på product brief og PRD.** Har lært at Produktbrief er en kort beskrivelse av hva som skal bli produktet, mens det er i PRD man utdyper hva produktet skal inneholde og gjøre.
+6. **Arbeidsmåte og sporbarhet.** Beslutningslogg og prompt-logg er to forskjellige ting, arbeidet må inn i GitHub underveis, og en TO DO-liste hindrer at ting blir glemt.

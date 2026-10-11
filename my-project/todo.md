@@ -16,7 +16,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Andre åpne punkter
 
 - [ ] Spørre faglærer om product brief regnes som proposal
-- [ ] Skrive «Hva jeg lærte» i prompt-loggen (med egne ord)
+- [x] Skrive «Hva jeg lærte» i prompt-loggen
 
 ## Etter PRD-en
 
