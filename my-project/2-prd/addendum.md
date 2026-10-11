@@ -33,7 +33,17 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
     case-2-okonomi/
       ...
   ```
+- **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Listen er et utkast og er ikke bestemt ennå (åpent punkt, eier: Kristine). Eksempler så langt:
+  - «Jeg er lidenskapelig opptatt av …»
+  - «I dagens raskt skiftende arbeidsmarked …»
+  - «Jeg er overbevist om at jeg vil være en verdifull ressurs …»
+  - «Med min solide bakgrunn innen …»
 
 ## Arbeidsmåte
 
 - **README (NFR-8):** README oppdateres fortløpende gjennom hele prosjektet, hver gang noe endres som påvirker hvordan nettsiden installeres, startes eller testes.
+- **Branches og pull requests (under kodingen):** Planleggingsdokumentene committes rett til `main`. Fra første story gjelder dette:
+  1. Hver story får en egen branch og en pull request (PR) til `main`. Tittelen på PR-en viser til story og FR-nummer.
+  2. I hver PR skrives én eller to setninger om hva som ble sjekket, og om KI-en gjorde noe feil eller noe jeg ikke ba om, og hvordan det ble rettet.
+  3. De automatiske testene (CI) må være grønne før PR-en flettes inn.
+  4. Prompt-loggen fortsetter under kodingen.

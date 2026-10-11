@@ -17,9 +17,11 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 - [ ] Spørre faglærer om product brief regnes som proposal
 - [x] Skrive «Hva jeg lærte» i prompt-loggen
+- [ ] Bestemme lista over typiske KI-fraser (FR-24, ligger i addendum)
 
 ## Etter PRD-en
 
+- [ ] Prøve branch og pull request én gang med Claude før kodingen starter (for eksempel en liten endring i README)
 - [ ] UX (skisser av modusvalget og resultatsiden, se addendum)
 - [ ] Arkitektur
 - [ ] Epics og stories

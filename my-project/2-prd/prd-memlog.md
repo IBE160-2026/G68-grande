@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-10T21:18
+updated: 2026-10-11T12:51
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -86,3 +86,13 @@ updated: 2026-10-10T21:18
 - (event) Åpent punkt (eier: Kristine, tas neste økt før steg 3): kilder for Jobscan, Rezi, Teal og Kickresume i visjonen («Hva gjør dette annerledes»), slik faglærer krevde for tall. Påstanden «sjelden begge deler i samme flyt» kan være utdatert; sjekk verktøyenes nettsider, legg inn lenker med dato, og skriv om setningen i PRD (og evt. brief) hvis den ikke stemmer
 - (change) Åpent punkt om kilder lukket. Sjekket 10.10.2026: Jobscan, Rezi, Teal og Kickresume tilbyr alle både nøkkelordsjekk og KI-søknadsbrev; påstanden «sjelden begge deler» var feil. Visjonen «Hva gjør dette annerledes» (overskrift beholdt) skrevet om: mange funksjoner finnes fra før; mulig forskjell er åpen telleregel og forklaring av begreper for studenter. Ny del «Kilder» nederst i PRD. Bruker valgte første setning og godkjente teksten
 - (change) Product brief rettet tilsvarende: «Hva gjør dette annerledes» bruker samme tekst som PRD; «Det siste er ikke bare en detalj» endret til «Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj» fordi setningen det viste til, ble fjernet; resten av brukerens ordlyd beholdt. Kilder lagt til nederst; updated 2026-10-10. Bruker sa ja
+- (event) Finalize steg 3 startet: bruker valgte to hjelpere, sjekkliste (rubric) og sensor-leser (sensorveiledningen)
+- (change) Gjennomgang (rubric H1): FR-15 presisert, samme prosent gjelder innenfor samme søknad; ny søknad eller utlogging glemmer listen og kan gi litt annen prosent (i tråd med NFR-4). Suksesskriterium 8 fikk «i samme søknad». Bruker sa ja
+- (change) Gjennomgang (rubric H2): FR-17 fikk regel om at nøkkelord på 1–3 tegn må stå som eget ord («C» treff i «C, Python», ikke i «Center»), så forkortelser som AI/IT/UX ikke gir falske treff inne i andre ord. NFR-9 tester også denne regelen. Bruker sa ja etter eksempler (AI-modeller = treff, mail = ikke treff)
+- (change) Gjennomgang (rubric H3): FR-24 beholder brukerens tekst og «akademisk» tone, men fikk tre sjekkbare regler (stilling og arbeidsgiver ved navn, minst to krav fra annonsen koblet til CV, ingen typiske KI-fraser). Korrektur: retter språk og ordvalg, men beholder brukerens innhold, eksempler og rekkefølge (egen stemme, FR-23). Skiller tone fra stemme. Bruker sa ja
+- (decision) Åpent punkt (eier: Kristine): liste over typiske KI-fraser i addendum er bare et utkast med fire eksempler fra Claude; bruker er usikker og vil komme tilbake til den. Må avgjøres før prompten for brevet skrives
+- (change) Gjennomgang (sensor S1): ny del «Milepæler» før nødlisten, regnet bakover fra levering 15.12.2026 (ikke ca. 9.12 som antatt før). Risiko 2 fikk regel: mer enn tre dager forsinket milepæl = kutt neste punkt på nødlisten. Bruker godtok datoene som utgangspunkt
+- (decision) Åpent punkt (eier: Kristine, uken etter 11.10.2026): vurdere milepælsdatoene på nytt når tiden til andre fag er klar
+- (change) Gjennomgang (sensor S2): addendum «Arbeidsmåte» fikk branch og PR per story, kort PR-kommentar om KI-feil og retting, grønn CI før fletting, og prompt-loggen fortsetter under kodingen. Gjelder fra første story; planleggingsdokumenter committes fortsatt rett til main. Risiko 5 i PRD viser til dette. TO DO: øve på branch og PR én gang før koding. Bruker sa ja etter forklaring
+- (change) Gjennomgang (sensor S3): NFR-9 utvidet med automatiske tester for kontroll av KI-svar (FR-28), sjekk av input (FR-9, FR-10, FR-12), gjenbruk av nøkkelordlisten (FR-15), innloggingskrav (FR-7) og nedlastet fil uten markeringer (FR-30). Alt er ren kode og testes uten ekte KI via testmodus; testene skrives sammen med hver story. Begrunnelse: unngå nivå C («dekningen er ujevn») på kriterium 3. Bruker sa ja
+- (event) Alle 6 høye funn fra gjennomgangen (rubric H1–H3, sensor S1–S3) behandlet. Gjenstår: 11 middels og 7 lave funn

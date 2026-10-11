@@ -2,7 +2,7 @@
 title: "PRD: Søknadsassistenten"
 status: draft
 created: 2026-10-09
-updated: 2026-10-09
+updated: 2026-10-11
 ---
 
 # PRD: Søknadsassistenten
@@ -64,10 +64,10 @@ Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, m
 KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle, slik at tallet kan testes.
 
 - **FR-14:** Gap-analysen går gjennom kravene i stillingsannonsen og viser dem i to lister: krav CV-en **dekker** og krav CV-en **mangler**. Gap-analysen er merket som KI-generert.
-- **FR-15:** KI-en henter ut nøkkelordene fra stillingsannonsen én gang. Listen lagres i økten, og prosenten regnes alltid fra den lagrede listen, ikke fra et nytt KI-kall. Samme annonse og samme CV gir derfor alltid samme prosent.
+- **FR-15:** KI-en henter ut nøkkelordene fra stillingsannonsen én gang. Listen lagres i økten, og prosenten regnes alltid fra den lagrede listen, ikke fra et nytt KI-kall. Innenfor samme søknad gir samme annonse og samme CV derfor alltid samme prosent. Starter brukeren en ny søknad eller logger ut, glemmes listen. Da lager KI-en en ny liste, og prosenten kan bli litt annerledes.
 - **FR-16:** Brukeren ser nøkkelordlisten, med hvert nøkkelord merket som treff eller ikke treff. Listen kan ikke endres av brukeren i versjon 1.
 - **FR-17:** Nøkkelordtreffet regnes ut av nettsiden med en fast regel og vises som «X av Y = Z %», for eksempel «7 av 10 = 70 %».
-  - **Telleregel:** Et nøkkelord er et treff hvis det finnes i CV-teksten, også som del av et lengre ord, uavhengig av store og små bokstaver. «Python» er altså et treff i «python-utvikler».
+  - **Telleregel:** Et nøkkelord er et treff hvis det finnes i CV-teksten, også som del av et lengre ord, uavhengig av store og små bokstaver. «Python» er altså et treff i «python-utvikler». Nøkkelord på 1–3 tegn må likevel stå som eget ord, så «C» er et treff i «C, Python», men ikke i «Center».
   - **Kjente begrensninger:** Bøyningsformer fanges ikke opp, så «prosjektledelse» er ikke et treff i «prosjektleder». Et kort nøkkelord kan gi treff inne i et annet ord, for eksempel «Java» i «JavaScript».
   - [ASSUMPTION: hvert nøkkelord telles bare én gang, og prosenten rundes til nærmeste hele tall]
 - **FR-18:** På resultatsiden forklarer nettsiden kort tre begreper:
@@ -83,7 +83,12 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 
 - **FR-22:** I «Skriv nytt brev» (Full generering) skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden. [ASSUMPTION: brevet vises på skjermen før brukeren laster det ned]
 - **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser endringene markert i teksten: fjernet tekst i rødt og ny tekst i grønt. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. [ASSUMPTION: fjernet tekst er også gjennomstreket og ny tekst understreket, slik at endringene ikke bare vises med farge]
-- **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene.
+- **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene. Det betyr at brevet:
+  - nevner stillingen og arbeidsgiveren ved navn,
+  - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en,
+  - ikke bruker typiske KI-fraser (listen ligger i addendum).
+
+  I «Forbedre mitt brev» betyr det at KI-en retter språk og ordvalg mot formell og akademisk tone, men beholder brukerens innhold, eksempler og rekkefølge. Slik beholder brukeren sin egen stemme (FR-23).
 - **FR-37:** KI-en skal ikke komme med antakelser på vegne av brukeren. Brevet bygger bare på det som står i CV-en, stillingsannonsen og eventuelt brukerens eget brev. KI-en legger ikke til erfaring, utdanning eller ferdigheter som ikke står der. KI-en får omformulere det som står i CV-en og koble det til kravene i stillingsannonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid». Dette gjelder begge modusene.
 - **FR-25:** Brukeren kan be om et nytt forslag hvis de ikke er fornøyd med brevet. I Korrektur lages det nye forslaget fra brukerens opprinnelige brev.
 - **FR-26:** Brukeren redigerer ikke brevet på nettsiden. Videre redigering gjøres i Word etter nedlasting.
@@ -146,7 +151,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
   - to–tre skjermbilder med ekte KI på (FR-38)
   - en oversikt over mappestrukturen
   - lenker til planleggingsdokumentene og prompt-loggen
-- **NFR-9:** Telleregelen for nøkkelordtreff (FR-17) og innloggingen (FR-1, FR-3) har automatiske tester med kjent input og fasit. README viser hvordan testene kjøres.
+- **NFR-9:** Telleregelen for nøkkelordtreff (FR-17), også regelen for korte nøkkelord, og innloggingen (FR-1, FR-3) har automatiske tester med kjent input og fasit. Det samme gjelder kontrollen av KI-svar (FR-28), sjekken av det brukeren legger inn (FR-9, FR-10, FR-12), gjenbruk av nøkkelordlisten (FR-15), at sider krever innlogging (FR-7), og at nedlastet fil er uten markeringer (FR-30). README viser hvordan testene kjøres.
 - **NFR-10:** KI-instruksene (prompts) ligger i Git, slik at endringer i dem kan følges.
 - **NFR-12:** Det finnes en skrevet testplan med resultat for suksesskriteriene som ikke testes automatisk, også hele flyten fra start til slutt.
 
@@ -190,7 +195,7 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 5. PDF og innlimt tekst gir samme treff, både for CV, stillingsannonse og eget søknadsbrev, og både .docx og PDF kan åpnes. (FR-8, FR-29)
 6. En ny bruker kan registrere seg, feil passord gir ikke tilgang, og testbrukeren fra README virker. (FR-1, FR-3, NFR-8)
 7. Nettsiden kan kjøres lokalt etter README i testmodus uten API-nøkkel. (FR-32, NFR-8)
-8. Samme stillingsannonse og CV kjørt to ganger gir samme nøkkelordtreff. (FR-15)
+8. Samme stillingsannonse og CV kjørt to ganger i samme søknad gir samme nøkkelordtreff. (FR-15)
 9. I vanlig modus kommer brukeren ikke videre uten å ha huket av for samtykke. (FR-36)
 10. Feil filtype, tomme felt og en uleselig PDF gir riktig feilmelding. (FR-4, FR-9, FR-10, FR-11)
 11. Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i den fiktive CV-en. Sjekkes manuelt mot fasit. (FR-37)
@@ -200,10 +205,25 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 | Risiko | Hva jeg gjør med det |
 |---|---|
 | **Gap-analysen og nøkkelordtellingen er vanskelig å få til** | Telleregelen (FR-17) bygges først, med automatiske tester. Den er ren kode og lettest å få riktig. Gap-analysen bygges etterpå. |
-| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten under, og de flyttes til kuttlisten med begrunnelse. Kjerneflyten kuttes aldri. |
+| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten under, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
 | **KI-funksjonen i nettsiden løser ikke problemet slik den skal, eller blir for avansert** | Hele flyten bygges først med testmodus og ferdige KI-svar. Ekte KI kobles på til slutt, når resten virker. Hver KI-oppgave (nøkkelord, gap-analyse, brev, korrektur) får sin egen enkle instruks (prompt) som kan testes hver for seg. Tellingen gjøres av koden, ikke av KI-en. |
 | **KI-en i nettsiden skriver ting i brevet som ikke stemmer**, for eksempel erfaring som ikke står i CV-en | Eget krav (FR-37). Instruksen til KI-en sier at brevet bare skal bygge på det brukeren har lagt inn. Testes med fiktive CV-er og fasit (suksesskriterium 11). |
-| **KI-en jeg bruker når jeg koder gjør endringer jeg ikke har bedt om, eller legger til ting jeg ikke får med meg** | Én liten oppgave om gangen. Endringene leses gjennom før de committes, og commits gjøres ofte, slik at det er lett å se hva som er endret og gå tilbake. Arbeidet følger stories som viser til FR-numrene i denne PRD-en. |
+| **KI-en jeg bruker når jeg koder gjør endringer jeg ikke har bedt om, eller legger til ting jeg ikke får med meg** | Én liten oppgave om gangen. Endringene leses gjennom før de committes, og commits gjøres ofte, slik at det er lett å se hva som er endret og gå tilbake. Arbeidet følger stories som viser til FR-numrene i denne PRD-en. Hver story får egen branch og pull request, med en kort kommentar om feil KI-en gjorde og hvordan de ble rettet (se addendum, «Arbeidsmåte»). |
+
+### Milepæler
+
+Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på nytt uken etter 11. oktober, når tiden til andre fag er klar.
+
+| Milepæl | Dato |
+|---|---|
+| PRD ferdig | 11. oktober |
+| UX, arkitektur og epics/stories ferdig | 25. oktober |
+| Innlogging og telleregel med tester | 1. november |
+| Hele kjerneflyten i testmodus | 18. november |
+| Ekte KI koblet på | 27. november |
+| Funksjonsstopp (bare feilretting, README og testplan) | 6. desember |
+| README testet på en ren klone | 11. desember |
+| Levering | 15. desember |
 
 ### Nødliste ved tidsnød
 
