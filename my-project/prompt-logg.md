@@ -149,3 +149,14 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 82 | «hvorfor skal man blande inn en medstudent her? gjennom gapanalsyen får de vite hva de mangler» / «åja da skjønte jeg hva du mente, ja vi kan ta det med» | Nytt suksesskriterium 13: en medstudent kan forklare resultatsiden med egne ord |
 | 83 | «ja, og ja 3 er bra» / «ja det er greit» (x2) | Kriterium 1 sjekker begge sider av gap-analysen, og KI-testene kjøres tre ganger. Punkter om oppdatering av PRD-en under kodingen og om linter og språk lagt i addendum |
 | 84 | «ja push alt nå» / «så da er alt av logger og tabeller og huskeliste osv pushet» / «ja takk» | Pushet. Gjennomgangene og kildesjekkene kopiert til `2-prd/gjennomganger/`. KI-en oppdaget at prompt-loggen manglet steg 3 og la den inn |
+
+### 2026-10-11 – Finalize steg 4: antakelsene i PRD-en
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 85 | «vi kan ta de steg for setg» | KI-en foreslo å avgjøre alle 9 antakelsene samtidig, men vi gikk gjennom dem én og én |
+| 86 | «utsett» / «vi utsetter» | FR-12: grensen for filstørrelse bestemmes i arkitekturen. FR-29: filnavnet bestemmes i UX, og det ble lagt et punkt i addendum |
+| 87 | «ja» (x6) | FR-17 (hvert nøkkelord telles én gang, og prosenten rundes av), FR-22, FR-23 (ikke bare farge), FR-27, FR-28 og FR-36 (ikke samtykke i testmodus) ble vanlige krav |
+| 88 | «jeg tenker vi tar A+B» | FR-31: en ny søknad starter med tomme felt. «Beholde CV-en ved ny søknad» ligger på kuttlisten |
+| 89 | «er det tydelig skrevet hvilke ting som avgjøres i senere deler av prosjektet som f.eks UX? og en begrunnelse på hvorfor?» / «detser bra ut legg det inn» | KI-en svarte at det bare var delvis tydelig: det var spredt og manglet begrunnelse. Ny del «Avgjøres i UX og arkitektur» med en tabell over hva, hvor og hvorfor ikke nå |
+| 90 | «du kan pushe alt, memlog og prompts også» | Denne delen av prompt-loggen. Alt er pushet |
