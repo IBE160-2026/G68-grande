@@ -37,3 +37,4 @@ updated: 2026-10-10T20:00
 - (change) Etter gjennomgang av faglærers punkter: begrunnelse for Word i stedet for Markdown lagt i Løsningen steg 5; README i my-project oppdatert; prompt-logg.md opprettet
 - (change) 2026-10-09, under PRD-arbeidet: «appen» byttet til «nettsiden» (8 steder, ellers ingen endringer), etter brukers ønske om at produktet kalles nettside. Se prd-memlog.md
 - (change) 2026-10-10, under PRD-arbeidet: «Hva gjør dette annerledes» skrevet om fordi påstanden om at sammenlignbare verktøy «sjelden» har både ATS-matching og KI-tekst ikke stemte (sjekket på nett: Jobscan, Rezi, Teal og Kickresume tilbyr begge deler). Kildeliste lagt til nederst. Se prd-memlog.md
+- (change) 2026-10-11, under PRD-arbeidet: Korrektur-beskrivelsen mistet «med fjernet tekst i rødt og ny tekst i grønt», fordi PRD-en (FR-23) nå sier at brukeren skal se endringene uten å lese brevet to ganger, og at visningen bestemmes i UX. Resten av teksten uendret. Se prd-memlog.md

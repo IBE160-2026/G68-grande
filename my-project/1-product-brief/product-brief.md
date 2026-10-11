@@ -2,7 +2,7 @@
 title: "Søknadsassistenten"
 status: final
 created: 2026-09-16
-updated: 2026-10-10
+updated: 2026-10-11
 ---
 
 # Produktbrief: Søknadsassistenten
@@ -36,7 +36,7 @@ Brukeren går gjennom én flyt:
    - *Nøkkelordtreff:* KI-en henter ut nøkkelordene fra annonsen, og nettsiden teller hvor mange av dem som finnes i CV-en, for eksempel «7 av 10 = 70 %». Tellingen gjøres med en fast regel, ikke av KI-en, slik at resultatet er forutsigbart og kan testes.
 4. **Velg modus:**
    - *Full generering:* KI-en skriver et søknadsbrev basert på CV-en og annonsen.
-   - *Korrektur:* Brukeren legger inn sitt eget brev. KI-en lager en forbedret versjon, og nettsiden viser endringene markert i teksten, med fjernet tekst i rødt og ny tekst i grønt. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme.
+   - *Korrektur:* Brukeren legger inn sitt eget brev. KI-en lager en forbedret versjon, og nettsiden viser endringene markert i teksten. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme.
    - *Tone og språk:* Brevet skrives alltid på norsk og i en formell tone.
 5. **Last ned brevet** som Word (.docx) for å redigere videre, eller som PDF hvis brevet er ferdig. Word er valgt i stedet for Markdown fordi studenter flest redigerer i Word, og brevet bør kunne finpusses før det sendes.
 

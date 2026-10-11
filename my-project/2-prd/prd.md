@@ -37,6 +37,10 @@ Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, m
 
 ## 2. Funksjoner
 
+Kravene beholder numrene de fikk da de ble skrevet, slik at henvisninger ikke brytes. Derfor står de ikke alltid i rekkefølge.
+
+**Flyten i korte trekk:** Innlogging eller registrering (FR-1–FR-4, FR-6, FR-7) → startside med samtykke og «Begynn å lage søknad» (FR-5, FR-36) → valg av modus (FR-20) → innleggingsside (FR-8–FR-13) → resultatside med gap-analyse og nøkkelordtreff (FR-14–FR-19, FR-21) → siden «Din ferdigstilte søknad!» med brevet (FR-22–FR-28, FR-37) → nedlasting (FR-29, FR-30) → startsiden eller logg ut (FR-31).
+
 ### 2.1 Registrering og innlogging
 
 - **FR-1:** Brukeren kan registrere seg med e-post og passord. Passordet må være minst 8 tegn. Etter registrering blir brukeren logget inn automatisk.
@@ -45,7 +49,7 @@ Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, m
 - **FR-4:** Hvis et felt står tomt, får rammen rundt feltet rød farge, og det vises en kort feilmelding ved feltet, for eksempel «Fyll inn e-post», slik at feilen ikke bare vises med farge.
 - **FR-5:** Etter innlogging havner brukeren på en startside med en tydelig måte å begynne på en ny søknad, for eksempel «Begynn å lage søknad». Derfra går brukeren videre til valget mellom «Skriv nytt brev» og «Forbedre mitt brev» (FR-20).
 - **FR-6:** Brukeren kan logge ut fra nettsiden.
-- **FR-7:** Det er ikke mulig å bruke nettsiden uten å være logget inn. Prøver brukeren å gå til en side på nettsiden uten å være logget inn, kommer de til innloggingen med en feilmelding som sier at de må logge inn først.
+- **FR-7:** Det er ikke mulig å bruke nettsiden uten å være logget inn, unntatt innloggingen og registreringen. Prøver brukeren å gå til en annen side på nettsiden uten å være logget inn, kommer de til innloggingen med en feilmelding som sier at de må logge inn først.
 
 ### 2.2 Valg av modus og PDF eller tekst inn
 
@@ -82,7 +86,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 ### 2.4 Søknadsbrev: Full generering og Korrektur
 
 - **FR-22:** I «Skriv nytt brev» (Full generering) skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden. [ASSUMPTION: brevet vises på skjermen før brukeren laster det ned]
-- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser endringene markert i teksten: fjernet tekst i rødt og ny tekst i grønt. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. [ASSUMPTION: fjernet tekst er også gjennomstreket og ny tekst understreket, slik at endringene ikke bare vises med farge]
+- **FR-23:** I «Forbedre mitt brev» (Korrektur) lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. [ASSUMPTION: endringene vises ikke bare med farge, for eksempel også med understreking]
 - **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene. Det betyr at brevet:
   - nevner stillingen og arbeidsgiveren ved navn,
   - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en,
@@ -113,9 +117,9 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 ### 2.6 Testmodus og bruk av KI
 
-- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus. I testmodus finnes det en knapp for å bytte tilbake til vanlig bruk. Brukeren kan bare bytte på startsiden, ikke midt i en søknad. I testmodus bruker nettsiden ferdige KI-svar i stedet for å sende tekst til en ekstern KI, slik at nettsiden kan kjøres uten API-nøkkel. Finnes det ingen API-nøkkel, starter nettsiden i testmodus, det er ikke mulig å bytte tilbake til vanlig bruk, og det vises en kort forklaring, for eksempel «Mangler API-nøkkel, se README».
+- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus. I testmodus finnes det en knapp for å bytte tilbake til vanlig modus. Brukeren kan bare bytte på startsiden, ikke midt i en søknad. I testmodus bruker nettsiden ferdige KI-svar i stedet for å sende tekst til en ekstern KI, slik at nettsiden kan kjøres uten API-nøkkel. Finnes det ingen API-nøkkel, starter nettsiden i testmodus, det er ikke mulig å bytte tilbake til vanlig modus, og det vises en kort forklaring, for eksempel «Mangler API-nøkkel, se README».
 - **FR-33:** Når testmodus er på, vises en tydelig merkelapp, for eksempel «Testmodus», slik at brukeren ser det.
-- **FR-34:** I testmodus fungerer bare de fiktive testdataene. Legger brukeren inn noe annet, får de beskjed om at bare testdata fungerer i testmodus. Feilmeldingene for tomme felt, feil filtype og uleselig PDF virker også i testmodus. Testdataene dekker begge modusene, også med et fiktivt søknadsbrev til «Forbedre mitt brev».
+- **FR-34:** I testmodus fungerer bare de fiktive testdataene. Legger brukeren inn noe annet, får de beskjed om at bare testdata fungerer i testmodus. Feilmeldingene for tomme felt, feil filtype og uleselig PDF virker også i testmodus. Testdataene dekker begge modusene, også med et fiktivt søknadsbrev til «Forbedre mitt brev». Testdataene har også en skannet PDF og en fil av feil type, slik at sensor kan prøve feilmeldingene.
 - **FR-35:** Når testmodus er av, vises en merknad i et hjørne av nettsiden hele tiden, som sier at nettsiden bruker en ekstern KI.
 - **FR-36:** Når testmodus er av, må brukeren samtykke til bruk av KI på startsiden før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
   - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn sendes til en ekstern KI.
@@ -135,12 +139,12 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 ### Tilgjengelighet og skjermstørrelser
 
-- **NFR-6:** Nettsiden har god kontrast, kan brukes med bare tastatur, og alle felt har synlige etiketter.
-- **NFR-7:** Nettsiden ser bra ut og fungerer godt på PC, nettbrett og mobil.
+- **NFR-6:** Nettsiden har god kontrast, kan brukes med bare tastatur, og alle felt har synlige etiketter. Bilder og ikoner har alternativtekst. Kontrasten sjekkes mot WCAG AA med et kontrastverktøy når fargene velges.
+- **NFR-7:** Nettsiden ser bra ut og fungerer godt på PC, nettbrett og mobil. Alle sider kan brukes uten å rulle sidelengs ved 375 px (mobil), 768 px (nettbrett) og 1280 px (PC) bredde.
 
 ### Kjørbarhet og testing
 
-- **NFR-8:** Sensor kan få nettsiden i gang på 15–20 minutter ved å følge README. Første gang nettsiden startes, lages databasen og testbrukeren automatisk. README har:
+- **NFR-8:** Sensor kan få nettsiden i gang på 10–15 minutter ved å følge README. Første gang nettsiden startes, lages databasen og testbrukeren automatisk. README har:
   - en kort beskrivelse av hva nettsiden gjør
   - forutsetninger med versjoner
   - eksakte kommandoer for installasjon og oppstart
@@ -153,7 +157,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
   - lenker til planleggingsdokumentene og prompt-loggen
 - **NFR-9:** Telleregelen for nøkkelordtreff (FR-17), også regelen for korte nøkkelord, og innloggingen (FR-1, FR-3) har automatiske tester med kjent input og fasit. Det samme gjelder kontrollen av KI-svar (FR-28), sjekken av det brukeren legger inn (FR-9, FR-10, FR-12), gjenbruk av nøkkelordlisten (FR-15), at sider krever innlogging (FR-7), og at nedlastet fil er uten markeringer (FR-30). README viser hvordan testene kjøres.
 - **NFR-10:** KI-instruksene (prompts) ligger i Git, slik at endringer i dem kan følges.
-- **NFR-12:** Det finnes en skrevet testplan med resultat for suksesskriteriene som ikke testes automatisk, også hele flyten fra start til slutt.
+- **NFR-12:** Det finnes en skrevet testplan med resultat for suksesskriteriene som ikke testes automatisk, også hele flyten fra start til slutt. Testplanen viser også at README er prøvd fra en ny kopi av repoet i en tom mappe, uten `.env` og andre lokale filer, før funksjonsstopp og rett før levering, med dato og resultat.
 
 ### KI-tjeneste
 
@@ -177,7 +181,7 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 | «Kun søknad», altså Korrektur uten CV | Krever en ekstra analysevariant (søknad mot annonse), flere KI-instrukser og flere tester. KI-delen er det mest risikable i prosjektet |
 | Redigere brevet i nettleseren | Studenter redigerer i Word. Visningen med markerte endringer i Korrektur er vanskelig å gjøre redigerbar, og «nytt forslag» ville overskrevet endringene |
 | Topp- og bunntekst i den nedlastede filen (dato, navn, stilling) | KI-en kan hente feil navn eller stilling, og det blir mer å teste. Brukeren legger det til i Word |
-| Kontrast som oppfyller WCAG AA, og alternativtekst på bilder og ikoner (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. NFR-6 (god kontrast, tastatur, synlige etiketter) gjelder fortsatt |
+| Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen (gjøres hvis det blir tid) | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
 | Automatisk test av hele flyten i testmodus (gjøres hvis det blir tid) | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
 
 ### Ikke en del av prosjektet
@@ -186,9 +190,9 @@ Betaling, automatisk innsending, oversikt over tidligere søknader og mobilapp.
 
 ## 5. Suksesskriterier
 
-Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3 og 11 testes med ekte KI, ikke i testmodus.
+Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11 og 12 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Resultatet skrives i testplanen (NFR-12).
 
-1. Gap-analysen viser alle krav som fasiten sier mangler. (FR-14)
+1. Gap-analysen viser alle krav som fasiten sier mangler, og ingen krav som fasiten sier er dekket, står under mangler. (FR-14)
 2. Nøkkelordtreffet gir nøyaktig den prosenten fasiten sier, når nøkkelordlisten er fast. (FR-17)
 3. Samme CV med to ulike annonser gir brev som nevner krav som er spesifikke for hver annonse. (FR-22)
 4. Korrektur viser minst én markert endring, og den nedlastede filen har ingen markeringer. (FR-23, FR-30)
@@ -199,12 +203,14 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 9. I vanlig modus kommer brukeren ikke videre uten å ha huket av for samtykke. (FR-36)
 10. Feil filtype, tomme felt og en uleselig PDF gir riktig feilmelding. (FR-4, FR-9, FR-10, FR-11)
 11. Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i den fiktive CV-en. Sjekkes manuelt mot fasit. (FR-37)
+12. I Korrektur beholder det forbedrede brevet brukerens innhold, eksempler og rekkefølge. Sjekkes manuelt med testdataene. (FR-23, FR-24)
+13. En medstudent som ser resultatsiden for en av test-CV-ene, kan med egne ord forklare hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. (FR-14, FR-18)
 
 ## 6. Risiko
 
 | Risiko | Hva jeg gjør med det |
 |---|---|
-| **Gap-analysen og nøkkelordtellingen er vanskelig å få til** | Telleregelen (FR-17) bygges først, med automatiske tester. Den er ren kode og lettest å få riktig. Gap-analysen bygges etterpå. |
+| **Gap-analysen og nøkkelordtreffet er vanskelig å få til** | Telleregelen (FR-17) bygges først, med automatiske tester. Den er ren kode og lettest å få riktig. Gap-analysen bygges etterpå. |
 | **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten under, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
 | **KI-funksjonen i nettsiden løser ikke problemet slik den skal, eller blir for avansert** | Hele flyten bygges først med testmodus og ferdige KI-svar. Ekte KI kobles på til slutt, når resten virker. Hver KI-oppgave (nøkkelord, gap-analyse, brev, korrektur) får sin egen enkle instruks (prompt) som kan testes hver for seg. Tellingen gjøres av koden, ikke av KI-en. |
 | **KI-en i nettsiden skriver ting i brevet som ikke stemmer**, for eksempel erfaring som ikke står i CV-en | Eget krav (FR-37). Instruksen til KI-en sier at brevet bare skal bygge på det brukeren har lagt inn. Testes med fiktive CV-er og fasit (suksesskriterium 11). |
@@ -237,7 +243,7 @@ Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden
 
 **Kuttes deretter (merkbart, men flyten virker fortsatt):**
 
-4. Ingen røde og grønne markeringer i Korrektur. Brukeren får det forbedrede brevet uten å se hva som er endret. (FR-23)
+4. Ingen markeringer i Korrektur. Brukeren får det forbedrede brevet uten å se hva som er endret. (FR-23)
 5. Bare innlimt tekst, ikke PDF-opplasting. Suksesskriterium 5 må da endres. (FR-8, FR-10–FR-12)
 
 **Siste utvei:**
@@ -245,6 +251,26 @@ Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden
 6. Hele «Forbedre mitt brev» (Korrektur). Den skiller nettsiden fra andre verktøy og kuttes bare når alt annet er prøvd.
 
 **Kuttes aldri:** testmodus, innlogging, gap-analysen, nøkkelordtreffet med telleregelen og testene, Full generering, .docx-nedlasting, samtykke og FR-37.
+
+## 7. Åpne spørsmål
+
+| Spørsmål | Eier | Når |
+|---|---|---|
+| Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Før arkitekturen |
+| Hvilke fraser skal stå på lista over typiske KI-fraser (FR-24)? | Kristine | Før prompten for brevet skrives |
+| Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Uken etter 11. oktober |
+
+## Ordliste
+
+- **Full generering** («Skriv nytt brev»): KI-en skriver et nytt søknadsbrev ut fra CV-en og stillingsannonsen.
+- **Korrektur** («Forbedre mitt brev»): KI-en forbedrer brukerens eget brev og viser hva som er endret.
+- **Gap-analyse:** KI-ens liste over hvilke krav i stillingsannonsen CV-en dekker, og hvilke som mangler.
+- **Nøkkelordtreff:** hvor mange av annonsens nøkkelord som står i CV-en. Det regnes ut av koden med telleregelen (FR-17).
+- **Telleregel:** den faste regelen koden bruker for å regne ut nøkkelordtreffet.
+- **Økt:** fra brukeren logger inn til brukeren logger ut. Ingenting fra en økt lagres (NFR-4).
+- **Testmodus:** nettsiden bruker ferdige KI-svar og bare de fiktive testdataene, og trenger ingen API-nøkkel.
+- **Vanlig modus:** nettsiden bruker ekte KI.
+- **Fasit:** det riktige svaret for hvert testcase. Fasiten ligger sammen med testdataene.
 
 ## Kilder
 

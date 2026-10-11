@@ -12,6 +12,8 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 
 - **Testmodus-bryter (FR-32):** ligger i et hjørne av startsiden.
 
+- **Markeringer i Korrektur (FR-23):** Brukeren skal ikke måtte lese brevet to ganger. Kristines utgangspunkt: brevet vises én gang i den nye versjonen, endrede setninger er markert (for eksempel grønne og understreket), og et klikk på en markert setning viser den gamle. Alternativ som kan prøves på skisse: markering per ord, der bare ordene som er endret vises i rødt og grønt. Avvist: per setning med gammel og ny setning under hverandre, fordi hele brevet da kan bli vist dobbelt.
+
 - **Skisser (fra faglærer):** Skisser modusvalget (FR-20) og resultatsiden, med gap-analysen, nøkkelordlisten og forklaringen av begrepene (FR-14, FR-16, FR-18).
 
 ## Til arkitektur
@@ -33,6 +35,9 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
     case-2-okonomi/
       ...
   ```
+- **Kodestil og språk:** Bruk en linter og en formatterer, og la CI sjekke dem. Vurder om hele nettsiden kan lages i ett språk, slik at installasjonen for sensor blir enklere (NFR-8).
+- **Gjenkjenning av testdata (FR-34):** Arkitekturen bestemmer hvordan testmodus kjenner igjen testdataene, og hvor tolerant det skal være. Limer sensor inn teksten fra en test-PDF med et ekstra linjeskift eller mellomrom, bør det fortsatt regnes som testdata.
+- **Ventetid på KI-en (FR-28):** Arkitekturen bestemmer hvor lenge nettsiden venter på svar fra KI-en før det regnes som at KI-en ikke svarer. Et langt søknadsbrev kan ta 20–30 sekunder.
 - **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Listen er et utkast og er ikke bestemt ennå (åpent punkt, eier: Kristine). Eksempler så langt:
   - «Jeg er lidenskapelig opptatt av …»
   - «I dagens raskt skiftende arbeidsmarked …»
@@ -47,3 +52,4 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
   2. I hver PR skrives én eller to setninger om hva som ble sjekket, og om KI-en gjorde noe feil eller noe jeg ikke ba om, og hvordan det ble rettet.
   3. De automatiske testene (CI) må være grønne før PR-en flettes inn.
   4. Prompt-loggen fortsetter under kodingen.
+- **PRD under kodingen:** Når kodingen avviker fra PRD-en (et krav kuttes, endres eller legges til), oppdateres PRD-en og kopien i `my-project/2-prd/`, og avviket skrives i beslutningsloggen med dato og grunn.
