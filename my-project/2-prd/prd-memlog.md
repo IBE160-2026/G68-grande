@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T15:32
+updated: 2026-10-11T17:12
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -144,3 +144,11 @@ updated: 2026-10-11T15:32
 - (event) Steg 5 strukturgjennomgang ferdig: PRD P1-P7 (5 endret, P5 og P7 beholdt), addendum A1-A6 (A4 beholdt). Neste: språkgjennomgang (prose)
 - (change) Steg 5 språk: 11 rettelser godkjent samlet: komma etter innskutt leddsetning (FR-27, FR-36, risikotabell, addendum Markeringer), inndata, fra bunnen av, si hverandre imot, formaterer, listen (ikke lista), «mangler» i anførselstegn (kriterium 1), stor F i addendum Tomme felt. Bruker sa ja til alle
 - (event) Pause i steg 5 språkgjennomgang: 11 småfeil rettet. Gjenstår 16 funn som tas ett og ett, neste er språk 1/16 (FR-17 «kort nøkkelord» → «4 tegn eller mer», ikke besvart). Se review-prose-prd.md (funn 1-5,7-9,11,15,17) og review-prose-addendum.md (funn 1-4,7)
+- (change) Steg 5 språk 1/16: FR-17 Kjente begrensninger: «Et kort nøkkelord» → «Et nøkkelord på 4 tegn eller mer» (Java har 4 tegn; «kort» = 1–3 tegn motsa telleregelen). Bruker sa ja
+- (change) Steg 5 språk 1/16 (forts.): FR-17 eksempel «C» i «C, Python» → i CV-teksten «Kan C og Python» (bruker misforstod eksempelet). Ny kjent begrensning oppdaget av bruker: kort nøkkelord kan gi feil treff når det står alene i annen betydning, f.eks. «C» i liste nummerert A, B, C. Bruker sa ja til begge
+- (change) Steg 5 språk 2/16: FR-34 «begge modusene» → «både Full generering og Korrektur» (kunne leses som testmodus/vanlig modus). Bruker sa ja
+- (change) Steg 5 språk 3/16: ordlisten Økt: «Ingenting fra en økt lagres» → «... lagres etter at brukeren logger ut» (motsa «Listen lagres i økten» i FR-15). Bruker sa ja
+- (change) Steg 5 språk 4/16: modusnavn konsekvent: «Forbedre mitt brev» (knappen) → Korrektur (modusen) i FR-8, FR-24 og FR-34. Regel: knappenavnet om knappen, Korrektur om modusen. Bruker sa ja
+- (change) Steg 5 språk 4/16 (revidert): bruker syntes skillet knapp/modus var rotete og valgte ett navn per modus: Korrektur og Full generering overalt. Endret FR-22, FR-23, nødliste 6 og addendum Innleggingssiden. Knappetekstene «Skriv nytt brev»/«Forbedre mitt brev» står bare i FR-5, FR-20 og ordlisten. Brukers valg
+- (change) Steg 5 språk 4/16 (tillegg): knappene på modusvalget skal vise begge navnene, f.eks. «Full generering – Skriv nytt brev» og «Korrektur – Forbedre mitt brev», så brukeren ikke misforstår (ny setning i FR-20, utseende bestemmes i UX). FR-5 sier nå «valget mellom Full generering og Korrektur». Addendum Skisser fikk tillegg om dette. Brukers ønske (endring i produktet, ikke bare tekst)
+- (event) Pause i steg 5 språkgjennomgang etter funn 4/16. Neste: språk 5/16 (FR-36 «på startsiden» flyttes fram, ikke besvart). Gjenstår PRD-funn 7-9, 11, 15, 17 i review-prose-prd.md og addendum-funn 1-4, 7 i review-prose-addendum.md

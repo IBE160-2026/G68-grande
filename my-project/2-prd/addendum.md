@@ -4,10 +4,10 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 
 ## Til UX
 
-- **Skisser (fra faglærer):** Skisser modusvalget (FR-20) og resultatsiden, med gap-analysen, nøkkelordlisten og forklaringen av begrepene (FR-14, FR-16, FR-18).
+- **Skisser (fra faglærer):** Skisser modusvalget (FR-20) og resultatsiden, med gap-analysen, nøkkelordlisten og forklaringen av begrepene (FR-14, FR-16, FR-18). På modusvalget viser knappene både modusnavnet og hva modusen gjør (FR-20).
 - **Logg ut-knapp (FR-6):** Kristine ser for seg en liten logg ut-knapp nederst på skjermen.
 - **Tomme felt (FR-4) og manglende innlogging (FR-7):** Feltene får rød ramme.
-- **Innleggingssiden (FR-8, FR-13):** Kristine kaller feltene «opplastingsfelt», ett for CV og ett for stillingsannonsen, og i «Forbedre mitt brev» også ett for brukerens eget søknadsbrev. Det skal være en angre-knapp.
+- **Innleggingssiden (FR-8, FR-13):** Kristine kaller feltene «opplastingsfelt», ett for CV og ett for stillingsannonsen, og i Korrektur også ett for brukerens eget søknadsbrev. Det skal være en angre-knapp.
 - **Ventetegn (FR-27):** Kristine ser for seg et «laster»-tegn som går rundt i en sirkel, med en tekst inni, for eksempel «På vei mot ny jobb» (frasen er ikke bestemt).
 - **Testmodus-bryter (FR-32):** ligger i et hjørne av startsiden.
 - **Markeringer i Korrektur (FR-23):** Brukeren skal ikke måtte lese brevet to ganger. Kristines utgangspunkt: brevet vises én gang i den nye versjonen, endrede setninger er markert (for eksempel grønne og understreket), og et klikk på en markert setning viser den gamle. Alternativ som kan prøves på skisse: markering per ord, der bare ordene som er endret, vises i rødt og grønt. Avvist: per setning med gammel og ny setning under hverandre, fordi hele brevet da kan bli vist dobbelt.
