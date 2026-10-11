@@ -124,3 +124,28 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 62 | «push» | Pushet til GitHub |
 | 63 | «ligger det prompts og memlog også?» | Alt til og med steg 2 ligger på GitHub; endringene fra steg 3 kopieres når steget er ferdig |
 | 64 | «ja takk» | Denne delen av prompt-loggen |
+
+### 2026-10-11 – Finalize steg 3: gjennomgang av PRD-en
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 65 | «1 og 2» | To hjelpere leste PRD-en kritisk: én mot BMADs kvalitetssjekkliste og én som «sensor» mot sensorveiledningen. 6 høye, 11 middels og 7 lave funn |
+| 66 | «ja enig med du, for vi skal ikke overlagre noe data, hvis du logger ut er alt som ble gjort forrige gang glemt» / «supert» | FR-15 og suksesskriterium 8: samme prosent gjelder innenfor samme søknad |
+| 67 | «jeg ser dette kan bli vanskelig å kode, men vi kan ikke ha sånn at hver enkeltbokstav skal sammenliknes det blir for dumt» / «men det er jo en god del forkortelser som bare er på to bokstaver og» | KI-en viste med eksempler at «AI» fortsatt er treff i «AI-modeller», men ikke i «mail». FR-17: nøkkelord på 1–3 tegn må stå som eget ord |
+| 68 | «hmm, ja ser problemene. Jeg antar at folk vil skrive en akademisk søknad fordi det høres mer troverdig ut, så jeg ønsker at den skal være akademisk fortsatt. har du et forslag til hvordan vi kan gjøre det mindre motsigende?» | FR-24 beholder akademisk tone, men fikk tre sjekkbare regler. Korrektur retter språket, men beholder innhold, eksempler og rekkefølge (egen stemme). Lista over KI-fraser er et åpent punkt |
+| 69 | «jeg skal levere hele prosjektet innen 15 desember, regner med å bli ferdig med PRD i dag» / «vi kan ha det som et utgangspunkt også kan vi revurdere den ila neste uke når jeg får kontroll på resterende fag» | Ny tabell med milepæler fram til 15. desember, og regel: mer enn tre dager forsinket betyr at neste punkt på nødlisten kuttes |
+| 70 | «jeg har hørt om dette, men skjønner ikke hvordan det fungerer. […] hva mener du med PR?» / «alt dette med main og branch kommer kun inn når vi jobber med koding?» | KI-en forklarte branch og pull request med en tegning. Fra første story: én branch og én PR per story, med en kort kommentar om feil KI-en gjorde |
+| 71 | «så story er koding?» / «okei så du kommer til å huske at vi skal gjøre a til e når vi kommer så langt i prosjektet?» | KI-en forklarte forskjellen på epic, story og koding, og lagret arbeidsmåten i addendum, TO DO-lista og sin egen hukommelse |
+| 72 | «kan du utdype s3?» / «ja» | NFR-9: automatiske tester også for kontroll av KI-svar, input, gjenbruk av nøkkelordlisten, innloggingskrav og nedlastet fil |
+| 73 | «jeg vil gjerne ta punkt for punkt» | De middels og lave funnene ble gått gjennom ett og ett |
+| 74 | «ja altså når du har registrert deg kan du logge inn. Du skal ikke logge inn for så å registrere, det blir feil» | FR-7: registreringen og innloggingen krever ikke innlogging |
+| 75 | «jeg skjønner ikke helt hensikten her?» / «1» | KI-en forklarte hvorfor åpne spørsmål hører hjemme i PRD-en. Ny del «7. Åpne spørsmål» |
+| 76 | «søknad gir ikke mening men de andre er br» / «analyse kanskje» / «ja da beholder vi søknad og tar det ut av listen» | Ordliste lagt inn. KI-en påpekte at «analyse» kunne blandes med gap-analyse, og at knappen heter «Begynn å lage søknad», så «søknad» ble beholdt |
+| 77 | «JA det virker greit, jeg vil ha Din ferdigstilte søknad! istedenfor brevsiden» | Oversikt over flyten øverst i del 2. Siden med brevet heter «Din ferdigstilte søknad!» |
+| 78 | «enig i det du sier» / «ja vi kan flytte dem inn» | Testdataene får en skannet PDF og en fil av feil type. Alternativtekst og WCAG-kontrast flyttet fra kuttlisten inn i NFR-6 |
+| 79 | «1 ingen grense, 2 setning» / «tilbake til B8 var det en god avgjørelse» / «hmm ja det kan bli et problem, suksesskriteriet er bra, men blir tungt å skulle lese en søknad dobbelt opp fordi alt kommer på nytt» / «jeg liker anbefaling 2, men er nok lurt å ta det i UX steget» | Jeg spurte om valget mitt var lurt, og KI-en pekte på at brevet kunne bli vist dobbelt. FR-23: brukeren ser endringene uten å lese brevet to ganger, og UX bestemmer hvordan. Nytt suksesskriterium 12 |
+| 80 | «for B8, dette står det vel noe om i breifen også, om det gjør det så må det endres på må det ikke?» / «ja det er greit» | Briefen rettet tilsvarende (rødt og grønt fjernet) |
+| 81 | «vet ikke» / «kanskje 10-15, for er vel satt at sensor skal bruke 15-20?» / «ja det kan være lurt» | NFR-8: 10–15 minutter. NFR-12: README prøves fra en ny, tom kopi før funksjonsstopp og før levering |
+| 82 | «hvorfor skal man blande inn en medstudent her? gjennom gapanalsyen får de vite hva de mangler» / «åja da skjønte jeg hva du mente, ja vi kan ta det med» | Nytt suksesskriterium 13: en medstudent kan forklare resultatsiden med egne ord |
+| 83 | «ja, og ja 3 er bra» / «ja det er greit» (x2) | Kriterium 1 sjekker begge sider av gap-analysen, og KI-testene kjøres tre ganger. Punkter om oppdatering av PRD-en under kodingen og om linter og språk lagt i addendum |
+| 84 | «ja push alt nå» / «så da er alt av logger og tabeller og huskeliste osv pushet» / «ja takk» | Pushet. Gjennomgangene og kildesjekkene kopiert til `2-prd/gjennomganger/`. KI-en oppdaget at prompt-loggen manglet steg 3 og la den inn |
