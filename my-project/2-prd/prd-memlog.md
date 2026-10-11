@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T13:43
+updated: 2026-10-11T13:49
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -114,3 +114,4 @@ updated: 2026-10-11T13:43
 - (change) Gjennomgang (sensor S4): addendum «Arbeidsmåte» fikk punkt om å oppdatere PRD og kopien i my-project/2-prd/ når kodingen avviker, og logge avviket med dato og grunn. Bruker sa ja
 - (change) Gjennomgang (sensor S11): addendum «Til arkitektur» fikk punkt om linter og formatterer sjekket i CI, og å vurdere ett språk for hele nettsiden (repoet er nå satt opp for JS frontend + Python backend). Bruker sa ja
 - (event) Finalize steg 3 (gjennomgang) ferdig: alle funn fra review-rubric.md og review-sensor.md behandlet (6 høye, 11 middels, 7 lave). Neste: steg 4, de 9 [ASSUMPTION]
+- (event) Gjennomganger (review-rubric, review-sensor) og kildesjekker (reconcile-*) kopiert til my-project/2-prd/gjennomganger/ og pushet, som spor for sensor av at PRD-en er sjekket kritisk. Brukers ønske
