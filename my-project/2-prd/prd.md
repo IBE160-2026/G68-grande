@@ -9,7 +9,7 @@ updated: 2026-10-11
 
 ## 1. Visjon
 
-Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren velger om KI-en skal skrive brevet fra bunnen (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**), legger inn CV-en sin og en stillingsannonse, og får se hva CV-en mangler.
+Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**), legger inn CV-en sin og en stillingsannonse, og får se hva CV-en mangler.
 
 ### Problemet
 
@@ -79,7 +79,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
   - **Nøkkelordtreff:** en ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan CV-en kan bli vurdert av et ATS, ikke en garanti.
   - **Gap-analyse:** en KI-vurdering av hvilke krav i annonsen CV-en dekker og mangler.
 
-  Nettsiden forklarer også at gap-analysen og nøkkelordtreffet derfor kan si imot hverandre. For eksempel kan gap-analysen si at «SQL mangler» selv om ordtellingen fant «SQL».
+  Nettsiden forklarer også at gap-analysen og nøkkelordtreffet derfor kan si hverandre imot. For eksempel kan gap-analysen si at «SQL mangler» selv om ordtellingen fant «SQL».
 - **FR-19:** Brukeren kan gå tilbake til innleggingssiden etter å ha sett resultatet. CV og annonse er da fortsatt fylt ut. Når brukeren går videre igjen, kjøres analysen på nytt. Er bare CV-en endret, gjenbrukes den lagrede nøkkelordlisten.
 - **FR-21:** Brukeren ser gap-analysen og nøkkelordtreffet før brevet lages eller korrigeres. Brevet lages først når brukeren har bekreftet at de vil gå videre.
 
@@ -96,7 +96,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 - **FR-37:** KI-en skal ikke komme med antakelser på vegne av brukeren. Brevet bygger bare på det som står i CV-en, stillingsannonsen og eventuelt brukerens eget brev. KI-en legger ikke til erfaring, utdanning eller ferdigheter som ikke står der. KI-en får omformulere det som står i CV-en og koble det til kravene i stillingsannonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid». Dette gjelder begge modusene.
 - **FR-25:** Brukeren kan be om et nytt forslag hvis de ikke er fornøyd med brevet. I Korrektur lages det nye forslaget fra brukerens opprinnelige brev.
 - **FR-26:** Brukeren redigerer ikke brevet på nettsiden. Videre redigering gjøres i Word etter nedlasting.
-- **FR-27:** Mens KI-en jobber, viser nettsiden et ventetegn med en kort tekst. Knappen som startet handlingen kan ikke trykkes på nytt mens brukeren venter, slik at det ikke sendes flere forespørsler samtidig.
+- **FR-27:** Mens KI-en jobber, viser nettsiden et ventetegn med en kort tekst. Knappen som startet handlingen, kan ikke trykkes på nytt mens brukeren venter, slik at det ikke sendes flere forespørsler samtidig.
 - **FR-28:** Hvis KI-en ikke svarer, får brukeren en feilmelding:
   - Ved nettverksfeil: «Nettverksfeil, sjekk nettverkstilgangen».
   - Ved andre feil: en feilmelding som ber brukeren prøve på nytt.
@@ -130,7 +130,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
   - Testdataene dekker begge modusene, også med et fiktivt søknadsbrev til «Forbedre mitt brev». Testdataene har også en skannet PDF og en fil av feil type, slik at sensor kan prøve feilmeldingene.
 - **FR-35:** Når testmodus er av, vises en merknad i et hjørne av nettsiden hele tiden, som sier at nettsiden bruker en ekstern KI.
 - **FR-36:** Når testmodus er av, må brukeren samtykke til bruk av KI på startsiden før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
-  - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn sendes til en ekstern KI.
+  - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn, sendes til en ekstern KI.
   - Brukeren huker av boksen og trykker deretter «Begynn å lage søknad».
   - Trykker brukeren «Begynn å lage søknad» uten å ha huket av, får de en feilmelding som sier at de må samtykke først.
   - I testmodus trengs ikke samtykke, fordi ingen tekst sendes til en ekstern KI.
@@ -228,7 +228,7 @@ Betaling, automatisk innsending, oversikt over tidligere søknader og mobilapp.
 
 Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11 og 12 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Resultatet skrives i testplanen (NFR-12).
 
-1. Gap-analysen viser alle krav som fasiten sier mangler, og ingen krav som fasiten sier er dekket, står under mangler. (FR-14)
+1. Gap-analysen viser alle krav som fasiten sier mangler, og ingen krav som fasiten sier er dekket, står under «mangler». (FR-14)
 2. Nøkkelordtreffet gir nøyaktig den prosenten fasiten sier, når nøkkelordlisten er fast. (FR-17)
 3. Samme CV med to ulike annonser gir brev som nevner krav som er spesifikke for hver annonse. (FR-22)
 4. Korrektur viser minst én markert endring, og den nedlastede filen har ingen markeringer. (FR-23, FR-30)
@@ -247,10 +247,10 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 | Risiko | Hva jeg gjør med det |
 |---|---|
 | **Gap-analysen og nøkkelordtreffet er vanskelig å få til** | Telleregelen (FR-17) bygges først, med automatiske tester. Den er ren kode og lettest å få riktig. Gap-analysen bygges etterpå. |
-| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inn-data → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten i del 4, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
+| **Kodingen tar lengre tid enn planlagt** | Kjerneflyten bygges i rekkefølge: innlogging → inndata → analyse → brev → nedlasting. Blir tiden knapp, kuttes flere funksjoner som ikke er en del av kjerneflyten, i rekkefølgen i nødlisten i del 4, og de flyttes til kuttlisten med begrunnelse. Hvis en milepæl er mer enn tre dager forsinket, kuttes neste punkt på nødlisten. Kjerneflyten kuttes aldri. |
 | **KI-funksjonen i nettsiden løser ikke problemet slik den skal, eller blir for avansert** | Hele flyten bygges først med testmodus og ferdige KI-svar. Ekte KI kobles på til slutt, når resten virker. Hver KI-oppgave (nøkkelord, gap-analyse, brev, korrektur) får sin egen enkle instruks (prompt) som kan testes hver for seg. Tellingen gjøres av koden, ikke av KI-en. |
 | **KI-en i nettsiden skriver ting i brevet som ikke stemmer**, for eksempel erfaring som ikke står i CV-en | Eget krav (FR-37). Instruksen til KI-en sier at brevet bare skal bygge på det brukeren har lagt inn. Testes med fiktive CV-er og fasit (suksesskriterium 11). |
-| **KI-en jeg bruker når jeg koder gjør endringer jeg ikke har bedt om, eller legger til ting jeg ikke får med meg** | Én liten oppgave om gangen. Endringene leses gjennom før de committes, og commits gjøres ofte, slik at det er lett å se hva som er endret og gå tilbake. Arbeidet følger stories som viser til FR-numrene i denne PRD-en. Hver story får egen branch og pull request, med en kort kommentar om feil KI-en gjorde og hvordan de ble rettet (se addendum, «Arbeidsmåte»). |
+| **KI-en jeg bruker når jeg koder, gjør endringer jeg ikke har bedt om, eller legger til ting jeg ikke får med meg** | Én liten oppgave om gangen. Endringene leses gjennom før de committes, og commits gjøres ofte, slik at det er lett å se hva som er endret og gå tilbake. Arbeidet følger stories som viser til FR-numrene i denne PRD-en. Hver story får egen branch og pull request, med en kort kommentar om feil KI-en gjorde og hvordan de ble rettet (se addendum, «Arbeidsmåte»). |
 
 ## 7. Milepæler
 
@@ -272,7 +272,7 @@ Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på
 | Spørsmål | Eier | Når |
 |---|---|---|
 | Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Før arkitekturen |
-| Hvilke fraser skal stå på lista over typiske KI-fraser (FR-24)? | Kristine | Før prompten for brevet skrives |
+| Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Kristine | Før prompten for brevet skrives |
 | Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Uken etter 11. oktober |
 
 ### Avgjøres i UX og arkitektur

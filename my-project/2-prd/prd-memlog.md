@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T15:25
+updated: 2026-10-11T15:32
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -142,3 +142,5 @@ updated: 2026-10-11T15:25
 - (change) Steg 5 struktur A6a: tomme linjer mellom punktene i addendum «Til UX» fjernet, så alle punkter står likt. Ingen tekst endret. Bruker sa ja
 - (change) Steg 5 struktur A6b: kilde skrives likt i addendum: «(Fra product brief.)» til slutt i KI-tjeneste og Lese tekst fra PDF flyttet inn i navnet («..., fra product brief»), som «fra faglærer». Bruker sa ja etter enklere forklaring
 - (event) Steg 5 strukturgjennomgang ferdig: PRD P1-P7 (5 endret, P5 og P7 beholdt), addendum A1-A6 (A4 beholdt). Neste: språkgjennomgang (prose)
+- (change) Steg 5 språk: 11 rettelser godkjent samlet: komma etter innskutt leddsetning (FR-27, FR-36, risikotabell, addendum Markeringer), inndata, fra bunnen av, si hverandre imot, formaterer, listen (ikke lista), «mangler» i anførselstegn (kriterium 1), stor F i addendum Tomme felt. Bruker sa ja til alle
+- (event) Pause i steg 5 språkgjennomgang: 11 småfeil rettet. Gjenstår 16 funn som tas ett og ett, neste er språk 1/16 (FR-17 «kort nøkkelord» → «4 tegn eller mer», ikke besvart). Se review-prose-prd.md (funn 1-5,7-9,11,15,17) og review-prose-addendum.md (funn 1-4,7)
