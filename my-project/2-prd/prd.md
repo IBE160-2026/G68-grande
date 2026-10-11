@@ -262,6 +262,22 @@ Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden
 | Hvilke fraser skal stå på lista over typiske KI-fraser (FR-24)? | Kristine | Før prompten for brevet skrives |
 | Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Uken etter 11. oktober |
 
+### Avgjøres i UX og arkitektur
+
+PRD-en sier *hva* nettsiden skal gjøre. *Hvordan* den ser ut, bestemmes i UX, og *hvordan* den lages, bestemmes i arkitekturen. Disse punktene er bevisst ikke bestemt her. Det er fordi de enten må prøves ut på skisser, eller fordi de avhenger av tekniske valg som ikke er tatt ennå. Detaljer og mine første ideer står i addendum.
+
+| Hva | Avgjøres i | Hvorfor ikke nå |
+|---|---|---|
+| Hvordan endringene markeres i Korrektur (FR-23) | UX | Må prøves på skisse. Utgangspunkt og et alternativ ligger klart |
+| Filnavnet på det nedlastede brevet (FR-29) | UX | Det er noe brukeren ser, og det henger sammen med hvordan nedlastingen ser ut |
+| Utseende og plassering av knapper, ventetegn, testmodus-bryter og feilmarkering | UX | PRD-en bestemmer at de finnes, UX bestemmer hvordan de ser ut |
+| Grensen for filstørrelse (FR-12) | Arkitektur | Avhenger av hvor nettsiden kjøres og hva KI-tjenesten tåler |
+| KI-modell og kostnad (NFR-11) | Arkitektur | Krever at modellene sammenlignes på pris og kvalitet |
+| Hvor lenge nettsiden venter på KI-en (FR-28) | Arkitektur | Avhenger av modellen og må måles. Et langt brev kan ta 20–30 sekunder |
+| Hvordan PDF leses, og hvordan Word og PDF lages (FR-11, FR-29) | Arkitektur | Valg av biblioteker er et teknisk valg |
+| CV-er med kolonner (FR-11) | Arkitektur | Avhenger av hva biblioteket for PDF klarer |
+| Hvordan testmodus kjenner igjen testdataene (FR-34), og mappene for testdata (NFR-3) | Arkitektur | Teknisk løsning |
+
 ## Ordliste
 
 - **Full generering** («Skriv nytt brev»): KI-en skriver et nytt søknadsbrev ut fra CV-en og stillingsannonsen.

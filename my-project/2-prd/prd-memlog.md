@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T14:56
+updated: 2026-10-11T15:00
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -125,3 +125,4 @@ updated: 2026-10-11T14:56
 - (decision) Steg 4, antakelse 8 (FR-31): A + B. A godtatt: går brukeren til startsiden, starter en ny søknad med tomme felt (enklest, tryggest for personvern). B på kuttlisten «gjøres hvis det blir tid»: beholde CV-en ved ny søknad, så brukeren kan søke på flere stillinger uten ny opplasting. Brukers valg
 - (decision) Steg 4, antakelse 9 (FR-36): godtatt. Eget underpunkt: i testmodus trengs ikke samtykke, fordi ingen tekst sendes til ekstern KI (stemmer med «Når testmodus er av» i FR-36). Bruker sa ja
 - (event) Finalize steg 4 ferdig: alle 9 [ASSUMPTION] avgjort (7 godtatt, 2 utsatt: FR-12 til arkitektur, FR-29 til UX). Ingen [NOTE FOR PM]. Åpne spørsmål i del 7 (proposal, KI-fraser, milepælsdatoer) er ikke fasehindre og har eier Kristine. Neste: steg 5, språkvask og struktur
+- (change) Ny del «Avgjøres i UX og arkitektur» under «7. Åpne spørsmål»: tabell med hva som utsettes, hvor det avgjøres og hvorfor ikke nå (FR-23, FR-29, utseende på knapper o.l. til UX; FR-12, NFR-11, FR-28 ventetid, PDF/Word-biblioteker, CV med kolonner, FR-34/NFR-3 testdata til arkitektur). Begrunnelse: brukeren spurte om det var tydelig; før var det spredt og uten begrunnelse. Begrunnelsene er Claudes formuleringer, godkjent av bruker
