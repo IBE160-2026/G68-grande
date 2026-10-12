@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-11T17:12
+updated: 2026-10-12T22:42
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -152,3 +152,17 @@ updated: 2026-10-11T17:12
 - (change) Steg 5 språk 4/16 (revidert): bruker syntes skillet knapp/modus var rotete og valgte ett navn per modus: Korrektur og Full generering overalt. Endret FR-22, FR-23, nødliste 6 og addendum Innleggingssiden. Knappetekstene «Skriv nytt brev»/«Forbedre mitt brev» står bare i FR-5, FR-20 og ordlisten. Brukers valg
 - (change) Steg 5 språk 4/16 (tillegg): knappene på modusvalget skal vise begge navnene, f.eks. «Full generering – Skriv nytt brev» og «Korrektur – Forbedre mitt brev», så brukeren ikke misforstår (ny setning i FR-20, utseende bestemmes i UX). FR-5 sier nå «valget mellom Full generering og Korrektur». Addendum Skisser fikk tillegg om dette. Brukers ønske (endring i produktet, ikke bare tekst)
 - (event) Pause i steg 5 språkgjennomgang etter funn 4/16. Neste: språk 5/16 (FR-36 «på startsiden» flyttes fram, ikke besvart). Gjenstår PRD-funn 7-9, 11, 15, 17 i review-prose-prd.md og addendum-funn 1-4, 7 i review-prose-addendum.md
+- (change) Steg 5 språk 5/16: FR-36 «samtykke til bruk av KI på startsiden» → «på startsiden samtykke til bruk av KI» (kunne leses som KI brukt på startsiden). Bruker sa ja
+- (change) Steg 5 språk 6/16: del 1 «nøkkelordtreffet regnes med en åpen telleregel» → «regnes ut med» (kunne leses som «tas med»; samme ord som FR-17 og ordlisten). Bruker sa ja
+- (decision) Steg 5 språk 7/16: FR-19 «CV og annonse er da fortsatt fylt ut» → «CV, annonse og eventuelt eget søknadsbrev ...». Eget brev i Korrektur (FR-8) beholdes når brukeren går tilbake. Brukers valg (A), fulgte Claudes anbefaling
+- (change) Steg 5 språk 8/16: FR-32 «knapp» → «bryter», som i del 8 og addendum (én av/på-bryter på startsiden i begge moduser). Innledningen fikk «med en bryter», underpunktet «med den samme bryteren». Brukers valg (A)
+- (change) Steg 5 språk 9/16: fortrinnet samkjørt med del 1 (bruker: produktet har lite nytt; bare åpen telleregel med prosent + forklaring av begreper skiller seg ut, ryddet 10.10). «Den ærlige begrensningen»: «fokuset på studentmålgruppen og de to modusene» → «en åpen telleregel og forklaringer for studenter». Nødliste 6: «Den skiller nettsiden fra andre verktøy» → «Den gjør at brukeren kan beholde sin egen stemme,». Bruker sa ja til begge
+- (change) Steg 5 språk 10/16: «teknisk sofistikasjon» → «teknisk sofistikering» (står ikke i Bokmålsordboka). Bruker sa ja. Åpent: product brief har fortsatt gammel setning om fortrinnet (studentmålgruppen og de to modusene); spør bruker om brief skal rettes etter språkfunnene
+- (change) Steg 5 språk 11/16: FR-24 punktliste uten komma/punktum til slutt, som FR-28 og NFR-8. Ingen ord endret. Bruker sa ja. PRD-funnene i språkgjennomgangen er ferdige; gjenstår addendum-funn 1-4, 7
+- (decision) Steg 5 språk 12/16: addendum «CV-er med kolonner og tabeller»: begrensningen rettet til «bare CV-er med én kolonne og uten tabeller støttes», tabeller lagt til i setningen om feil rekkefølge (faglærer nevnte tabeller som krevende, ikke som krav). Ny setning: Kristine vil prøve å støtte tabeller; blir det vanskelig, settes det på kuttlisten. PRD del 8-raden fikk «og tabeller». Brukers valg (B)
+- (change) Steg 5 språk 13/16: addendum PR-regel 2 «om KI-en gjorde noe feil» → «om KI-verktøyet jeg koder med (for eksempel Claude Code) gjorde noe feil» («KI-en» betyr ellers Claude inni nettsiden). Bruker sa ja
+- (change) Steg 5 språk 14/16: addendum «Språk: ... ett språk» → «Programmeringsspråk: ... ett programmeringsspråk» (kunne leses som norsk/engelsk). Bruker sa ja
+- (decision) Steg 5 språk 15/16: addendum Til UX «Tomme felt (FR-4) og manglende innlogging (FR-7)» → «... og feil e-post eller passord (FR-3)». FR-7 har ingen felt; bruker mente FR-3. Brukers valg (B)
+- (change) Steg 5 språk 16/16: FR-8 lagt til i henvisningene om PDF-lesing (addendum «Lese tekst fra PDF» og PRD del 8-raden), fordi FR-11 bare gjelder PDF som ikke kan leses. Bruker sa ja etter enklere forklaring
+- (event) Steg 5 språkgjennomgang ferdig: alle 16 funn + 11 småfeil gjennomgått. Åpent: product brief har gammel setning om fortrinnet. Neste: spør om brief, så steg 6 (ingen external_handoffs) og steg 7 (status final)
+- (change) Product brief (my-project/1-product-brief/product-brief.md) samkjørt med PRD: «Den ærlige begrensningen» fikk «sofistikering» og fortrinnet «en åpen telleregel og forklaringer for studenter»; updated 2026-10-12; linje lagt i brief-memlog.md. Bruker sa ja. Status final venter etter brukers ønske

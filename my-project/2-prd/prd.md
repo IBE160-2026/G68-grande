@@ -31,9 +31,9 @@ En søknad som føles som *deres egen stemme*, ikke en generisk KI-tekst — og 
 
 ### Hva gjør dette annerledes
 
-Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske.
+Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes ut med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske.
 
-Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, men at fokuset på studentmålgruppen og de to modusene gir en enkel, tydelig opplevelse fremfor bredde.
+Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikering, men en åpen telleregel og forklaringer for studenter som gir en enkel, tydelig opplevelse fremfor bredde.
 
 ## 2. Funksjoner
 
@@ -82,7 +82,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
   - **Gap-analyse:** en KI-vurdering av hvilke krav i annonsen CV-en dekker og mangler.
 
   Nettsiden forklarer også at gap-analysen og nøkkelordtreffet derfor kan si hverandre imot. For eksempel kan gap-analysen si at «SQL mangler» selv om ordtellingen fant «SQL».
-- **FR-19:** Brukeren kan gå tilbake til innleggingssiden etter å ha sett resultatet. CV og annonse er da fortsatt fylt ut. Når brukeren går videre igjen, kjøres analysen på nytt. Er bare CV-en endret, gjenbrukes den lagrede nøkkelordlisten.
+- **FR-19:** Brukeren kan gå tilbake til innleggingssiden etter å ha sett resultatet. CV, annonse og eventuelt eget søknadsbrev er da fortsatt fylt ut. Når brukeren går videre igjen, kjøres analysen på nytt. Er bare CV-en endret, gjenbrukes den lagrede nøkkelordlisten.
 - **FR-21:** Brukeren ser gap-analysen og nøkkelordtreffet før brevet lages eller korrigeres. Brevet lages først når brukeren har bekreftet at de vil gå videre.
 
 ### 2.4 Søknadsbrev: Full generering og Korrektur
@@ -90,9 +90,9 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 - **FR-22:** I Full generering skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden, slik at brukeren kan lese det før det lastes ned.
 - **FR-23:** I Korrektur lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. Endringene vises ikke bare med farge, men også på en annen måte, for eksempel med understreking.
 - **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene. Det betyr at brevet:
-  - nevner stillingen og arbeidsgiveren ved navn,
-  - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en,
-  - ikke bruker typiske KI-fraser (listen ligger i addendum).
+  - nevner stillingen og arbeidsgiveren ved navn
+  - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en
+  - ikke bruker typiske KI-fraser (listen ligger i addendum)
 
   I Korrektur betyr det at KI-en retter språk og ordvalg mot formell og akademisk tone, men beholder brukerens innhold, eksempler og rekkefølge. Slik beholder brukeren sin egen stemme (FR-23).
 - **FR-37:** KI-en skal ikke komme med antakelser på vegne av brukeren. Brevet bygger bare på det som står i CV-en, stillingsannonsen og eventuelt brukerens eget brev. KI-en legger ikke til erfaring, utdanning eller ferdigheter som ikke står der. KI-en får omformulere det som står i CV-en og koble det til kravene i stillingsannonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid». Dette gjelder begge modusene.
@@ -121,8 +121,8 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 ### 2.6 Testmodus og bruk av KI
 
-- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus.
-  - I testmodus finnes det en knapp for å bytte tilbake til vanlig modus. Brukeren kan bare bytte på startsiden, ikke midt i en søknad.
+- **FR-32:** Allerede på startsiden kan brukeren bytte til testmodus med en bryter.
+  - I testmodus kan brukeren bytte tilbake til vanlig modus med den samme bryteren. Brukeren kan bare bytte på startsiden, ikke midt i en søknad.
   - I testmodus bruker nettsiden ferdige KI-svar i stedet for å sende tekst til en ekstern KI, slik at nettsiden kan kjøres uten API-nøkkel.
   - Finnes det ingen API-nøkkel, starter nettsiden i testmodus, det er ikke mulig å bytte tilbake til vanlig modus, og det vises en kort forklaring, for eksempel «Mangler API-nøkkel, se README».
 - **FR-33:** Når testmodus er på, vises en tydelig merkelapp, for eksempel «Testmodus», slik at brukeren ser det.
@@ -131,7 +131,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
   - Feilmeldingene for tomme felt, feil filtype og uleselig PDF virker også i testmodus.
   - Testdataene dekker både Full generering og Korrektur, også med et fiktivt søknadsbrev til Korrektur. Testdataene har også en skannet PDF og en fil av feil type, slik at sensor kan prøve feilmeldingene.
 - **FR-35:** Når testmodus er av, vises en merknad i et hjørne av nettsiden hele tiden, som sier at nettsiden bruker en ekstern KI.
-- **FR-36:** Når testmodus er av, må brukeren samtykke til bruk av KI på startsiden før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
+- **FR-36:** Når testmodus er av, må brukeren på startsiden samtykke til bruk av KI før de kan begynne å lage en søknad. Samtykket gis på nytt hver gang brukeren logger inn.
   - Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder, altså at teksten brukeren legger inn, sendes til en ekstern KI.
   - Brukeren huker av boksen og trykker deretter «Begynn å lage søknad».
   - Trykker brukeren «Begynn å lage søknad» uten å ha huket av, får de en feilmelding som sier at de må samtykke først.
@@ -218,7 +218,7 @@ Disse funksjonene er med i versjon 1, men kuttes i denne rekkefølgen hvis tiden
 
 **Siste utvei:**
 
-6. Hele Korrektur. Den skiller nettsiden fra andre verktøy og kuttes bare når alt annet er prøvd.
+6. Hele Korrektur. Den gjør at brukeren kan beholde sin egen stemme, og kuttes bare når alt annet er prøvd.
 
 **Kuttes aldri:** testmodus, innlogging, gap-analysen, nøkkelordtreffet med telleregelen og testene, Full generering, .docx-nedlasting, samtykke og FR-37.
 
@@ -289,8 +289,8 @@ PRD-en sier *hva* nettsiden skal gjøre. *Hvordan* den ser ut, bestemmes i UX, o
 | Grensen for filstørrelse (FR-12) | Arkitektur | Avhenger av hvor nettsiden kjøres og hva KI-tjenesten tåler |
 | KI-modell og kostnad (NFR-11) | Arkitektur | Krever at modellene sammenlignes på pris og kvalitet |
 | Hvor lenge nettsiden venter på KI-en (FR-28) | Arkitektur | Avhenger av modellen og må måles. Et langt brev kan ta 20–30 sekunder |
-| Hvordan PDF leses, og hvordan Word og PDF lages (FR-11, FR-29) | Arkitektur | Valg av biblioteker er et teknisk valg |
-| CV-er med kolonner (FR-11) | Arkitektur | Avhenger av hva biblioteket for PDF klarer |
+| Hvordan PDF leses, og hvordan Word og PDF lages (FR-8, FR-11, FR-29) | Arkitektur | Valg av biblioteker er et teknisk valg |
+| CV-er med kolonner og tabeller (FR-11) | Arkitektur | Avhenger av hva biblioteket for PDF klarer |
 | Hvordan testmodus kjenner igjen testdataene (FR-34), og mappene for testdata (NFR-3) | Arkitektur | Teknisk løsning |
 
 ## Ordliste

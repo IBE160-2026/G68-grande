@@ -2,7 +2,7 @@
 title: "Søknadsassistenten"
 status: final
 created: 2026-09-16
-updated: 2026-10-11
+updated: 2026-10-12
 ---
 
 # Produktbrief: Søknadsassistenten
@@ -46,7 +46,7 @@ Ingenting lagres mellom gangene i versjon 1. Når brukeren logger ut, forsvinner
 
 Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj i brukeropplevelsen: helt KI-genererte søknadsbrev har en kjent svakhet — de blir lett gjenkjennelige og generiske. Ved å tilby Korrektur som et likeverdig alternativ til Full generering, anerkjenner produktet det problemet direkte i stedet for å late som det ikke finnes.
 
-Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikasjon, men at fokuset på studentmålgruppen og de to modusene gir en enkel, tydelig opplevelse fremfor bredde.
+Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikering, men en åpen telleregel og forklaringer for studenter som gir en enkel, tydelig opplevelse fremfor bredde.
 
 ## Hvem dette er for
 
