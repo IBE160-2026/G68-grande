@@ -9,7 +9,7 @@ updated: 2026-10-12
 
 ## Sammendrag
 
-Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger mellom to moduser: **Full generering**, der KI-en skriver brevet fra bunnen, eller **Korrektur**, der KI-en forbedrer et brev brukeren har skrevet selv og viser hva som er endret.
+Søknadsassistenten er et nettbasert verktøy som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger mellom to moduser: **Full generering**, der KI-en skriver brevet fra bunnen av, eller **Korrektur**, der KI-en forbedrer et brev brukeren har skrevet selv og viser hva som er endret.
 
 Før brevet skrives, får brukeren en **gap-analyse**, som viser hvilke krav i annonsen CV-en ikke dekker, og et **nøkkelordtreff**, som viser hvor stor andel av annonsens nøkkelord som står i CV-en. Mange arbeidsgivere bruker et ATS (Applicant Tracking System), altså programvare som sorterer søknader automatisk før et menneske leser dem. Nøkkelordtreffet gir studenten en enkel og forståelig pekepinn på hvordan CV-en kan bli vurdert.
 
@@ -30,21 +30,23 @@ Resultatet er søknader som aldri blir lest av et menneske, og studenter som ikk
 Brukeren går gjennom én flyt:
 
 1. **Logg inn** med e-post og passord.
-2. **Legg inn CV og stillingsannonse**, enten som PDF-fil eller som innlimt tekst. Hvis nettsiden ikke klarer å lese en PDF, for eksempel fordi den er skannet, får brukeren beskjed om å lime inn teksten i stedet.
-3. **Få innsikt:**
-   - *Gap-analyse:* hvilke krav i annonsen CV-en ikke dekker.
-   - *Nøkkelordtreff:* KI-en henter ut nøkkelordene fra annonsen, og nettsiden teller hvor mange av dem som finnes i CV-en, for eksempel «7 av 10 = 70 %». Tellingen gjøres med en fast regel, ikke av KI-en, slik at resultatet er forutsigbart og kan testes.
-4. **Velg modus:**
+2. **Velg modus:**
    - *Full generering:* KI-en skriver et søknadsbrev basert på CV-en og annonsen.
    - *Korrektur:* Brukeren legger inn sitt eget brev. KI-en lager en forbedret versjon, og nettsiden viser endringene markert i teksten. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme.
    - *Tone og språk:* Brevet skrives alltid på norsk og i en formell tone.
+3. **Legg inn CV og stillingsannonse**, og i Korrektur også eget søknadsbrev, enten som PDF-fil eller som innlimt tekst. Hvis nettsiden ikke klarer å lese en PDF, for eksempel fordi den er skannet, får brukeren beskjed om å lime inn teksten i stedet.
+4. **Få innsikt:**
+   - *Gap-analyse:* hvilke krav i annonsen CV-en ikke dekker.
+   - *Nøkkelordtreff:* KI-en henter ut nøkkelordene fra annonsen, og nettsiden teller hvor mange av dem som finnes i CV-en, for eksempel «7 av 10 = 70 %». Tellingen gjøres med en fast regel, ikke av KI-en, slik at resultatet er forutsigbart og kan testes.
+
+   Brevet skrives først når brukeren har sett innsikten og valgt å gå videre.
 5. **Last ned brevet** som Word (.docx) for å redigere videre, eller som PDF hvis brevet er ferdig. Word er valgt i stedet for Markdown fordi studenter flest redigerer i Word, og brevet bør kunne finpusses før det sendes.
 
 Ingenting lagres mellom gangene i versjon 1. Når brukeren logger ut, forsvinner CV, annonse og brev fra nettsiden. Brukeren tar vare på brevet ved å laste det ned.
 
 ## Hva gjør dette annerledes
 
-Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj i brukeropplevelsen: helt KI-genererte søknadsbrev har en kjent svakhet — de blir lett gjenkjennelige og generiske. Ved å tilby Korrektur som et likeverdig alternativ til Full generering, anerkjenner produktet det problemet direkte i stedet for å late som det ikke finnes.
+Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes ut med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Valget mellom å la KI-en skrive brevet og å forbedre sitt eget er heller ikke bare en detalj i brukeropplevelsen: helt KI-genererte søknadsbrev har en kjent svakhet — de blir lett gjenkjennelige og generiske. Ved å tilby Korrektur som et likeverdig alternativ til Full generering, anerkjenner produktet det problemet direkte i stedet for å late som det ikke finnes.
 
 Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikering, men en åpen telleregel og forklaringer for studenter som gir en enkel, tydelig opplevelse fremfor bredde.
 

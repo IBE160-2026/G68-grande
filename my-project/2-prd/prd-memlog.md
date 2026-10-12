@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-12T22:42
+updated: 2026-10-12T22:50
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -166,3 +166,6 @@ updated: 2026-10-12T22:42
 - (change) Steg 5 språk 16/16: FR-8 lagt til i henvisningene om PDF-lesing (addendum «Lese tekst fra PDF» og PRD del 8-raden), fordi FR-11 bare gjelder PDF som ikke kan leses. Bruker sa ja etter enklere forklaring
 - (event) Steg 5 språkgjennomgang ferdig: alle 16 funn + 11 småfeil gjennomgått. Åpent: product brief har gammel setning om fortrinnet. Neste: spør om brief, så steg 6 (ingen external_handoffs) og steg 7 (status final)
 - (change) Product brief (my-project/1-product-brief/product-brief.md) samkjørt med PRD: «Den ærlige begrensningen» fikk «sofistikering» og fortrinnet «en åpen telleregel og forklaringer for studenter»; updated 2026-10-12; linje lagt i brief-memlog.md. Bruker sa ja. Status final venter etter brukers ønske
+- (change) Konsistenssjekk brief mot PRD (brukers spørsmål før final): ingen uønskede endringer funnet. Brief «Løsningen» fikk PRD-ens rekkefølge (modus før innlegging, innsikt før brev) + «fra bunnen av» og «regnes ut». Milepæl «PRD ferdig 11. oktober» beholdes (under tre dager forsinket, mest for brukerens egen del). Brukers valg (A)
+- (change) README-er: «(under arbeid)» fjernet ved PRD i begge. my-project/README fikk rad for 2-prd/gjennomganger/ (manglet). Rot-README fikk lenke til addendum. Bruker ba om at det som mangler i README, tas med
+- (event) PRD finalized

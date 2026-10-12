@@ -1,8 +1,8 @@
 ---
 title: "PRD: Søknadsassistenten"
-status: draft
+status: final
 created: 2026-10-09
-updated: 2026-10-11
+updated: 2026-10-12
 ---
 
 # PRD: Søknadsassistenten
