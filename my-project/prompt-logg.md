@@ -160,3 +160,21 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 88 | «jeg tenker vi tar A+B» | FR-31: en ny søknad starter med tomme felt. «Beholde CV-en ved ny søknad» ligger på kuttlisten |
 | 89 | «er det tydelig skrevet hvilke ting som avgjøres i senere deler av prosjektet som f.eks UX? og en begrunnelse på hvorfor?» / «detser bra ut legg det inn» | KI-en svarte at det bare var delvis tydelig: det var spredt og manglet begrunnelse. Ny del «Avgjøres i UX og arkitektur» med en tabell over hva, hvor og hvorfor ikke nå |
 | 90 | «du kan pushe alt, memlog og prompts også» | Denne delen av prompt-loggen. Alt er pushet |
+
+### 2026-10-11/12 – Finalize steg 5: struktur og språk i PRD-en og addendumet (pågår)
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 91 | «ja fortsett med steg 5» | KI-en kjørte en strukturgjennomgang av PRD-en og addendumet (to hjelpere samtidig). Språket ventet til etterpå, så tekst som skulle flyttes, ikke ble vasket først |
+| 92 | «jeg må ta de en og en» | KI-en foreslo å godkjenne alle anbefalingene samtidig, men vi gikk gjennom dem én og én |
+| 93 | «ja» (x5) | PRD: FR-28 delt i tre deler, nødlisten flyttet til del 4, egen tabell for «Gjøres hvis det blir tid», Milepæler som eget kapittel, FR-32 og FR-34 delt i underpunkter. Ordlyden uendret |
+| 94 | «ja» / «beholde begge» / «behold» | Fulgte KI-ens råd om å beholde: setningen om utgangspunktet i FR-23, skjermbildene både i FR-38 og NFR-8, og hele punktet «KI-tjeneste» i addendumet |
+| 95 | «jeg skjønte ikke helt» / «ja» | KI-en forklarte enklere at addendumet er delt etter hvem som skal bruke det. KI-frasene fikk egen seksjon, «Til prompten for brevet» |
+| 96 | «ja» (x3) / «ja til a) , skjønte ikke b» / «ha det likt» | Addendumet: punktene gruppert, skissene øverst i «Til UX», kodestil flyttet til Arbeidsmåte, like mellomrom, og kilden skrevet likt («fra product brief») |
+| 97 | «ja hvis lista med 10 først» / «ja til alle» | Språkgjennomgang: 11 skrive- og kommafeil rettet samlet (KI-en hadde først telt feil og sagt 10) |
+| 98 | «kan du comitte og pushe endringene nå, må gå» | Pushet. Gjennomgangene lagt i `2-prd/gjennomganger/` |
+| 99 | «ja det høres bra ut, men hva mener du med C i python det er ikke c i python» / «så du mener at dersom noen har nummerert etter bokstaver også bare C skal skjønne at C: Python er en greie?» / «ja begge» | FR-17: «kort nøkkelord» ble «4 tegn eller mer», og eksempelet ble «Kan C og Python». Jeg fant en svakhet i telleregelen: «C» i en liste nummerert med bokstaver gir feil treff. Den er lagt inn som kjent begrensning |
+| 100 | «ja» (x3) | FR-34: «Full generering og Korrektur» i stedet for «begge modusene». Ordlisten: ingenting lagres etter at brukeren logger ut. Tre steder fikk «Korrektur» i stedet for knappenavnet |
+| 101 | «kan vi gå over 4 en gang til så jeg får det helt klart for meg» / «synes egt det ble litt rotete» / «jeg synes det var vanskelig å skille dem to fra hverandre modus og knapp» / «korrektur og full generering» | Forskjellen på knapp og modus var vanskelig å holde styr på. Nå har hver modus ett navn overalt: Korrektur og Full generering |
+| 102 | «på knappene ønsker jeg at det skal stå begge deler så det ikke går an å misforstås» / «A» / «ja» | FR-20: knappene på nettsiden viser begge navnene, for eksempel «Korrektur – Forbedre mitt brev». En endring i nettsiden, ikke bare i teksten |
+| 103 | «jeg må gå igjen, kan du lagre de nye endringene» / «vi kan pushe, push alt av memlog, promptlog og alle dokumemtene vi har endret på» | Committet, og senere pushet sammen med denne delen av prompt-loggen. 12 av 16 språkfunn gjenstår |
