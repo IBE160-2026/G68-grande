@@ -15,7 +15,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Andre åpne punkter
 
-- [ ] Spørre faglærer om product brief regnes som proposal
+- [x] Spørre faglærer om product brief regnes som proposal
 - [x] Skrive «Hva jeg lærte» i prompt-loggen
 - [ ] Bestemme lista over typiske KI-fraser (FR-24, ligger i addendum)
 

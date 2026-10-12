@@ -273,7 +273,7 @@ Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på
 
 | Spørsmål | Eier | Når |
 |---|---|---|
-| Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Før arkitekturen |
+| Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Avklart 12. oktober: ja, briefen tilsvarer proposal. Kuttlisten trenger ikke endres |
 | Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Kristine | Før prompten for brevet skrives |
 | Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Uken etter 11. oktober |
 

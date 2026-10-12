@@ -1,6 +1,6 @@
 ---
 topic: Søknadsassistenten PRD
-updated: 2026-10-12T22:50
+updated: 2026-10-12T22:51
 ---
 
 - (event) PRD startet fra my-project/product-brief.md (final). Frist ca. 2026-12-09, én person
@@ -169,3 +169,4 @@ updated: 2026-10-12T22:50
 - (change) Konsistenssjekk brief mot PRD (brukers spørsmål før final): ingen uønskede endringer funnet. Brief «Løsningen» fikk PRD-ens rekkefølge (modus før innlegging, innsikt før brev) + «fra bunnen av» og «regnes ut». Milepæl «PRD ferdig 11. oktober» beholdes (under tre dager forsinket, mest for brukerens egen del). Brukers valg (A)
 - (change) README-er: «(under arbeid)» fjernet ved PRD i begge. my-project/README fikk rad for 2-prd/gjennomganger/ (manglet). Rot-README fikk lenke til addendum. Bruker ba om at det som mangler i README, tas med
 - (event) PRD finalized
+- (decision) Åpent spørsmål avklart (etter final): product brief tilsvarer proposal (brukers svar). Raden i del 8 merket «Avklart 12. oktober», kuttlisten trenger ikke endres. TO DO krysset av
