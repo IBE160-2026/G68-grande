@@ -25,3 +25,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] UX (skisser av modusvalget og resultatsiden, se addendum)
 - [ ] Arkitektur
 - [ ] Epics og stories
+
+## Før innlevering
+
+- [ ] Lage en kort prompt-logg med de viktigste valgene for hele prosjektet, til sensor (den lange loggen beholdes)
