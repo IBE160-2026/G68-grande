@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logoskrift – forslag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&family=Poppins:wght@700&family=Fredoka:wght@600&family=Fraunces:opsz,wght@9..144,700&family=Baloo+2:wght@800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C;
+    --primary-contrast: #FFFFFF;
+    --accent: #F6B8A0;
+    --bg: #FFF7F5;
+    --surface: #FFFFFF;
+    --text: #3A2530;
+    --muted: #6E5560;
+    --border: #EED7DD;
+    --error: #B4232F;
+    --focus: #3B5BDB;
+    --radius: 26px;
+    --shadow: 0 8px 24px rgba(162,62,108,.12);
+    --sys: system-ui, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--sys);
+    background: #F3E9EC;
+    color: var(--text);
+    line-height: 1.5;
+    padding: 24px 16px 48px;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+  .intro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    font-size: 1.1rem;
+  }
+  .intro p { margin: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 28px;
+  }
+  .option h2 { margin: 0 0 2px; font-size: 1.05rem; color: var(--text); }
+  .option .feel { margin: 0 0 10px; color: var(--muted); font-size: .95rem; }
+
+  /* Nettleserramme */
+  .browser {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: var(--shadow);
+  }
+  .bar {
+    display: flex; align-items: center; gap: 8px;
+    background: #F7EEF0; border-bottom: 1px solid var(--border);
+    padding: 8px 12px;
+  }
+  .dots { display: flex; gap: 5px; flex-shrink: 0; }
+  .dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+  .url {
+    flex: 1; min-width: 0;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px 12px;
+    font-size: .8rem; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* Mini innloggingsside */
+  .page { padding: 28px 18px 32px; text-align: center; }
+  .logo {
+    margin: 0 0 22px;
+    color: var(--primary);
+    font-size: clamp(1.5rem, 6.4vw, 2.3rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px 20px;
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .card h3 { margin: 0 0 14px; font-size: 1.15rem; font-family: var(--sys); }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: 4px; }
+  .field input {
+    width: 100%; font: inherit; font-size: .95rem; color: var(--text);
+    background: var(--surface);
+    border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 9px 12px;
+  }
+  .field input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .btn {
+    display: block; width: 100%;
+    font: inherit; font-weight: 700; font-size: 1rem;
+    background: var(--primary); color: var(--primary-contrast);
+    border: 0; border-radius: var(--radius);
+    padding: 11px 16px; margin-top: 6px; cursor: pointer;
+    box-shadow: 0 4px 12px rgba(162,62,108,.22);
+  }
+  .btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .signup { margin: 14px 0 0; text-align: center; font-size: .92rem; color: var(--muted); }
+  .signup a { color: var(--primary); font-weight: 600; }
+  .signup a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+  /* Alternativ 1 – Nunito */
+  .f-nunito { font-family: "Nunito", var(--sys); font-weight: 800; }
+  /* Alternativ 2 – Poppins */
+  .f-poppins { font-family: "Poppins", var(--sys); font-weight: 700; letter-spacing: -.01em; }
+  /* Alternativ 3 – Fredoka */
+  .f-fredoka { font-family: "Fredoka", var(--sys); font-weight: 600; }
+  /* Alternativ 4 – Fraunces */
+  .f-fraunces { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-optical-sizing: auto; }
+  /* Alternativ 5 – Baloo 2 */
+  .f-baloo { font-family: "Baloo 2", var(--sys); font-weight: 800; }
+  /* Alternativ 6 – Caveat */
+  .f-caveat { font-family: "Caveat", cursive; font-weight: 700; font-size: clamp(2rem, 8.6vw, 3rem); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro">
+    <p>Tittelen er logoen – resten av siden bruker vanlig systemskrift. Hvilken skrift passer best?</p>
+  </div>
+
+  <div class="grid">
+
+    <section class="option">
+      <h2>1. Nunito (ekstra fet)</h2>
+      <p class="feel">Rund og vennlig – trygg og lett å lese.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-nunito">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e1">E-post</label><input id="e1" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p1">Passord</label><input id="p1" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="option">
+      <h2>2. Poppins (fet)</h2>
+      <p class="feel">Geometrisk og ryddig – moderne og effektiv.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-poppins">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e2">E-post</label><input id="e2" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p2">Passord</label><input id="p2" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="option">
+      <h2>3. Fredoka (halvfet)</h2>
+      <p class="feel">Myk og leken – levende uten å bli barnslig.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-fredoka">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e3">E-post</label><input id="e3" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p3">Passord</label><input id="p3" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="option">
+      <h2>4. Fraunces (fet)</h2>
+      <p class="feel">Myk serif – lun, varm og litt elegant.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-fraunces">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e4">E-post</label><input id="e4" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p4">Passord</label><input id="p4" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="option">
+      <h2>5. Baloo 2 (ekstra fet)</h2>
+      <p class="feel">Varm og tykk – glad og innbydende.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-baloo">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e5">E-post</label><input id="e5" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p5">Passord</label><input id="p5" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="option">
+      <h2>6. Caveat (fet)</h2>
+      <p class="feel">Håndskrevet preg – personlig, som en hilsen fra en venn.</p>
+      <div class="browser">
+        <div class="bar"><div class="dots"><span></span><span></span><span></span></div><div class="url">soknadsassistenten.no/logg-inn</div></div>
+        <div class="page">
+          <h1 class="logo f-caveat">Søknadsassistenten</h1>
+          <form class="card" action="#" onsubmit="return false">
+            <h3>Logg inn</h3>
+            <div class="field"><label for="e6">E-post</label><input id="e6" type="email" autocomplete="email"></div>
+            <div class="field"><label for="p6">Passord</label><input id="p6" type="password" autocomplete="current-password"></div>
+            <button class="btn" type="button">Logg inn</button>
+            <p class="signup">Ny her? <a href="#">Registrer deg her</a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

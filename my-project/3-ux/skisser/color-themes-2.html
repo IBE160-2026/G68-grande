@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lilla varianter – runde 2</title>
+<style>
+/* Søknadsassistenten – 5 lilla varianter av tema 5 (samme former og animasjoner, kun farger ulike). Kontrast beregnet med WCAG-formelen. */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#ECEDEF;color:#1A1A1A;line-height:1.45;overflow-x:hidden}
+.page{max-width:1400px;margin:0 auto;padding:24px 16px 48px}
+.intro{background:#fff;border:1px solid #D6D8DC;border-radius:12px;padding:16px 20px;margin-bottom:20px;max-width:900px}
+.intro h1{margin:0 0 6px;font-size:1.35rem}
+.intro p{margin:0 0 6px;font-size:1rem}
+.intro p:last-child{margin:0;font-size:.9rem;color:#4A4D52}
+.list{display:flex;flex-direction:column;gap:22px}
+.theme{--radius:26px;--bw:1px;--fw:600;background:var(--background);color:var(--text);border:1px solid var(--border);border-radius:16px;padding:16px;min-width:0;display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:1000px){.theme{grid-template-columns:330px 1fr;padding:20px}}
+.info,.browser{min-width:0}
+.th{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.num{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:var(--primary);color:var(--primary-contrast);font-weight:800}
+.th h2{margin:0;font-size:1.25rem}
+.reg{margin:2px 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:700}
+.desc{margin:0;font-size:.92rem}
+.chips{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+.chip{display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 6px;font-size:.74rem;min-width:0}
+.chip b{display:block;font-weight:600;overflow-wrap:anywhere}
+.chip code{font-family:ui-monospace,Consolas,monospace;color:var(--text-muted)}
+.sw{flex:none;width:26px;height:26px;border-radius:6px;border:1px solid rgba(0,0,0,.18)}
+.ratios{display:flex;flex-direction:column;gap:6px;font-size:.84rem}
+.ratio{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.demo{display:inline-grid;place-items:center;width:34px;height:24px;border-radius:5px;font-weight:700;border:1px solid var(--border)}
+.pass{background:var(--success-tint);color:var(--success);font-weight:700;padding:1px 7px;border-radius:99px;font-size:.75rem}
+.browser{border:1px solid #C9CCD1;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.bar{display:flex;align-items:center;gap:10px;background:#E9EAED;padding:8px 10px;border-bottom:1px solid #C9CCD1}
+.lights{display:flex;gap:5px;flex:none}
+.lights i{width:10px;height:10px;border-radius:50%;background:#C4C7CC}
+.url{flex:1;min-width:0;background:#fff;border-radius:99px;padding:3px 12px;font-size:.78rem;color:#4A4D52;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.site{background:var(--background);padding:16px 18px;display:flex;flex-direction:column;gap:16px}
+@media (min-width:700px){.site{padding:20px 32px}}
+.ic{width:18px;height:18px;flex:none;vertical-align:-3px;margin-right:5px}
+.ic.big{width:36px;height:36px;margin:0}
+.ic.sm{width:10px;height:10px;vertical-align:0}
+.ic.acc{color:var(--primary)}
+.fillacc{fill:var(--accent);stroke:var(--accent)}
+.strokeacc{stroke:currentColor}
+.topline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;padding-bottom:12px;border-bottom:var(--bw) solid var(--border)}
+.logo{font-weight:var(--fw);color:var(--primary);display:flex;align-items:center;font-size:1.05rem}
+.nav{display:flex;gap:14px;font-size:.85rem;color:var(--text-muted);flex-wrap:wrap}
+.nav .cur{color:var(--primary);font-weight:700;border-bottom:3px solid var(--line)}
+.hero{display:flex;flex-direction:column;gap:12px}
+.q{margin:0;font-weight:var(--fw);font-size:1.3rem}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.mode{font:inherit;cursor:pointer;display:flex;gap:14px;align-items:center;text-align:left;padding:18px 20px;border-radius:var(--radius);border:var(--bw) solid var(--primary);box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease}
+.mode b{display:block;font-size:1.12rem;font-weight:var(--fw)}
+.mode small{display:block;font-size:.92rem}
+.mode.primary{background:var(--primary);color:var(--primary-contrast)}
+.mode.secondary{background:var(--surface);color:var(--primary)}
+.mode:hover{transform:translateY(-3px);box-shadow:var(--shadow),0 10px 22px rgba(0,0,0,.12)}
+.mode:active{transform:translateY(0) scale(.98);box-shadow:var(--shadow);transition-duration:.06s}
+.mode.secondary:hover{background:var(--background)}
+.mode .ic.big{transition:transform .25s ease}
+.mode:hover .ic.big{transform:rotate(-8deg) scale(1.1)}
+.mode:focus-visible,.logout:focus-visible,input:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.loadcard{background:var(--surface);border:var(--bw) solid var(--border);border-radius:var(--radius);padding:12px 18px;box-shadow:var(--shadow)}
+.loading{margin:0;font-size:.98rem;font-weight:600;color:var(--text);display:flex;align-items:center}
+.loadsub{margin:2px 0 0 23px;font-size:.84rem;color:var(--text-muted)}
+.dots{display:inline-flex;gap:4px;margin-left:6px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:bob 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bob{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-4px);opacity:1}}
+.result{background:var(--surface);border:var(--bw) solid var(--border);border-radius:var(--radius);padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px 24px}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.label{margin:0;font-size:.82rem;font-weight:700;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.score{background:var(--primary);color:var(--primary-contrast);padding:2px 9px;border-radius:99px;font-size:.82rem}
+.ki{font-weight:600;font-size:.72rem;border:1px solid var(--text-muted);border-radius:99px;padding:0 7px}
+.kw{display:flex;flex-wrap:wrap;gap:6px}
+.kw span{display:inline-flex;align-items:center;font-size:.85rem;padding:3px 10px;border-radius:99px;font-weight:600}
+.kw em{font-style:normal;font-weight:400;font-size:.75rem;margin-left:5px}
+.hit{background:var(--success-tint);color:var(--success);border:1px solid var(--success)}
+.miss{background:var(--surface);color:var(--text-muted);border:1px dashed var(--text-muted)}
+.gap{list-style:none;margin:0;padding:0}
+.gap li{font-size:.9rem;display:flex;align-items:baseline;gap:2px}
+.gap .ic{color:var(--error)}
+.letter{margin:0;font-size:.92rem}
+.changed{color:var(--success);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;background:var(--success-tint)}
+.field{display:flex;flex-direction:column;gap:4px;font-size:.88rem;font-weight:600}
+.field input{font:inherit;font-weight:400;padding:9px 11px;border:2px solid var(--error);border-radius:calc(var(--radius) / 2);background:var(--surface);color:var(--text);width:100%;max-width:340px}
+.errmsg{color:var(--error);font-weight:600;display:flex;align-items:center;font-size:.85rem}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--border)}
+.ki-note{font-size:.75rem;color:var(--text-muted);display:flex;align-items:center;border:1px dashed var(--text-muted);border-radius:99px;padding:2px 9px}
+.ki-note .ic{width:13px;height:13px}
+.logout{font:inherit;font-size:.78rem;background:transparent;color:var(--text-muted);border:1px solid var(--text-muted);border-radius:99px;padding:3px 12px;cursor:pointer;transition:color .15s,border-color .15s,transform .1s}
+.logout:hover{color:var(--primary);border-color:var(--primary)}
+.logout:active{transform:scale(.96)}
+@media (prefers-reduced-motion:reduce){.dots i{animation:none;opacity:.8}.mode,.mode .ic.big,.logout{transition:none}.mode:hover,.mode:active,.mode:hover .ic.big,.logout:active{transform:none}}
+</style>
+</head>
+<body>
+<main class="page">
+ <div class="intro">
+  <h1>Lilla varianter for Søknadsassistenten – runde 2</h1>
+  <p>Alle fem bruker samme myke former og animasjoner som nr. 5 – bare fargene er ulike. Hvilken lilla passer best for alle studenter?</p>
+  <p>Hold musen over de store knappene, og trykk på dem for å kjenne «trykket». Prikkene viser hvordan det ser ut mens nettsiden jobber.</p>
+ </div>
+ <div class="list">
+<section class="theme" style="--primary:#A23E6C;--primary-contrast:#FFFFFF;--accent:#F6B8A0;--background:#FFF7F5;--surface:#FFFFFF;--text:#3A2530;--text-muted:#6E5560;--border:#EED7DD;--success:#2F7A57;--error:#B4232F;--focus-ring:#3B5BDB;--success-tint:#E4F3EB;--shadow:0 10px 24px rgba(162,62,108,.12);--line:var(--primary);" aria-labelledby="hA">
+ <div class="info">
+  <header class="th">
+   <span class="num">A</span>
+   <div><h2 id="hA">Myk fersken</h2><p class="reg">referanse / uendret</p><p class="desc">Mild og varm, som en hyggelig veileder som heier på deg – men med et tydelig rosa preg.</p></div>
+  </header>
+  <ul class="chips"><li class="chip"><span class="sw" style="background:#A23E6C"></span><span><b>primary</b><code>#A23E6C</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>primary-contrast</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#F6B8A0"></span><span><b>accent</b><code>#F6B8A0</code></span></li><li class="chip"><span class="sw" style="background:#FFF7F5"></span><span><b>background</b><code>#FFF7F5</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>surface</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#3A2530"></span><span><b>text</b><code>#3A2530</code></span></li><li class="chip"><span class="sw" style="background:#6E5560"></span><span><b>text-muted</b><code>#6E5560</code></span></li><li class="chip"><span class="sw" style="background:#EED7DD"></span><span><b>border</b><code>#EED7DD</code></span></li><li class="chip"><span class="sw" style="background:#2F7A57"></span><span><b>success</b><code>#2F7A57</code></span></li><li class="chip"><span class="sw" style="background:#B4232F"></span><span><b>error</b><code>#B4232F</code></span></li><li class="chip"><span class="sw" style="background:#3B5BDB"></span><span><b>focus-ring</b><code>#3B5BDB</code></span></li></ul>
+  <div class="ratios">
+   <span class="ratio"><span class="demo" style="background:#FFF7F5;color:#3A2530">Aa</span>tekst på bakgrunn <b>13,3:1</b> <span class="pass">AA ✓</span></span>
+   <span class="ratio"><span class="demo" style="background:#A23E6C;color:#FFFFFF">Aa</span>tekst på primærfarge <b>6,1:1</b> <span class="pass">AA ✓</span></span>
+  </div>
+ </div>
+ <div class="browser">
+  <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">soknadsassistenten.no/velg-modus</span></div>
+  <div class="site">
+   <div class="topline"><span class="logo"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>Søknadsassistenten</span><nav class="nav"><span>CV og annonse</span><span class="cur">Brev</span><span>Resultat</span></nav></div>
+   <div class="hero">
+    <p class="q">Hva vil du gjøre med søknadsbrevet?</p>
+    <div class="modes">
+     <button class="mode primary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/><path class="fillacc" d="M19 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg><span><b>Full generering</b><small>Skriv nytt brev</small></span></button>
+     <button class="mode secondary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6"/><path class="strokeacc" d="M13 17l2 2 5-5"/></svg><span><b>Korrektur</b><small>Forbedre mitt brev</small></span></button>
+    </div>
+    <div class="loadcard" role="status"><p class="loading"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>På vei mot ny jobb<span class="dots"><i></i><i></i><i></i></span></p><p class="loadsub">Vi lager brevet ditt – det tar noen sekunder.</p></div>
+   </div>
+   <div class="result">
+    <div class="col">
+     <p class="label">Nøkkelord fra annonsen <span class="score">7 av 10 = 70 %</span></p>
+     <div class="kw"><span class="hit"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>teamarbeid <em>treff</em></span><span class="miss"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>SQL <em>ikke treff</em></span></div>
+     <p class="label">Mangler <span class="ki">KI-generert</span></p>
+     <ul class="gap"><li><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>Erfaring med kundeservice nevnes ikke i CV-en</li></ul>
+    </div>
+    <div class="col">
+     <p class="label">Korrektur</p>
+     <p class="letter">Jeg søker stillingen fordi <span class="changed">jeg trives med å hjelpe andre</span>.</p>
+     <label class="field"><span>E-post</span><input type="email" value="" aria-invalid="true" placeholder="navn@eksempel.no"><span class="errmsg"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/></svg>Fyll inn e-post</span></label>
+    </div>
+   </div>
+   <div class="foot"><span class="ki-note"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Teksten din sendes til ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+ </div>
+</section>
+<section class="theme" style="--primary:#6E4A9E;--primary-contrast:#FFFFFF;--accent:#C9B5E6;--background:#FAF8F5;--surface:#FFFFFF;--text:#2A2433;--text-muted:#5F5868;--border:#E5DFE9;--success:#2F7A57;--error:#B4232F;--focus-ring:#B35C00;--success-tint:#E4F3EB;--shadow:0 10px 24px rgba(110,74,158,.12);--line:var(--primary);" aria-labelledby="hB">
+ <div class="info">
+  <header class="th">
+   <span class="num">B</span>
+   <div><h2 id="hB">Lavendel</h2><p class="reg">balansert / rolig</p><p class="desc">Lilla uten det rosa – rolig og vennlig, og føles nøytral for de fleste.</p></div>
+  </header>
+  <ul class="chips"><li class="chip"><span class="sw" style="background:#6E4A9E"></span><span><b>primary</b><code>#6E4A9E</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>primary-contrast</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#C9B5E6"></span><span><b>accent</b><code>#C9B5E6</code></span></li><li class="chip"><span class="sw" style="background:#FAF8F5"></span><span><b>background</b><code>#FAF8F5</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>surface</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#2A2433"></span><span><b>text</b><code>#2A2433</code></span></li><li class="chip"><span class="sw" style="background:#5F5868"></span><span><b>text-muted</b><code>#5F5868</code></span></li><li class="chip"><span class="sw" style="background:#E5DFE9"></span><span><b>border</b><code>#E5DFE9</code></span></li><li class="chip"><span class="sw" style="background:#2F7A57"></span><span><b>success</b><code>#2F7A57</code></span></li><li class="chip"><span class="sw" style="background:#B4232F"></span><span><b>error</b><code>#B4232F</code></span></li><li class="chip"><span class="sw" style="background:#B35C00"></span><span><b>focus-ring</b><code>#B35C00</code></span></li></ul>
+  <div class="ratios">
+   <span class="ratio"><span class="demo" style="background:#FAF8F5;color:#2A2433">Aa</span>tekst på bakgrunn <b>14,1:1</b> <span class="pass">AA ✓</span></span>
+   <span class="ratio"><span class="demo" style="background:#6E4A9E;color:#FFFFFF">Aa</span>tekst på primærfarge <b>6,6:1</b> <span class="pass">AA ✓</span></span>
+  </div>
+ </div>
+ <div class="browser">
+  <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">soknadsassistenten.no/velg-modus</span></div>
+  <div class="site">
+   <div class="topline"><span class="logo"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>Søknadsassistenten</span><nav class="nav"><span>CV og annonse</span><span class="cur">Brev</span><span>Resultat</span></nav></div>
+   <div class="hero">
+    <p class="q">Hva vil du gjøre med søknadsbrevet?</p>
+    <div class="modes">
+     <button class="mode primary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/><path class="fillacc" d="M19 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg><span><b>Full generering</b><small>Skriv nytt brev</small></span></button>
+     <button class="mode secondary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6"/><path class="strokeacc" d="M13 17l2 2 5-5"/></svg><span><b>Korrektur</b><small>Forbedre mitt brev</small></span></button>
+    </div>
+    <div class="loadcard" role="status"><p class="loading"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>På vei mot ny jobb<span class="dots"><i></i><i></i><i></i></span></p><p class="loadsub">Vi lager brevet ditt – det tar noen sekunder.</p></div>
+   </div>
+   <div class="result">
+    <div class="col">
+     <p class="label">Nøkkelord fra annonsen <span class="score">7 av 10 = 70 %</span></p>
+     <div class="kw"><span class="hit"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>teamarbeid <em>treff</em></span><span class="miss"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>SQL <em>ikke treff</em></span></div>
+     <p class="label">Mangler <span class="ki">KI-generert</span></p>
+     <ul class="gap"><li><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>Erfaring med kundeservice nevnes ikke i CV-en</li></ul>
+    </div>
+    <div class="col">
+     <p class="label">Korrektur</p>
+     <p class="letter">Jeg søker stillingen fordi <span class="changed">jeg trives med å hjelpe andre</span>.</p>
+     <label class="field"><span>E-post</span><input type="email" value="" aria-invalid="true" placeholder="navn@eksempel.no"><span class="errmsg"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/></svg>Fyll inn e-post</span></label>
+    </div>
+   </div>
+   <div class="foot"><span class="ki-note"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Teksten din sendes til ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+ </div>
+</section>
+<section class="theme" style="--primary:#4C47B5;--primary-contrast:#FFFFFF;--accent:#9DB8F2;--background:#F4F6FA;--surface:#FFFFFF;--text:#1E2235;--text-muted:#545A70;--border:#D8DDEA;--success:#1E7A4F;--error:#B42318;--focus-ring:#C2410C;--success-tint:#E3F3EA;--shadow:0 10px 24px rgba(76,71,181,.12);--line:var(--primary);" aria-labelledby="hC">
+ <div class="info">
+  <header class="th">
+   <span class="num">C</span>
+   <div><h2 id="hC">Kveldsindigo</h2><p class="reg">kjølig / trygg</p><p class="desc">Blålilla som en klar kveldshimmel – profesjonell og trygg, nesten blå.</p></div>
+  </header>
+  <ul class="chips"><li class="chip"><span class="sw" style="background:#4C47B5"></span><span><b>primary</b><code>#4C47B5</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>primary-contrast</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#9DB8F2"></span><span><b>accent</b><code>#9DB8F2</code></span></li><li class="chip"><span class="sw" style="background:#F4F6FA"></span><span><b>background</b><code>#F4F6FA</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>surface</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#1E2235"></span><span><b>text</b><code>#1E2235</code></span></li><li class="chip"><span class="sw" style="background:#545A70"></span><span><b>text-muted</b><code>#545A70</code></span></li><li class="chip"><span class="sw" style="background:#D8DDEA"></span><span><b>border</b><code>#D8DDEA</code></span></li><li class="chip"><span class="sw" style="background:#1E7A4F"></span><span><b>success</b><code>#1E7A4F</code></span></li><li class="chip"><span class="sw" style="background:#B42318"></span><span><b>error</b><code>#B42318</code></span></li><li class="chip"><span class="sw" style="background:#C2410C"></span><span><b>focus-ring</b><code>#C2410C</code></span></li></ul>
+  <div class="ratios">
+   <span class="ratio"><span class="demo" style="background:#F4F6FA;color:#1E2235">Aa</span>tekst på bakgrunn <b>14,5:1</b> <span class="pass">AA ✓</span></span>
+   <span class="ratio"><span class="demo" style="background:#4C47B5;color:#FFFFFF">Aa</span>tekst på primærfarge <b>7,3:1</b> <span class="pass">AA ✓</span></span>
+  </div>
+ </div>
+ <div class="browser">
+  <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">soknadsassistenten.no/velg-modus</span></div>
+  <div class="site">
+   <div class="topline"><span class="logo"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>Søknadsassistenten</span><nav class="nav"><span>CV og annonse</span><span class="cur">Brev</span><span>Resultat</span></nav></div>
+   <div class="hero">
+    <p class="q">Hva vil du gjøre med søknadsbrevet?</p>
+    <div class="modes">
+     <button class="mode primary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/><path class="fillacc" d="M19 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg><span><b>Full generering</b><small>Skriv nytt brev</small></span></button>
+     <button class="mode secondary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6"/><path class="strokeacc" d="M13 17l2 2 5-5"/></svg><span><b>Korrektur</b><small>Forbedre mitt brev</small></span></button>
+    </div>
+    <div class="loadcard" role="status"><p class="loading"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>På vei mot ny jobb<span class="dots"><i></i><i></i><i></i></span></p><p class="loadsub">Vi lager brevet ditt – det tar noen sekunder.</p></div>
+   </div>
+   <div class="result">
+    <div class="col">
+     <p class="label">Nøkkelord fra annonsen <span class="score">7 av 10 = 70 %</span></p>
+     <div class="kw"><span class="hit"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>teamarbeid <em>treff</em></span><span class="miss"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>SQL <em>ikke treff</em></span></div>
+     <p class="label">Mangler <span class="ki">KI-generert</span></p>
+     <ul class="gap"><li><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>Erfaring med kundeservice nevnes ikke i CV-en</li></ul>
+    </div>
+    <div class="col">
+     <p class="label">Korrektur</p>
+     <p class="letter">Jeg søker stillingen fordi <span class="changed">jeg trives med å hjelpe andre</span>.</p>
+     <label class="field"><span>E-post</span><input type="email" value="" aria-invalid="true" placeholder="navn@eksempel.no"><span class="errmsg"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/></svg>Fyll inn e-post</span></label>
+    </div>
+   </div>
+   <div class="foot"><span class="ki-note"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Teksten din sendes til ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+ </div>
+</section>
+<section class="theme" style="--primary:#4A2A7A;--primary-contrast:#FFFFFF;--accent:#FFC857;--background:#FBF9F6;--surface:#FFFFFF;--text:#251C31;--text-muted:#5D5470;--border:#E6E0EC;--success:#2F7A57;--error:#B3261E;--focus-ring:#C2410C;--success-tint:#E4F3EB;--shadow:0 10px 24px rgba(74,42,122,.13);--line:var(--accent);" aria-labelledby="hD">
+ <div class="info">
+  <header class="th">
+   <span class="num">D</span>
+   <div><h2 id="hD">Plomme og sol</h2><p class="reg">dyp / varm gnist</p><p class="desc">Dyp, moden lilla med en liten solgul gnist – seriøs, men med optimisme.</p></div>
+  </header>
+  <ul class="chips"><li class="chip"><span class="sw" style="background:#4A2A7A"></span><span><b>primary</b><code>#4A2A7A</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>primary-contrast</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#FFC857"></span><span><b>accent</b><code>#FFC857</code></span></li><li class="chip"><span class="sw" style="background:#FBF9F6"></span><span><b>background</b><code>#FBF9F6</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>surface</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#251C31"></span><span><b>text</b><code>#251C31</code></span></li><li class="chip"><span class="sw" style="background:#5D5470"></span><span><b>text-muted</b><code>#5D5470</code></span></li><li class="chip"><span class="sw" style="background:#E6E0EC"></span><span><b>border</b><code>#E6E0EC</code></span></li><li class="chip"><span class="sw" style="background:#2F7A57"></span><span><b>success</b><code>#2F7A57</code></span></li><li class="chip"><span class="sw" style="background:#B3261E"></span><span><b>error</b><code>#B3261E</code></span></li><li class="chip"><span class="sw" style="background:#C2410C"></span><span><b>focus-ring</b><code>#C2410C</code></span></li></ul>
+  <div class="ratios">
+   <span class="ratio"><span class="demo" style="background:#FBF9F6;color:#251C31">Aa</span>tekst på bakgrunn <b>15,5:1</b> <span class="pass">AA ✓</span></span>
+   <span class="ratio"><span class="demo" style="background:#4A2A7A;color:#FFFFFF">Aa</span>tekst på primærfarge <b>11,0:1</b> <span class="pass">AA ✓</span></span>
+  </div>
+ </div>
+ <div class="browser">
+  <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">soknadsassistenten.no/velg-modus</span></div>
+  <div class="site">
+   <div class="topline"><span class="logo"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>Søknadsassistenten</span><nav class="nav"><span>CV og annonse</span><span class="cur">Brev</span><span>Resultat</span></nav></div>
+   <div class="hero">
+    <p class="q">Hva vil du gjøre med søknadsbrevet?</p>
+    <div class="modes">
+     <button class="mode primary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/><path class="fillacc" d="M19 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg><span><b>Full generering</b><small>Skriv nytt brev</small></span></button>
+     <button class="mode secondary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6"/><path class="strokeacc" d="M13 17l2 2 5-5"/></svg><span><b>Korrektur</b><small>Forbedre mitt brev</small></span></button>
+    </div>
+    <div class="loadcard" role="status"><p class="loading"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>På vei mot ny jobb<span class="dots"><i></i><i></i><i></i></span></p><p class="loadsub">Vi lager brevet ditt – det tar noen sekunder.</p></div>
+   </div>
+   <div class="result">
+    <div class="col">
+     <p class="label">Nøkkelord fra annonsen <span class="score">7 av 10 = 70 %</span></p>
+     <div class="kw"><span class="hit"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>teamarbeid <em>treff</em></span><span class="miss"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>SQL <em>ikke treff</em></span></div>
+     <p class="label">Mangler <span class="ki">KI-generert</span></p>
+     <ul class="gap"><li><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>Erfaring med kundeservice nevnes ikke i CV-en</li></ul>
+    </div>
+    <div class="col">
+     <p class="label">Korrektur</p>
+     <p class="letter">Jeg søker stillingen fordi <span class="changed">jeg trives med å hjelpe andre</span>.</p>
+     <label class="field"><span>E-post</span><input type="email" value="" aria-invalid="true" placeholder="navn@eksempel.no"><span class="errmsg"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/></svg>Fyll inn e-post</span></label>
+    </div>
+   </div>
+   <div class="foot"><span class="ki-note"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Teksten din sendes til ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+ </div>
+</section>
+<section class="theme" style="--primary:#6B3FC4;--primary-contrast:#FFFFFF;--accent:#EEE8FB;--background:#F7F7F8;--surface:#FFFFFF;--text:#222226;--text-muted:#5B5B63;--border:#DEDEE3;--success:#2F7A57;--error:#B3261E;--focus-ring:#6B3FC4;--success-tint:#E4F3EB;--shadow:0 10px 24px rgba(0,0,0,.08);--line:var(--primary);" aria-labelledby="hE">
+ <div class="info">
+  <header class="th">
+   <span class="num">E</span>
+   <div><h2 id="hE">Lys med lilla</h2><p class="reg">nøytral / ren</p><p class="desc">Nesten helt nøytral side der lilla bare dukker opp der du skal handle – rent og for alle.</p></div>
+  </header>
+  <ul class="chips"><li class="chip"><span class="sw" style="background:#6B3FC4"></span><span><b>primary</b><code>#6B3FC4</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>primary-contrast</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#EEE8FB"></span><span><b>accent</b><code>#EEE8FB</code></span></li><li class="chip"><span class="sw" style="background:#F7F7F8"></span><span><b>background</b><code>#F7F7F8</code></span></li><li class="chip"><span class="sw" style="background:#FFFFFF"></span><span><b>surface</b><code>#FFFFFF</code></span></li><li class="chip"><span class="sw" style="background:#222226"></span><span><b>text</b><code>#222226</code></span></li><li class="chip"><span class="sw" style="background:#5B5B63"></span><span><b>text-muted</b><code>#5B5B63</code></span></li><li class="chip"><span class="sw" style="background:#DEDEE3"></span><span><b>border</b><code>#DEDEE3</code></span></li><li class="chip"><span class="sw" style="background:#2F7A57"></span><span><b>success</b><code>#2F7A57</code></span></li><li class="chip"><span class="sw" style="background:#B3261E"></span><span><b>error</b><code>#B3261E</code></span></li><li class="chip"><span class="sw" style="background:#6B3FC4"></span><span><b>focus-ring</b><code>#6B3FC4</code></span></li></ul>
+  <div class="ratios">
+   <span class="ratio"><span class="demo" style="background:#F7F7F8;color:#222226">Aa</span>tekst på bakgrunn <b>14,8:1</b> <span class="pass">AA ✓</span></span>
+   <span class="ratio"><span class="demo" style="background:#6B3FC4;color:#FFFFFF">Aa</span>tekst på primærfarge <b>6,7:1</b> <span class="pass">AA ✓</span></span>
+  </div>
+ </div>
+ <div class="browser">
+  <div class="bar"><span class="lights"><i></i><i></i><i></i></span><span class="url">soknadsassistenten.no/velg-modus</span></div>
+  <div class="site">
+   <div class="topline"><span class="logo"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>Søknadsassistenten</span><nav class="nav"><span>CV og annonse</span><span class="cur">Brev</span><span>Resultat</span></nav></div>
+   <div class="hero">
+    <p class="q">Hva vil du gjøre med søknadsbrevet?</p>
+    <div class="modes">
+     <button class="mode primary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/><path class="fillacc" d="M19 15l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z"/></svg><span><b>Full generering</b><small>Skriv nytt brev</small></span></button>
+     <button class="mode secondary"><svg class="ic big" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><path d="M8 8h6M8 12h6"/><path class="strokeacc" d="M13 17l2 2 5-5"/></svg><span><b>Korrektur</b><small>Forbedre mitt brev</small></span></button>
+    </div>
+    <div class="loadcard" role="status"><p class="loading"><svg class="ic acc" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>På vei mot ny jobb<span class="dots"><i></i><i></i><i></i></span></p><p class="loadsub">Vi lager brevet ditt – det tar noen sekunder.</p></div>
+   </div>
+   <div class="result">
+    <div class="col">
+     <p class="label">Nøkkelord fra annonsen <span class="score">7 av 10 = 70 %</span></p>
+     <div class="kw"><span class="hit"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>teamarbeid <em>treff</em></span><span class="miss"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>SQL <em>ikke treff</em></span></div>
+     <p class="label">Mangler <span class="ki">KI-generert</span></p>
+     <ul class="gap"><li><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>Erfaring med kundeservice nevnes ikke i CV-en</li></ul>
+    </div>
+    <div class="col">
+     <p class="label">Korrektur</p>
+     <p class="letter">Jeg søker stillingen fordi <span class="changed">jeg trives med å hjelpe andre</span>.</p>
+     <label class="field"><span>E-post</span><input type="email" value="" aria-invalid="true" placeholder="navn@eksempel.no"><span class="errmsg"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/></svg>Fyll inn e-post</span></label>
+    </div>
+   </div>
+   <div class="foot"><span class="ki-note"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Teksten din sendes til ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+ </div>
+</section>
+ </div>
+</main>
+</body>
+</html>

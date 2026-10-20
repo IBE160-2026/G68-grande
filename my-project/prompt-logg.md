@@ -189,3 +189,25 @@ KI-en sendte fire hjelpere (underagenter) som hver sjekket én kilde mot PRD-en:
 | 112 | «det eneste jeg lurer på før vi gjør det er, er det noe som ikke stemmer overens med hverandre nå i briefen og PRD, og har det skjedd noen endringer jeg ikke har bedt om?» / «A, og siden det ikke hat gått tre dager siden milepæl datoen går det fint, den er mest for min egen del» | KI-en gikk gjennom alle endringene ord for ord. Ingen endringer i innholdet var gjort uten at jeg hadde sagt ja. Brief-en hadde en annen rekkefølge i flyten enn PRD-en (modus valgt etter analysen). Den er nå rettet, så modus velges først, som i PRD-en |
 | 113 | «ja, og om det er noe mer som skal med i readme så må det med også» | PRD-en satt til ferdig (`status: final`). «(under arbeid)» fjernet i README-ene. README-en i my-project fikk en rad for `gjennomganger/`, som manglet, og README-en i roten fikk en lenke til addendumet. Committet og pushet |
 | 114 | «tusen takk,, briefen tilsvarer proposal» | Det åpne spørsmålet om proposal er avklart i PRD-en (del 8) og krysset av i TO DO-listen. Kuttlisten trenger ikke endres |
+
+## 2026-10-20 – UX, del 1: utseende og Ingrids brukerreise (pågår)
+
+Verktøy: Claude Code med BMAD-skillen `bmad-ux` (grundig vei, med visuelle forslag). Alle beslutninger er logget i `3-ux/ux-memlog.md`, og forslagene jeg valgte mellom ligger i `3-ux/skisser/`.
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 115 | «1 og 2, skoleprosjekt, grundig vei, da forstår jeg bedre» | Kildene er PRD-en og addendumet. KI-en hentet ut alt om skjermer, krav og åpne UX-spørsmål |
+| 116 | «1) enkel, effektiv, levende 2) ikke en statisk og kjedelig nettside 3) ingen skisser» / «1) en kombinasjon av farger, bevegelse, mindre illustrasjoner og vennlig tekst» | Stemningen for nettsiden. KI-en spurte hva «levende» betyr, i stedet for å gjette |
+| 117 | «2) er det vanskelig å ha begge deler» / «A» | KI-en forklarte at mørk modus dobler kontrastsjekk og testing. Bare lys modus. Mørk modus står under «Hvis tid» i TO DO-lista |
+| 118 | «ok, husk dette er en nettside, ikke app» | Jeg rettet KI-en, som hadde kalt den «appen». Forslagene vises som nettside |
+| 119 | «jeg er veldig glad i lilla så likte nummer 5 best, men usikker på om den er like appelerende for alle dersom den er rosa/lilla» / «jeg må si det er den samme som i sta som appelerer best til meg, den er så lun» | KI-en laget fem lilla varianter for å teste tvilen min. Jeg valgte likevel fargetemaet «Myk fersken» |
+| 120 | «jeg liker teksten slik den er nå, enkel og grei» / «1) Baloo 2, så lenge man får hele overskriften på en linje på PC og telefon» | Systemskrift på hele siden. Bare logoen «Søknadsassistenten» har en egen skrift (Baloo 2) |
+| 121 | «først, er dette en slik story som det er snakk om? som vi skal lage sammen med epics?» | KI-en forklarte forskjellen på brukerreise (UX) og user story (koding) |
+| 122 | «2) jeg ville blitt usikker, da det er personalia hennes som sendes av gårde med CV» / «teksten kan anbefale at man fjerner personalia, men må ikke det er en hvers valg» | Samtykket forklarer at ingenting lagres, og anbefaler å fjerne personopplysninger. Det er brukerens eget valg. Ingen PRD-endring |
+| 123 | «legger bare pilen over også popper det opp en boks» / «enig i forslaget ditt, sånn at det fungerer for alle tre tilfellene» | KI-en pekte på at bare hover ikke virker på mobil og med tastatur (NFR-6, NFR-7). «i»-boksen åpnes med hover, trykk og tastatur |
+| 124 | «kjapt spørsmål, må vi ikke ha med testmodus her? tenkte å ha det oppe i hjørnet» / «1) kun på startsiden» | Testmodus oppe til høyre, logg ut nede til høyre og KI-merknaden nede til venstre. Det skal lages en egen reise for sensor |
+| 125 | «mener vi skrev i PRD at man må samtykke når man velger modus» / «A, det er jeg som surrer, jeg glemte startsiden» | KI-en sjekket PRD-en: samtykket står på startsiden (FR-36). Vi følger PRD-en |
+| 126 | «Dette kan du jobbe videre med er hyggeligere å se» | Lista over det CV-en mangler, heter «Dette kan du jobbe videre med» på skjermen. I PRD og tester heter den fortsatt «mangler» |
+| 127 | «Mulig å få noe fyrverkeri?» / «hver gang ett nytt forslag er skrevet, fyrverkeri» | Fyrverkeri rundt «Din ferdigstilte søknad!» i 2–3 sekunder, men ikke for dem som har valgt redusert bevegelse |
+| 128 | «tenker man skal ha mulighet til å både laste ned som PDF og word, så en bli her knapp er fint» | Vinduet etter nedlasting har tre valg: ny søknad, logg ut og bli her. Ingrids reise er ferdig i ni steg |
+| 129 | «jeg gir meg for i dag, kan du commite det vi har gjort i dag under UX» | Beslutningslogg og forslag kopiert til `3-ux/`, og committet |

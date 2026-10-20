@@ -1,0 +1,56 @@
+---
+topic: UX for kode prosjekt (CV-verktøy)
+updated: 2026-10-20T22:34
+---
+
+- (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
+- (decision) Innsats: skoleprosjekt som vurderes av sensor (ikke ekte brukere).
+- (decision) Arbeidsmåte: grundig vei (coaching) med visuelle eksempler underveis, fordi Kristine forstår bedre da.
+- (decision) Stemning: tre ord er «enkel, effektiv, levende».
+- (decision) Anti-mønster: siden skal ikke være en statisk og kjedelig nettside.
+- (event) Ingen skisser eller bilder fra Kristine; imports/ er tom.
+- (decision) «Levende» betyr en kombinasjon av farger, bevegelse (små animasjoner), små illustrasjoner/ikoner og vennlig, personlig tekst.
+- (decision) Bare lys modus. Farger lagres som navngitte variabler (tokens) slik at mørk modus kan legges til senere. Mørk modus står på TO DO som «hvis tid». Grunn: frist 15.12, kontrastsjekk og testing ville doblet seg.
+- (decision) Produktet er en nettside, ikke en app. Skisser vises som nettside i nettleser, og ordet «app» brukes ikke i tekst eller dokumenter.
+- (event) Laget .working/color-themes-1.html med 5 fargeforslag: Rolig fjord, Solnedgang, Frisk mynte, Skarp kontrast, Myk fersken. Alle består WCAG AA.
+- (decision) Favoritt: tema 5 «Myk fersken» (bringebær/lilla #A23E6C). Kristine er glad i lilla, men usikker på om rosa/lilla appellerer til alle studenter. Runde 2 med lilla-varianter skal avklare.
+- (decision) Kristine likte animasjonene når man holder over eller trykker på boksene/knappene, og «laster»-prikkene. Dette er med i retningen for bevegelse.
+- (event) Laget .working/color-themes-2.html med 5 lilla varianter i samme myke former som nr. 5: A Myk fersken, B Lavendel, C Kveldsindigo, D Plomme og sol, E Lys med lilla. Alle består WCAG AA, og animasjonene slås av ved redusert bevegelse.
+- (decision) Fargetema valgt: «Myk fersken» (variant A / nr. 5) fordi den er «så lun». Tokens: primary #A23E6C, primary-contrast #FFFFFF, accent #F6B8A0, background #FFF7F5, surface #FFFFFF, text #3A2530, text-muted #6E5560, border #EED7DD, success #2F7A57 (tint #E4F3EB), error #B4232F, focus-ring #3B5BDB. Kristine vurderte om rosa/lilla appellerer til alle, så lilla-varianter, og valgte likevel denne.
+- (decision) Former fra tema 5 beholdes: runde hjørner (ca. 26px på kort/knapper) og myk farget skygge.
+- (decision) Bevegelse: knapper og bokser reagerer ved hover, knapper krymper litt ved trykk, og ventetegnet har hoppende prikker med «På vei mot ny jobb» og teksten «Vi lager brevet ditt – det tar noen sekunder.» under. Alle animasjoner slås av ved prefers-reduced-motion.
+- (decision) Typografi: systemskrift (Segoe UI på Windows, San Francisco på Mac osv.), slik i fargeforslagene. Ingen nettskrift. Grunn: «enkel og grei».
+- (decision) Brukerreise 1 (Full generering): hovedperson Ingrid, 21 år, studerer sykepleie, bruker PC hjemme.
+- (decision) Ingrid søker deltidsjobb ved siden av studiet. Hun er usikker og har aldri søkt jobb før.
+- (decision) Reise 1, steg 1: Ingrid åpner siden og kommer til en innloggings- og registreringsside. «Søknadsassistenten» står øverst, sentrert, med store og tykke bokstaver i fin skrift. Er man ikke registrert, går man rett til registrering.
+- (decision) Reise 1, steg 2: Ingrid blir usikker når hun leser samtykket, fordi personopplysningene hennes i CV-en sendes til ekstern KI. Samtykketeksten må gjøre henne trygg (hvordan avklares).
+- (decision) Tittelen «Søknadsassistenten» er en logo med egen skrift, litt annerledes enn systemskriften. Det er det eneste unntaket fra systemskrift. Skriften er ikke valgt ennå.
+- (decision) Innlogging: siden viser innloggingsskjemaet. Under det står «Ny her? Registrer deg her», og et klikk på teksten fører til registreringen.
+- (decision) Samtykke: teksten sier at ingenting lagres etter utlogging. Den anbefaler å fjerne personopplysninger fra CV-en, men gjør det klart at det er brukerens eget valg. Den forklarer også hvorfor teksten sendes. Et ikon ved siden av samtykket åpner en lengre tekst med alt dette. Ingen automatisk fjerning av personopplysninger, så PRD-en endres ikke.
+- (event) Laget .working/logo-fonts-1.html med 6 logoskrifter fra Google Fonts: Nunito, Poppins, Fredoka, Fraunces, Baloo 2, Caveat.
+- (decision) Logoskrift: Baloo 2 (ekstra fet), bare i tittelen «Søknadsassistenten». Krav: hele tittelen skal stå på én linje både på PC og mobil (375 px), så skriftstørrelsen må skalere med skjermbredden.
+- (decision) Ikonet ved samtykket er en «i» i en sirkel, ikke et utropstegn, fordi det er mindre skremmende.
+- (event) Kristine ønsker at infoboksen dukker opp når man holder musa over «i». Det er i konflikt med NFR-6 (tastatur) og NFR-7 (mobil har ingen hover). Avklares.
+- (event) Kristine syntes innloggingssiden i logo-fonts-1 var «veldig alminnelig», men enkel. Det avklares om den skal bli mer levende.
+- (decision) Infoboksen ved «i»: åpnes ved hover på PC, ved trykk på mobil og ved tastaturfokus. Esc lukker den. Det løser konflikten med NFR-6/NFR-7.
+- (decision) Innloggingssiden får et vanlig og enkelt oppsett, slik innloggingssider stort sett ser ut. Det levende spares til resten av siden.
+- (decision) Hjørnene: testmodus-bryteren står oppe til høyre. Når testmodus er på, vises «Testmodus» hele tiden på alle sider (FR-33). Etter innlogging står logg ut-knappen nede til høyre og merknaden om ekstern KI nede til venstre (FR-35, FR-6).
+- (assumption) Faste elementer i hjørnene nederst kan dekke innhold på mobil (375 px). Plasseringen på mobil må sjekkes i skissene.
+- (decision) Testmodus slås av og på bare på startsiden. På de andre sidene står det bare «Testmodus» oppe til høyre som merkelapp, uten bryter.
+- (decision) Det lages en egen brukerreise for sensor (testmodus) etter Ingrids reiser.
+- (decision) Samtykket følger PRD (FR-36): det står på startsiden sammen med testmodus-bryteren og «Begynn å lage søknad». Modusvalget kommer etterpå (FR-5 → FR-20). Ingen PRD-endring.
+- (decision) Innleggingssiden (Full generering): ett felt for CV og ett for stillingsannonse. Hvert felt har to knapper, «Last opp PDF» og «Lim inn tekst». Angre-knappen tømmer feltet.
+- (decision) Innlegging: etter PDF-opplasting viser feltet filnavnet. «Lim inn tekst» åpner en tekstboks i feltet. Angre er et søppelbøtte-ikon som tømmer feltet med en gang, uten bekreftelse. Knappen for å gå videre heter «Sjekk CV-en min», og etter den vises ventetegnet.
+- (assumption) Søppelbøtte-ikonet får en tekst for skjermlesere, for eksempel «Tøm CV-feltet» (NFR-6: ikoner har alternativtekst).
+- (decision) Resultatsiden: gap-analysen står først, så nøkkelordene. Forklaringene på begrepene ligger bak «i»-ikoner som man åpner hvis man vil. Under nøkkelordene er det en egen ATS-forklaring med overskriften «Hva er ATS og hva betyr den for deg?».
+- (decision) Høydepunkt (forslag fra Kristine, ikke bekreftet): på resultatsiden ser Ingrid hvilke kvalifikasjoner i CV-en som passer med annonsen, og skjønner at hun faktisk kan være kvalifisert.
+- (decision) Gap-analysen: overskriftene er «Dette dekker CV-en din» og «Dette kan du jobbe videre med» (i stedet for «mangler», fordi det er hyggeligere for en usikker student). På PC står listene side om side, med «dekker» til venstre og «jobbe videre med» til høyre. På mobil står «dekker» øverst.
+- (decision) «Dette kan du jobbe videre med» er bare teksten på skjermen. PRD (FR-14) og testene bruker fortsatt «mangler» som navn på lista. Ingen PRD-endring.
+- (decision) ATS-forklaringen er en overskrift som foldes ut når man klikker på den, ikke en «i». Knappen for å gå videre heter «Lag søknadsbrevet mitt», og trykket på den er bekreftelsen (FR-21). Det kommer ikke noe ekstra bekreftelsesvindu.
+- (decision) «Din ferdigstilte søknad!»: Kristine ønsker fyrverkeri når brevet vises (detaljer avklares).
+- (decision) Rekkefølge under brevet: først to knapper, «Last ned som Word» og «Last ned som PDF». Under dem står «Nytt forslag». «Nytt forslag» krever bekreftelse, fordi det nåværende brevet slettes.
+- (decision) Filnavnet tar med arbeidsgiver, slik at søknadene er lette å skille, for eksempel «Soknad_Sykehuset_2026-10-20.docx». Ingen æ, ø eller å.
+- (assumption) Arbeidsgivernavnet hentes fra annonsen (hvordan avgjøres i arkitekturen). Finnes det ikke, brukes «Soknad_<dato>». Æ, ø og å byttes til ae, o og a, og mellomrom blir til bindestrek.
+- (decision) Fyrverkeri: rundt overskriften «Din ferdigstilte søknad!» i 2–3 sekunder når siden åpnes, og hver gang et nytt forslag er skrevet. Det dekker ikke brevet, blinker ikke mer enn tre ganger i sekundet og hoppes over ved prefers-reduced-motion.
+- (decision) Etter nedlasting åpnes et vindu: «Brevet er lastet ned! Vil du lage en ny søknad eller logge ut?» med valgene startsiden og logg ut (FR-31).
+- (decision) Vinduet etter nedlasting har tre valg: lage ny søknad (startsiden), logg ut og «Bli her». «Bli her» lukker vinduet, slik at brukeren kan laste ned det andre formatet også.
