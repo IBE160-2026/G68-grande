@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brevsiden – skisse</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --error: #B4232F;
+    --focus-ring: #3B5BDB; --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 760px; }
+  .switch { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 0; }
+  .switch span { align-self: center; font-size: .9rem; color: var(--text-muted); }
+  .tbtn { font: inherit; cursor: pointer; border-radius: var(--radius); padding: 7px 14px; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  main { padding: 20px 16px 40px; }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
+    margin: 0 auto; max-width: 960px; display: flex; flex-direction: column; position: relative;
+    max-height: 860px; overflow-y: auto; transition: max-width .3s ease; }
+  body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
+  .bar { display: flex; justify-content: flex-end; padding: 14px 16px 0; min-height: 36px; }
+  .badge { font-size: .78rem; font-weight: 600; background: var(--accent); color: var(--text); border-radius: 12px; padding: 2px 10px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 4px 0 0; white-space: nowrap; }
+  body.mobile .logo { font-size: 1.45rem; }
+  .screen { padding: 8px 20px 10px; flex: 1; }
+  .hero { position: relative; text-align: center; padding: 26px 0 18px; }
+  .hero h2 { margin: 0; font-size: 1.5rem; position: relative; z-index: 1; }
+  body.mobile .hero h2 { font-size: 1.25rem; }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .legend { background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+    padding: 10px 14px; font-size: .88rem; margin: 0 auto 12px; max-width: 720px; }
+  .legend p { margin: 0; }
+  .letter { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow);
+    padding: 26px 30px; max-width: 720px; margin: 0 auto; font-size: .98rem; }
+  body.mobile .letter { padding: 16px; font-size: .95rem; }
+  .letter p { margin: 0 0 12px; }
+  .chg { color: inherit; background: var(--success-tint); text-decoration: underline; text-decoration-color: var(--success);
+    text-decoration-thickness: 2px; text-underline-offset: 3px; border: none; padding: 0 2px; font: inherit; text-align: left;
+    cursor: pointer; border-radius: 4px; }
+  .chg:hover, .chg[aria-expanded="true"] { background: #CFEBDC; }
+  .chg:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+  .old { display: block; margin: 6px 0 4px; background: var(--background); border-left: 4px solid var(--text-muted);
+    border-radius: 8px; padding: 6px 10px; font-size: .88rem; color: var(--text-muted); }
+  .old b { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 18px; }
+  .btn { font: inherit; border-radius: var(--radius); padding: 12px 20px; cursor: pointer; border: 2px solid var(--primary);
+    transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn:active { transform: scale(.96); }
+  .btn:focus-visible, .btn-link:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-contrast); font-weight: 600; }
+  .btn-secondary { background: var(--surface); color: var(--primary); }
+  .btn-done { background: var(--success-tint); color: var(--success); border-color: var(--success); font-weight: 600; }
+  .btn-link { background: none; border: none; color: var(--primary); text-decoration: underline; font: inherit; cursor: pointer; padding: 6px; }
+  .btn-link[disabled] { opacity: .5; cursor: wait; }
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; gap: 8px; }
+  .ki-note { font-size: .78rem; color: var(--text-muted); }
+  .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
+  .overlay { position: absolute; inset: 0; background: rgba(58, 37, 48, .45); display: flex; align-items: center; justify-content: center;
+    padding: 16px; z-index: 20; border-radius: inherit; }
+  .dialog { background: var(--surface); border-radius: var(--radius); padding: 22px; text-align: center; box-shadow: var(--shadow);
+    max-width: 420px; animation: pop .2s ease; }
+  .dialog h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .dialog p { margin: 0 0 4px; }
+  .wait { position: absolute; inset: 0; background: rgba(255, 247, 245, .94); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; z-index: 15; border-radius: inherit; }
+  .dots { display: flex; gap: 10px; }
+  .dots i { width: 16px; height: 16px; border-radius: 50%; background: var(--primary); animation: hop 1s ease-in-out infinite; }
+  .dots i:nth-child(2) { animation-delay: .15s; background: #C0618C; }
+  .dots i:nth-child(3) { animation-delay: .3s; background: var(--accent); }
+  .wait .big { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary); font-size: 1.5rem; margin: 0; }
+  .wait .small { margin: 0; color: var(--text-muted); }
+  .toast { text-align: center; font-size: .85rem; color: var(--text-muted); margin: 6px 0 0; min-height: 1.3em; }
+  [hidden] { display: none !important; }
+  @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
+  @keyframes pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Brevsiden – skisse</h1>
+  <p>Fyrverkeriet kommer når siden åpnes og etter hvert nytt forslag. Prøv nedlastingsknappene, vinduet og «Nytt forslag». I Korrektur kan du trykke på de grønne setningene.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+  <div class="switch">
+    <span>Modus:</span>
+    <button class="tbtn" id="mFull" aria-pressed="true">Full generering</button>
+    <button class="tbtn" id="mKorr" aria-pressed="false">Korrektur</button>
+    <span>Testmodus:</span>
+    <button class="tbtn" id="tOff" aria-pressed="true">Av</button>
+    <button class="tbtn" id="tOn" aria-pressed="false">På</button>
+  </div>
+</header>
+<main>
+  <div class="frame" id="frame">
+    <div class="bar"><span class="badge" id="badge" hidden>Testmodus</span></div>
+    <p class="logo">Søknadsassistenten</p>
+    <div class="screen">
+      <div class="hero"><canvas id="fx" aria-hidden="true"></canvas><h2 id="title">Din ferdigstilte søknad!</h2></div>
+      <div class="legend" id="legend" hidden><p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p></div>
+      <article class="letter" id="letter"></article>
+
+      <div class="row">
+        <button class="btn btn-primary" data-fmt="Word">Last ned som Word</button>
+        <button class="btn btn-primary" data-fmt="PDF">Last ned som PDF</button>
+      </div>
+      <p class="toast" id="toast" aria-live="polite"></p>
+      <div class="row" style="margin-top:4px"><button class="btn-link" id="again">Nytt forslag</button></div>
+    </div>
+    <div class="corners">
+      <span class="ki-note" id="kinote">ⓘ Teksten behandles av ekstern KI</span>
+      <button class="logout">Logg ut</button>
+    </div>
+
+    <div class="overlay" id="dlDialog" hidden role="dialog" aria-modal="true" aria-labelledby="dl-t">
+      <div class="dialog">
+        <h3 id="dl-t">Brevet er lastet ned!</h3>
+        <p>Vil du lage en ny søknad eller logge ut?</p>
+        <div class="row" style="margin-top:14px">
+          <button class="btn btn-primary">Lag ny søknad</button>
+          <button class="btn btn-secondary">Logg ut</button>
+          <button class="btn-link" id="stay">Bli her</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="newDialog" hidden role="dialog" aria-modal="true" aria-labelledby="nw-t">
+      <div class="dialog">
+        <h3 id="nw-t">Vil du ha et nytt forslag?</h3>
+        <p>Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.</p>
+        <div class="row" style="margin-top:14px">
+          <button class="btn btn-primary" id="yesNew">Ja, lag nytt forslag</button>
+          <button class="btn btn-secondary" id="noNew">Avbryt</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wait" id="wait" hidden role="status" aria-live="polite">
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="big">På vei mot ny jobb</p>
+      <p class="small">Vi lager brevet ditt – det tar noen sekunder.</p>
+    </div>
+  </div>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let mode = 'full', version = 0;
+
+  const FULL = [
+    `<p>Hei,</p>`,
+    `<p>Jeg søker på stillingen som pleieassistent i deltid ved Sykehuset. Som sykepleierstudent i andre år ønsker jeg å bruke det jeg lærer, i møte med pasienter, og stillingen deres gir meg akkurat den muligheten.</p>`,
+    `<p>Gjennom praksis i hjemmesykepleien har jeg fått erfaring med pasientkontakt og stell. Jeg har lært å være rolig og tydelig også når det er travelt, og å samarbeide tett med kollegaer.</p>`,
+    `<p>Jeg kan jobbe helg, og jeg snakker og skriver godt norsk. Jeg har førstehjelpskurs fra i høst.</p>`,
+    `<p>Jeg ser frem til å høre fra dere.</p><p>Med vennlig hilsen<br>Ingrid</p>`
+  ];
+  const FULL2 = [
+    `<p>Hei,</p>`,
+    `<p>Med dette søker jeg på deltidsstillingen som pleieassistent ved Sykehuset. Jeg studerer sykepleie og vil gjerne bruke helgene på å få mer erfaring med pasienter.</p>`,
+    `<p>I praksis i hjemmesykepleien har jeg hatt ansvar for stell og daglig pasientkontakt. Der har jeg lært å holde roen i travle situasjoner og å samarbeide godt i team.</p>`,
+    `<p>Jeg er tilgjengelig i helgene, har gode norskkunnskaper og har nylig tatt førstehjelpskurs.</p>`,
+    `<p>Jeg håper å få høre fra dere.</p><p>Med vennlig hilsen<br>Ingrid</p>`
+  ];
+  const KORR = `
+    <p>Hei,</p>
+    <p>Jeg søker på stillingen som deltids økonomiassistent hos Fjordbanken.
+      <button class="chg" aria-expanded="false" data-old="Jeg er veldig interessert i jobben deres og tror jeg hadde passet bra.">Jeg er særlig interessert i stillingen fordi den kombinerer regnskap med kundekontakt.</button></p>
+    <p>Jeg studerer finans ved Handelshøyskolen og er nå i tredje år. I fjor jobbet jeg som sommervikar i et regnskapsbyrå, der jeg førte bilag og avstemte kontoer.
+      <button class="chg" aria-expanded="false" data-old="Det var veldig lærerikt og jeg fikk mye ansvar.">Der fikk jeg tidlig ansvar for egne kunder og lærte å jobbe nøyaktig under tidspress.</button></p>
+    <p>Ved siden av studiet er jeg kasserer i linjeforeningen.
+      <button class="chg" aria-expanded="false" data-old="Jeg er flink med Excel og tall.">Jeg har god erfaring med Excel, blant annet med budsjett og pivottabeller.</button></p>
+    <p>Jeg ser frem til å høre fra dere.</p><p>Med vennlig hilsen<br>Eirik</p>`;
+
+  function render() {
+    $('title').textContent = mode === 'full' ? 'Din ferdigstilte søknad!' : 'Din oppdaterte søknad er ferdig!';
+    $('legend').hidden = mode === 'full';
+    $('letter').innerHTML = mode === 'full' ? (version % 2 ? FULL2 : FULL).join('') : KORR;
+    document.querySelectorAll('#letter .chg').forEach(btn => {
+      const old = document.createElement('span'); old.className = 'old'; old.hidden = true;
+      old.innerHTML = '<b>Du skrev</b>' + btn.dataset.old; btn.after(old);
+      btn.onclick = () => { const o = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!o)); old.hidden = o; };
+    });
+    document.querySelectorAll('[data-fmt]').forEach(b => { b.className = 'btn btn-primary'; b.textContent = 'Last ned som ' + b.dataset.fmt; });
+    $('toast').textContent = '';
+    fireworks();
+  }
+
+  // Nedlasting: grønn hake + vindu
+  let lastBtn = null;
+  document.querySelectorAll('[data-fmt]').forEach(b => b.onclick = () => {
+    b.className = 'btn btn-done'; b.textContent = '✓ Lastet ned som ' + b.dataset.fmt;
+    const name = mode === 'full' ? 'Soknad_Sykehuset_2026-10-21' : 'Soknad_Fjordbanken_2026-10-21';
+    $('toast').textContent = 'Filnavn: ' + name + (b.dataset.fmt === 'Word' ? '.docx' : '.pdf');
+    lastBtn = b; open('dlDialog', 'stay');
+  });
+  $('stay').onclick = () => close('dlDialog');
+
+  // Nytt forslag: bekreftelse → venting → nytt brev + fyrverkeri
+  $('again').onclick = () => { lastBtn = $('again'); open('newDialog', 'noNew'); };
+  $('noNew').onclick = () => close('newDialog');
+  $('yesNew').onclick = () => {
+    close('newDialog'); $('again').disabled = true; $('wait').hidden = false;
+    setTimeout(() => { $('wait').hidden = true; $('again').disabled = false; version++; render(); $('title').focus?.(); }, 3000);
+  };
+
+  function open(id, focusId) { $(id).hidden = false; $(focusId).focus(); }
+  function close(id) { $(id).hidden = true; if (lastBtn) lastBtn.focus(); }
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    ['dlDialog', 'newDialog'].forEach(id => { if (!$(id).hidden) close(id); });
+  });
+
+  // Fyrverkeri rundt overskriften: ca. 2,5 s, maks tre utbrudd i sekundet, hoppes over ved redusert bevegelse
+  function fireworks() {
+    if (reduce) return;
+    const c = $('fx'), ctx = c.getContext('2d');
+    const r = c.getBoundingClientRect(); c.width = r.width * devicePixelRatio; c.height = r.height * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    const colors = ['#A23E6C', '#F6B8A0', '#C0618C', '#2F7A57', '#F2C14E'];
+    const parts = []; const start = performance.now(); let lastBurst = 0;
+    function burst() {
+      const side = Math.random() < .5 ? .1 + Math.random() * .2 : .7 + Math.random() * .2;
+      const x = r.width * side, y = r.height * (.25 + Math.random() * .5);
+      const col = colors[Math.floor(Math.random() * colors.length)];
+      for (let i = 0; i < 26; i++) { const a = Math.PI * 2 * i / 26, v = 1 + Math.random() * 2;
+        parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, col }); }
+    }
+    function tick(t) {
+      const el = t - start;
+      if (el < 2200 && t - lastBurst > 350) { burst(); lastBurst = t; }   // ca. 3 utbrudd i sekundet
+      ctx.clearRect(0, 0, r.width, r.height);
+      parts.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .03; p.life -= .018;
+        if (p.life > 0) { ctx.globalAlpha = p.life; ctx.fillStyle = p.col; ctx.beginPath(); ctx.arc(p.x, p.y, 2.4, 0, 7); ctx.fill(); } });
+      ctx.globalAlpha = 1;
+      if (el < 3200) requestAnimationFrame(tick); else ctx.clearRect(0, 0, r.width, r.height);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const setP = (a, b, f) => { a.setAttribute('aria-pressed', String(f)); b.setAttribute('aria-pressed', String(!f)); };
+  $('pc').onclick = () => { document.body.classList.remove('mobile'); setP($('pc'), $('mob'), true); setTimeout(fireworks, 320); };
+  $('mob').onclick = () => { document.body.classList.add('mobile'); setP($('pc'), $('mob'), false); setTimeout(fireworks, 320); };
+  $('mFull').onclick = () => { mode = 'full'; setP($('mFull'), $('mKorr'), true); render(); };
+  $('mKorr').onclick = () => { mode = 'korr'; setP($('mFull'), $('mKorr'), false); render(); };
+  function setTest(on) { setP($('tOff'), $('tOn'), !on); $('badge').hidden = !on; $('kinote').style.visibility = on ? 'hidden' : 'visible'; }
+  $('tOff').onclick = () => setTest(false); $('tOn').onclick = () => setTest(true);
+
+  render();
+</script>
+</body>
+</html>

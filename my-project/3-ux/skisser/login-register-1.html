@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innlogging og registrering – skisse</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --error: #B4232F; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 700px; }
+  .switch { display: flex; justify-content: center; gap: 8px; margin: 12px 0 0; }
+  .tbtn { font: inherit; cursor: pointer; border-radius: var(--radius); padding: 8px 16px; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  main { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; padding: 20px 16px 40px; }
+  .variant { flex: 1 1 440px; max-width: 560px; }
+  body.mobile .variant { flex: 0 1 375px; }
+  .variant > h2 { margin: 0 0 10px; font-size: 1.1rem; color: var(--primary); text-align: center; }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
+    padding: 28px 20px 24px; min-height: 560px; }
+  body.mobile .frame { border: 10px solid #2b1d24; border-radius: 36px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.4rem); margin: 0 0 18px; white-space: nowrap; }
+  body.mobile .logo { font-size: 1.45rem; }
+  form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 22px; max-width: 360px; margin: 0 auto; box-shadow: var(--shadow); }
+  form h3 { margin: 0 0 14px; text-align: center; font-size: 1.15rem; }
+  .field { margin-bottom: 14px; }
+  label { display: block; font-weight: 600; font-size: .92rem; margin-bottom: 4px; }
+  input { font: inherit; width: 100%; padding: 10px 12px; border: 2px solid var(--border); border-radius: 13px;
+    background: var(--surface); color: var(--text); }
+  input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; border-color: var(--primary); }
+  .help { font-size: .82rem; color: var(--text-muted); margin-top: 4px; }
+  .err { font-size: .85rem; color: var(--error); margin-top: 4px; display: none; font-weight: 600; }
+  .field.bad input { border-color: var(--error); }
+  .field.bad .err { display: block; }
+  .formerr { display: none; background: #FBE6E8; color: var(--error); border: 1px solid var(--error);
+    border-radius: 13px; padding: 8px 12px; font-size: .9rem; font-weight: 600; margin-bottom: 12px; }
+  .formerr.show { display: block; }
+  .btn { font: inherit; width: 100%; border-radius: var(--radius); padding: 12px 20px; cursor: pointer; border: 2px solid var(--primary);
+    background: var(--primary); color: var(--primary-contrast); font-weight: 600; margin-top: 4px;
+    transition: transform .15s ease, box-shadow .15s ease; }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn:active { transform: scale(.96); }
+  .btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .switchlink { text-align: center; margin: 16px 0 0; font-size: .92rem; }
+  .switchlink a { color: var(--primary); font-weight: 600; }
+  .switchlink a:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; border-radius: 4px; }
+  .tips { max-width: 360px; margin: 14px auto 0; font-size: .82rem; color: var(--text-muted); text-align: center; }
+  .tips code { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Innlogging og registrering – skisse</h1>
+  <p>Prøv å trykke på knappene med tomme felt, feil passord eller for kort passord. Lenkene under skjemaene bytter mellom sidene.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+</header>
+<main>
+
+  <section class="variant">
+    <h2>Innlogging</h2>
+    <div class="frame">
+      <p class="logo">Søknadsassistenten</p>
+      <form id="login" novalidate>
+        <h3>Logg inn</h3>
+        <div class="formerr" role="alert">Feil e-post eller passord</div>
+        <div class="field" data-name="e-post">
+          <label for="le">E-post</label>
+          <input id="le" type="email" autocomplete="email" aria-describedby="le-err">
+          <div class="err" id="le-err">Fyll inn e-post</div>
+        </div>
+        <div class="field" data-name="passord">
+          <label for="lp">Passord</label>
+          <input id="lp" type="password" autocomplete="current-password" aria-describedby="lp-err">
+          <div class="err" id="lp-err">Fyll inn passord</div>
+        </div>
+        <button class="btn" type="submit">Logg inn</button>
+        <p class="switchlink">Ny her? <a href="#reg">Registrer deg her</a></p>
+      </form>
+      <p class="tips">Prøv: <code>test@test.no</code> og <code>passord123</code> logger inn. Alt annet gir «Feil e-post eller passord».</p>
+    </div>
+  </section>
+
+  <section class="variant" id="reg">
+    <h2>Registrering</h2>
+    <div class="frame">
+      <p class="logo">Søknadsassistenten</p>
+      <form id="register" novalidate>
+        <h3>Registrer deg</h3>
+        <div class="field" data-name="e-post">
+          <label for="re">E-post</label>
+          <input id="re" type="email" autocomplete="email" aria-describedby="re-err">
+          <div class="err" id="re-err">Fyll inn e-post</div>
+        </div>
+        <div class="field" data-name="passord">
+          <label for="rp">Passord</label>
+          <input id="rp" type="password" autocomplete="new-password" aria-describedby="rp-help rp-err">
+          <div class="help" id="rp-help">Minst 8 tegn</div>
+          <div class="err" id="rp-err">Fyll inn passord</div>
+        </div>
+        <div class="field" data-name="gjenta">
+          <label for="rp2">Gjenta passord</label>
+          <input id="rp2" type="password" autocomplete="new-password" aria-describedby="rp2-err">
+          <div class="err" id="rp2-err">Gjenta passordet</div>
+        </div>
+        <button class="btn" type="submit">Registrer deg</button>
+        <p class="switchlink">Har du allerede en bruker? <a href="#login">Logg inn</a></p>
+      </form>
+      <p class="tips">Prøv: <code>test@test.no</code> gir «Denne e-posten er allerede registrert» (FR-2).</p>
+    </div>
+  </section>
+
+</main>
+<script>
+  const pc = document.getElementById('pc'), mob = document.getElementById('mob');
+  function setMobile(m) {
+    document.body.classList.toggle('mobile', m);
+    pc.setAttribute('aria-pressed', String(!m)); mob.setAttribute('aria-pressed', String(m));
+  }
+  pc.onclick = () => setMobile(false); mob.onclick = () => setMobile(true);
+
+  function setErr(input, msg) {
+    const f = input.closest('.field');
+    f.classList.toggle('bad', !!msg);
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (msg) f.querySelector('.err').textContent = msg;
+  }
+
+  document.getElementById('login').addEventListener('submit', e => {
+    e.preventDefault();
+    const em = document.getElementById('le'), pw = document.getElementById('lp');
+    const box = e.target.querySelector('.formerr');
+    box.classList.remove('show');
+    setErr(em, em.value.trim() ? '' : 'Fyll inn e-post');
+    setErr(pw, pw.value ? '' : 'Fyll inn passord');
+    const first = e.target.querySelector('.bad input');
+    if (first) { first.focus(); return; }
+    if (em.value.trim() === 'test@test.no' && pw.value === 'passord123') alert('Innlogget! Du kommer nå til startsiden.');
+    else box.classList.add('show');
+  });
+
+  document.getElementById('register').addEventListener('submit', e => {
+    e.preventDefault();
+    const em = document.getElementById('re'), pw = document.getElementById('rp'), pw2 = document.getElementById('rp2');
+    setErr(em, !em.value.trim() ? 'Fyll inn e-post'
+      : em.value.trim() === 'test@test.no' ? 'Denne e-posten er allerede registrert' : '');
+    setErr(pw, !pw.value ? 'Fyll inn passord' : pw.value.length < 8 ? 'Passordet må ha minst 8 tegn' : '');
+    setErr(pw2, !pw2.value ? 'Gjenta passordet' : pw2.value !== pw.value ? 'Passordene er ikke like' : '');
+    const first = e.target.querySelector('.bad input');
+    if (first) { first.focus(); return; }
+    alert('Registrert og logget inn! Du kommer nå til startsiden.');
+  });
+</script>
+</body>
+</html>

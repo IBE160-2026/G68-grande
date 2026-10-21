@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T21:03
+updated: 2026-10-21T21:32
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -91,3 +91,27 @@ updated: 2026-10-21T21:03
 - (decision) Nøkkelordlisten (FR-16): forslag B, to lister, «Står i CV-en (antall)» med ✓ og «Står ikke i CV-en (antall)» med ○. Side om side på PC og under hverandre på mobil. Grunn: mer oversiktlig enn merkelapper.
 - (decision) Overskriften på resultatsiden er «Slik passer CV-en din til stillingen».
 - (event) Skissene av modusvalget og resultatsiden er ferdige. Neste steg er ferdigstilling av DESIGN.md og EXPERIENCE.md.
+- (decision) Registreringssiden har det samme vanlige og enkle oppsettet som innloggingen, med «Søknadsassistenten» øverst.
+- (decision) Registreringen har tre felt: e-post, passord og «Gjenta passord». «Gjenta passord» er et tillegg i UX for å unngå skrivefeil, og det strider ikke mot FR-1.
+- (decision) Passordregelen «Minst 8 tegn» står under passordfeltet fra starten, ikke bare som feilmelding.
+- (decision) Under registreringsskjemaet står «Har du allerede en bruker? Logg inn», som fører tilbake til innloggingen.
+- (assumption) Er passordene ikke like, vises feilmeldingen «Passordene er ikke like» ved «Gjenta passord», med rød ramme som i FR-4.
+- (event) Laget .working/login-register-1.html: innlogging og registrering side om side, på PC og mobil, med feilmeldinger som kan prøves (tomme felt, «Feil e-post eller passord», e-posten er allerede registrert, for kort passord, passordene er ikke like).
+- (decision) Kristine vil ha skisser av alle sidene. De samles i tre filer: startsiden (med testmodus og manglende API-nøkkel), innleggingen (begge modusene, feilboks, hjelpetekst for testdata, ventetegn) og brevsiden (begge modusene, fyrverkeri, Nytt forslag med bekreftelse, vinduet etter nedlasting).
+- (event) Laget .working/start-page-1.html: startsiden på PC og mobil, med testmodus-bryter, samtykke med «i»-boks, feilmelding uten samtykke, testmodus der samtykket og KI-merknaden er skjult (FR-35, FR-36), og en situasjon uten API-nøkkel der bryteren er låst på. «Velkommen! 👋» og ingressen er forslag.
+- (decision) Startsiden: overskriften «Velkommen! 👋» står på én linje, og ingressen «Her lager du et søknadsbrev som passer til stillingen du vil søke på.» står på én linje under den på PC. På mobil får ingressen flere linjer, slik at skriften ikke blir for liten.
+- (decision) Samtykket på startsiden: bare avkrysningsboksen «Jeg samtykker til bruk av KI» med et «i»-ikon ved siden av. All forklaring (hva som sendes, hvorfor, at ingenting lagres, anbefalingen om personopplysninger) ligger i «i»-boksen. Det står ingen forklarende tekst rett på siden.
+- (decision) Testmodus på startsiden er godkjent slik det er i skissen: samtykket og KI-merknaden skjules, og teksten «Du er i testmodus. Nettsiden bruker ferdige svar, og ingenting sendes til ekstern KI.» vises. Uten API-nøkkel er bryteren låst på og viser «Mangler API-nøkkel, se README».
+- (event) Konflikt med PRD: FR-36 sier «Over avkrysningsboksen står en tekst som forklarer hva samtykket gjelder». Kristine vil ha forklaringen bare i «i»-boksen. Avklares med Kristine.
+- (decision) Startsiden: samtykkeboksen er liten (bare så bred som innholdet), og «Begynn å lage søknad» er den største knappen på siden. På mobil går knappen over hele bredden.
+- (decision) Konflikten med FR-36 er løst med valg b: FR-36 beholdes. Over avkrysningsboksen står én kort linje, «Teksten din sendes til ekstern KI.», og resten av forklaringen ligger i «i»-boksen. Ingen PRD-endring.
+- (decision) På PC er «Begynn å lage søknad» ekstra stor (omtrent 1,5 ganger vanlig skriftstørrelse, med god luft rundt teksten).
+- (event) Laget .working/input-page-1.html: innleggingen på PC og mobil, med valg av modus (2 eller 3 felt) og testmodus av/på. Feltene har «Last opp PDF» og «Lim inn tekst», filnavn med søppelbøtte etter opplasting, feilboks øverst med alle feilene samlet, og hjelpetekst for testdata. Ventetegnet vises etter «Sjekk CV-en min», og knappen er låst mens man venter (FR-27). Forslag: overskrifter per modus, ikoner per felt, og ventetekst for analysen «Vi sjekker CV-en din – det tar noen sekunder.»
+- (decision) Innleggingssiden er godkjent slik den er i skissen (Kristine: «storfornøyd»). Overskriftene er «Legg inn CV-en din og stillingsannonsen» (Full generering) og «Legg inn CV-en din, brevet ditt og stillingsannonsen» (Korrektur).
+- (decision) Feltene på innleggingssiden har ikoner: 📄 CV, ✉️ Ditt søknadsbrev, 📢 Stillingsannonse. Ikonene er pynt og skjules for skjermlesere.
+- (change) Venteteksten avhenger av hva som skjer: ved analysen (etter «Sjekk CV-en min») står «Vi sjekker CV-en din – det tar noen sekunder.», og når brevet lages eller et nytt forslag lages, står «Vi lager brevet ditt – det tar noen sekunder.». «På vei mot ny jobb» står over begge.
+- (decision) Innleggingsfeltene står side om side på PC (2 felt i Full generering, 3 i Korrektur) og under hverandre på mobil. Felt med feil får rød ramme i tillegg til feilboksen øverst, og feilboksen samler alle feilene.
+- (event) Laget .working/letter-page-1.html: brevsiden på PC og mobil i begge modusene, med fyrverkeri rundt overskriften (ca. 2,5 s, høyst 3 utbrudd i sekundet, hoppes over ved redusert bevegelse), markerte setninger i Korrektur, grønn hake og filnavn etter nedlasting, vinduet etter nedlasting, og «Nytt forslag» med bekreftelse, ventetegn og nytt brev med nytt fyrverkeri. Forslag: teksten i bekreftelsen «Vil du ha et nytt forslag? Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.» med knappene «Ja, lag nytt forslag» og «Avbryt».
+- (decision) Bekreftelsen ved «Nytt forslag» er et vindu med «Vil du ha et nytt forslag?» og «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.», og knappene «Ja, lag nytt forslag» og «Avbryt». Esc og Avbryt lukker vinduet.
+- (decision) Etter nedlasting vises filnavnet under nedlastingsknappene, for eksempel «Filnavn: Soknad_Sykehuset_2026-10-21.docx».
+- (decision) Brevsiden er godkjent slik den er i skissen. Nå har alle sidene en skisse på PC og mobil.

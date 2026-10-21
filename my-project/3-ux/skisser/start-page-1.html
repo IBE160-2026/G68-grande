@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startsiden – skisse</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --error: #B4232F; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 720px; }
+  .switch { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 12px 0 0; }
+  .switch span { align-self: center; font-size: .9rem; color: var(--text-muted); }
+  .tbtn { font: inherit; cursor: pointer; border-radius: var(--radius); padding: 8px 16px; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  main { padding: 20px 16px 40px; }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
+    margin: 0 auto; max-width: 960px; min-height: 600px; display: flex; flex-direction: column; transition: max-width .3s ease; }
+  body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
+  .bar { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 14px 16px 0; min-height: 44px; flex-wrap: wrap; }
+  /* bryter */
+  .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; }
+  .toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .track { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; transition: background .2s ease; }
+  .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s ease; }
+  .toggle input:checked + .track { background: var(--primary); }
+  .toggle input:checked + .track::after { transform: translateX(20px); }
+  .toggle input:focus-visible + .track { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .toggle input:disabled + .track { opacity: .6; }
+  .toggle.locked { cursor: not-allowed; }
+  .nokey { flex-basis: 100%; text-align: right; font-size: .8rem; color: var(--text-muted); }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.4rem); margin: 6px 0 0; white-space: nowrap; }
+  body.mobile .logo { font-size: 1.45rem; }
+  .screen { padding: 8px 20px 10px; flex: 1; }
+  .hello { text-align: center; margin: 6px 0 4px; font-size: 1.3rem; }
+  .lead { text-align: center; color: var(--text-muted); margin: 0 auto 22px; }
+  body:not(.mobile) .lead { white-space: nowrap; }
+  .card { width: fit-content; max-width: 100%; padding: 12px 18px; border-radius: 18px; font-size: .92rem; }
+  .consent-line { margin: 0 0 6px; text-align: center; color: var(--text-muted); }
+  .go { padding: 18px 40px !important; font-size: 1.25rem !important; margin-top: 24px !important; }
+  body:not(.mobile) .go { padding: 24px 64px !important; font-size: 1.5rem !important; margin-top: 32px !important; }
+  body.mobile .go { width: 100%; }
+  .consent-row { display: flex; justify-content: center; align-items: center; gap: 10px; }
+  .consent-row .check { align-items: center; }
+  .consent .err { text-align: center; margin-left: 0; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 22px; max-width: 520px; margin: 0 auto; }
+  .consent-text { margin: 0 0 14px; display: flex; gap: 8px; align-items: flex-start; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: var(--primary); margin-top: 1px; flex-shrink: 0; }
+  .check input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .err { display: none; color: var(--error); font-weight: 600; font-size: .9rem; margin: 8px 0 0 32px; }
+  .consent.bad .err { display: block; }
+  .consent.bad .check input { outline: 2px solid var(--error); outline-offset: 2px; }
+  .testinfo { margin: 0; color: var(--text-muted); font-size: .95rem; text-align: center; }
+  /* i-ikon */
+  .info { position: relative; display: inline-block; flex-shrink: 0; }
+  .info > button { font: inherit; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); font-weight: 700; font-size: .8rem; cursor: pointer; line-height: 1; padding: 0; }
+  .info > button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .tip { position: absolute; right: -12px; top: 32px; width: min(300px, 78vw); z-index: 5;
+    background: var(--text); color: #fff; font-size: .85rem; border-radius: 14px; padding: 12px 14px;
+    box-shadow: var(--shadow); display: none; }
+  .tip p { margin: 0 0 8px; } .tip p:last-child { margin: 0; }
+  .info.open .tip { display: block; }
+  @media (hover: hover) { .info:hover .tip { display: block; } }
+  .go { display: block; margin: 20px auto 0; font: inherit; border-radius: var(--radius); padding: 14px 28px; cursor: pointer;
+    border: 2px solid var(--primary); background: var(--primary); color: var(--primary-contrast); font-weight: 600; font-size: 1.05rem;
+    transition: transform .15s ease, box-shadow .15s ease; }
+  .go:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .go:active { transform: scale(.96); }
+  .go:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  .ki-note { font-size: .78rem; color: var(--text-muted); }
+  .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Startsiden – skisse</h1>
+  <p>Siden etter innlogging. Prøv bryteren oppe til høyre, «i»-ikonet og å trykke «Begynn å lage søknad» uten å krysse av.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+  <div class="switch">
+    <span>Situasjon:</span>
+    <button class="tbtn" id="sNormal" aria-pressed="true">Med API-nøkkel</button>
+    <button class="tbtn" id="sNoKey" aria-pressed="false">Uten API-nøkkel (sensor)</button>
+  </div>
+</header>
+<main>
+  <div class="frame">
+    <div class="bar">
+      <label class="toggle" id="tLabel">
+        <input type="checkbox" id="testmode" role="switch">
+        <span class="track" aria-hidden="true"></span>
+        Testmodus
+      </label>
+      <span class="nokey" id="nokey" hidden>Mangler API-nøkkel, se README</span>
+    </div>
+    <p class="logo">Søknadsassistenten</p>
+    <div class="screen">
+      <h2 class="hello">Velkommen! 👋</h2>
+      <p class="lead">Her lager du et søknadsbrev som passer til stillingen du vil søke på.</p>
+
+      <div class="card">
+        <div class="consent" id="consent">
+          <p class="consent-line">Teksten din sendes til ekstern KI.</p>
+          <div class="consent-row">
+            <label class="check"><input type="checkbox" id="agree" aria-describedby="agree-err">
+              Jeg samtykker til bruk av KI</label>
+            <span class="info"><button aria-label="Hva betyr samtykket?" aria-expanded="false">i</button>
+              <span class="tip" role="tooltip">
+                <p><b>Hva samtykker jeg til?</b> Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til en ekstern KI-tjeneste.</p>
+                <p><b>Hvorfor sendes teksten?</b> KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.</p>
+                <p><b>Lagres noe?</b> Nei. Ingenting du legger inn, lagres etter at du logger ut.</p>
+                <p><b>Personopplysninger:</b> Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. Det er ditt valg.</p>
+              </span></span>
+          </div>
+          <div class="err" id="agree-err" role="alert">Du må samtykke før du kan begynne</div>
+        </div>
+        <p class="testinfo" id="testinfo" hidden>Du er i testmodus. Nettsiden bruker ferdige svar, og ingenting sendes til ekstern KI.</p>
+      </div>
+
+      <button class="go" id="go">Begynn å lage søknad</button>
+    </div>
+    <div class="corners">
+      <span class="ki-note" id="kinote">ⓘ Teksten behandles av ekstern KI</span>
+      <button class="logout">Logg ut</button>
+    </div>
+  </div>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  // PC / mobil
+  function setMobile(m) { document.body.classList.toggle('mobile', m);
+    $('pc').setAttribute('aria-pressed', String(!m)); $('mob').setAttribute('aria-pressed', String(m)); }
+  $('pc').onclick = () => setMobile(false); $('mob').onclick = () => setMobile(true);
+
+  // Testmodus av/på
+  function applyTest() {
+    const on = $('testmode').checked;
+    $('consent').hidden = on;          // FR-36: ikke samtykke i testmodus
+    $('testinfo').hidden = !on;
+    $('kinote').style.visibility = on ? 'hidden' : 'visible';  // FR-35: merknad bare når testmodus er av
+    $('consent').classList.remove('bad');
+  }
+  $('testmode').addEventListener('change', applyTest);
+
+  // Situasjon: uten API-nøkkel låser testmodus på
+  function setKey(noKey) {
+    $('sNormal').setAttribute('aria-pressed', String(!noKey)); $('sNoKey').setAttribute('aria-pressed', String(noKey));
+    $('testmode').checked = noKey ? true : false;
+    $('testmode').disabled = noKey;
+    $('tLabel').classList.toggle('locked', noKey);
+    $('nokey').hidden = !noKey;
+    applyTest();
+  }
+  $('sNormal').onclick = () => setKey(false); $('sNoKey').onclick = () => setKey(true);
+
+  // Samtykke
+  $('go').addEventListener('click', () => {
+    if (!$('testmode').checked && !$('agree').checked) {
+      $('consent').classList.add('bad'); $('agree').focus(); return;
+    }
+    alert('Du kommer nå til modusvalget.');
+  });
+  $('agree').addEventListener('change', () => { if ($('agree').checked) $('consent').classList.remove('bad'); });
+
+  // i-ikon
+  document.querySelectorAll('.info').forEach(info => {
+    const btn = info.querySelector('button');
+    const set = o => { info.classList.toggle('open', o); btn.setAttribute('aria-expanded', String(o)); };
+    btn.addEventListener('click', () => set(!info.classList.contains('open')));
+    btn.addEventListener('focus', () => set(true));
+    btn.addEventListener('blur', () => set(false));
+    btn.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+  });
+</script>
+</body>
+</html>

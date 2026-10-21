@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innleggingssiden – skisse</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --error: #B4232F; --error-tint: #FBE6E8;
+    --focus-ring: #3B5BDB; --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 760px; }
+  header.page code { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 0 4px; }
+  .switch { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 0; }
+  .switch span { align-self: center; font-size: .9rem; color: var(--text-muted); }
+  .tbtn { font: inherit; cursor: pointer; border-radius: var(--radius); padding: 7px 14px; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  main { padding: 20px 16px 40px; }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
+    margin: 0 auto; max-width: 960px; min-height: 640px; display: flex; flex-direction: column; position: relative;
+    max-height: 820px; overflow-y: auto; transition: max-width .3s ease; }
+  body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
+  .bar { display: flex; justify-content: flex-end; padding: 14px 16px 0; min-height: 36px; }
+  .badge { font-size: .78rem; font-weight: 600; background: var(--accent); color: var(--text); border-radius: 12px; padding: 2px 10px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 4px 0 0; white-space: nowrap; }
+  body.mobile .logo { font-size: 1.45rem; }
+  .screen { padding: 8px 20px 10px; flex: 1; }
+  .screen > h2 { text-align: center; margin: 4px 0 16px; font-size: 1.2rem; }
+  .errbox { background: var(--error-tint); border: 2px solid var(--error); color: var(--error); border-radius: 18px;
+    padding: 12px 16px; margin-bottom: 16px; }
+  .errbox:focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .errbox strong { display: block; margin-bottom: 4px; }
+  .errbox ul { margin: 0; padding-left: 18px; }
+  .testhint { background: var(--surface); border: 1px dashed var(--primary); border-radius: 18px; padding: 10px 14px;
+    margin-bottom: 16px; font-size: .92rem; text-align: center; }
+  .testhint code { background: var(--background); border-radius: 6px; padding: 0 4px; }
+  .fields { display: grid; gap: 16px; grid-template-columns: repeat(var(--cols, 2), 1fr); }
+  body.mobile .fields { grid-template-columns: 1fr; }
+  .field { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 18px;
+    box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; transition: border-color .2s ease; }
+  .field.bad { border-color: var(--error); }
+  .field h3 { margin: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+  .field h3 .ic { font-size: 1.3rem; }
+  .field .what { margin: 0; font-size: .88rem; color: var(--text-muted); }
+  .choices { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { font: inherit; border-radius: var(--radius); padding: 10px 16px; cursor: pointer; border: 2px solid var(--primary);
+    transition: transform .15s ease, box-shadow .15s ease; }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn:active { transform: scale(.96); }
+  .btn:focus-visible, .trash:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-contrast); font-weight: 600; }
+  .btn-secondary { background: var(--surface); color: var(--primary); }
+  .btn[disabled] { opacity: .55; cursor: wait; transform: none; box-shadow: none; }
+  .choices .btn { flex: 1 1 130px; font-size: .92rem; }
+  .filled { display: flex; align-items: center; gap: 8px; background: var(--success-tint); color: var(--success);
+    border-radius: 14px; padding: 8px 10px; font-weight: 600; font-size: .92rem; animation: pop .2s ease; }
+  .filled .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .trash { font: inherit; border: none; background: none; cursor: pointer; font-size: 1.15rem; border-radius: 10px; padding: 2px 6px;
+    transition: transform .15s ease; }
+  .trash:hover { transform: scale(1.15); }
+  .pastebox { display: flex; flex-direction: column; gap: 6px; }
+  .pastebox .top { display: flex; justify-content: space-between; align-items: center; font-size: .88rem; color: var(--text-muted); }
+  textarea { font: inherit; font-size: .92rem; width: 100%; min-height: 160px; resize: vertical; border: 2px solid var(--border);
+    border-radius: 14px; padding: 10px; color: var(--text); }
+  body.mobile textarea { min-height: 200px; }
+  .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 22px 0 8px; }
+  .actions .btn-primary { padding: 12px 26px; font-size: 1.05rem; }
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  .ki-note { font-size: .78rem; color: var(--text-muted); }
+  .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
+  /* ventetegn */
+  .wait { position: absolute; inset: 0; background: rgba(255, 247, 245, .94); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; border-radius: inherit; z-index: 10; }
+  .dots { display: flex; gap: 10px; }
+  .dots i { width: 16px; height: 16px; border-radius: 50%; background: var(--primary); animation: hop 1s ease-in-out infinite; }
+  .dots i:nth-child(2) { animation-delay: .15s; background: #C0618C; }
+  .dots i:nth-child(3) { animation-delay: .3s; background: var(--accent); }
+  .wait .big { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary); font-size: 1.5rem; margin: 0; }
+  .wait .small { margin: 0; color: var(--text-muted); }
+  [hidden] { display: none !important; }
+  @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
+  @keyframes pop { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Innleggingssiden – skisse</h1>
+  <p>Prøv å laste opp en fil (velg hvilken som helst), lime inn tekst og tømme med søppelbøtta. Trykk «Sjekk CV-en min» med tomme felt for å se feilboksen.
+    Filnavn som ikke slutter på <code>.pdf</code> gir «Feil filtype». Filnavn med <code>skannet</code> gir feilen for uleselig PDF. I testmodus virker bare filnavn som begynner med <code>test</code>.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+  <div class="switch">
+    <span>Modus:</span>
+    <button class="tbtn" id="mFull" aria-pressed="true">Full generering</button>
+    <button class="tbtn" id="mKorr" aria-pressed="false">Korrektur</button>
+    <span>Testmodus:</span>
+    <button class="tbtn" id="tOff" aria-pressed="true">Av</button>
+    <button class="tbtn" id="tOn" aria-pressed="false">På</button>
+  </div>
+</header>
+<main>
+  <div class="frame" id="frame">
+    <div class="bar"><span class="badge" id="badge" hidden>Testmodus</span></div>
+    <p class="logo">Søknadsassistenten</p>
+    <div class="screen">
+      <h2 id="title">Legg inn CV-en din og stillingsannonsen</h2>
+
+      <div class="errbox" id="errbox" tabindex="-1" role="alert" hidden>
+        <strong>Noe må fikses før du kan gå videre:</strong>
+        <ul id="errlist"></ul>
+      </div>
+
+      <p class="testhint" id="testhint" hidden>🧪 Testmodus: bruk filene i mappen <code>testdata/</code> i prosjektet.</p>
+
+      <div class="fields" id="fields"></div>
+
+      <div class="actions">
+        <button class="btn btn-secondary">Tilbake</button>
+        <button class="btn btn-primary" id="check">Sjekk CV-en min</button>
+      </div>
+    </div>
+    <div class="corners">
+      <span class="ki-note" id="kinote">ⓘ Teksten behandles av ekstern KI</span>
+      <button class="logout">Logg ut</button>
+    </div>
+
+    <div class="wait" id="wait" hidden role="status" aria-live="polite">
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="big">På vei mot ny jobb</p>
+      <p class="small">Vi sjekker CV-en din – det tar noen sekunder.</p>
+    </div>
+  </div>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  const FIELDS = {
+    cv:     { icon: '📄', name: 'CV', what: 'CV-en din', aria: 'CV-feltet' },
+    letter: { icon: '✉️', name: 'Ditt søknadsbrev', what: 'Brevet du har skrevet selv', aria: 'brevfeltet' },
+    ad:     { icon: '📢', name: 'Stillingsannonse', what: 'Annonsen for jobben du søker på', aria: 'annonsefeltet' }
+  };
+  let mode = 'full', test = false;
+  const state = {};   // id -> {type:'file'|'text', name, value}
+
+  function setPressed(a, b, first) { a.setAttribute('aria-pressed', String(first)); b.setAttribute('aria-pressed', String(!first)); }
+
+  function render() {
+    const ids = mode === 'full' ? ['cv', 'ad'] : ['cv', 'letter', 'ad'];
+    $('fields').style.setProperty('--cols', ids.length);
+    $('title').textContent = mode === 'full'
+      ? 'Legg inn CV-en din og stillingsannonsen'
+      : 'Legg inn CV-en din, brevet ditt og stillingsannonsen';
+    $('fields').innerHTML = '';
+    ids.forEach(id => $('fields').appendChild(fieldEl(id)));
+  }
+
+  function fieldEl(id) {
+    const f = FIELDS[id], s = state[id];
+    const el = document.createElement('section');
+    el.className = 'field'; el.id = 'f-' + id;
+    el.innerHTML = `<h3><span class="ic" aria-hidden="true">${f.icon}</span>${f.name}</h3><p class="what">${f.what}</p>`;
+    if (!s) {
+      const c = document.createElement('div'); c.className = 'choices';
+      c.innerHTML = `<button class="btn btn-primary">Last opp PDF</button><button class="btn btn-secondary">Lim inn tekst</button>`;
+      const input = document.createElement('input'); input.type = 'file'; input.hidden = true;
+      c.children[0].onclick = () => input.click();
+      input.onchange = () => { if (input.files[0]) { state[id] = { type: 'file', name: input.files[0].name }; render(); } };
+      c.children[1].onclick = () => { state[id] = { type: 'text', value: '' }; render(); $('ta-' + id).focus(); };
+      el.append(c, input);
+    } else if (s.type === 'file') {
+      el.insertAdjacentHTML('beforeend', `<div class="filled"><span aria-hidden="true">✓</span><span class="name">${s.name}</span>
+        <button class="trash" aria-label="Tøm ${f.aria}">🗑️</button></div>`);
+      el.querySelector('.trash').onclick = () => { delete state[id]; render(); };
+    } else {
+      el.insertAdjacentHTML('beforeend', `<div class="pastebox"><div class="top"><label for="ta-${id}">Lim inn teksten her</label>
+        <button class="trash" aria-label="Tøm ${f.aria}">🗑️</button></div><textarea id="ta-${id}"></textarea></div>`);
+      const ta = el.querySelector('textarea'); ta.value = s.value;
+      ta.oninput = () => s.value = ta.value;
+      el.querySelector('.trash').onclick = () => { delete state[id]; render(); };
+    }
+    return el;
+  }
+
+  $('check').onclick = () => {
+    const ids = mode === 'full' ? ['cv', 'ad'] : ['cv', 'letter', 'ad'];
+    const errs = [];
+    ids.forEach(id => {
+      const s = state[id], n = FIELDS[id].name;
+      let msg = '';
+      if (!s || (s.type === 'text' && !s.value.trim())) msg = `${n}: Fyll inn feltet. Last opp en PDF eller lim inn tekst.`;
+      else if (s.type === 'file' && !/\.pdf$/i.test(s.name)) msg = `${n}: Feil filtype, prøv PDF.`;
+      else if (s.type === 'file' && /skannet/i.test(s.name)) msg = `${n}: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.`;
+      else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen testdata/.`;
+      document.getElementById('f-' + id).classList.toggle('bad', !!msg);
+      if (msg) errs.push(msg);
+    });
+    if (errs.length) {
+      $('errlist').innerHTML = errs.map(e => `<li>${e}</li>`).join('');
+      $('errbox').hidden = false;
+      $('frame').scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      $('errbox').focus({ preventScroll: true });
+      return;
+    }
+    $('errbox').hidden = true;
+    $('check').disabled = true;     // FR-27: kan ikke trykkes på nytt mens man venter
+    $('wait').hidden = false;
+    setTimeout(() => { $('wait').hidden = true; $('check').disabled = false; alert('Ferdig! Du kommer nå til resultatsiden.'); }, 3500);
+  };
+
+  $('pc').onclick = () => { document.body.classList.remove('mobile'); setPressed($('pc'), $('mob'), true); };
+  $('mob').onclick = () => { document.body.classList.add('mobile'); setPressed($('pc'), $('mob'), false); };
+  $('mFull').onclick = () => { mode = 'full'; setPressed($('mFull'), $('mKorr'), true); $('errbox').hidden = true; render(); };
+  $('mKorr').onclick = () => { mode = 'korr'; setPressed($('mFull'), $('mKorr'), false); $('errbox').hidden = true; render(); };
+  function setTest(on) {
+    test = on; setPressed($('tOff'), $('tOn'), !on);
+    $('badge').hidden = !on; $('testhint').hidden = !on;
+    $('kinote').style.visibility = on ? 'hidden' : 'visible';
+  }
+  $('tOff').onclick = () => setTest(false); $('tOn').onclick = () => setTest(true);
+
+  render();
+</script>
+</body>
+</html>
