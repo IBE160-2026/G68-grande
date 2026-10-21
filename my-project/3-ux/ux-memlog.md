@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T20:20
+updated: 2026-10-21T20:36
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -60,3 +60,13 @@ updated: 2026-10-21T20:20
 - (event) Oppdaterte A i download-options-1.html med grønn hake og de faste hjørnene (logg ut nede til høyre, KI-merknad nede til venstre). De manglet i første versjon av skissen, men var allerede bestemt.
 - (decision) Brukerreise 1: Kristine bekrefter stegene 1–9.
 - (decision) Høydepunktet i reise 1 er steg 8, når brevet vises med fyrverkeri rundt «Din ferdigstilte søknad!». Steg 7 (Ingrid ser at CV-en passer med annonsen) er et viktig steg på veien, men ikke høydepunktet.
+- (decision) Brukerreise 2 (Korrektur): hovedperson Eirik, 22 år, studerer finans og bruker telefonen. Han har søkt jobber før og har allerede skrevet et søknadsbrev. Han vil bare forbedre brevet, ikke få et nytt, fordi han har jobbet mye med det selv.
+- (decision) Reise 2, steg 1: Eirik har en bruker fra før og logger bare inn. Han hopper over registreringen.
+- (decision) Reise 2, steg 4: Eirik har filene på telefonen og laster opp PDF-ene, så filvelgeren må fungere godt på mobil. «Lim inn tekst» må også fungere på mobil (FR-8), med en tekstboks som er stor nok til et helt brev.
+- (decision) Reise 2, steg 6: i Korrektur heter knappen på resultatsiden «Oppdater søknadsbrevet mitt» (i Full generering heter den «Lag søknadsbrevet mitt»). Trykket er bekreftelsen (FR-21), som i reise 1.
+- (decision) Reise 2, steg 7: i Korrektur heter brevsiden «Din oppdaterte søknad er ferdig!» (i Full generering heter den «Din ferdigstilte søknad!»).
+- (decision) Høydepunktet i reise 2 er steg 7: Eirik ser at brevet er ferdig, men at det fortsatt er hans eget, fordi endringene er markert og han kan se hva han skrev før.
+- (event) Laget .working/korrektur-markings-1.html med to måter å markere endringer på mobil (375 px) (FR-23): 1 per setning, grønn og understreket, der et trykk viser «Du skrev» med den gamle setningen. 2 per ord, rødt overstreket og grønt understreket, med en bryter som skjuler markeringene.
+- (decision) Markeringer i Korrektur (FR-23): forslag 1, per setning. Endrede setninger er grønne og understreket. Et trykk (eller Enter med tastatur) åpner en boks under setningen med «Du skrev» og den gamle setningen, og et nytt trykk lukker den. Grunn: mindre rotete enn per ord, og man kan likevel sammenligne nytt og gammelt. Per ord er forkastet.
+- (decision) Fyrverkeri også i Korrektur, rundt overskriften «Din oppdaterte søknad er ferdig!», med de samme reglene som i reise 1.
+- (decision) Merkelappen «Testmodus» vises bare når testmodus er slått på.

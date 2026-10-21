@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Markeringer i Korrektur – to forslag</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --error: #B4232F;
+    --error-tint: #FBE6E8; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 640px; }
+  main { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; padding: 20px 16px 40px; }
+  .variant { width: 375px; max-width: 100%; }
+  .variant > h2 { margin: 0 0 4px; font-size: 1.1rem; color: var(--primary); }
+  .variant > .hint { margin: 0 0 12px; font-size: .9rem; color: var(--text-muted); min-height: 3em; }
+  .phone { background: var(--background); border: 10px solid #2b1d24; border-radius: 36px;
+    height: 720px; overflow-y: auto; position: relative; box-shadow: var(--shadow); }
+  .bar { display: flex; justify-content: flex-end; padding: 12px 16px 0; }
+  .badge { font-size: .75rem; background: var(--accent); color: var(--text); border-radius: 12px; padding: 2px 10px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: 1.45rem; margin: 4px 0 0; white-space: nowrap; }
+  .screen { padding: 8px 16px 90px; }
+  .screen h3 { text-align: center; margin: 4px 0 12px; font-size: 1.15rem; }
+  .legend { background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+    padding: 10px 12px; font-size: .85rem; margin-bottom: 12px; }
+  .legend p { margin: 0; }
+  .letter { background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+    padding: 14px; font-size: .95rem; }
+  .letter p { margin: 0 0 10px; }
+  /* Forslag 1: per setning */
+  .chg { color: inherit; background: var(--success-tint); text-decoration: underline;
+    text-decoration-color: var(--success); text-decoration-thickness: 2px; text-underline-offset: 3px;
+    border: none; padding: 0 2px; font: inherit; text-align: left; cursor: pointer; border-radius: 4px;
+    transition: background .15s ease; }
+  .chg:hover { background: #CFEBDC; }
+  .chg:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+  .chg[aria-expanded="true"] { background: #CFEBDC; }
+  .old { display: block; margin: 6px 0 4px; background: var(--background); border-left: 4px solid var(--text-muted);
+    border-radius: 8px; padding: 6px 10px; font-size: .85rem; color: var(--text-muted); animation: open .2s ease; }
+  .old b { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+  .old[hidden] { display: none; }
+  /* Forslag 2: per ord */
+  del { color: var(--error); background: var(--error-tint); text-decoration-thickness: 2px; border-radius: 3px; padding: 0 2px; }
+  ins { color: var(--success); background: var(--success-tint); text-decoration: underline;
+    text-decoration-thickness: 2px; text-underline-offset: 3px; border-radius: 3px; padding: 0 2px; }
+  .toggle { display: flex; justify-content: center; margin-bottom: 10px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  button.btn { font: inherit; border-radius: var(--radius); padding: 10px 16px; cursor: pointer;
+    border: 2px solid var(--primary); transition: transform .15s ease, box-shadow .15s ease; }
+  button.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  button.btn:active { transform: scale(.96); }
+  button.btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-contrast); }
+  .btn-secondary { background: var(--surface); color: var(--primary); }
+  .btn-link { background: none; border: none; color: var(--primary); text-decoration: underline;
+    font: inherit; cursor: pointer; padding: 6px; }
+  .corners { position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px; background: linear-gradient(transparent, var(--background) 35%); }
+  .ki-note { font-size: .75rem; color: var(--text-muted); }
+  .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); }
+  @keyframes open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Markeringer i Korrektur – to forslag</h1>
+  <p>Eiriks brev på en mobilskjerm (375 px). Prøv å trykke på det som er markert. Den nedlastede filen har ingen markeringer (FR-30).</p>
+</header>
+<main>
+
+  <!-- Forslag 1 -->
+  <section class="variant">
+    <h2>1. Per setning (ditt utgangspunkt)</h2>
+    <p class="hint">Setninger som er endret, er grønne og understreket. Trykk på en setning for å se hva Eirik skrev.</p>
+    <div class="phone">
+      <div class="bar"></div>
+      <p class="logo">Søknadsassistenten</p>
+      <div class="screen">
+        <h3>Din oppdaterte søknad er ferdig!</h3>
+        <div class="legend"><p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p></div>
+        <div class="letter" id="v1">
+          <p>Hei,</p>
+          <p>Jeg søker på stillingen som deltids økonomiassistent hos Fjordbanken.
+            <button class="chg" aria-expanded="false" data-old="Jeg er veldig interessert i jobben deres og tror jeg hadde passet bra.">Jeg er særlig interessert i stillingen fordi den kombinerer regnskap med kundekontakt.</button>
+          </p>
+          <p>Jeg studerer finans ved Handelshøyskolen og er nå i tredje år. I fjor jobbet jeg som sommervikar i et regnskapsbyrå, der jeg førte bilag og avstemte kontoer.
+            <button class="chg" aria-expanded="false" data-old="Det var veldig lærerikt og jeg fikk mye ansvar.">Der fikk jeg tidlig ansvar for egne kunder og lærte å jobbe nøyaktig under tidspress.</button>
+          </p>
+          <p>Ved siden av studiet er jeg kasserer i linjeforeningen.
+            <button class="chg" aria-expanded="false" data-old="Jeg er flink med Excel og tall.">Jeg har god erfaring med Excel, blant annet med budsjett og pivottabeller.</button>
+          </p>
+          <p>Jeg ser frem til å høre fra dere.</p>
+          <p>Med vennlig hilsen<br>Eirik</p>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary">Last ned som Word</button>
+          <button class="btn btn-primary">Last ned som PDF</button>
+        </div>
+        <div class="row"><button class="btn-link">Nytt forslag</button></div>
+      </div>
+      <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    </div>
+  </section>
+
+  <!-- Forslag 2 -->
+  <section class="variant">
+    <h2>2. Per ord (alternativet)</h2>
+    <p class="hint">Ord som er fjernet, er røde og overstreket. Nye ord er grønne og understreket. Bryteren øverst skjuler markeringene.</p>
+    <div class="phone">
+      <div class="bar"></div>
+      <p class="logo">Søknadsassistenten</p>
+      <div class="screen">
+        <h3>Din oppdaterte søknad er ferdig!</h3>
+        <div class="legend"><p><del>Rødt og overstreket</del> = fjernet. <ins>Grønt og understreket</ins> = lagt til.</p></div>
+        <div class="toggle"><button class="btn btn-secondary" id="toggle2" aria-pressed="true">Skjul markeringene</button></div>
+        <div class="letter" id="v2">
+          <p>Hei,</p>
+          <p>Jeg søker på stillingen som deltids økonomiassistent hos Fjordbanken. Jeg er <del>veldig</del> <ins>særlig</ins> interessert i <del>jobben deres og tror jeg hadde passet bra</del> <ins>stillingen fordi den kombinerer regnskap med kundekontakt</ins>.</p>
+          <p>Jeg studerer finans ved Handelshøyskolen og er nå i tredje år. I fjor jobbet jeg som sommervikar i et regnskapsbyrå, der jeg førte bilag og avstemte kontoer. <del>Det var veldig lærerikt og jeg fikk mye ansvar</del> <ins>Der fikk jeg tidlig ansvar for egne kunder og lærte å jobbe nøyaktig under tidspress</ins>.</p>
+          <p>Ved siden av studiet er jeg kasserer i linjeforeningen. Jeg <del>er flink med Excel og tall</del> <ins>har god erfaring med Excel, blant annet med budsjett og pivottabeller</ins>.</p>
+          <p>Jeg ser frem til å høre fra dere.</p>
+          <p>Med vennlig hilsen<br>Eirik</p>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary">Last ned som Word</button>
+          <button class="btn btn-primary">Last ned som PDF</button>
+        </div>
+        <div class="row"><button class="btn-link">Nytt forslag</button></div>
+      </div>
+      <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    </div>
+  </section>
+
+</main>
+<script>
+  // Forslag 1: trykk på setning viser den gamle
+  document.querySelectorAll('#v1 .chg').forEach(btn => {
+    const old = document.createElement('span');
+    old.className = 'old';
+    old.hidden = true;
+    old.innerHTML = '<b>Du skrev</b>' + btn.dataset.old;
+    btn.after(old);
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      old.hidden = open;
+    });
+  });
+
+  // Forslag 2: skjul/vis markeringer
+  const t = document.getElementById('toggle2');
+  const v2 = document.getElementById('v2');
+  const dels = [...v2.querySelectorAll('del')];
+  t.addEventListener('click', () => {
+    const on = t.getAttribute('aria-pressed') === 'true';
+    t.setAttribute('aria-pressed', String(!on));
+    t.textContent = on ? 'Vis markeringene' : 'Skjul markeringene';
+    dels.forEach(d => d.style.display = on ? 'none' : '');
+    v2.querySelectorAll('ins').forEach(i => i.style.cssText = on ? 'color:inherit;background:none;text-decoration:none' : '');
+  });
+</script>
+</body>
+</html>
