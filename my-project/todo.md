@@ -25,8 +25,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] UX (skisser av modusvalget og resultatsiden, se addendum)
   - [x] Utseende: farger (Myk fersken), former, bevegelse, skrift og logo
   - [x] Brukerreise 1: Ingrid, Full generering
-  - [ ] Brukerreise 2: Korrektur (prøve mobil)
-  - [ ] Brukerreise 3: sensor og testmodus
+  - [x] Brukerreise 2: Eirik, Korrektur på mobil
+  - [x] Brukerreise 3: Henrik, sensor og testmodus
   - [ ] Skisser av modusvalget og resultatsiden, og ferdigstille DESIGN.md og EXPERIENCE.md
 - [ ] Arkitektur
 - [ ] Epics og stories

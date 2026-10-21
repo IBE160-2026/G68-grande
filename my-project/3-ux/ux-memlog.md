@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T20:36
+updated: 2026-10-21T20:53
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -70,3 +70,14 @@ updated: 2026-10-21T20:36
 - (decision) Markeringer i Korrektur (FR-23): forslag 1, per setning. Endrede setninger er grønne og understreket. Et trykk (eller Enter med tastatur) åpner en boks under setningen med «Du skrev» og den gamle setningen, og et nytt trykk lukker den. Grunn: mindre rotete enn per ord, og man kan likevel sammenligne nytt og gammelt. Per ord er forkastet.
 - (decision) Fyrverkeri også i Korrektur, rundt overskriften «Din oppdaterte søknad er ferdig!», med de samme reglene som i reise 1.
 - (decision) Merkelappen «Testmodus» vises bare når testmodus er slått på.
+- (decision) Tilbakeknapp på resultatsiden (FR-19), både i Full generering og Korrektur: en hvit sekundærknapp med teksten «Tilbake» nederst, ved siden av «Lag søknadsbrevet mitt» / «Oppdater søknadsbrevet mitt». Den fører til innleggingssiden, og feltene er fortsatt fylt ut.
+- (decision) Tilbakeknapp også på innleggingssiden: en hvit «Tilbake»-knapp ved siden av «Sjekk CV-en min». Den fører til modusvalget, slik at man kan rette opp et feil valg av modus. Dette står ikke i PRD-en, men det er et tillegg i UX og ikke i strid med den.
+- (assumption) Går man fra innleggingssiden tilbake til modusvalget, beholdes CV og annonse hvis de er fylt ut. Feltet for eget brev finnes bare i Korrektur. Avklares ved ferdigstilling.
+- (decision) Brukerreise 2 er bekreftet med 8 steg, og steg 6 har «Tilbake»-knapp.
+- (decision) Brukerreise 3 (testmodus): hovedperson Henrik, sensor i faget. Han har 10–15 minutter og har trolig sett slike prosjekter før. Han vil sjekke at begge modusene og feilmeldingene fungerer.
+- (decision) Testdata: Henrik laster opp filene fra testdata-mappen selv, slik PRD-en sier (NFR-3, NFR-8). Innleggingssiden får en liten hjelpetekst som bare vises i testmodus, for eksempel «Testmodus: bruk filene i mappen testdata/ i prosjektet.» Det kommer ingen knapp som fyller inn testdata, fordi det ville vært en ny funksjon.
+- (decision) Høydepunktet i reise 3: Henrik har gått gjennom alt innen 15 minutter, uten å stå fast.
+- (decision) Feilmeldinger på innleggingssiden (for eksempel skannet PDF, feil filtype, ikke-testdata i testmodus) vises i en boks øverst på siden.
+- (decision) Feilboksen øverst: siden hopper opp til boksen av seg selv, og boksen sier hvilket felt det gjelder og hva man kan gjøre, for eksempel «CV-feltet: Filen ser ut til å være skannet. Prøv en PDF med tekst, eller lim inn teksten.». Skjermlesere leser den opp (NFR-6).
+- (change) Høydepunktet i reise 3 er endret: nettsiden er i gang på 10–15 minutter (NFR-8), og så kommer Henrik gjennom begge modusene og feilmeldingene uten å stå fast. Grunn: sensorveiledningens «inntil 15–20 minutter» gjelder installering og oppstart, ikke hele gjennomgangen.
+- (decision) Brukerreise 3 er bekreftet med 9 steg: oppstart uten API-nøkkel, innlogging med testbrukeren, startsiden med testmodus låst på, Full generering med feilmeldingene prøvd først, resultat, brev og nedlasting, Korrektur med testbrevet, logg ut.
