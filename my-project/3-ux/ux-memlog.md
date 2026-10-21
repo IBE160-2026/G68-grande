@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T20:53
+updated: 2026-10-21T21:03
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -81,3 +81,13 @@ updated: 2026-10-21T20:53
 - (decision) Feilboksen øverst: siden hopper opp til boksen av seg selv, og boksen sier hvilket felt det gjelder og hva man kan gjøre, for eksempel «CV-feltet: Filen ser ut til å være skannet. Prøv en PDF med tekst, eller lim inn teksten.». Skjermlesere leser den opp (NFR-6).
 - (change) Høydepunktet i reise 3 er endret: nettsiden er i gang på 10–15 minutter (NFR-8), og så kommer Henrik gjennom begge modusene og feilmeldingene uten å stå fast. Grunn: sensorveiledningens «inntil 15–20 minutter» gjelder installering og oppstart, ikke hele gjennomgangen.
 - (decision) Brukerreise 3 er bekreftet med 9 steg: oppstart uten API-nøkkel, innlogging med testbrukeren, startsiden med testmodus låst på, Full generering med feilmeldingene prøvd først, resultat, brev og nedlasting, Korrektur med testbrevet, logg ut.
+- (event) Laget .working/mode-select-1.html med tre forslag til modusvalget (FR-20), på PC og mobil: A to store kort med ikon, B to store knapper uten ikon, C kort som også viser hvilke filer man trenger.
+- (decision) Modusvalg (FR-20): forslag A, to store kort med ikon (✨ Full generering – Skriv nytt brev, ✏️ Korrektur – Forbedre mitt brev) og en kort forklaring. Hele kortet er en knapp. Kortene står side om side på PC og under hverandre på mobil. Ikonet vipper litt ved hover.
+- (decision) Modusvalget får en hvit «Tilbake»-knapp under kortene, og den fører til startsiden. Grunn: blant annet hvis sensor går videre uten å slå på testmodus, som bare kan slås på på startsiden.
+- (assumption) Overskriften på modusvalget er «Hva vil du gjøre i dag?». Kristine har ikke kommentert den.
+- (event) Laget .working/result-page-1.html: resultatsiden med de avgjørelsene som er tatt (gap-analysen først med merket «Laget av KI», nøkkelordtreff «7 av 10 = 70 %» med en prosentlinje, «i»-ikoner, ATS-forklaring som foldes ut, Tilbake og Lag søknadsbrevet mitt). Nøkkelordlisten vises på to måter: A merkelapper, B to lister. Overskriften «Slik passer CV-en din til stillingen» er et forslag.
+- (decision) Resultatsiden: gap-analysen får merket «Laget av KI» ved overskriften (FR-14).
+- (decision) Resultatsiden: under «X av Y = Z %» står en prosentlinje som fylles opp når siden åpnes (hoppes over ved prefers-reduced-motion). Den skal gjøre siden mer levende.
+- (decision) Nøkkelordlisten (FR-16): forslag B, to lister, «Står i CV-en (antall)» med ✓ og «Står ikke i CV-en (antall)» med ○. Side om side på PC og under hverandre på mobil. Grunn: mer oversiktlig enn merkelapper.
+- (decision) Overskriften på resultatsiden er «Slik passer CV-en din til stillingen».
+- (event) Skissene av modusvalget og resultatsiden er ferdige. Neste steg er ferdigstilling av DESIGN.md og EXPERIENCE.md.

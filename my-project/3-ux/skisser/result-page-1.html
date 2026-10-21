@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resultatsiden – skisse</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 700px; }
+  .switch { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 12px 0 0; }
+  .switch span { align-self: center; font-size: .9rem; color: var(--text-muted); }
+  .tbtn { font: inherit; cursor: pointer; border-radius: var(--radius); padding: 8px 16px; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  main { padding: 20px 16px 40px; }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
+    margin: 0 auto; max-width: 960px; transition: max-width .3s ease; overflow: hidden; }
+  body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 18px 0 0; white-space: nowrap; }
+  body.mobile .logo { font-size: 1.45rem; }
+  .screen { padding: 8px 20px 10px; }
+  .screen > h2 { text-align: center; margin: 4px 0 18px; font-size: 1.25rem; }
+  .box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .box > h3 { margin: 0 0 4px; font-size: 1.1rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .ai-tag { font-size: .72rem; font-weight: 600; background: var(--accent); color: var(--text);
+    border-radius: 10px; padding: 1px 8px; }
+  .sub { margin: 0 0 12px; font-size: .9rem; color: var(--text-muted); }
+  /* i-ikon med infoboks */
+  .info { position: relative; display: inline-block; }
+  .info > button { font: inherit; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--primary);
+    background: var(--surface); color: var(--primary); font-weight: 700; font-size: .8rem; cursor: pointer; line-height: 1; padding: 0; }
+  .info > button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .info .tip { position: absolute; left: 50%; top: 32px; transform: translateX(-50%); width: 260px; z-index: 5;
+    background: var(--text); color: #fff; font-size: .85rem; font-weight: 400; border-radius: 14px; padding: 10px 12px;
+    box-shadow: var(--shadow); display: none; }
+  .info.open .tip { display: block; animation: pop .15s ease; }
+  @media (hover: hover) { .info:hover .tip { display: block; } }
+  /* gap-analyse */
+  .gap { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  body.mobile .gap { grid-template-columns: 1fr; }
+  .col { border-radius: 18px; padding: 14px; }
+  .col h4 { margin: 0 0 8px; font-size: 1rem; }
+  .col ul { margin: 0; padding: 0; list-style: none; }
+  .col li { padding: 6px 0; border-top: 1px solid rgba(0,0,0,.06); font-size: .93rem; }
+  .col li:first-child { border-top: none; }
+  .covers { background: var(--success-tint); }
+  .covers h4 { color: var(--success); }
+  .covers li::before { content: "✓ "; color: var(--success); font-weight: 700; }
+  .work { background: #FDEEE8; }
+  .work h4 { color: #8A3A20; }
+  .work li::before { content: "→ "; color: #8A3A20; font-weight: 700; }
+  /* nøkkelord */
+  .score { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .score strong { font-size: 1.6rem; color: var(--primary); }
+  .meter { height: 12px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .meter span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: 8px; transition: width 1s ease; }
+  .kwA { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border-radius: 16px; padding: 4px 12px; font-size: .9rem; border: 1px solid var(--border); }
+  .chip.hit { background: var(--success-tint); color: var(--success); border-color: var(--success); }
+  .chip.hit::before { content: "✓ "; font-weight: 700; }
+  .chip.miss { background: var(--surface); color: var(--text-muted); border-style: dashed; }
+  .chip.miss::before { content: "○ "; }
+  .kwB { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  body.mobile .kwB { grid-template-columns: 1fr; }
+  .kwB h4 { margin: 0 0 6px; font-size: .95rem; }
+  .kwB ul { margin: 0; padding-left: 0; list-style: none; font-size: .93rem; }
+  .kwB .hits li::before { content: "✓ "; color: var(--success); font-weight: 700; }
+  .kwB .misses li::before { content: "○ "; color: var(--text-muted); }
+  [hidden] { display: none !important; }
+  /* ATS */
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px; }
+  summary { cursor: pointer; font-weight: 700; color: var(--primary); list-style: none; display: flex; justify-content: space-between; gap: 8px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "▾"; transition: transform .2s ease; }
+  details[open] summary::after { transform: rotate(180deg); }
+  summary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 4px; border-radius: 6px; }
+  details p { margin: 10px 0 0; font-size: .93rem; }
+  /* knapper */
+  .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 6px 0 8px; }
+  .btn { font: inherit; border-radius: var(--radius); padding: 12px 20px; cursor: pointer; border: 2px solid var(--primary);
+    transition: transform .15s ease, box-shadow .15s ease; }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn:active { transform: scale(.96); }
+  .btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-contrast); font-weight: 600; }
+  .btn-secondary { background: var(--surface); color: var(--primary); }
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  .ki-note { font-size: .78rem; color: var(--text-muted); }
+  .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; }
+  @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Resultatsiden – skisse</h1>
+  <p>Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset. Prøv «i»-ikonene og ATS-forklaringen. Bytt mellom PC og mobil, og mellom de to måtene å vise nøkkelordene på.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+  <div class="switch">
+    <span>Nøkkelord:</span>
+    <button class="tbtn" id="kA" aria-pressed="true">A. Merkelapper</button>
+    <button class="tbtn" id="kB" aria-pressed="false">B. To lister</button>
+  </div>
+</header>
+<main>
+  <div class="frame">
+    <p class="logo">Søknadsassistenten</p>
+    <div class="screen">
+      <h2>Slik passer CV-en din til stillingen</h2>
+
+      <section class="box">
+        <h3>Gap-analyse
+          <span class="info"><button aria-label="Hva er en gap-analyse?" aria-expanded="false">i</button>
+            <span class="tip" role="tooltip">En KI-vurdering av hvilke krav i annonsen CV-en dekker, og hvilke du kan jobbe videre med.</span></span>
+          <span class="ai-tag">Laget av KI</span>
+        </h3>
+        <p class="sub">Kravene fra annonsen, sammenlignet med CV-en din.</p>
+        <div class="gap">
+          <div class="col covers">
+            <h4>Dette dekker CV-en din</h4>
+            <ul>
+              <li>Erfaring med pasientkontakt</li>
+              <li>Gode norskkunnskaper, muntlig og skriftlig</li>
+              <li>Kan jobbe helg</li>
+              <li>Påbegynt helsefaglig utdanning</li>
+            </ul>
+          </div>
+          <div class="col work">
+            <h4>Dette kan du jobbe videre med</h4>
+            <ul>
+              <li>Erfaring fra sykehus eller sykehjem</li>
+              <li>Kjennskap til journalsystemet DIPS</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="box">
+        <h3>Nøkkelordtreff
+          <span class="info"><button aria-label="Hva er nøkkelordtreff?" aria-expanded="false">i</button>
+            <span class="tip" role="tooltip">En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.</span></span>
+        </h3>
+        <div class="score"><strong>7 av 10 = 70 %</strong><span class="sub" style="margin:0">av nøkkelordene står i CV-en din</span></div>
+        <div class="meter" aria-hidden="true"><span id="bar"></span></div>
+
+        <div class="kwA" id="listA">
+          <span class="chip hit">pasientkontakt</span><span class="chip hit">sykepleie</span><span class="chip hit">helg</span>
+          <span class="chip hit">omsorg</span><span class="chip hit">teamarbeid</span><span class="chip hit">førstehjelp</span>
+          <span class="chip hit">norsk</span><span class="chip miss">DIPS</span><span class="chip miss">sykehjem</span><span class="chip miss">turnus</span>
+        </div>
+
+        <div class="kwB" id="listB" hidden>
+          <div><h4>Står i CV-en (7)</h4>
+            <ul class="hits"><li>pasientkontakt</li><li>sykepleie</li><li>helg</li><li>omsorg</li><li>teamarbeid</li><li>førstehjelp</li><li>norsk</li></ul></div>
+          <div><h4>Står ikke i CV-en (3)</h4>
+            <ul class="misses"><li>DIPS</li><li>sykehjem</li><li>turnus</li></ul></div>
+        </div>
+      </section>
+
+      <details>
+        <summary>Hva er ATS og hva betyr den for deg?</summary>
+        <p>Mange arbeidsgivere sender søknadene gjennom et ATS før et menneske leser dem. Et ATS er et dataprogram som blant annet ser etter ord fra annonsen.</p>
+        <p>Står flere av nøkkelordene i CV-en din, er det større sjanse for at den blir lest. Men prosenten over er bare en pekepinn, ikke en garanti.</p>
+      </details>
+
+      <div class="actions">
+        <button class="btn btn-secondary">Tilbake</button>
+        <button class="btn btn-primary">Lag søknadsbrevet mitt</button>
+      </div>
+    </div>
+    <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+  </div>
+</main>
+<script>
+  // PC / mobil
+  const pc = document.getElementById('pc'), mob = document.getElementById('mob');
+  function setMobile(m) {
+    document.body.classList.toggle('mobile', m);
+    pc.setAttribute('aria-pressed', String(!m)); mob.setAttribute('aria-pressed', String(m));
+  }
+  pc.onclick = () => setMobile(false); mob.onclick = () => setMobile(true);
+
+  // Nøkkelord A / B
+  const kA = document.getElementById('kA'), kB = document.getElementById('kB');
+  function setList(b) {
+    document.getElementById('listA').hidden = b; document.getElementById('listB').hidden = !b;
+    kA.setAttribute('aria-pressed', String(!b)); kB.setAttribute('aria-pressed', String(b));
+  }
+  kA.onclick = () => setList(false); kB.onclick = () => setList(true);
+
+  // i-ikon: trykk eller fokus åpner, Esc lukker
+  document.querySelectorAll('.info').forEach(info => {
+    const btn = info.querySelector('button');
+    const set = open => { info.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => set(!info.classList.contains('open')));
+    btn.addEventListener('focus', () => set(true));
+    btn.addEventListener('blur', () => set(false));
+    btn.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+  });
+
+  // Prosentlinjen fylles når siden åpnes
+  requestAnimationFrame(() => setTimeout(() => document.getElementById('bar').style.width = '70%', 150));
+</script>
+</body>
+</html>

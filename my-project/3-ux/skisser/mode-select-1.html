@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modusvalg – tre forslag</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3E9EC; color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 28px 16px 4px; }
+  header.page h1 { margin: 0; font-size: 1.5rem; }
+  header.page p { margin: 4px auto 0; color: var(--text-muted); max-width: 680px; }
+  .switch { display: flex; justify-content: center; gap: 8px; margin: 14px 0 0; }
+  main { display: grid; gap: 32px; padding: 20px 16px 40px; max-width: 1000px; margin: 0 auto; }
+  .variant > h2 { margin: 0 0 4px; font-size: 1.1rem; color: var(--primary); }
+  .variant > .hint { margin: 0 0 12px; font-size: .9rem; color: var(--text-muted); }
+  .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px;
+    box-shadow: var(--shadow); margin: 0 auto; width: 100%; transition: width .3s ease; overflow: hidden; }
+  body.mobile .frame { width: 375px; max-width: 100%; border: 10px solid #2b1d24; border-radius: 36px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 18px 0 0; white-space: nowrap; }
+  .screen { padding: 8px 20px 20px; }
+  .screen h3 { text-align: center; margin: 4px 0 18px; font-size: 1.2rem; }
+  .options { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  body.mobile .options { grid-template-columns: 1fr; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+  /* A: store kort med ikon */
+  .card { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius);
+    padding: 22px 18px; text-align: center; box-shadow: var(--shadow);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+  .card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 12px 30px rgba(162,62,108,.22); }
+  .card:active { transform: scale(.97); }
+  .card .icon { font-size: 2.4rem; display: block; margin-bottom: 6px; transition: transform .3s ease; }
+  .card:hover .icon { transform: rotate(-8deg) scale(1.1); }
+  .card .name { display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); }
+  .card .what { display: block; font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 2px 0 6px; }
+  .card .desc { display: block; font-size: .92rem; color: var(--text-muted); }
+  /* B: to store knapper */
+  .big { background: var(--primary); color: var(--primary-contrast); border: none; border-radius: var(--radius);
+    padding: 20px; font-size: 1.1rem; font-weight: 600; transition: transform .15s ease, box-shadow .15s ease; }
+  .big.alt { background: var(--surface); color: var(--primary); border: 2px solid var(--primary); }
+  .big:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .big:active { transform: scale(.96); }
+  .big small { display: block; font-weight: 400; font-size: .85rem; opacity: .9; margin-top: 2px; }
+  /* C: kort med «du trenger» */
+  .card2 { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius);
+    padding: 20px 18px; text-align: left; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 8px;
+    transition: transform .18s ease, border-color .18s ease; }
+  .card2:hover { transform: translateY(-4px); border-color: var(--primary); }
+  .card2:active { transform: scale(.97); }
+  .card2 .top { display: flex; align-items: center; gap: 10px; }
+  .card2 .icon { font-size: 1.8rem; }
+  .card2 .what { font-size: 1.15rem; font-weight: 700; color: var(--primary); display: block; }
+  .card2 .name { font-size: .8rem; color: var(--text-muted); display: block; }
+  .card2 .desc { font-size: .92rem; }
+  .card2 ul { margin: 0; padding: 10px 12px; list-style: none; background: var(--background); border-radius: 14px; font-size: .88rem; }
+  .card2 li::before { content: "📄 "; }
+  .card2 .go { margin-top: auto; align-self: flex-start; background: var(--primary); color: var(--primary-contrast);
+    border-radius: var(--radius); padding: 8px 16px; font-weight: 600; font-size: .92rem; }
+  .back { display: block; margin: 18px auto 0; background: none; border: none; color: var(--primary); text-decoration: underline; }
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  .ki-note { font-size: .78rem; color: var(--text-muted); }
+  .logout { font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 2px solid var(--primary); background: var(--surface); color: var(--primary); }
+  .tbtn { border-radius: var(--radius); padding: 8px 16px; border: 2px solid var(--primary); background: var(--surface); color: var(--primary); }
+  .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Modusvalg – tre forslag</h1>
+  <p>Siden som kommer etter «Begynn å lage søknad». Hold musa over og trykk. Bytt mellom PC og mobil med knappene under.</p>
+  <div class="switch">
+    <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+</header>
+<main>
+
+  <section class="variant">
+    <h2>A. To store kort med ikon</h2>
+    <p class="hint">Ikon, modusnavn, hva den gjør og en kort forklaring. Hele kortet er en knapp.</p>
+    <div class="frame">
+      <p class="logo">Søknadsassistenten</p>
+      <div class="screen">
+        <h3>Hva vil du gjøre i dag?</h3>
+        <div class="options">
+          <button class="card"><span class="icon" aria-hidden="true">✨</span>
+            <span class="name">Full generering</span><span class="what">Skriv nytt brev</span>
+            <span class="desc">Du legger inn CV-en og annonsen, så skriver vi et brev til deg.</span></button>
+          <button class="card"><span class="icon" aria-hidden="true">✏️</span>
+            <span class="name">Korrektur</span><span class="what">Forbedre mitt brev</span>
+            <span class="desc">Du har skrevet et brev selv. Vi forbedrer språket og beholder innholdet ditt.</span></button>
+        </div>
+      </div>
+      <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    </div>
+  </section>
+
+  <section class="variant">
+    <h2>B. To store knapper</h2>
+    <p class="hint">Enklest mulig: to knapper med navn og en kort undertekst. Ingen ikoner.</p>
+    <div class="frame">
+      <p class="logo">Søknadsassistenten</p>
+      <div class="screen">
+        <h3>Hva vil du gjøre i dag?</h3>
+        <div class="options">
+          <button class="big">Full generering – Skriv nytt brev<small>Vi skriver et brev ut fra CV-en og annonsen</small></button>
+          <button class="big alt">Korrektur – Forbedre mitt brev<small>Vi forbedrer brevet du har skrevet selv</small></button>
+        </div>
+      </div>
+      <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    </div>
+  </section>
+
+  <section class="variant">
+    <h2>C. Kort som viser hva du trenger</h2>
+    <p class="hint">Som A, men hvert kort viser også hvilke filer du må ha klare. Da vet brukeren hva som kommer på neste side.</p>
+    <div class="frame">
+      <p class="logo">Søknadsassistenten</p>
+      <div class="screen">
+        <h3>Hva vil du gjøre i dag?</h3>
+        <div class="options">
+          <button class="card2">
+            <span class="top"><span class="icon" aria-hidden="true">✨</span><span><span class="what">Skriv nytt brev</span><span class="name">Full generering</span></span></span>
+            <span class="desc">Vi skriver et brev til deg ut fra CV-en og annonsen.</span>
+            <ul><li>CV</li><li>Stillingsannonse</li></ul>
+            <span class="go">Velg</span>
+          </button>
+          <button class="card2">
+            <span class="top"><span class="icon" aria-hidden="true">✏️</span><span><span class="what">Forbedre mitt brev</span><span class="name">Korrektur</span></span></span>
+            <span class="desc">Vi forbedrer språket i brevet ditt og beholder innholdet.</span>
+            <ul><li>CV</li><li>Ditt eget søknadsbrev</li><li>Stillingsannonse</li></ul>
+            <span class="go">Velg</span>
+          </button>
+        </div>
+      </div>
+      <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    </div>
+  </section>
+
+</main>
+<script>
+  const pc = document.getElementById('pc'), mob = document.getElementById('mob');
+  function set(mobile) {
+    document.body.classList.toggle('mobile', mobile);
+    pc.setAttribute('aria-pressed', String(!mobile));
+    mob.setAttribute('aria-pressed', String(mobile));
+  }
+  pc.addEventListener('click', () => set(false));
+  mob.addEventListener('click', () => set(true));
+</script>
+</body>
+</html>

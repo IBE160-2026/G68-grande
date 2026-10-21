@@ -27,7 +27,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Brukerreise 1: Ingrid, Full generering
   - [x] Brukerreise 2: Eirik, Korrektur på mobil
   - [x] Brukerreise 3: Henrik, sensor og testmodus
-  - [ ] Skisser av modusvalget og resultatsiden, og ferdigstille DESIGN.md og EXPERIENCE.md
+  - [x] Skisser av modusvalget og resultatsiden
+  - [ ] Ferdigstille DESIGN.md og EXPERIENCE.md
 - [ ] Arkitektur
 - [ ] Epics og stories
 
