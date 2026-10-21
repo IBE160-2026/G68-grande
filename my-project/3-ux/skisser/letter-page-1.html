@@ -82,6 +82,9 @@
   .dots i:nth-child(3) { animation-delay: .3s; background: var(--accent); }
   .wait .big { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary); font-size: 1.5rem; margin: 0; }
   .wait .small { margin: 0; color: var(--text-muted); }
+  .kibox { background: #FBE6E8; border: 2px solid var(--error); color: var(--error); border-radius: 18px; padding: 12px 16px; margin: 10px auto 0; max-width: 720px; }
+  .kibox:focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .kibox strong { display: block; margin-bottom: 4px; }
   .toast { text-align: center; font-size: .85rem; color: var(--text-muted); margin: 6px 0 0; min-height: 1.3em; }
   [hidden] { display: none !important; }
   @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
@@ -107,12 +110,23 @@
     <button class="tbtn" id="tOff" aria-pressed="true">Av</button>
     <button class="tbtn" id="tOn" aria-pressed="false">På</button>
   </div>
+  <div class="switch">
+    <span>Svar fra KI ved «Nytt forslag»:</span>
+    <button class="tbtn kiopt" data-ki="ok" aria-pressed="true">Virker</button>
+    <button class="tbtn kiopt" data-ki="net" aria-pressed="false">Nettverksfeil</button>
+    <button class="tbtn kiopt" data-ki="other" aria-pressed="false">Annen feil</button>
+  </div>
 </header>
 <main>
   <div class="frame" id="frame">
     <div class="bar"><span class="badge" id="badge" hidden>Testmodus</span></div>
     <p class="logo">Søknadsassistenten</p>
     <div class="screen">
+      <div class="kibox" id="kibox" tabindex="-1" role="alert" hidden>
+        <strong id="kimsg"></strong>
+        <span>Brevet du hadde, er beholdt.</span>
+        <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
+      </div>
       <div class="hero"><canvas id="fx" aria-hidden="true"></canvas><h2 id="title">Din ferdigstilte søknad!</h2></div>
       <div class="legend" id="legend" hidden><p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p></div>
       <article class="letter" id="letter"></article>
@@ -216,10 +230,25 @@
   // Nytt forslag: bekreftelse → venting → nytt brev + fyrverkeri
   $('again').onclick = () => { lastBtn = $('again'); open('newDialog', 'noNew'); };
   $('noNew').onclick = () => close('newDialog');
-  $('yesNew').onclick = () => {
-    close('newDialog'); $('again').disabled = true; $('wait').hidden = false;
-    setTimeout(() => { $('wait').hidden = true; $('again').disabled = false; version++; render(); $('title').focus?.(); }, 3000);
-  };
+  let ki = 'ok';
+  function makeNew() {
+    $('kibox').hidden = true; $('again').disabled = true; $('wait').hidden = false;
+    setTimeout(() => {
+      $('wait').hidden = true; $('again').disabled = false;
+      if (ki === 'ok') { version++; render(); return; }
+      // FR-28: KI-feil – det gamle brevet beholdes
+      $('kimsg').textContent = ki === 'net' ? 'Nettverksfeil, sjekk nettverkstilgangen.' : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.';
+      $('kibox').hidden = false;
+      $('frame').scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      $('kibox').focus({ preventScroll: true });
+    }, 3000);
+  }
+  $('yesNew').onclick = () => { close('newDialog'); makeNew(); };
+  $('retry').onclick = makeNew;
+  document.querySelectorAll('.kiopt').forEach(b => b.onclick = () => {
+    ki = b.dataset.ki;
+    document.querySelectorAll('.kiopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  });
 
   function open(id, focusId) { $(id).hidden = false; $(focusId).focus(); }
   function close(id) { $(id).hidden = true; if (lastBtn) lastBtn.focus(); }

@@ -100,7 +100,7 @@
 <header class="page">
   <h1>Innleggingssiden – skisse</h1>
   <p>Prøv å laste opp en fil (velg hvilken som helst), lime inn tekst og tømme med søppelbøtta. Trykk «Sjekk CV-en min» med tomme felt for å se feilboksen.
-    Filnavn som ikke slutter på <code>.pdf</code> gir «Feil filtype». Filnavn med <code>skannet</code> gir feilen for uleselig PDF. I testmodus virker bare filnavn som begynner med <code>test</code>.</p>
+    Filnavn som ikke slutter på <code>.pdf</code> gir «Feil filtype». Filnavn med <code>skannet</code> gir feilen for uleselig PDF, og filnavn med <code>stor</code> gir «Filen er for stor». Med «Svar fra KI» kan du prøve feilmeldingene når KI-en ikke svarer. I testmodus virker bare filnavn som begynner med <code>test</code>.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
@@ -113,6 +113,12 @@
     <button class="tbtn" id="tOff" aria-pressed="true">Av</button>
     <button class="tbtn" id="tOn" aria-pressed="false">På</button>
   </div>
+  <div class="switch">
+    <span>Svar fra KI:</span>
+    <button class="tbtn kiopt" data-ki="ok" aria-pressed="true">Virker</button>
+    <button class="tbtn kiopt" data-ki="net" aria-pressed="false">Nettverksfeil</button>
+    <button class="tbtn kiopt" data-ki="other" aria-pressed="false">Annen feil</button>
+  </div>
 </header>
 <main>
   <div class="frame" id="frame">
@@ -124,6 +130,12 @@
       <div class="errbox" id="errbox" tabindex="-1" role="alert" hidden>
         <strong>Noe må fikses før du kan gå videre:</strong>
         <ul id="errlist"></ul>
+      </div>
+
+      <div class="errbox" id="kibox" tabindex="-1" role="alert" hidden>
+        <strong id="kimsg"></strong>
+        <span>Det du har lagt inn, er ikke borte.</span>
+        <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
       </div>
 
       <p class="testhint" id="testhint" hidden>🧪 Testmodus: bruk filene i mappen <code>testdata/</code> i prosjektet.</p>
@@ -204,12 +216,14 @@
       let msg = '';
       if (!s || (s.type === 'text' && !s.value.trim())) msg = `${n}: Fyll inn feltet. Last opp en PDF eller lim inn tekst.`;
       else if (s.type === 'file' && !/\.pdf$/i.test(s.name)) msg = `${n}: Feil filtype, prøv PDF.`;
+      else if (s.type === 'file' && /stor/i.test(s.name)) msg = `${n}: Filen er for stor. Den kan være på høyst [grensen bestemmes i arkitekturen] MB.`;
       else if (s.type === 'file' && /skannet/i.test(s.name)) msg = `${n}: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.`;
       else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen testdata/.`;
       document.getElementById('f-' + id).classList.toggle('bad', !!msg);
       if (msg) errs.push(msg);
     });
     if (errs.length) {
+      $('kibox').hidden = true;
       $('errlist').innerHTML = errs.map(e => `<li>${e}</li>`).join('');
       $('errbox').hidden = false;
       $('frame').scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
@@ -217,10 +231,31 @@
       return;
     }
     $('errbox').hidden = true;
+    run();
+  };
+
+  // KI-kall: venting, og så enten resultat eller KI-feil (FR-27, FR-28)
+  let ki = 'ok';
+  function run() {
+    $('kibox').hidden = true;
     $('check').disabled = true;     // FR-27: kan ikke trykkes på nytt mens man venter
     $('wait').hidden = false;
-    setTimeout(() => { $('wait').hidden = true; $('check').disabled = false; alert('Ferdig! Du kommer nå til resultatsiden.'); }, 3500);
-  };
+    setTimeout(() => {
+      $('wait').hidden = true; $('check').disabled = false;
+      if (ki === 'ok') { alert('Ferdig! Du kommer nå til resultatsiden.'); return; }
+      $('kimsg').textContent = ki === 'net'
+        ? 'Nettverksfeil, sjekk nettverkstilgangen.'
+        : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.';
+      $('kibox').hidden = false;
+      $('frame').scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      $('kibox').focus({ preventScroll: true });
+    }, 3000);
+  }
+  $('retry').onclick = run;
+  document.querySelectorAll('.kiopt').forEach(b => b.onclick = () => {
+    ki = b.dataset.ki;
+    document.querySelectorAll('.kiopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  });
 
   $('pc').onclick = () => { document.body.classList.remove('mobile'); setPressed($('pc'), $('mob'), true); };
   $('mob').onclick = () => { document.body.classList.add('mobile'); setPressed($('pc'), $('mob'), false); };

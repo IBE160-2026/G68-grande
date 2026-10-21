@@ -71,6 +71,10 @@
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
   </div>
+  <div class="switch">
+    <button class="tbtn" id="sNormal" aria-pressed="true">Åpner siden vanlig</button>
+    <button class="tbtn" id="sBlocked" aria-pressed="false">Prøvde å gå til en annen side uten å være logget inn</button>
+  </div>
 </header>
 <main>
 
@@ -80,7 +84,8 @@
       <p class="logo">Søknadsassistenten</p>
       <form id="login" novalidate>
         <h3>Logg inn</h3>
-        <div class="formerr" role="alert">Feil e-post eller passord</div>
+        <div class="formerr" id="mustlogin" role="alert">Du må logge inn først</div>
+        <div class="formerr" id="wrongpw" role="alert">Feil e-post eller passord</div>
         <div class="field" data-name="e-post">
           <label for="le">E-post</label>
           <input id="le" type="email" autocomplete="email" aria-describedby="le-err">
@@ -136,6 +141,15 @@
   }
   pc.onclick = () => setMobile(false); mob.onclick = () => setMobile(true);
 
+  // FR-7: kom fra en side som krever innlogging
+  const sN = document.getElementById('sNormal'), sB = document.getElementById('sBlocked');
+  function setBlocked(b) {
+    sN.setAttribute('aria-pressed', String(!b)); sB.setAttribute('aria-pressed', String(b));
+    document.getElementById('mustlogin').classList.toggle('show', b);
+    document.getElementById('wrongpw').classList.remove('show');
+  }
+  sN.onclick = () => setBlocked(false); sB.onclick = () => setBlocked(true);
+
   function setErr(input, msg) {
     const f = input.closest('.field');
     f.classList.toggle('bad', !!msg);
@@ -146,8 +160,9 @@
   document.getElementById('login').addEventListener('submit', e => {
     e.preventDefault();
     const em = document.getElementById('le'), pw = document.getElementById('lp');
-    const box = e.target.querySelector('.formerr');
+    const box = document.getElementById('wrongpw');
     box.classList.remove('show');
+    document.getElementById('mustlogin').classList.remove('show');
     setErr(em, em.value.trim() ? '' : 'Fyll inn e-post');
     setErr(pw, pw.value ? '' : 'Fyll inn passord');
     const first = e.target.querySelector('.bad input');

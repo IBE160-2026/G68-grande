@@ -101,6 +101,20 @@
   .ki-note { font-size: .78rem; color: var(--text-muted); }
   .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
     border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; }
+  .frame { position: relative; }
+  .kibox { background: #FBE6E8; border: 2px solid #B4232F; color: #B4232F; border-radius: 18px; padding: 12px 16px; margin-bottom: 16px; }
+  .kibox:focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .kibox strong { display: block; margin-bottom: 4px; }
+  .btn[disabled] { opacity: .55; cursor: wait; transform: none; box-shadow: none; }
+  .wait { position: absolute; inset: 0; background: rgba(255, 247, 245, .94); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 20px; z-index: 10; border-radius: inherit; }
+  .dots { display: flex; gap: 10px; }
+  .dots i { width: 16px; height: 16px; border-radius: 50%; background: var(--primary); animation: hop 1s ease-in-out infinite; }
+  .dots i:nth-child(2) { animation-delay: .15s; background: #C0618C; }
+  .dots i:nth-child(3) { animation-delay: .3s; background: var(--accent); }
+  .wait .big { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary); font-size: 1.5rem; margin: 0; }
+  .wait .small { margin: 0; color: var(--text-muted); }
+  @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
   @keyframes pop { from { opacity: 0; } to { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -120,12 +134,24 @@
     <button class="tbtn" id="kA" aria-pressed="true">A. Merkelapper</button>
     <button class="tbtn" id="kB" aria-pressed="false">B. To lister</button>
   </div>
+  <div class="switch">
+    <span>Svar fra KI når brevet lages:</span>
+    <button class="tbtn kiopt" data-ki="ok" aria-pressed="true">Virker</button>
+    <button class="tbtn kiopt" data-ki="net" aria-pressed="false">Nettverksfeil</button>
+    <button class="tbtn kiopt" data-ki="other" aria-pressed="false">Annen feil</button>
+  </div>
 </header>
 <main>
   <div class="frame">
     <p class="logo">Søknadsassistenten</p>
     <div class="screen">
       <h2>Slik passer CV-en din til stillingen</h2>
+
+      <div class="kibox" id="kibox" tabindex="-1" role="alert" hidden>
+        <strong id="kimsg"></strong>
+        <span>Resultatet og det du har lagt inn, er ikke borte.</span>
+        <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
+      </div>
 
       <section class="box">
         <h3>Gap-analyse
@@ -184,10 +210,15 @@
 
       <div class="actions">
         <button class="btn btn-secondary">Tilbake</button>
-        <button class="btn btn-primary">Lag søknadsbrevet mitt</button>
+        <button class="btn btn-primary" id="make">Lag søknadsbrevet mitt</button>
       </div>
     </div>
     <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
+    <div class="wait" id="wait" hidden role="status" aria-live="polite">
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="big">På vei mot ny jobb</p>
+      <p class="small">Vi lager brevet ditt – det tar noen sekunder.</p>
+    </div>
   </div>
 </main>
 <script>
@@ -215,6 +246,30 @@
     btn.addEventListener('focus', () => set(true));
     btn.addEventListener('blur', () => set(false));
     btn.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+  });
+
+  // Lag brevet: venting, og så enten brevsiden eller KI-feil (FR-27, FR-28)
+  let ki = 'ok';
+  const frame = document.querySelector('.frame');
+  function run() {
+    document.getElementById('kibox').hidden = true;
+    document.getElementById('make').disabled = true;
+    document.getElementById('wait').hidden = false;
+    setTimeout(() => {
+      document.getElementById('wait').hidden = true; document.getElementById('make').disabled = false;
+      if (ki === 'ok') { alert('Ferdig! Du kommer nå til brevsiden.'); return; }
+      document.getElementById('kimsg').textContent = ki === 'net'
+        ? 'Nettverksfeil, sjekk nettverkstilgangen.' : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.';
+      document.getElementById('kibox').hidden = false;
+      document.getElementById('kibox').scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      document.getElementById('kibox').focus({ preventScroll: true });
+    }, 3000);
+  }
+  document.getElementById('make').onclick = run;
+  document.getElementById('retry').onclick = run;
+  document.querySelectorAll('.kiopt').forEach(b => b.onclick = () => {
+    ki = b.dataset.ki;
+    document.querySelectorAll('.kiopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   });
 
   // Prosentlinjen fylles når siden åpnes

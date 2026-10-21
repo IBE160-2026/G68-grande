@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T21:32
+updated: 2026-10-21T21:43
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -115,3 +115,9 @@ updated: 2026-10-21T21:32
 - (decision) Bekreftelsen ved «Nytt forslag» er et vindu med «Vil du ha et nytt forslag?» og «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.», og knappene «Ja, lag nytt forslag» og «Avbryt». Esc og Avbryt lukker vinduet.
 - (decision) Etter nedlasting vises filnavnet under nedlastingsknappene, for eksempel «Filnavn: Soknad_Sykehuset_2026-10-21.docx».
 - (decision) Brevsiden er godkjent slik den er i skissen. Nå har alle sidene en skisse på PC og mobil.
+- (decision) De tre feilene som manglet, legges inn i skissene: KI-feil (FR-28), for stor fil (FR-12) og «Du må logge inn først» (FR-7).
+- (decision) For stor fil (FR-12) vises i feilboksen øverst på innleggingssiden, sammen med de andre feilene, for eksempel «CV: Filen er for stor. Den kan være på høyst X MB.». Tallet bestemmes i arkitekturen.
+- (decision) «Du må logge inn først» (FR-7) vises i en rød boks over innloggingsskjemaet, på samme måte som «Feil e-post eller passord».
+- (assumption) KI-feil (FR-28) vises i en rød boks øverst på siden man sto på (innleggingen, resultatsiden eller brevsiden), med en «Prøv igjen»-knapp. Siden hopper opp til boksen. Tekstene er «Nettverksfeil, sjekk nettverkstilgangen.» og «Noe gikk galt hos KI-tjenesten. Prøv på nytt.». Det brukeren har lagt inn, er ikke borte. Hvis «Nytt forslag» feiler, beholdes det gamle brevet.
+- (decision) KI-feil (FR-28) er bekreftet slik de står i skissene: rød boks øverst på siden man sto på, med «Prøv igjen», tekstene «Nettverksfeil, sjekk nettverkstilgangen.» og «Noe gikk galt hos KI-tjenesten. Prøv på nytt.», og en tekst om at ingenting er borte. Feiler «Nytt forslag», beholdes det gamle brevet.
+- (event) Alle sidene og alle feilmeldingene i PRD-en har nå skisse på PC og mobil. Klar for ferdigstilling.
