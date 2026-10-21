@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-21T21:43
+updated: 2026-10-21T22:24
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -121,3 +121,21 @@ updated: 2026-10-21T21:43
 - (assumption) KI-feil (FR-28) vises i en rød boks øverst på siden man sto på (innleggingen, resultatsiden eller brevsiden), med en «Prøv igjen»-knapp. Siden hopper opp til boksen. Tekstene er «Nettverksfeil, sjekk nettverkstilgangen.» og «Noe gikk galt hos KI-tjenesten. Prøv på nytt.». Det brukeren har lagt inn, er ikke borte. Hvis «Nytt forslag» feiler, beholdes det gamle brevet.
 - (decision) KI-feil (FR-28) er bekreftet slik de står i skissene: rød boks øverst på siden man sto på, med «Prøv igjen», tekstene «Nettverksfeil, sjekk nettverkstilgangen.» og «Noe gikk galt hos KI-tjenesten. Prøv på nytt.», og en tekst om at ingenting er borte. Feiler «Nytt forslag», beholdes det gamle brevet.
 - (event) Alle sidene og alle feilmeldingene i PRD-en har nå skisse på PC og mobil. Klar for ferdigstilling.
+- (event) Ferdigstilling runde 1: DESIGN.md og EXPERIENCE.md er skrevet ut fra memloggen og skissene. Hjelperen fant 9 hull og 10 antakelser. Brukerreisene i EXPERIENCE.md er rettet til stegene slik Kristine bekreftet dem i samtalen (reise 1: 9 steg, reise 2: 8 steg, reise 3: 9 steg).
+- (decision) FR-18 (gap-analysen og nøkkelordtreffet kan si hverandre imot): en kort linje mellom de to boksene på resultatsiden: «Gap-analysen og nøkkelordtreffet kan si litt forskjellig. Gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.»
+- (decision) Bruddpunkt: under 700 px står ting under hverandre (modusvalg, gap-analyse, nøkkelordlister, innleggingsfelt). Fra 700 px og oppover står de side om side, også på nettbrett (768 px, NFR-7). Det lages ingen egen nettbrettskisse.
+- (event) Rammen rundt skrivefelt (#EED7DD) har bare 1,4:1 kontrast mot hvit, men WCAG AA krever 3:1 (NFR-6). Laget .working/border-contrast-1.html som sammenligner #EED7DD, #B98A9C, #A77C8D (forslag), #8E6A79 og #A23E6C.
+- (decision) Skrivefelt, tekstbokser og avkrysningsbokser får ramme i hovedfargen #A23E6C (6,6:1 mot hvit) i stedet for #EED7DD. Kort og bokser beholder den lyse rammen #EED7DD, som bare er pynt. Kristine valgte hovedfargen fremfor forslaget #A77C8D etter å ha sett sammenligningen.
+- (decision) Testmodus-bryteren: sporet er grått (text-muted #6E5560) når bryteren er av, og lilla (primary) når den er på. Grunn: #EED7DD var for svak kontrast (NFR-6).
+- (decision) Samtykket må krysses av på nytt hver gang man kommer til startsiden, også i samme økt (via Tilbake fra modusvalget eller «Lag ny søknad»).
+- (decision) Logg ut før nedlasting: trykker man «Logg ut» på brevsiden før brevet er lastet ned, kommer vinduet «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» med [Logg ut] og [Avbryt].
+- (decision) Nettleserens egen tilbakeknapp: UX bestemmer ikke hva den gjør. Det overlates til arkitekturen.
+- (decision) Tomme lister på resultatsiden: tom «Dette dekker CV-en din» → «CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med.»; tom «Dette kan du jobbe videre med» → «Bra jobbet! CV-en din dekker alle kravene i annonsen. 🎉»; tom «Står i CV-en (0)» → «Ingen av nøkkelordene står i CV-en ennå.»; tom «Står ikke i CV-en (0)» → «Alle nøkkelordene står i CV-en din!».
+- (change) Feilmeldingen for uleselig PDF (FR-11) er teksten fra skissen: «<Felt>: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» Prefikset er feltnavnet (CV, Ditt søknadsbrev, Stillingsannonse). Den erstatter teksten fra tidligere i loggen.
+- (change) Baloo 2 brukes i logoen og i «På vei mot ny jobb» i ventetegnet, ikke bare i logoen.
+- (decision) Feil e-post eller passord (FR-3): bare den røde boksen over skjemaet, ingen rød ramme på feltene. Grunn: nettsiden vet ikke hvilket felt som er feil, og det er tryggere ikke å si det. Avviker fra addendum, som nevnte rød ramme.
+- (decision) KI-merknaden og «Logg ut» står i en rad festet til bunnen av skjermen og synes hele tiden, også når man ruller (FR-35). Siden får luft nederst, så raden ikke dekker innhold på mobil.
+- (decision) Hjelpeteksten for testdata får ingen 🧪 foran.
+- (decision) Kristine bekrefter alle de sju gjenstående antakelsene: Tilbake til modusvalget beholder CV og annonse; Logg ut fører til innloggingen; «Passordene er ikke like»; modusvalget har overskriften «Hva vil du gjøre i dag?»; et ubrukelig KI-svar gir «Noe gikk galt hos KI-tjenesten. Prøv på nytt.»; regelen for filnavn; skjermlesertekstene «Tøm CV-feltet», «Tøm brevfeltet» og «Tøm annonsefeltet».
+- (assumption) Ikke til hinder for UX: om Baloo 2 lastes fra Google Fonts eller ligger lokalt, avgjøres i arkitekturen.
+- (event) Pause 2026-10-21 etter runde 2 av ferdigstillingen. Neste gang: runde 3, kritisk gjennomgang (Kristine vil ha den, anbefalt A sjekkliste + C sensor-blikk, eventuelt B tilgjengelighet). Så oppdateres skissene med endringene fra runde 2, de flyttes til mockups/, og så kommer språkvask og status final.

@@ -18,8 +18,10 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`prd-memlog.md`](2-prd/prd-memlog.md) | Beslutningslogg for PRD-en: hva som ble bestemt og endret, og hvorfor |
 | [`gjennomganger/`](2-prd/gjennomganger/) | Gjennomgangene av PRD-en: kildesjekk mot brief og tilbakemeldinger, kritisk gjennomgang, og gjennomgang av struktur og språk |
 | **`3-ux/`** (under arbeid) | |
+| [`DESIGN.md`](3-ux/DESIGN.md) | Hvordan nettsiden ser ut: farger, skrift, former, knapper og bevegelse (utkast) |
+| [`EXPERIENCE.md`](3-ux/EXPERIENCE.md) | Hvordan nettsiden virker: sidene, tekstene, feilmeldingene, tilgjengelighet og de tre brukerreisene (utkast) |
 | [`ux-memlog.md`](3-ux/ux-memlog.md) | Beslutningslogg for UX: hvordan nettsiden skal se ut og fungere, og hvorfor |
-| [`skisser/`](3-ux/skisser/) | Forslag til farger og logoskrift som jeg valgte mellom (åpnes i nettleseren) |
+| [`skisser/`](3-ux/skisser/) | Skisser av alle sidene på PC og mobil, og forslagene jeg valgte mellom (åpnes i nettleseren) |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |

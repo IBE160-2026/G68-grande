@@ -28,8 +28,16 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Brukerreise 2: Eirik, Korrektur på mobil
   - [x] Brukerreise 3: Henrik, sensor og testmodus
   - [x] Skisser av modusvalget og resultatsiden
+  - [x] Skisser av alle sidene, på PC og mobil
   - [ ] Ferdigstille DESIGN.md og EXPERIENCE.md
+    - [x] Runde 1: dokumentene skrevet ut fra beslutningsloggen og skissene
+    - [x] Runde 2: hull, motsigelser og antakelser gått gjennom
+    - [ ] Runde 3: kritisk gjennomgang (A sjekkliste + C sensor-blikk, eventuelt B tilgjengelighet)
+    - [ ] Oppdatere skissene med endringene fra runde 2 (FR-18-linjen, rammefarge, bryter, tomme lister, logg ut-vindu, fast rad nederst, tekst for skannet PDF, ingen 🧪)
+    - [ ] Språkvask og sette dokumentene til ferdig (`status: final`)
 - [ ] Arkitektur
+  - [ ] Bestemme om logoskriften Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet
+  - [ ] Bestemme hva nettleserens egen tilbakeknapp gjør midt i en søknad
 - [ ] Epics og stories
 
 ## Før innlevering

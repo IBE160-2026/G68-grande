@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rammefarge – sammenligning</title>
+<style>
+  :root { --primary: #A23E6C; --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --focus-ring: #3B5BDB; --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--background); color: var(--text); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header { text-align: center; padding: 28px 16px 8px; }
+  header h1 { margin: 0; font-size: 1.5rem; }
+  header p { margin: 4px auto 0; color: var(--text-muted); max-width: 680px; }
+  main { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1200px; margin: 0 auto; padding: 16px; }
+  .opt { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .opt h2 { margin: 0 0 2px; font-size: 1.05rem; color: var(--primary); }
+  .meta { margin: 0 0 14px; font-size: .88rem; color: var(--text-muted); }
+  .ok { color: #2F7A57; font-weight: 700; } .no { color: #B4232F; font-weight: 700; }
+  .swatch { display: inline-block; width: 18px; height: 18px; border-radius: 5px; vertical-align: -4px; margin-right: 6px; }
+  label { display: block; font-weight: 600; font-size: .92rem; margin: 10px 0 4px; }
+  input, textarea { font: inherit; width: 100%; padding: 10px 12px; border: 2px solid var(--b); border-radius: 13px; background: var(--surface); color: var(--text); }
+  textarea { min-height: 70px; resize: vertical; }
+  input:focus-visible, textarea:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+  .check { display: flex; gap: 10px; align-items: center; margin-top: 12px; font-weight: 600; }
+  .box { width: 22px; height: 22px; border: 2px solid var(--b); border-radius: 5px; background: var(--surface); flex-shrink: 0; }
+  .rec { outline: 3px solid var(--primary); outline-offset: 3px; }
+  .tag { display: inline-block; background: #F6B8A0; border-radius: 10px; padding: 0 8px; font-size: .75rem; font-weight: 700; margin-left: 6px; color: var(--text); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Rammefarge på skrivefelt – sammenligning</h1>
+  <p>Kortet rundt hvert forslag har fortsatt den lyse rammen (#EED7DD). Bare skrivefeltene og avkrysningsboksen bytter farge. Kravet er minst 3:1 mot hvit.</p>
+</header>
+<main>
+  <section class="opt" style="--b:#EED7DD">
+    <h2><span class="swatch" style="background:#EED7DD"></span>Nå: #EED7DD</h2>
+    <p class="meta">Kontrast 1,4:1 <span class="no">✗ for svak</span></p>
+    <label>E-post</label><input placeholder="ingrid@student.no">
+    <label>Lim inn teksten her</label><textarea></textarea>
+    <div class="check"><span class="box"></span>Jeg samtykker til bruk av KI</div>
+  </section>
+
+  <section class="opt" style="--b:#B98A9C">
+    <h2><span class="swatch" style="background:#B98A9C"></span>#B98A9C</h2>
+    <p class="meta">Kontrast 2,9:1 <span class="no">✗ litt for svak</span></p>
+    <label>E-post</label><input placeholder="ingrid@student.no">
+    <label>Lim inn teksten her</label><textarea></textarea>
+    <div class="check"><span class="box"></span>Jeg samtykker til bruk av KI</div>
+  </section>
+
+  <section class="opt rec" style="--b:#A77C8D">
+    <h2><span class="swatch" style="background:#A77C8D"></span>#A77C8D <span class="tag">Mitt forslag</span></h2>
+    <p class="meta">Kontrast 3,6:1 <span class="ok">✓ godkjent</span></p>
+    <label>E-post</label><input placeholder="ingrid@student.no">
+    <label>Lim inn teksten her</label><textarea></textarea>
+    <div class="check"><span class="box"></span>Jeg samtykker til bruk av KI</div>
+  </section>
+
+  <section class="opt" style="--b:#8E6A79">
+    <h2><span class="swatch" style="background:#8E6A79"></span>#8E6A79</h2>
+    <p class="meta">Kontrast 4,7:1 <span class="ok">✓ godkjent, tydeligere</span></p>
+    <label>E-post</label><input placeholder="ingrid@student.no">
+    <label>Lim inn teksten her</label><textarea></textarea>
+    <div class="check"><span class="box"></span>Jeg samtykker til bruk av KI</div>
+  </section>
+
+  <section class="opt" style="--b:#A23E6C">
+    <h2><span class="swatch" style="background:#A23E6C"></span>#A23E6C (hovedfargen)</h2>
+    <p class="meta">Kontrast 6,6:1 <span class="ok">✓ godkjent, men sterk</span></p>
+    <label>E-post</label><input placeholder="ingrid@student.no">
+    <label>Lim inn teksten her</label><textarea></textarea>
+    <div class="check"><span class="box"></span>Jeg samtykker til bruk av KI</div>
+  </section>
+</main>
+</body>
+</html>
