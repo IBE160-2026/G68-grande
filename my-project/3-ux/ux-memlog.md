@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-20T22:34
+updated: 2026-10-21T20:20
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -54,3 +54,9 @@ updated: 2026-10-20T22:34
 - (decision) Fyrverkeri: rundt overskriften «Din ferdigstilte søknad!» i 2–3 sekunder når siden åpnes, og hver gang et nytt forslag er skrevet. Det dekker ikke brevet, blinker ikke mer enn tre ganger i sekundet og hoppes over ved prefers-reduced-motion.
 - (decision) Etter nedlasting åpnes et vindu: «Brevet er lastet ned! Vil du lage en ny søknad eller logge ut?» med valgene startsiden og logg ut (FR-31).
 - (decision) Vinduet etter nedlasting har tre valg: lage ny søknad (startsiden), logg ut og «Bli her». «Bli her» lukker vinduet, slik at brukeren kan laste ned det andre formatet også.
+- (event) Pause 2026-10-20 etter brukerreise 1. Neste gang: Kristine bekrefter stegene 1–9, så kommer reise 2 (Korrektur, mobil) og reise 3 (sensor, testmodus).
+- (event) Laget .working/download-options-1.html med tre måter å laste ned både Word og PDF på: A vindu etter hver nedlasting (slik det er bestemt nå), B melding på siden, C valgene står alltid under brevet.
+- (decision) Nedlasting: forslag A (vindu etter hver nedlasting med Ny søknad, Logg ut og Bli her) beholdes. Fra B tas grønn hake med: knappen blir grønn og viser «✓ Lastet ned som Word/PDF» etter nedlasting, slik at det er lett å se hvilket format som mangler.
+- (event) Oppdaterte A i download-options-1.html med grønn hake og de faste hjørnene (logg ut nede til høyre, KI-merknad nede til venstre). De manglet i første versjon av skissen, men var allerede bestemt.
+- (decision) Brukerreise 1: Kristine bekrefter stegene 1–9.
+- (decision) Høydepunktet i reise 1 er steg 8, når brevet vises med fyrverkeri rundt «Din ferdigstilte søknad!». Steg 7 (Ingrid ser at CV-en passer med annonsen) er et viktig steg på veien, men ikke høydepunktet.

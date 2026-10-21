@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nedlasting – tre forslag</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #A23E6C; --primary-contrast: #FFFFFF; --accent: #F6B8A0;
+    --background: #FFF7F5; --surface: #FFFFFF; --text: #3A2530; --text-muted: #6E5560;
+    --border: #EED7DD; --success: #2F7A57; --success-tint: #E4F3EB; --focus-ring: #3B5BDB;
+    --radius: 26px; --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--background); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif; line-height: 1.5; }
+  header.page { text-align: center; padding: 32px 16px 8px; }
+  header.page h1 { margin: 0; font-size: 1.6rem; }
+  header.page p { margin: 4px 0 0; color: var(--text-muted); }
+  main { max-width: 1200px; margin: 0 auto; padding: 16px; display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .variant { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 20px; position: relative; overflow: hidden; }
+  .variant > h2 { margin: 0 0 4px; font-size: 1.15rem; color: var(--primary); }
+  .variant > .hint { margin: 0 0 16px; font-size: .9rem; color: var(--text-muted); }
+  .screen { background: var(--background); border-radius: 18px; padding: 16px; position: relative; min-height: 420px; }
+  .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
+    text-align: center; font-size: 1.3rem; margin: 0 0 8px; }
+  .screen h3 { text-align: center; margin: 0 0 12px; font-size: 1.05rem; }
+  .letter { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+  .letter span { display: block; height: 8px; background: var(--border); border-radius: 4px; margin: 6px 0; }
+  .letter span:nth-child(3n) { width: 70%; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  button { font: inherit; border-radius: var(--radius); padding: 10px 16px; cursor: pointer;
+    border: 2px solid var(--primary); transition: transform .15s ease, box-shadow .15s ease; }
+  button:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  button:active { transform: scale(.96); }
+  button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-contrast); }
+  .btn-secondary { background: var(--surface); color: var(--primary); }
+  .btn-link { background: none; border: none; color: var(--primary); text-decoration: underline; padding: 6px; }
+  .btn-done { background: var(--success-tint); color: var(--success); border-color: var(--success); }
+  /* A: vindu */
+  .overlay { position: absolute; inset: 0; background: rgba(58, 37, 48, .45); border-radius: 18px;
+    display: none; align-items: center; justify-content: center; padding: 16px; }
+  .overlay.open { display: flex; }
+  .dialog { background: var(--surface); border-radius: var(--radius); padding: 20px; text-align: center;
+    box-shadow: var(--shadow); animation: pop .2s ease; }
+  .dialog p { margin: 0 0 12px; font-weight: 600; }
+  #A .screen { padding-bottom: 64px; }
+  .corners { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex;
+    justify-content: space-between; align-items: center; gap: 8px; }
+  .ki-note { font-size: .8rem; color: var(--text-muted); }
+  .logout { padding: 6px 14px; font-size: .9rem; }
+  /* B: melding */
+  .notice { display: none; background: var(--success-tint); color: var(--success); border: 1px solid var(--success);
+    border-radius: 18px; padding: 10px 12px; margin-top: 14px; text-align: center; animation: slide .25s ease; }
+  .notice.show { display: block; }
+  .notice strong { display: block; margin-bottom: 6px; }
+  .notice .row { margin-top: 0; }
+  .notice button { padding: 6px 12px; }
+  /* C */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0 4px; }
+  .small { text-align: center; color: var(--text-muted); font-size: .85rem; margin: 8px 0 0; }
+  .toast { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); background: var(--text);
+    color: #fff; padding: 6px 12px; border-radius: 12px; font-size: .85rem; display: none; }
+  .toast.show { display: block; }
+  .reset { margin-top: 12px; font-size: .85rem; }
+  @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes slide { from { transform: translateY(-6px); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>Nedlasting av brevet – tre forslag</h1>
+  <p>Trykk på knappene og prøv selv. «Start på nytt» nullstiller hvert forslag.</p>
+</header>
+<main>
+
+  <!-- A -->
+  <section class="variant" id="A">
+    <h2>A. Vindu etter hver nedlasting (oppdatert)</h2>
+    <p class="hint">Med grønn hake fra B, og med logg ut nede til høyre og KI-merknaden nede til venstre, slik de står på alle sider. Vil du ha begge formatene, trykker du «Bli her».</p>
+    <div class="screen">
+      <p class="logo">Søknadsassistenten</p>
+      <h3>Din ferdigstilte søknad!</h3>
+      <div class="letter"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="row">
+        <button class="btn-primary" data-a="Word">Last ned som Word</button>
+        <button class="btn-primary" data-a="PDF">Last ned som PDF</button>
+      </div>
+      <div class="row"><button class="btn-link">Nytt forslag</button></div>
+      <div class="corners">
+        <span class="ki-note">ⓘ Teksten behandles av ekstern KI</span>
+        <button class="btn-secondary logout">Logg ut</button>
+      </div>
+      <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="a-title">
+        <div class="dialog">
+          <p id="a-title">Brevet er lastet ned! Vil du lage en ny søknad eller logge ut?</p>
+          <div class="row">
+            <button class="btn-primary">Lag ny søknad</button>
+            <button class="btn-secondary">Logg ut</button>
+            <button class="btn-link" data-close>Bli her</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-link reset" data-reset="A">Start på nytt</button>
+  </section>
+
+  <!-- B -->
+  <section class="variant" id="B">
+    <h2>B. Melding på siden</h2>
+    <p class="hint">En grønn melding dukker opp under knappene. Ingenting stopper deg fra å laste ned det andre formatet.</p>
+    <div class="screen">
+      <p class="logo">Søknadsassistenten</p>
+      <h3>Din ferdigstilte søknad!</h3>
+      <div class="letter"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="row">
+        <button class="btn-primary" data-b="Word">Last ned som Word</button>
+        <button class="btn-primary" data-b="PDF">Last ned som PDF</button>
+      </div>
+      <div class="notice" role="status" aria-live="polite">
+        <strong>✅ Brevet er lastet ned!</strong>
+        <div class="row">
+          <button class="btn-primary">Lag ny søknad</button>
+          <button class="btn-secondary">Logg ut</button>
+        </div>
+      </div>
+      <div class="row"><button class="btn-link">Nytt forslag</button></div>
+    </div>
+    <button class="btn-link reset" data-reset="B">Start på nytt</button>
+  </section>
+
+  <!-- C -->
+  <section class="variant" id="C">
+    <h2>C. Valgene står alltid under brevet</h2>
+    <p class="hint">Ingen vindu og ingen melding. Knappen får en hake når formatet er lastet ned.</p>
+    <div class="screen">
+      <p class="logo">Søknadsassistenten</p>
+      <h3>Din ferdigstilte søknad!</h3>
+      <div class="letter"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="row">
+        <button class="btn-primary" data-c="Word">Last ned som Word</button>
+        <button class="btn-primary" data-c="PDF">Last ned som PDF</button>
+      </div>
+      <div class="row"><button class="btn-link">Nytt forslag</button></div>
+      <hr class="divider">
+      <p class="small">Ferdig?</p>
+      <div class="row">
+        <button class="btn-secondary">Lag ny søknad</button>
+        <button class="btn-secondary">Logg ut</button>
+      </div>
+      <div class="toast" role="status" aria-live="polite"></div>
+    </div>
+    <button class="btn-link reset" data-reset="C">Start på nytt</button>
+  </section>
+
+</main>
+<script>
+  // A: vindu etter hver nedlasting
+  const A = document.getElementById('A');
+  const overlay = A.querySelector('.overlay');
+  A.querySelectorAll('[data-a]').forEach(b => b.addEventListener('click', () => {
+    b.textContent = '✓ Lastet ned som ' + b.dataset.a;
+    b.className = 'btn-done';
+    overlay.classList.add('open');
+    overlay.querySelector('[data-close]').focus();
+  }));
+  overlay.querySelector('[data-close]').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+
+  // B: melding på siden
+  const B = document.getElementById('B');
+  B.querySelectorAll('[data-b]').forEach(b => b.addEventListener('click', () => {
+    b.textContent = '✓ Lastet ned som ' + b.dataset.b;
+    b.className = 'btn-done';
+    B.querySelector('.notice').classList.add('show');
+  }));
+
+  // C: valgene står alltid der
+  const C = document.getElementById('C');
+  const toast = C.querySelector('.toast');
+  C.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
+    b.textContent = '✓ Lastet ned som ' + b.dataset.c;
+    b.className = 'btn-done';
+    toast.textContent = 'Filen er lagret i Nedlastinger';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }));
+
+  // Start på nytt
+  const original = {};
+  ['A', 'B', 'C'].forEach(id => original[id] = document.getElementById(id).innerHTML);
+  document.addEventListener('click', e => {
+    const id = e.target.dataset && e.target.dataset.reset;
+    if (id) location.reload();
+  });
+</script>
+</body>
+</html>
