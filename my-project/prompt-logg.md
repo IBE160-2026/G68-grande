@@ -239,3 +239,19 @@ Verktøy: Claude Code med BMAD-skillen `bmad-ux`. Alle beslutninger er logget i 
 | 148 | «om testmodusknappen, ja det er greit, hull 4) b , 5) a» / «hull 6) kan du ha byttet om de to nederste? hull 7) b» / «ja det gir mening» | Samtykket krysses av på nytt hver gang, og man får en advarsel ved utlogging før nedlasting. Tekster for tomme lister. KI-en forklarte hvorfor tekstene ikke var byttet om |
 | 149 | «1b, 2b, 3a, 4b, 5b» / «ok på alle» | Fem motsigelser mellom loggen og skissene er løst, og sju antakelser er bekreftet |
 | 150 | «jeg synes vi skal gjøre det, men det blir i morgen, jeg ønsker at du legger inn punktet med baloo2 skriften på to do listen, deretter comitte alt vi har gjort i dag, og push alt til github med de loggene vi skal ha med» | Baloo 2 og nettleserens tilbakeknapp står på TO DO-lista under Arkitektur. Committet og pushet med beslutningslogg, prompt-logg, utkast og skisser. Den kritiske gjennomgangen tas i morgen |
+
+## 2026-10-22 – UX, del 3: kritisk gjennomgang (runde 3) (pågår)
+
+Verktøy: Claude Code med BMAD-skillen `bmad-ux`. Tre hjelpere leste dokumentene hver for seg: A sjekkliste, B tilgjengelighet og C sensor-blikk. Rapportene og den samlede rapporten ligger i `3-ux/gjennomganger/`. Alle beslutningene er logget i `3-ux/ux-memlog.md`.
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 151 | «A+B+C» | Tre hjelpere gikk gjennom DESIGN.md og EXPERIENCE.md. Ingen kritiske funn, 9 høye, 21 middels og 33 lave. Rundt ti av dem var det samme funnet sett av flere |
+| 152 | «A» / «jeg skjønner ikke hva alle disse tingene er» / «enig» | Jeg ba om forklaring på hver ting før jeg bestemte meg. Pynten fikk en kutteliste i tre nivåer, og bygges etter kjerneflyten |
+| 153 | «1» / «1) ja, 2) a» | Korrektur: KI-en svarer med par av ny og gammel setning. Fjernede setninger nevnes under brevet. Alt det man legger inn, sjekkes når man trykker «Sjekk CV-en min» |
+| 154 | «ja» / «ja er enig, men hvordan åpner jeg den linken i chrome?» / «det funker både med tab og med å legge musa over» / «funker det og» | Vinduene, den faste raden, ventetegnet og «i»-boksen virker med tastatur og skjermleser. Jeg testet «i»-boksen selv i Chrome, og den virket, selv om to hjelpere mente at den hadde en feil |
+| 155 | «ja det funker for meg så lenge det ser likt ut som nå i vanlig størrelse så er jeg fornøyd» | Siden skal virke ved 320 px og 200 % zoom, men se lik ut ved vanlig størrelse |
+| 156 | «Vi lager brevet ditt - det kan ta en liten stund» / «Vil se dem først» / «alle er fine» / «E-posten er ikke gyldig» | Jeg skrev min egen ventetekst og valgte den korte e-postteksten. Jeg ville se de seks fargene fra skissene før jeg godkjente dem. Startsiden starter alltid en ny søknad, og feltene står side om side først fra 1000 px |
+| 157 | «ja den husker at du var i testmodus når du kommer tilbake til startsiden» / «etter innlogging kommer du alltid til startsiden» | Testmodus-bryteren husker valget så lenge man er logget inn. Etter innlogging kommer man til startsiden |
+| 158 | «ja den er fin, men den inneholder jo kun info fra i dag» / «A» | `3-ux/mine-valg-og-ki-feil.md` er laget for UX. En samlet fil for hele prosjektet lages før innlevering |
+| 159 | «jeg vil se dem før jeg godkjenner dem» / «jeg må si jeg ikke helt skjønner hva jeg leser på her» / «ja til alt» | Jeg ville se presiseringene før jeg godkjente dem. KI-en skilte ut de to som endrer det man ser, og jeg godtok alle |

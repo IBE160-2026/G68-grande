@@ -22,6 +22,8 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`EXPERIENCE.md`](3-ux/EXPERIENCE.md) | Hvordan nettsiden virker: sidene, tekstene, feilmeldingene, tilgjengelighet og de tre brukerreisene (utkast) |
 | [`ux-memlog.md`](3-ux/ux-memlog.md) | Beslutningslogg for UX: hvordan nettsiden skal se ut og fungere, og hvorfor |
 | [`skisser/`](3-ux/skisser/) | Skisser av alle sidene på PC og mobil, og forslagene jeg valgte mellom (åpnes i nettleseren) |
+| [`gjennomganger/`](3-ux/gjennomganger/) | Den kritiske gjennomgangen av UX: sjekkliste, tilgjengelighet og sensor-blikk, og en samlet rapport (`validation-report.html`) |
+| [`mine-valg-og-ki-feil.md`](3-ux/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i UX, og hvilke KI-feil jeg fant |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |

@@ -32,8 +32,9 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] Ferdigstille DESIGN.md og EXPERIENCE.md
     - [x] Runde 1: dokumentene skrevet ut fra beslutningsloggen og skissene
     - [x] Runde 2: hull, motsigelser og antakelser gått gjennom
-    - [ ] Runde 3: kritisk gjennomgang (A sjekkliste + C sensor-blikk, eventuelt B tilgjengelighet)
+    - [x] Runde 3: kritisk gjennomgang (A sjekkliste + B tilgjengelighet + C sensor-blikk), alle funn bestemt og lagt inn i dokumentene
     - [ ] Oppdatere skissene med endringene fra runde 2 (FR-18-linjen, rammefarge, bryter, tomme lister, logg ut-vindu, fast rad nederst, tekst for skannet PDF, ingen 🧪)
+    - [ ] Oppdatere skissene med endringene fra runde 3 (resultatsiden i Korrektur, feiltekst under feltet, filnavn i vinduet, ny ventetekst, felt side om side fra 1000 px, «1 setning er fjernet», ekte `@media` og prøve 768 px)
     - [ ] Språkvask og sette dokumentene til ferdig (`status: final`)
 - [ ] Arkitektur
   - [ ] Bestemme om logoskriften Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet
@@ -49,3 +50,4 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Før innlevering
 
 - [ ] Lage en kort prompt-logg med de viktigste valgene for hele prosjektet, til sensor (den lange loggen beholdes)
+  - Ta med `3-ux/mine-valg-og-ki-feil.md` (UX er ferdig der), og legg til brief, PRD, arkitektur og koding
