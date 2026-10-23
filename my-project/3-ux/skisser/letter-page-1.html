@@ -142,7 +142,7 @@
       <div class="kibox" id="kibox" tabindex="-1" hidden>
         <strong id="kimsg"></strong>
         <span id="kisub">Brevet du hadde, er beholdt.</span>
-        <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
+        <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv på nytt</button></div>
       </div>
       <div class="hero"><canvas id="fx" aria-hidden="true"></canvas><h2 id="title" tabindex="-1">Din ferdigstilte søknad!</h2></div>
       <div class="legend" id="legend" hidden><p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p></div>
@@ -261,7 +261,7 @@
   function download(b) {
     lastFmt = b;
     if (fileFails) {   // filen kan ikke lages: rød boks øverst, brevet er ikke borte
-      showErr('Vi klarte ikke å lage filen. Prøv igjen.', 'Brevet er ikke borte.', () => download(b)); return;
+      showErr('Vi klarte ikke å lage filen. Prøv på nytt.', 'Brevet er ikke borte.', () => download(b)); return;
     }
     $('kibox').hidden = true;
     b.className = 'btn btn-done'; b.textContent = '✓ Lastet ned som ' + b.dataset.fmt;

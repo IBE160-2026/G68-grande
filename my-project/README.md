@@ -17,12 +17,12 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`addendum.md`](2-prd/addendum.md) | Notater til UX og arkitektur som kom fram under PRD-arbeidet, for eksempel plassering av knapper |
 | [`prd-memlog.md`](2-prd/prd-memlog.md) | Beslutningslogg for PRD-en: hva som ble bestemt og endret, og hvorfor |
 | [`gjennomganger/`](2-prd/gjennomganger/) | Gjennomgangene av PRD-en: kildesjekk mot brief og tilbakemeldinger, kritisk gjennomgang, og gjennomgang av struktur og språk |
-| **`3-ux/`** (under arbeid) | |
-| [`DESIGN.md`](3-ux/DESIGN.md) | Hvordan nettsiden ser ut: farger, skrift, former, knapper og bevegelse (utkast) |
-| [`EXPERIENCE.md`](3-ux/EXPERIENCE.md) | Hvordan nettsiden virker: sidene, tekstene, feilmeldingene, tilgjengelighet og de tre brukerreisene (utkast) |
+| **`3-ux/`** | |
+| [`DESIGN.md`](3-ux/DESIGN.md) | Hvordan nettsiden ser ut: farger, skrift, former, knapper og bevegelse |
+| [`EXPERIENCE.md`](3-ux/EXPERIENCE.md) | Hvordan nettsiden virker: sidene, tekstene, feilmeldingene, tilgjengelighet og de tre brukerreisene |
 | [`ux-memlog.md`](3-ux/ux-memlog.md) | Beslutningslogg for UX: hvordan nettsiden skal se ut og fungere, og hvorfor |
-| [`skisser/`](3-ux/skisser/) | Skisser av alle sidene på PC og mobil, og forslagene jeg valgte mellom (åpnes i nettleseren) |
-| [`gjennomganger/`](3-ux/gjennomganger/) | Den kritiske gjennomgangen av UX: sjekkliste, tilgjengelighet og sensor-blikk, og en samlet rapport (`validation-report.html`) |
+| [`skisser/`](3-ux/skisser/) | Skisser av alle sidene på PC, nettbrett og mobil, og forslagene jeg valgte mellom (åpnes i nettleseren) |
+| [`gjennomganger/`](3-ux/gjennomganger/) | Den kritiske gjennomgangen av UX: sjekkliste, tilgjengelighet og sensor-blikk, en samlet rapport (`validation-report.html`) og språkvasken (`review-struktur-og-sprak.md`) |
 | [`mine-valg-og-ki-feil.md`](3-ux/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i UX, og hvilke KI-feil jeg fant |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |

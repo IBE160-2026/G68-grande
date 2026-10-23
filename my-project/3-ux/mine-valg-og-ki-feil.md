@@ -13,6 +13,7 @@ En kort oversikt over hva jeg bestemte selv i UX-arbeidet, og hvilke feil jeg fa
 7. **Personopplysninger er brukerens valg.** Samtykket anbefaler å fjerne personopplysninger fra CV-en, men det skal ikke være et krav. (122)
 8. **Kutteliste for pynten.** Fyrverkeri, animasjoner og ekstra vinduer bygges sist og kuttes først hvis tiden blir knapp. Kjerneflyten og testene kommer først. (152)
 9. **Egne tekster.** Venteteksten «Vi lager brevet ditt – det kan ta en liten stund.» er min egen. Jeg valgte også «E-posten er ikke gyldig» fremfor teksten KI-en foreslo. (156)
+10. **Fargene fra skissene.** Seks farger kom fra skissene og ikke fra fargetemaet. Jeg ville se dem slik de brukes før jeg godkjente dem, og godkjente dem i runde 3. (156)
 
 ## KI-feil jeg fant
 

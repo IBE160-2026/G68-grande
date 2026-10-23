@@ -22,20 +22,20 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Etter PRD-en
 
 - [ ] Prøve branch og pull request én gang med Claude før kodingen starter (for eksempel en liten endring i README)
-- [ ] UX (skisser av modusvalget og resultatsiden, se addendum)
+- [x] UX (skisser av modusvalget og resultatsiden, se addendum)
   - [x] Utseende: farger (Myk fersken), former, bevegelse, skrift og logo
   - [x] Brukerreise 1: Ingrid, Full generering
   - [x] Brukerreise 2: Eirik, Korrektur på mobil
   - [x] Brukerreise 3: Henrik, sensor og testmodus
   - [x] Skisser av modusvalget og resultatsiden
   - [x] Skisser av alle sidene, på PC og mobil
-  - [ ] Ferdigstille DESIGN.md og EXPERIENCE.md
+  - [x] Ferdigstille DESIGN.md og EXPERIENCE.md
     - [x] Runde 1: dokumentene skrevet ut fra beslutningsloggen og skissene
     - [x] Runde 2: hull, motsigelser og antakelser gått gjennom
     - [x] Runde 3: kritisk gjennomgang (A sjekkliste + B tilgjengelighet + C sensor-blikk), alle funn bestemt og lagt inn i dokumentene
     - [x] Oppdatere skissene med endringene fra runde 2 (FR-18-linjen, rammefarge, bryter, tomme lister, logg ut-vindu, fast rad nederst, tekst for skannet PDF, ingen 🧪)
     - [x] Oppdatere skissene med endringene fra runde 3 (resultatsiden i Korrektur, feiltekst under feltet, filnavn i vinduet, ny ventetekst, felt side om side fra 1000 px, «1 setning er fjernet», ekte `@media` og prøve 768 px)
-    - [ ] Språkvask og sette dokumentene til ferdig (`status: final`)
+    - [x] Språkvask og sette dokumentene til ferdig (`status: final`)
 - [ ] Arkitektur
   - [ ] Bestemme om logoskriften Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet
   - [ ] Bestemme hva nettleserens egen tilbakeknapp gjør midt i en søknad

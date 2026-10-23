@@ -1,9 +1,9 @@
 ---
 name: Søknadsassistenten
 description: Nettside som hjelper studenter å skrive søknadsbrev. Fargetema «Myk fersken», systemskrift, runde hjørner og små animasjoner. Bare lys modus.
-status: draft
+status: final
 created: 2026-10-20
-updated: 2026-10-22
+updated: 2026-10-23
 sources:
   - ../../prds/prd-kode-prosjekt-2026-10-09/prd.md
   - ../../prds/prd-kode-prosjekt-2026-10-09/addendum.md
@@ -282,39 +282,55 @@ Fargetemaet heter «Myk fersken». Det ble valgt fordi det er «så lunt». Alle
 - **Dempet plomme (`{colors.text-muted}` #6E5560)** er hjelpetekst, ingress, KI-merknaden og den gamle setningen i Korrektur. Den er også sporet i testmodus-bryteren når bryteren er av.
 - **Lys rosa (`{colors.border}` #EED7DD)** er rammer og sporet i prosentlinjen.
 - **Grønn (`{colors.success}` / `{colors.success-tint}`)** betyr «dette er bra» eller «ferdig»: «Dette dekker CV-en din», nøkkelord som står i CV-en, filnavnet etter opplasting, endrede setninger i Korrektur og knappen «✓ Lastet ned som …».
+- **`{colors.changed-active}`** (#CFEBDC): endret setning når man holder over den, eller når den er åpnet.
+- **`{colors.work-on}` / `{colors.work-on-tint}`** (#8A3A20 på #FDEEE8): lista «Dette kan du jobbe videre med». Varm, ikke rød, fordi det ikke er en feil.
 - **Rød (`{colors.error}` / `{colors.error-tint}`)** brukes bare til feil: røde rammer, feiltekst og feilboksene.
 - **Blå (`{colors.focus-ring}` #3B5BDB)** er fokusringen for tastatur. Den er blå med vilje, så den skiller seg fra bringebær og rød.
-
-Farger fra skissene, godkjent av Kristine i runde 3:
-
-- **`{colors.work-on}` / `{colors.work-on-tint}`** (#8A3A20 på #FDEEE8): lista «Dette kan du jobbe videre med». Varm, ikke rød, fordi det ikke er en feil.
-- **`{colors.changed-active}`** (#CFEBDC): endret setning når man holder over den eller den er åpnet.
 - **`{colors.dot-middle}`** (#C0618C): den midterste ventetegn-prikken.
 - **`{colors.fireworks-gold}`** (#F2C14E): én av fem fyrverkeri-farger (de andre er primary, accent, dot-middle og success).
 
-Kontrast (WCAG AA, regnet ut): text-muted på background 6,3:1 · error på error-tint 5,5:1 · success på success-tint 4,5:1 · work-on på work-on-tint 6,9:1 · text på accent 8,3:1 · hvit på text 14,1:1 · focus-ring på background 5,4:1 · primary på background 5,8:1 (lenker) · error på surface 6,5:1 · text-muted på surface 6,7:1 (også bryteren når den er av) · focus-ring på surface 5,7:1 · primary på border 4,47:1 (prosentlinjen, bare pynt).
+work-on, work-on-tint, changed-active, dot-middle og fireworks-gold (og error-tint) kom fra skissene. Kristine så dem i `mockups/sketch-colors-1.html` og godkjente dem i runde 3.
+
+### Kontrast
+
+Kontrast (WCAG AA, regnet ut):
+
+| Farge | Mot | Kontrast | Merknad |
+|---|---|---|---|
+| text-muted | background | 6,3:1 | |
+| error | error-tint | 5,5:1 | |
+| success | success-tint | 4,5:1 | |
+| work-on | work-on-tint | 6,9:1 | |
+| text | accent | 8,3:1 | |
+| hvit | text | 14,1:1 | |
+| focus-ring | background | 5,4:1 | |
+| primary | background | 5,8:1 | lenker |
+| error | surface | 6,5:1 | |
+| text-muted | surface | 6,7:1 | også bryteren når den er av |
+| focus-ring | surface | 5,7:1 | |
+| primary | border | 4,47:1 | prosentlinjen, bare pynt |
 
 Låste knapper (55 % synlig) og den låste bryteren (60 % synlig) har bevisst lavere kontrast, ca. 2,6:1 og 2,7:1. WCAG krever ikke kontrast for låste knapper, og teksten «Mangler API-nøkkel, se README» forklarer den låste bryteren.
 
-success på success-tint (4,5:1) har ingen margin. Ikke gjør den grønne teksten lysere eller bakgrunnen mørkere.
+`{colors.success}` på `{colors.success-tint}` (4,5:1) har ingen margin. Ikke gjør den grønne teksten lysere eller bakgrunnen mørkere.
 
-Fokusringen har alltid 2 px luft. Uten luft er kontrasten mot en bringebær knapp bare 1,1:1.
+Fokusringen har alltid 2 px luft. Uten luft er kontrasten mot en bringebærfarget knapp bare 1,1:1.
 
-Skrivefelt, tekstbokser og avkrysningsbokser har ramme i `{colors.primary}` (6,1:1 mot hvit), fordi `{colors.border}` bare har 1,4:1 og WCAG AA krever 3:1 for rammer rundt felt (NFR-6). Kort og bokser beholder den lyse `{colors.border}`, fordi rammen der bare er pynt. Sammenligningen ligger i `mockups/border-contrast-1.html`.
+Tekstfelt, tekstbokser og avkrysningsbokser har ramme i `{colors.primary}` (6,1:1 mot hvit), fordi `{colors.border}` bare har 1,4:1 og WCAG AA krever 3:1 for rammer rundt felt (NFR-6). Kort og bokser beholder den lyse `{colors.border}`, fordi rammen der bare er pynt. Sammenligningen ligger i `mockups/border-contrast-1.html`.
+
+→ Fargene fra skissene slik de brukes: `mockups/sketch-colors-1.html`. Rammefargene: `mockups/border-contrast-1.html`.
 
 ## Typography
 
-Systemskrift på hele siden: Segoe UI på Windows, San Francisco på Mac, osv. Ingen nettskrift. Grunn: «enkel og grei».
+Systemskrift på hele siden: Segoe UI på Windows, San Francisco på Mac osv. Ingen nettskrift. Grunn: «enkel og grei».
 
-Unntakene er **logoen «Søknadsassistenten»** og **«På vei mot ny jobb» i ventetegnet**. Begge står i **Baloo 2 ExtraBold (800)**. Hele ordet skal stå på én linje både på PC og på mobil (375 px), ved vanlig tekststørrelse. Derfor skalerer størrelsen med skjermbredden: `{typography.logo.fontSize}` (skissene bruker 1,45rem på 375 px). Logoen står øverst og sentrert på alle sider.
+Unntakene er **logoen «Søknadsassistenten»** og **«På vei mot ny jobb» i ventetegnet**. Begge står i **Baloo 2 ExtraBold (800)**. Hele logoen skal stå på én linje både på PC og på mobil (375 px), ved vanlig tekststørrelse. Derfor skalerer størrelsen med skjermbredden: `{typography.logo.fontSize}` (skissene bruker 1,45rem på 375 px). Logoen står øverst og sentrert på alle sider.
 
-Blir teksten større enn det er plass til (for eksempel ved 200 % zoom), får logoen og ingressen på startsiden bryte linjen. Ingen `nowrap` på tekst. Ved vanlig tekststørrelse skal alt se ut akkurat som nå.
+Blir teksten større enn det er plass til (for eksempel ved 200 % zoom), får logoen og ingressen på startsiden bryte linjen. Ingen `nowrap` på tekst. Ved vanlig tekststørrelse skal alt se ut akkurat som i skissene.
 
-«På vei mot ny jobb» står i Baloo 2 ExtraBold, ca. 1,5rem, i `{colors.primary}`, slik i skissene (`{typography.wait-title}`). Det gjør ventetegnet mer levende.
+«På vei mot ny jobb» står i Baloo 2 ExtraBold, ca. 1,5rem, i `{colors.primary}`, som i skissene (`{typography.wait-title}`). Det gjør ventetegnet mer levende.
 
 Om Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet, avgjøres i arkitekturen. Lastes den ikke, brukes systemskriften.
-
-→ Logoskrift: `mockups/logo-fonts-1.html` (Baloo 2 er valgt).
 
 | Rolle | Token | Brukes til |
 |---|---|---|
@@ -334,9 +350,15 @@ Om Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet, avgjøres 
 
 Hvilket overskriftsnivå (h1–h3) hver rolle har, står i `EXPERIENCE.md` under Accessibility Floor.
 
+→ Logoskrift: `mockups/logo-fonts-1.html` (Baloo 2 er valgt).
+
 ## Layout & Spacing
 
-Skalaen er 4 / 8 / 12 / 16 / 20 / 24 / 32 px (`{spacing.1}`–`{spacing.7}`). Tallene er hentet fra skissene. Verdier utenfor skalaene (`spacing` og `rounded`) rundes til nærmeste token, for eksempel 13 → 14 px, 12 og 10 → 14 px og 26 × 30 → 24 × 32 px.
+Skalaen er 4 / 8 / 12 / 16 / 20 / 24 / 32 px (`{spacing.1}`–`{spacing.7}`). Tallene er hentet fra skissene. Verdier utenfor skalaen rundes til nærmeste token, for eksempel 26 × 30 → 24 × 32 px. Hvordan hjørnene er rundet av, står under Shapes.
+
+**Bruddpunkt: 700 px.** Under 700 px står alt under hverandre. Fra 700 px og oppover står ting side om side, også på nettbrett (768 px). Det er ingen egen nettbrettskisse, men skissene har en knapp for nettbrett (768 px).
+
+**Unntak: innleggingsfeltene står side om side først fra 1000 px.** Under 1000 px står de under hverandre, også på nettbrett (768 px). 700 px gjelder fortsatt for modusvalget, gap-analysen og nøkkelordlistene.
 
 - Innholdet er sentrert. Brevet er høyst 720 px bredt. Skjemaene på innlogging og registrering er høyst 360 px brede.
 - Sidemarg: `{spacing.page-side}` på PC, `{spacing.page-side-mobile}` på mobil.
@@ -345,11 +367,7 @@ Skalaen er 4 / 8 / 12 / 16 / 20 / 24 / 32 px (`{spacing.1}`–`{spacing.7}`). Ta
 - Ingen side skal rulle sidelengs ved 375, 768 og 1280 px (NFR-7). Siden skal også virke ved 320 px bredde og 200 % zoom uten rulling sidelengs (WCAG 1.4.10).
 - Ingen faste høyder på knapper, merkelapper eller bokser med tekst.
 
-**Bruddpunkt: 700 px.** Under 700 px står alt under hverandre. Fra 700 px og oppover står ting side om side, også på nettbrett (768 px). Det er ingen egen nettbrettskisse.
-
-**Unntak: innleggingsfeltene står side om side først fra 1000 px.** Under 1000 px står de under hverandre, også på nettbrett (768 px). 700 px gjelder fortsatt for modusvalget, gap-analysen og nøkkelordlistene.
-
-→ Oppsett per side: `mockups/login-register-1.html`, `mockups/start-page-1.html`, `mockups/mode-select-1.html` (variant A), `mockups/input-page-1.html`, `mockups/result-page-1.html` (nøkkelord variant B), `mockups/letter-page-1.html`.
+→ Oppsett per side: `mockups/login-register-1.html`, `mockups/start-page-1.html`, `mockups/mode-select-1.html`, `mockups/input-page-1.html`, `mockups/result-page-1.html`, `mockups/letter-page-1.html`. Skissene har knapper for PC, nettbrett (768 px) og mobil (375 px), og oppsettet følger den ekte bredden.
 
 ## Elevation & Depth
 
@@ -362,7 +380,7 @@ Dybde kommer fra en **myk, farget skygge**: `0 8px 24px rgba(162, 62, 108, 0.14)
 
 ### Bevegelse
 
-Visuelle regler. Når og hvorfor ting beveger seg, står i `EXPERIENCE.md`. Fyrverkeriet, prosentlinjen som fylles og ikonet som vipper kuttes først hvis tiden blir knapp (se UX-kuttliste i `EXPERIENCE.md`).
+Visuelle regler. Når og hvorfor ting beveger seg, står i `EXPERIENCE.md`. Fyrverkeriet, prosentlinjen som fylles og ikonet på modus-kortet som vipper, kuttes først hvis tiden blir knapp (se UX-kuttliste i `EXPERIENCE.md`).
 
 | Hva | Bevegelse |
 |---|---|
@@ -375,13 +393,13 @@ Visuelle regler. Når og hvorfor ting beveger seg, står i `EXPERIENCE.md`. Fyrv
 | Prosentlinjen | Fylles fra 0 til Z % på 1 s når resultatsiden åpnes. |
 | Vinduer, «i»-boks, filnavn etter opplasting | Toner inn på 0,15–0,2 s. |
 | ATS-pila (▾) | Snur seg 180° når forklaringen åpnes. |
-| Fyrverkeri | Rundt overskriften på brevsiden, ca. 2,5 s (utbrudd i ca. 2,2 s, borte etter ca. 3,2 s). Høyst 3 utbrudd i sekundet. Utbruddene kommer på venstre og høyre side av overskriften, ligger bak teksten og dekker aldri brevet. Ingen blinking mer enn tre ganger i sekundet. |
+| Fyrverkeri | Rundt overskriften på brevsiden. Nye utbrudd i ca. 2,2 s, og alt er borte etter ca. 3,2 s. Høyst 3 utbrudd i sekundet. Utbruddene kommer på venstre og høyre side av overskriften, ligger bak teksten og dekker aldri brevet. Ingen blinking mer enn tre ganger i sekundet. |
 
 **Redusert bevegelse:** Ved `prefers-reduced-motion: reduce` slås *alle* animasjoner og overganger av. Fyrverkeriet vises ikke, prosentlinjen står ferdig fylt, prikkene står stille.
 
 ## Shapes
 
-Runde, myke former fra tema «Myk fersken».
+Runde, myke former fra temaet «Myk fersken».
 
 - `{rounded.lg}` (26 px): knapper, kort, felt, skjemaer, vinduer, ATS-forklaringen.
 - `{rounded.md}` (18 px): feilboksen, gap-listene, brevet, forklaringen i Korrektur.
@@ -393,34 +411,54 @@ Runde, myke former fra tema «Myk fersken».
 
 Atferd (hva som skjer når man trykker) står i `EXPERIENCE.md` under Component Patterns.
 
-- **Hovedknapp (`button-primary`)** — `{colors.primary}` fylt, hvit tekst, `{rounded.lg}` hjørner. «Logg inn», «Registrer deg», «Sjekk CV-en min», «Lag søknadsbrevet mitt», «Last ned som Word/PDF», «Last opp PDF», «Prøv igjen», «Ja, lag nytt forslag», «Lag ny søknad». Låst knapp: 55 % synlig, ingen bevegelse.
-- **Sekundærknapp (`button-secondary`)** — hvit med bringebær ramme og tekst. «Tilbake», «Lim inn tekst», «Avbryt», «Logg ut».
+### Knapper
+
+- **Hovedknapp (`button-primary`)** — `{colors.primary}` fylt, hvit tekst, `{rounded.lg}` hjørner. «Logg inn», «Registrer deg», «Sjekk CV-en min», «Lag søknadsbrevet mitt», «Last ned som Word/PDF», «Last opp PDF», «Prøv på nytt», «Ja, lag nytt forslag», «Lag ny søknad». Låst knapp: 55 % synlig, ingen bevegelse.
+- **Sekundærknapp (`button-secondary`)** — hvit med bringebærfarget ramme og tekst. «Tilbake», «Lim inn tekst», «Avbryt», «Logg ut».
 - **Stor knapp (`button-hero`)** — «Begynn å lage søknad». Den største knappen på startsiden. På PC ca. 1,5 ganger vanlig skrift med god luft (`{components.button-hero.padding}`). På mobil 1,25rem og hele bredden.
 - **Nedlastet-knapp (`button-done`)** — nedlastingsknappen etter nedlasting: grønn, med «✓ Lastet ned som Word» / «✓ Lastet ned som PDF».
-- **Lenkeknapp (`link-button`)** — understreket bringebær tekst uten ramme. «Nytt forslag», «Bli her», «Registrer deg her», «Logg inn».
-- **Modus-kort (`mode-card`)** — hvitt kort med stort ikon (✨ eller ✏️, 2,4rem), modusnavnet med små store bokstaver i `{colors.text-muted}` («FULL GENERERING»), handlingen i fet bringebær 1,25rem («Skriv nytt brev») og en kort forklaring. Hele kortet er en knapp.
-- **Tekstfelt (`text-input`)** — etikett over feltet, ramme `{colors.primary}`, rød ramme ved feil, feiltekst i `{colors.error}` fet under feltet. Hjelpetekst («Minst 8 tegn») i `{colors.text-muted}`.
+- **Lenkeknapp (`link-button`)** — understreket bringebærfarget tekst uten ramme. «Nytt forslag», «Bli her», «Registrer deg her», «Logg inn».
+- **Modus-kort (`mode-card`)** — hvitt kort med stort ikon (✨ eller ✏️, 2,4rem), modusnavnet med små store bokstaver i `{colors.text-muted}` («FULL GENERERING»), handlingen i fet, bringebærfarget 1,25rem («Skriv nytt brev») og en kort forklaring. Hele kortet er en knapp.
+
+### Skjema og felt
+
+- **Tekstfelt (`text-input`)** — etikett over feltet, ramme `{colors.primary}`, rød ramme ved feil, fet feiltekst i `{colors.error}` under feltet. Hjelpetekst («Minst 8 tegn») i `{colors.text-muted}`.
+- **Avkrysningsboks (`checkbox`)** — samtykket på startsiden. 22 × 22 px, ramme og hake i `{colors.primary}`. Ved feil får selve avkrysningsboksen en rød ramme (2 px `{colors.error}` med 2 px avstand), som i skissen.
 - **Innleggingsfelt (`upload-field`)** — hvitt kort med ikon og feltnavn (📄 CV, ✉️ Ditt søknadsbrev, 📢 Stillingsannonse), en kort forklaring og to knapper side om side: «Last opp PDF» (hoved) og «Lim inn tekst» (sekundær). Ved feil får feltet rød ramme, og feilteksten står i `{colors.error}` under feltnavnet (den samme teksten som i feilboksen).
-- **Filnavn (`file-chip`)** — grønn stripe med ✓, filnavnet (kuttes med «…» hvis det er langt) og søppelbøtte-ikonet 🗑️ til høyre.
-- **Søppelbøtte (`trash-button`)** — 🗑️ uten ramme eller bakgrunn. Trykkflaten er minst 24 × 24 px (WCAG 2.5.8), og den har fokusring. Blir 15 % større ved hover.
-- **Avkrysningsboks (`checkbox`)** — samtykket på startsiden. 22 × 22 px, ramme og hake i `{colors.primary}`. Ved feil får selve avkrysningsboksen en rød ramme (2 px `{colors.error}` med 2 px avstand), slik i skissen.
 - **Tekstboks** — ca. 160 px høy på PC og 200 px på mobil, kan dras større. Søppelbøtta står over den, til høyre for «Lim inn teksten her».
-- **Feilboks (`error-box`)** — rosa boks med rød ramme og rød tekst, øverst på siden. Fet overskrift og en liste med feilene. Hver linje i listen er en lenke til feltet med feilen. KI-feil bruker den samme boksen med en «Prøv igjen»-knapp.
+- **Filnavn (`file-chip`)** — grønn stripe med ✓, filnavnet (kuttes med «…» hvis det er langt) og søppelbøtte-ikonet 🗑️ til høyre.
+- **Søppelbøtte (`trash-button`)** — 🗑️ uten ramme eller bakgrunn. Trykkflaten er minst 24 × 24 px (WCAG 2.5.8), og den har fokusring.
+- **Hjelpetekst for testdata** — hvit boks med stiplet bringebærfarget ramme: «Testmodus: bruk filene i mappen `testdata/` i prosjektet.»
+
+### Feil
+
+- **Feilboks (`error-box`)** — rosa boks med rød ramme og rød tekst, øverst på siden. Fet overskrift og en liste med feilene. Hver linje i listen er en lenke til feltet med feilen. KI-feil bruker den samme boksen med en «Prøv på nytt»-knapp.
 - **Skjemafeil (`form-error`)** — mindre rød boks over skjemaet på innloggingen: «Feil e-post eller passord», «Du må logge inn først».
-- **«i»-ikon (`info-icon`) og «i»-boks (`info-tip`)** — liten sirkel med «i» (ikke utropstegn, fordi det er mindre skremmende). Boksen er mørk (`{colors.text}`) med hvit tekst og runde hjørner.
+
+### Merkelapper og hjelp
+
+- **«i»-ikon (`info-icon`) og «i»-boks (`info-tip`)** — liten sirkel med «i» (ikke utropstegn, fordi «i» er mindre skremmende). Boksen er mørk (`{colors.text}`) med hvit tekst og runde hjørner.
 - **Testmodus-bryter (`testmode-toggle`)** — bryter oppe til høyre på startsiden, med teksten «Testmodus». Låst bryter er 60 % synlig.
 - **Merkelapp «Testmodus» (`testmode-badge`)** — liten ferskenfarget merkelapp oppe til høyre på de andre sidene.
 - **Merket «Laget av KI» (`ai-tag`)** — liten ferskenfarget merkelapp ved overskriften «Gap-analyse».
-- **Gap-lister (`gap-covers`, `gap-work-on`)** — to bokser. «Dette dekker CV-en din» er grønn med ✓ foran hvert punkt. «Dette kan du jobbe videre med» er varm fersken med → foran hvert punkt.
-- **Nøkkelordtreff (`score-meter`)** — «X av Y = Z %» stort og bringebær, med «av nøkkelordene står i CV-en din» ved siden av. Under: prosentlinje 12 px høy. Under den to lister: «Står i CV-en (antall)» med ✓ i grønt og «Står ikke i CV-en (antall)» med ○ i dempet farge.
-- **ATS-forklaring** — hvit boks med overskriften «Hva er ATS og hva betyr den for deg?» i bringebær og en ▾ til høyre.
+
+### Resultat
+
+- **Gap-lister (`gap-covers`, `gap-work-on`)** — to bokser. «Dette dekker CV-en din» er grønn med ✓ foran hvert punkt. «Dette kan du jobbe videre med» er varm ferskenfarget med → foran hvert punkt.
+- **Nøkkelordtreff (`score-meter`)** — «X av Y = Z %» stort og bringebærfarget, med «av nøkkelordene står i CV-en din» ved siden av. Under: prosentlinje 12 px høy. Under den to lister: «Står i CV-en (antall)» med ✓ i grønt og «Står ikke i CV-en (antall)» med ○ i dempet farge.
+- **ATS-forklaring** — hvit boks med overskriften «Hva er ATS og hva betyr det for deg?» i bringebær og en ▾ til høyre.
+
+### Brev og Korrektur
+
 - **Brevet (`letter-card`)** — hvitt ark med skygge, høyst `{components.letter-card.maxWidth}` bredt, god luft rundt teksten (`{spacing.6}` × `{spacing.7}` på PC, `{spacing.4}` på mobil).
 - **Endret setning (`changed-sentence`)** — lys grønn bakgrunn og 2 px grønn understreking. Teksten har vanlig tekstfarge (`{colors.text}`), ikke grønn. Mørkere grønn når den er åpen. Den gamle setningen (`old-sentence`) står under, med en strek til venstre og overskriften «DU SKREV».
 - **Forklaring i Korrektur** — liten hvit boks over brevet: «Grønn og understreket = endret. Trykk på setningen for å se det du skrev.»
+
+### Ramme rundt sidene
+
 - **Vindu (`dialog`)** — hvitt, sentrert, høyst 420 px bredt, med mørkt slør bak. Overskrift, tekst og knapper på rad. Brukes til de tre vinduene: etter nedlasting, «Nytt forslag» og «Logg ut før nedlasting».
 - **Ventetegn (`wait-overlay`)** — dekker siden. Tre hoppende prikker, «På vei mot ny jobb» stort i bringebær (`{typography.wait-title}`), og en ventetekst under i `{colors.text-muted}`.
 - **Hjørnerad (`corner-row`)** — festet til bunnen av skjermen på hver side etter innlogging, med bakgrunn `{colors.background}` og en tynn strek `{colors.border}` øverst, så innholdet ikke synes gjennom raden. På lave skjermer (under ca. 500 px høyde) står raden nederst på siden i stedet (se `EXPERIENCE.md`). I raden: KI-merknaden «ⓘ Teksten behandles av ekstern KI» til venstre (`{typography.caption}`, dempet) og en liten «Logg ut»-knapp (sekundær, liten) til høyre.
-- **Hjelpetekst for testdata** — hvit boks med stiplet bringebær ramme: «Testmodus: bruk filene i mappen `testdata/` i prosjektet.»
 - **Fokusring** — 3 px heltrukket `{colors.focus-ring}` med 2 px avstand, på alt man kan trykke på.
 
 ## Do's and Don'ts

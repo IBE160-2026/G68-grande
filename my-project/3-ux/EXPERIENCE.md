@@ -1,8 +1,8 @@
 ---
 name: Søknadsassistenten
-status: draft
+status: final
 created: 2026-10-20
-updated: 2026-10-22
+updated: 2026-10-23
 sources:
   - ../../prds/prd-kode-prosjekt-2026-10-09/prd.md
   - ../../prds/prd-kode-prosjekt-2026-10-09/addendum.md
@@ -48,9 +48,9 @@ sources:
 | Nede til venstre | «ⓘ Teksten behandles av ekstern KI» | Bare når testmodus er av | FR-35 |
 | Nede til høyre | «Logg ut» | Alltid etter innlogging | FR-6 |
 
-KI-merknaden og «Logg ut» står i en rad som er **festet til bunnen av skjermen**, så de synes hele tiden, også når man ruller (FR-35). Siden får like mye luft nederst som raden er høy, slik at raden aldri dekker innhold, heller ikke på mobil (375 px). Skissene viser raden nederst på siden, men det er dette dokumentet som gjelder.
+KI-merknaden og «Logg ut» står i en rad som er **festet til bunnen av skjermen**, så de synes hele tiden, også når man ruller (FR-35). Siden får like mye luft nederst som raden er høy, slik at raden aldri dekker innhold, heller ikke på mobil (375 px).
 
-Raden har bakgrunn `{colors.background}` og en tynn strek `{colors.border}` øverst. Siden ruller slik at elementet med fokus aldri havner bak raden (`scroll-padding-bottom` lik radens høyde). På lave skjermer (under ca. 500 px høyde, for eksempel liggende mobil eller stor zoom) står raden nederst på siden i stedet for fast.
+Hvordan raden ser ut, står i `DESIGN.md` (`corner-row`). Siden ruller slik at elementet med fokus aldri havner bak raden (`scroll-padding-bottom` lik radens høyde). På lave skjermer (under ca. 500 px høyde, for eksempel liggende mobil eller stor zoom) står raden nederst på siden i stedet for fast.
 
 **Logoen** «Søknadsassistenten» står øverst og sentrert på alle sider.
 
@@ -66,31 +66,13 @@ Raden har bakgrunn `{colors.background}` og en tynn strek `{colors.border}` øve
 - «Logg ut» fører til innloggingssiden.
 - Hva nettleserens egen tilbakeknapp gjør midt i en søknad, bestemmes i arkitekturen, ikke i UX.
 
-## Skisser
-
-Alle sider har skisse på PC og mobil. Skissene viser oppsett og oppførsel. Ved konflikt gjelder dette dokumentet.
-
-| Skisse | Viser |
-|---|---|
-| `mockups/login-register-1.html` | Innlogging og registrering, alle feilmeldinger, «Du må logge inn først» |
-| `mockups/start-page-1.html` | Startsiden, samtykke med «i»-boks, testmodus av/på, uten API-nøkkel |
-| `mockups/mode-select-1.html` | Modusvalget. **Variant A er valgt.** B og C er forkastet |
-| `mockups/input-page-1.html` | Innleggingen i begge modusene, feilboks, testdata-hjelpetekst, ventetegn, KI-feil |
-| `mockups/result-page-1.html` | Resultatsiden. **Nøkkelord variant B (to lister) er valgt.** A er forkastet. Korrektur-varianten med «Oppdater søknadsbrevet mitt» legges til når skissene oppdateres |
-| `mockups/letter-page-1.html` | Brevsiden i begge modusene, fyrverkeri, markeringer, nedlasting, vinduene, KI-feil |
-| `mockups/download-options-1.html` | Tidlig forslag. Variant A ble valgt, med grønn hake fra B. Erstattet av brevsiden |
-| `mockups/korrektur-markings-1.html` | Tidlig forslag. Per setning ble valgt, per ord er forkastet. Erstattet av brevsiden |
-| `mockups/color-themes-1.html`, `mockups/color-themes-2.html`, `mockups/logo-fonts-1.html` | Valg av farger og logoskrift (se `DESIGN.md`) |
-| `mockups/border-contrast-1.html` | Sammenligning av rammefarger for skrivefelt. Hovedfargen er valgt (se `DESIGN.md`) |
-| `mockups/sketch-colors-1.html` | De seks fargene fra skissene slik de brukes (feilboks, «Dette kan du jobbe videre med», åpnet endret setning, ventetegn, fyrverkeri). Godkjent i runde 3 |
-
 ## Voice and Tone
 
 Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren som «du». Teksten skal gjøre en usikker student trygg, for eksempel «Dette kan du jobbe videre med» i stedet for «mangler».
 
 | Gjør | Ikke gjør |
 |---|---|
-| «Dette kan du jobbe videre med» | «Mangler» på skjermen (navnet «mangler» brukes fortsatt i PRD og tester, FR-14) |
+| «Dette kan du jobbe videre med» | «Mangler» på skjermen (navnet «mangler» brukes fortsatt i PRD-en og testene, FR-14) |
 | «Vi lager brevet ditt – det kan ta en liten stund.» | «Laster …» |
 | Si hvilket felt feilen gjelder og hva man kan gjøre | «Ugyldig input» |
 | «Det du har lagt inn, er ikke borte.» | La brukeren lure på om alt er borte |
@@ -169,7 +151,7 @@ Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den s
 - Lister: «Står i CV-en (antall)» og «Står ikke i CV-en (antall)».
 - «i» ved gap-analyse (fra skissen): «En KI-vurdering av hvilke krav i annonsen CV-en dekker, og hvilke du kan jobbe videre med.»
 - «i» ved nøkkelordtreff (fra skissen): «En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.»
-- ATS-forklaring (foldes ut): «Hva er ATS og hva betyr den for deg?» Tekst fra skissen: «Mange arbeidsgivere sender søknadene gjennom et ATS før et menneske leser dem. Et ATS er et dataprogram som blant annet ser etter ord fra annonsen.» og «Står flere av nøkkelordene i CV-en din, er det større sjanse for at den blir lest. Men prosenten over er bare en pekepinn, ikke en garanti.»
+- ATS-forklaring (foldes ut): «Hva er ATS og hva betyr det for deg?» Tekst fra skissen: «Mange arbeidsgivere sender søknadene gjennom et ATS før et menneske leser dem. Et ATS er et dataprogram som blant annet ser etter ord fra annonsen.» og «Står flere av nøkkelordene i CV-en din, er det større sjanse for at den blir lest. Men prosenten over er bare en pekepinn, ikke en garanti.»
 - Mellom gap-analysen og nøkkelordtreffet står en kort linje (FR-18): «Gap-analysen og nøkkelordtreffet kan si litt forskjellig. Gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.»
 - Knapper: «Tilbake» og «Lag søknadsbrevet mitt» (Full generering) / «Oppdater søknadsbrevet mitt» (Korrektur).
 
@@ -177,7 +159,7 @@ Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den s
 
 - Overskrift Full generering: «Din ferdigstilte søknad!». Korrektur: «Din oppdaterte søknad er ferdig!».
 - Bare Korrektur, over brevet: «Grønn og understreket = endret. Trykk på setningen for å se det du skrev.» Under en åpnet setning: «Du skrev» og den gamle setningen.
-- Bare Korrektur, ny setning: «Du skrev» viser «(Ny setning)». Fjernede setninger: én linje under brevet, «1 setning er fjernet.» / «2 setninger er fjernet.».
+- Bare Korrektur, ny setning: «Du skrev» viser «(Ny setning)». Fjernede setninger: én linje under brevet, «1 setning er fjernet.» / «2 setninger er fjernet.»
 - Bare Korrektur, ingenting endret: «Vi fant ingenting å endre. Brevet ditt er bra som det er.»
 - Knapper: «Last ned som Word», «Last ned som PDF». Etter nedlasting: «✓ Lastet ned som Word» / «✓ Lastet ned som PDF».
 - Under knappene etter nedlasting (filnavn-linjen): «Filnavn: Soknad_Sykehuset_2026-10-21.docx».
@@ -185,7 +167,7 @@ Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den s
 - Vindu etter nedlasting: «Brevet er lastet ned!» · filnavnet, for eksempel «Soknad_Sykehuset_2026-10-21.docx» · «Vil du lage en ny søknad eller logge ut?» · «Lag ny søknad», «Logg ut», «Bli her».
 - Vindu ved nytt forslag: «Vil du ha et nytt forslag?» · «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.» · «Ja, lag nytt forslag», «Avbryt».
 - Vindu ved logg ut før nedlasting: «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» · «Logg ut», «Avbryt».
-- Filen kan ikke lages: «Vi klarte ikke å lage filen. Prøv igjen.» · «Prøv igjen».
+- Filen kan ikke lages: «Vi klarte ikke å lage filen. Prøv på nytt.» · «Prøv på nytt».
 
 **Ventetegn** (FR-27)
 
@@ -197,9 +179,9 @@ Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den s
 
 - Nettverksfeil: «Nettverksfeil, sjekk nettverkstilgangen.»
 - Andre feil: «Noe gikk galt hos KI-tjenesten. Prøv på nytt.»
-- Når KI-en svarer, men svaret ikke kan brukes (FR-28), vises «Noe gikk galt hos KI-tjenesten. Prøv på nytt.».
+- Når KI-en svarer, men svaret ikke kan brukes (FR-28), vises «Noe gikk galt hos KI-tjenesten. Prøv på nytt.»
 - Tekst under, per side: innlegging «Det du har lagt inn, er ikke borte.» · resultatside «Resultatet og det du har lagt inn, er ikke borte.» · brevside «Brevet du hadde, er beholdt.»
-- Knapp: «Prøv igjen».
+- Knapp: «Prøv på nytt».
 
 ## Component Patterns
 
@@ -212,8 +194,8 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | «Begynn å lage søknad» | Startside | Den største knappen på siden. Krever samtykke når testmodus er av (FR-36). |
 | Modus-kort | Modusvalg | Hele kortet er én knapp. Ett trykk går rett til innleggingen for den modusen. Ingen «Velg»-knapp i tillegg. |
 | Tekstfelt | Innlogging, registrering | Etikett over feltet. Hjelpetekst og feiltekst står under og er koblet til feltet. |
-| Skjemafeil | Innlogging | Bare visning. Fokus går til den røde boksen når den vises (se Accessibility Floor). |
-| Innleggingsfelt | Innlegging | Tom tilstand: «Last opp PDF» og «Lim inn tekst». «Last opp PDF» åpner filvelgeren, som bare viser PDF (`accept=".pdf"`). Etter opplasting vises filnavnet med ✓, fokus går til søppelbøtta ved filnavnet, og skjermlesere hører «CV lastet opp: `<filnavn>`». «Lim inn tekst» åpner en tekstboks i feltet, og markøren settes i den. Det man legger inn, sjekkes først når man trykker «Sjekk CV-en min» (se State Patterns). |
+| Skjemafeil | Innlogging | Bare visning. Fokus: se Accessibility Floor. |
+| Innleggingsfelt | Innlegging | Tom tilstand: «Last opp PDF» og «Lim inn tekst». «Last opp PDF» åpner filvelgeren, som bare viser PDF (`accept=".pdf"`). Etter opplasting vises filnavnet med ✓, fokus går til søppelbøtta ved filnavnet, og skjermlesere hører «CV lastet opp: `<filnavn>`». «Lim inn tekst» åpner en tekstboks i feltet, og markøren settes i den. Det man legger inn, sjekkes ikke før man trykker «Sjekk CV-en min» (se State Patterns). |
 | Filnavn (`file-chip`) | Innleggingsfelt | Bare visning. Et langt filnavn kuttes med «…». |
 | Tekstboks | Innleggingsfelt | Kan dras større. Søppelbøtta over den tømmer den. |
 | Søppelbøtte | Innleggingsfelt | Tømmer feltet med en gang, uten bekreftelse (FR-13). Feltet går tilbake til tom tilstand. Skjermlesertekst: «Tøm CV-feltet», «Tøm brevfeltet», «Tøm annonsefeltet». Etter tømming går fokus til «Last opp PDF» i samme felt, og skjermlesere hører «CV-feltet er tømt». |
@@ -224,29 +206,29 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | «i»-ikon | Startside, resultatside | Åpner en kort forklaring. Se Interaction Primitives. |
 | Merket «Laget av KI» | Resultatside | Bare visning. |
 | Gap-lister | Resultatside | Bare visning. Tomme lister: se State Patterns. |
-| ATS-forklaring | Resultatside | Overskrift som foldes ut og inn når man trykker. Lukket når siden åpnes. Ikke en «i». |
+| ATS-forklaring | Resultatside | Overskrift som foldes ut og inn (se Interaction Primitives). Lukket når siden åpnes. Ikke en «i». |
 | Prosentlinje (del av Nøkkelordtreff, `score-meter`) | Resultatside | Fylles når siden åpnes. Bare pynt, tallet står alltid som tekst (FR-17). |
 | Nøkkelordlister (del av Nøkkelordtreff, `score-meter`) | Resultatside | Kan ikke endres (FR-16). |
 | Brevet | Brevside | Bare visning. Kan ikke redigeres (FR-26). |
 | Forklaring i Korrektur | Brevside (Korrektur) | Bare visning. Skjules når ingenting er endret. |
-| Endret setning | Brevside (Korrektur) | Er en knapp. Trykk, Enter eller mellomrom åpner «Du skrev» med den gamle setningen rett under. Nytt trykk lukker. Flere kan være åpne samtidig. Brevet kan ikke redigeres (FR-26). Se Endrede setninger i Korrektur under. |
+| Endret setning | Brevside (Korrektur) | Er en knapp som åpner og lukker «Du skrev» med den gamle setningen rett under (se Interaction Primitives). Flere kan være åpne samtidig. Brevet kan ikke redigeres (FR-26). Se Endrede setninger i Korrektur under. |
 | Gammel setning | Brevside (Korrektur) | Bare visning. Vises bare når den endrede setningen er åpnet. |
 | Nedlastingsknapper | Brevside | Laster ned filen, blir grønne med «✓ Lastet ned som …», viser filnavn-linjen under, og åpner vinduet etter nedlasting. Vinduet kommer hver gang. Filen har ingen markeringer (FR-30). Se Filnavn ved nedlasting under. |
 | «Nytt forslag» | Brevside | Åpner bekreftelsesvinduet. «Ja, lag nytt forslag» → ventetegn → nytt brev med nytt fyrverkeri. Nedlastingsknappene og filnavnet nullstilles. I Korrektur lages det nye forslaget fra det opprinnelige brevet (FR-25). |
 | Vindu etter nedlasting (`dialog`) | Brevside | Viser filnavnet under «Brevet er lastet ned!». «Lag ny søknad» → startsiden med tomme felt (FR-31). «Logg ut» → logger ut. «Bli her» lukker vinduet, slik at man kan laste ned det andre formatet. |
 | Vindu «Nytt forslag» (`dialog`) | Brevside | «Ja, lag nytt forslag» starter. «Avbryt» og Esc lukker. |
 | Vindu «Logg ut før nedlasting» (`dialog`) | Brevside | Åpnes når man trykker «Logg ut» før brevet er lastet ned i noe format. «Logg ut» logger ut, og brevet slettes. «Avbryt» og Esc lukker. Fokus går til «Avbryt» når vinduet åpnes. |
-| Ventetegn | Innlegging, resultatside, brevside | Dekker siden mens KI-en jobber. Ingen avbryt-knapp i versjon 1. Tar det for lang tid, kommer KI-feilen med «Prøv igjen» (FR-28). Teksten avhenger av hva som skjer (se Voice and Tone). |
+| Ventetegn | Innlegging, resultatside, brevside | Dekker siden mens KI-en jobber. Ingen avbryt-knapp i versjon 1. Tar det for lang tid, kommer KI-feilen med «Prøv på nytt» (FR-28). Teksten avhenger av hva som skjer (se Voice and Tone). |
 | Feilboks | Innlegging, resultatside, brevside | Øverst på siden. Samler alle feilene. Hver linje er en lenke som flytter fokus til feltet den gjelder. Se State Patterns. |
 | Hjørnerad (`corner-row`) | Alle sider etter innlogging | Festet til bunnen av skjermen. Se Information Architecture. |
-| Logg ut | Alle sider etter innlogging | Logger ut med en gang, unntatt på brevsiden før brevet er lastet ned, se State Patterns. Alt fra økten glemmes (NFR-4). Nettsiden logger ikke ut av seg selv. Gjør arkitekturen det likevel, varsles brukeren minst 20 sekunder før og kan velge «Fortsett». |
+| Logg ut | Alle sider etter innlogging | Logger ut med en gang, unntatt på brevsiden før brevet er lastet ned (se State Patterns). Alt fra økten glemmes (NFR-4). Nettsiden logger ikke ut av seg selv. Gjør arkitekturen det likevel, varsles brukeren minst 20 sekunder før og kan velge «Fortsett». |
 
 ### Endrede setninger i Korrektur (FR-23)
 
-- I Korrektur svarer KI-en med en liste av setningspar `{ny, gammel}`. Nettsiden viser bare det KI-en sier, og sammenligner ikke selv.
+- I Korrektur svarer KI-en med en liste med setningspar `{ny, gammel}`. Nettsiden viser bare det KI-en sier, og sammenligner ikke selv.
 - **Ny setning:** markeres, og «Du skrev» viser «(Ny setning)».
 - **To setninger slått sammen:** «Du skrev» viser begge de gamle.
-- **Fjernet setning:** vises ikke i brevet. Under brevet står én linje: «1 setning er fjernet.» / «2 setninger er fjernet.».
+- **Fjernet setning:** vises ikke i brevet. Under brevet står én linje: «1 setning er fjernet.» / «2 setninger er fjernet.»
 - **Ingenting endret:** «Vi fant ingenting å endre. Brevet ditt er bra som det er.», og forklaringen om grønt skjules.
 - Blir det for vanskelig, gjelder nødlisten i PRD-en punkt 4: ingen markeringer i Korrektur, og forklaringen over brevet skjules.
 - **Spørsmål til arkitekturen:** formatet på KI-svaret (setningsparene).
@@ -263,18 +245,18 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 
 | Tilstand | Side | Hva skjer |
 |---|---|---|
-| Tomt skjema sendt | Innlogging, registrering | Hvert tomt felt får rød ramme og en kort tekst under (FR-4). Fokus flyttes til det første feltet med feil. |
-| Feil e-post eller passord | Innlogging | Rød boks over skjemaet: «Feil e-post eller passord» (FR-3). Fokus går til boksen. Feltene får ingen rød ramme (bevisst avvik fra addendum). |
-| Ikke logget inn | Innlogging | Kommer man til en annen side uten å være logget inn, sendes man hit med «Du må logge inn først» i rød boks over skjemaet (FR-7). Fokus går til boksen. |
+| Tomt skjema sendt | Innlogging, registrering | Hvert tomt felt får rød ramme og en kort tekst under (FR-4). Fokus: se Accessibility Floor. |
+| Feil e-post eller passord | Innlogging | Rød boks over skjemaet: «Feil e-post eller passord» (FR-3). Fokus: se Accessibility Floor. Feltene får ingen rød ramme (bevisst avvik fra addendumet). |
+| Ikke logget inn | Innlogging | Kommer man til en annen side uten å være logget inn, sendes man hit med «Du må logge inn først» i rød boks over skjemaet (FR-7). Fokus: se Accessibility Floor. |
 | Logget inn | Innlogging | Etter innlogging kommer man alltid til startsiden, også når man ble sendt til innloggingen med «Du må logge inn først» (FR-7). |
 | Logger inn | Innlogging, registrering | Innloggingen er lokal (NFR-5), så det trengs ingen egen tilstand mens den sjekkes. |
 | E-post finnes | Registrering | Rød ramme og tekst ved e-postfeltet (FR-2). |
-| E-post med feil form | Registrering | For eksempel «ola@»: «E-posten er ikke gyldig» ved feltet, med rød ramme som de andre feltfeilene. |
+| E-post med feil form | Registrering | For eksempel «ola@»: rød ramme og tekst ved feltet (se Tekster per side). |
 | Passord for kort / ikke like | Registrering | Rød ramme og tekst ved feltet. «Minst 8 tegn» står under passordfeltet hele tiden. |
 | Registrert | Registrering | Logges inn automatisk og kommer til startsiden (FR-1). |
-| Kommer til startsiden | Startside | Det starter alltid en ny søknad med tomme felt og ny nøkkelordliste, også via «Tilbake» (som «Lag ny søknad», FR-31). Da kan ikke testmodus byttes midt i en søknad (FR-32). |
+| Kommer til startsiden | Startside | Det starter alltid en ny søknad med tomme felt og ny nøkkelordliste, også via «Tilbake» (som «Lag ny søknad», FR-31). Slik kan ikke testmodus byttes midt i en søknad (FR-32). |
 | Vanlig modus | Startside | Samtykke synlig og ikke krysset av. KI-merknad nede til venstre. |
-| Uten samtykke | Startside | «Begynn å lage søknad» uten avkryssing → rød ramme rundt boksen og «Du må samtykke før du kan begynne». Fokus flyttes til avkrysningsboksen. |
+| Uten samtykke | Startside | «Begynn å lage søknad» uten avkryssing → rød ramme rundt avkrysningsboksen og «Du må samtykke før du kan begynne». Fokus flyttes til avkrysningsboksen. |
 | Testmodus på | Startside | Samtykket og KI-merknaden skjules. Teksten om testmodus vises. «Begynn å lage søknad» virker uten samtykke (FR-36). |
 | Uten API-nøkkel | Startside | Bryteren er slått på og låst. «Mangler API-nøkkel, se README» står under bryteren (FR-32). |
 | Bryterens valg | Startside | Bryteren husker valget så lenge man er logget inn. Kommer man tilbake til startsiden i testmodus, står bryteren fortsatt på. Etter ny innlogging står den av, eller på og låst hvis API-nøkkelen mangler (FR-32). |
@@ -282,29 +264,27 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | Testmodus på | Innlegging | Hjelpeteksten om `testdata/` vises over feltene. |
 | Tomme felt | Innlegging | Hvert felt viser «Last opp PDF» og «Lim inn tekst». |
 | Fylt felt | Innlegging | Filnavn med ✓ og søppelbøtte, eller tekstboks med søppelbøtte. Filnavnet vises med en gang filen er valgt. |
-| Feil i det man har lagt inn | Innlegging | Alt det man legger inn, sjekkes først når man trykker «Sjekk CV-en min»: tomme felt, feil filtype, for stor fil, uleselig PDF og bare testdata i testmodus. Ingen sjekk mens man velger fil eller limer inn. Da kommer feilboksen øverst med alle feilene samtidig. Felt med feil får rød ramme, og feilteksten står også under feltnavnet. Siden ruller opp til boksen, fokus flyttes dit, og skjermlesere leser den opp. Feilboksen forsvinner når man prøver igjen uten feil. |
-| Venter på KI | Innlegging, resultatside, brevside | Ventetegnet dekker siden. Knappen er låst, så det ikke sendes flere forespørsler (FR-27). Resten av siden er sperret. Når ventingen er over, går fokus til overskriften på den nye siden (eller det nye brevet), eller til feilboksen ved KI-feil. |
-| KI-feil | Innlegging, resultatside, brevside | Rød boks øverst på siden man sto på, med feiltekst, en tekst om at ingenting er borte, og «Prøv igjen». Siden ruller opp til boksen, og fokus flyttes dit. Det man har lagt inn, er der fortsatt (FR-28). Feiler «Nytt forslag», beholdes det gamle brevet. Svarer ikke KI-en innen en fast tid (bestemmes i arkitekturen), vises «Noe gikk galt hos KI-tjenesten. Prøv på nytt.». |
+| Feil i det man har lagt inn | Innlegging | Alt det man legger inn, sjekkes ikke før man trykker «Sjekk CV-en min»: tomme felt, feil filtype, for stor fil, uleselig PDF og filer eller tekst som ikke er testdata, i testmodus. Ingen sjekk mens man velger fil eller limer inn. Da kommer feilboksen øverst med alle feilene samtidig. Felt med feil får rød ramme, og feilteksten står også under feltnavnet. Siden ruller opp til boksen, fokus flyttes dit, og skjermlesere leser den opp. Feilboksen forsvinner når man prøver igjen uten feil. |
+| Venter på KI | Innlegging, resultatside, brevside | Ventetegnet dekker siden. Knappen er låst, så det ikke sendes flere forespørsler (FR-27). Resten av siden er sperret. Fokus etterpå: se Accessibility Floor (Ventetegn). |
+| KI-feil | Innlegging, resultatside, brevside | Rød boks øverst på siden man sto på, med feiltekst, en tekst om at ingenting er borte, og «Prøv på nytt». Siden ruller opp til boksen, og fokus flyttes dit. Det man har lagt inn, er der fortsatt (FR-28). Feiler «Nytt forslag», beholdes det gamle brevet. Svarer ikke KI-en innen en fast tid (bestemmes i arkitekturen), vises «Noe gikk galt hos KI-tjenesten. Prøv på nytt.» |
 | Resultat | Resultatside | Gap-analysen først, så nøkkelordtreffet, så ATS-forklaringen (lukket). |
 | Tom liste | Resultatside | Tom «Dette dekker CV-en din»: «CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med.» · Tom «Dette kan du jobbe videre med»: «Bra jobbet! CV-en din dekker alle kravene i annonsen. 🎉» · Tom «Står i CV-en (0)»: «Ingen av nøkkelordene står i CV-en ennå.» · Tom «Står ikke i CV-en (0)»: «Alle nøkkelordene står i CV-en din!» Er begge listene tomme, gjelder FR-28. |
 | Brevet vises | Brevside | Fyrverkeri rundt overskriften når siden åpnes. |
-| Ingenting endret | Brevside (Korrektur) | «Vi fant ingenting å endre. Brevet ditt er bra som det er.» Forklaringen om grønt skjules. |
-| Setninger fjernet | Brevside (Korrektur) | Én linje under brevet: «1 setning er fjernet.» / «2 setninger er fjernet.». De fjernede setningene vises ikke i brevet. |
+| Ingenting endret · Setninger fjernet | Brevside (Korrektur) | Se Endrede setninger i Korrektur under Component Patterns. |
 | Nedlastet | Brevside | Knappen er grønn med ✓, filnavn-linjen står under, vinduet åpnes. |
-| Filen kan ikke lages | Brevside | Rød boks øverst på brevsiden, som ved KI-feil: «Vi klarte ikke å lage filen. Prøv igjen.» med «Prøv igjen». Brevet er ikke borte. |
+| Filen kan ikke lages | Brevside | Rød boks øverst på brevsiden, som ved KI-feil: «Vi klarte ikke å lage filen. Prøv på nytt.» med «Prøv på nytt». Brevet er ikke borte. |
 | Nytt forslag laget | Brevside | Nytt brev, nytt fyrverkeri, nedlastingsknappene er nullstilt. |
+| Logg ut før nedlasting | Brevside | «Logg ut» før brevet er lastet ned i noe format åpner vinduet «Logg ut før nedlasting» (se Component Patterns, teksten står i Tekster per side). Er brevet lastet ned, logges man ut med en gang (NFR-4). |
 
 **Samtykket** må krysses av på nytt hver gang man kommer til startsiden, også i samme økt (via «Tilbake» på modusvalget eller «Lag ny søknad»). Avkrysningsboksen er alltid tom når startsiden åpnes. Slås testmodus på og så av igjen på startsiden, er avkrysningsboksen tom.
-
-**Logg ut før nedlasting:** trykker man «Logg ut» på brevsiden før brevet er lastet ned i noe format, åpnes et vindu: «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» med [Logg ut] og [Avbryt]. Esc og Avbryt lukker vinduet. Fokus går til «Avbryt» når vinduet åpnes. Er brevet lastet ned, logges man ut med en gang (NFR-4).
 
 ## Interaction Primitives
 
 - **Trykk og klikk** er hovedmåten å gjøre ting på. Ingen hurtigtaster er bestemt.
-- **«i»-boksen:** trykk, Enter eller mellomrom åpner og lukker. Esc lukker. Hover åpner på PC, og den holder seg åpen mens musa er over ikonet eller boksen. Den åpnes ikke av fokus alene. Teksten er koblet til knappen (`aria-expanded`/`aria-controls`) og står rett etter den i lesrekkefølgen. Slik virker den med mus, på mobil, med tastatur og med skjermleser (NFR-6, NFR-7).
-- **ATS-forklaringen** foldes ut og inn ved trykk, eller med Enter/mellomrom med tastatur.
-- **Endret setning** åpnes og lukkes ved trykk, eller med Enter eller mellomrom med tastatur.
-- **Vinduer:** Fokus flyttes inn i vinduet når det åpnes, til det trygge valget («Bli her» eller «Avbryt»). Mens et vindu er åpent, kan bare vinduet nås med Tab, mus og skjermleser (for eksempel `<dialog>` med `showModal()`, eller `inert` på resten av siden). Vinduet har `aria-labelledby` til overskriften og `aria-describedby` til teksten. Esc lukker alle tre vinduene (etter nedlasting, «Nytt forslag», «Logg ut før nedlasting»). Når vinduet lukkes, går fokus tilbake til knappen som åpnet det.
+- **«i»-boksen:** trykk, Enter eller mellomrom åpner og lukker. Esc lukker. Hover åpner på PC, og den holder seg åpen mens musa er over ikonet eller boksen. Den åpnes ikke av fokus alene. Teksten er koblet til knappen (`aria-expanded`/`aria-controls`) og står rett etter den i leserekkefølgen. Slik virker den med mus, på mobil, med tastatur og med skjermleser (NFR-6, NFR-7).
+- **ATS-forklaringen** foldes ut og inn ved trykk, eller med Enter eller mellomrom på tastaturet.
+- **Endret setning** åpnes og lukkes ved trykk, eller med Enter eller mellomrom på tastaturet.
+- **Vinduer:** fokus flyttes inn i vinduet når det åpnes, til det trygge valget («Bli her» eller «Avbryt»). Mens et vindu er åpent, kan bare vinduet nås med Tab, mus og skjermleser (for eksempel `<dialog>` med `showModal()`, eller `inert` på resten av siden). Vinduet har `aria-labelledby` til overskriften og `aria-describedby` til teksten. Esc lukker alle tre vinduene (etter nedlasting, «Nytt forslag», «Logg ut før nedlasting»). Når vinduet lukkes, går fokus tilbake til knappen som åpnet det.
 - **Søppelbøtta** tømmer med en gang, uten bekreftelse.
 - **«Nytt forslag»** krever bekreftelse, fordi brevet slettes.
 - **Ingen ekstra bekreftelse** før brevet lages. Trykket på «Lag søknadsbrevet mitt» / «Oppdater søknadsbrevet mitt» er bekreftelsen (FR-21).
@@ -319,20 +299,22 @@ Atferd. Kontrast og farger står i `DESIGN.md`.
 - **Bare tastatur:** alt kan brukes med Tab, Enter, mellomrom og Esc (NFR-6). Rekkefølgen følger lesingen. Alt man kan trykke på, har synlig fokusring (`{colors.focus-ring}`).
 - **Sidetitler og fokus ved ny side:** hver side har sin egen tittel, for eksempel «Logg inn – Søknadsassistenten» og «Resultat – Søknadsassistenten». Byttes siden uten at hele siden lastes på nytt, flyttes fokus til sidens hovedoverskrift.
 - **Overskrifter og landemerker:** sideoverskriften er `h1` (for eksempel «Slik passer CV-en din til stillingen»). Boksoverskrifter («Gap-analyse», «Nøkkelordtreff», feltnavnene) er `h2`, og listeoverskriftene er `h3`. Logoen er ikke en overskrift. «i»-knappen og merket «Laget av KI» står ved siden av overskriften, ikke inne i den. Siden har landemerkene `header` (logo, testmodus), `main` og `footer` (hjørneraden).
-- **Etiketter:** alle felt har synlige etiketter (NFR-6). Hjelpetekst og feiltekst er koblet til feltet, slik at skjermlesere leser dem opp. Knappene og tekstboksen i innleggingsfeltene har feltnavnet med for skjermlesere, for eksempel «Last opp PDF, CV», «Lim inn tekst, Stillingsannonse» og tekstboksen «CV: Lim inn teksten her». Det synlige navnet er det samme.
-- **Innlogging og registrering:** e-post har `autocomplete="email"`, passord har `autocomplete="current-password"` (innlogging) og `autocomplete="new-password"` (registrering). Liming og passordbehandlere er alltid lov. Ved «Feil e-post eller passord» og «Du må logge inn først» går fokus til den røde boksen.
+- **Etiketter:** alle felt har synlige etiketter (NFR-6). Hjelpetekst og feiltekst er koblet til feltet, slik at skjermlesere leser dem opp. Knappene og tekstboksen i innleggingsfeltene har feltnavnet med for skjermlesere, for eksempel «Last opp PDF, CV», «Lim inn tekst, Stillingsannonse» og tekstboksen «CV: Lim inn teksten her». Den synlige teksten er den samme, uten feltnavnet (for eksempel bare «Last opp PDF»).
+- **Innlogging og registrering:** e-post har `autocomplete="email"`, passord har `autocomplete="current-password"` (innlogging) og `autocomplete="new-password"` (registrering). Liming og passordbehandlere er alltid lov. Har et felt feil, flyttes fokus til det første feltet med feil. Ved «Feil e-post eller passord» og «Du må logge inn først» går fokus til den røde boksen.
 - **Ikoner:** ikoner som bare er pynt (📄 ✉️ 📢 ✨ ✏️ 👋, prikkene, fyrverkeriet), skjules for skjermlesere. Knapper med bare ikon har en tekst for skjermlesere: søppelbøtta («Tøm CV-feltet» osv.) og «i»-ikonene («Hva betyr samtykket?», «Hva er en gap-analyse?», «Hva er nøkkelordtreff?»). Disse er også pynt og skjules for skjermlesere: 🎉, ⓘ, →, ✓ og ○. Listeoverskriftene og knappeteksten forteller det samme.
-- **Feil:** feilboksen og KI-feilboksen får fokus (`tabindex="-1"`), og da leser skjermlesere dem opp. De har ikke `role="alert"`, så de ikke leses opp to ganger. På innloggingen flyttes fokus til det første feltet med feil. Felt med feil merkes som ugyldige for skjermlesere. I innleggingsfeltene er feilteksten under feltnavnet koblet til knappene og tekstboksen (`aria-describedby`), og tekstboksen får `aria-invalid="true"`.
+- **Feil:** feilboksen og KI-feilboksen får fokus (`tabindex="-1"`), og da leser skjermlesere dem opp. De har ikke `role="alert"`, så de ikke leses opp to ganger. Fokus på innloggingen: se punktet over. Felt med feil merkes som ugyldige for skjermlesere. I innleggingsfeltene er feilteksten under feltnavnet koblet til knappene og tekstboksen (`aria-describedby`), og tekstboksen får `aria-invalid="true"`.
 - **Farge er aldri det eneste tegnet:** feil har tekst og rød ramme (FR-4). Endringer i Korrektur er understreket i tillegg til grønne (FR-23), og hver endret setning har en skjult tekst for skjermlesere: «Endret setning». Forklaringen over brevet får en skjult tilleggstekst: «Endrede setninger er knapper.» Nøkkelord har ✓ eller ○. Gap-listene har overskrifter. Nedlastet-knappen har ✓ og tekst.
 - **Ventetegn:** skjermlesere får beskjed om ventetegnet og teksten. Mens man venter, er resten av siden sperret (`inert`), også hjørneraden. Knappen låses med `aria-disabled="true"` og beholder fokus. Et statusområde (`role="status"`) finnes på siden hele tiden, og ventesetningen skrives inn i det når ventingen starter. Etterpå går fokus til overskriften på den nye siden (eller det nye brevet), eller til feilboksen ved KI-feil.
-- **Filnavn etter nedlasting** leses opp av skjermlesere. Det står i vinduet etter nedlasting, under «Brevet er lastet ned!», så det ikke blir avbrutt når vinduet åpnes.
+- **Filnavn etter nedlasting** leses opp av skjermlesere. Det står i vinduet etter nedlasting, under «Brevet er lastet ned!», så opplesingen ikke blir avbrutt når vinduet åpnes.
 - **Testmodus:** teksten «Du er i testmodus …» står i et statusområde, så den leses opp når den kommer.
 - **Redusert bevegelse:** ved `prefers-reduced-motion` slås alle animasjoner av. Fyrverkeriet hoppes over, prosentlinjen vises ferdig, og siden hopper til feilboksen uten myk rulling.
 - **Blinking:** fyrverkeriet blinker ikke mer enn tre ganger i sekundet og dekker ikke brevet.
 - **Bredde:** alle sider kan brukes uten å rulle sidelengs ved 375, 768 og 1280 px (NFR-7). Siden skal også virke ved 320 px bredde og 200 % zoom uten rulling sidelengs (WCAG 1.4.10).
-- **Større tekst:** logoen og ingressen står på én linje ved vanlig tekststørrelse, men får bryte linjen når teksten blir større enn det er plass til (ingen `nowrap`). Ingen faste høyder på knapper, merkelapper eller bokser med tekst. Ved vanlig tekststørrelse skal alt se ut akkurat som nå.
+- **Større tekst:** logoen og ingressen står på én linje ved vanlig tekststørrelse, men får bryte linjen når teksten blir større enn det er plass til (ingen `nowrap`). Ingen faste høyder på knapper, merkelapper eller bokser med tekst. Ved vanlig tekststørrelse skal alt se ut akkurat som i skissene.
 
 ## Responsive & Platform
+
+Bruddpunktet er 700 px: under 700 px står alt under hverandre, og fra 700 px står ting side om side, også på nettbrett (768 px, NFR-7). Unntaket er innleggingsfeltene, som står side om side først fra 1000 px (se tabellen).
 
 | | Fra 700 px (PC og nettbrett) | Under 700 px (mobil) |
 |---|---|---|
@@ -347,8 +329,6 @@ Atferd. Kontrast og farger står i `DESIGN.md`.
 | Brevoverskrift | Større | Mindre |
 | «i»-boks | Trykk, Enter, mellomrom eller hover | Trykk |
 | Filvelger | Vanlig filvelger | Telefonens filvelger, må virke godt |
-
-Bruddpunktet er 700 px: under 700 px står alt under hverandre, og fra 700 px står ting side om side, også på nettbrett (768 px, NFR-7). Unntaket er innleggingsfeltene: de står side om side først fra 1000 px, og under 1000 px står de under hverandre, også på nettbrett (768 px).
 
 ## Inspiration & Anti-patterns
 
@@ -380,11 +360,11 @@ Ingrid er 21 år og studerer sykepleie. Hun søker deltidsjobb ved siden av stud
 4. **Modusvalg:** Hun velger «Full generering – Skriv nytt brev».
 5. **Innlegging:** Hun laster opp CV-en som PDF og limer inn annonseteksten. Søppelbøtta kan tømme et felt. Hun trykker «Sjekk CV-en min».
 6. **Venting:** Hoppende prikker, «På vei mot ny jobb» og «Vi sjekker CV-en din – det tar noen sekunder.»
-7. **Resultatsiden:** Først «Dette dekker CV-en din», og ved siden av «Dette kan du jobbe videre med». Ingrid skjønner at hun faktisk er kvalifisert. Under står nøkkelordene og den utfoldbare «Hva er ATS og hva betyr den for deg?». Hun trykker «Lag søknadsbrevet mitt».
+7. **Resultatsiden:** Først «Dette dekker CV-en din», og ved siden av «Dette kan du jobbe videre med». Ingrid skjønner at hun faktisk er kvalifisert. Under står nøkkelordene og den utfoldbare «Hva er ATS og hva betyr det for deg?». Hun trykker «Lag søknadsbrevet mitt».
 8. **Høydepunkt – brevet:** «Din ferdigstilte søknad!» med fyrverkeri i 2–3 sekunder. Under brevet står «Last ned som Word», «Last ned som PDF» og «Nytt forslag».
 9. **Nedlasting:** Hun trykker «Last ned som Word». Knappen blir grønn med hake, og vinduet «Brevet er lastet ned!» åpnes. Hun trykker «Bli her» og laster ned PDF-en også. Den knappen blir også grønn, og vinduet kommer igjen. Da velger hun «Logg ut».
 
-Feilvei: KI-en svarer ikke etter steg 5 eller 7 → rød boks med «Prøv igjen» på innleggingen eller resultatsiden, og det hun har lagt inn, er der fortsatt (FR-28).
+Feilvei: KI-en svarer ikke etter steg 5 eller 7 → rød boks med «Prøv på nytt» på innleggingen eller resultatsiden, og det hun har lagt inn, er der fortsatt (FR-28).
 
 ### Reise 2 — Eirik, Korrektur på mobil
 
@@ -397,7 +377,7 @@ Eirik er 22 år og studerer finans. Han bruker telefonen. Han har søkt jobber f
 5. **Venting:** De hoppende prikkene.
 6. **Resultatsiden:** «Dette dekker CV-en din» øverst og «Dette kan du jobbe videre med» under. Så nøkkelordene og ATS-forklaringen. Nederst står «Tilbake» og «Oppdater søknadsbrevet mitt». Han trykker «Oppdater søknadsbrevet mitt».
 7. **Høydepunkt – det oppdaterte brevet:** «Din oppdaterte søknad er ferdig!» med fyrverkeri. Endrede setninger er markert med grønt. Eirik trykker på noen av dem og ser hva han skrev før. Han ser at brevet er ferdig, men fortsatt hans eget.
-8. **Nedlasting:** Han laster ned, knappen blir grønn med hake, og vinduet kommer med ny søknad, logg ut og «Bli her». Filen har ingen markeringer (FR-30).
+8. **Nedlasting:** Han laster ned, knappen blir grønn med hake, og vinduet kommer med «Lag ny søknad», «Logg ut» og «Bli her». Filen har ingen markeringer (FR-30).
 
 Feilvei: vil han ha et annet forslag, trykker han «Nytt forslag» og bekrefter. Feiler det, beholdes det gamle brevet (FR-28).
 
@@ -425,7 +405,7 @@ Feilvei: går han videre fra startsiden uten testmodus (når API-nøkkel finnes)
 
 Rekkefølgen for å kutte UX-pynt hvis tiden blir knapp:
 
-- **Kuttes først (bygges til slutt):** fyrverkeri (blir en enkel ✓), prosentlinjen som fylles (vises ferdig fylt), ikonet som vipper, vinduet «Logg ut før nedlasting», arbeidsgiver i filnavnet (blir `Soknad_<dato>`).
+- **Kuttes først (bygges til slutt):** fyrverkeri (blir en enkel ✓), prosentlinjen som fylles (vises ferdig fylt), ikonet på modus-kortet som vipper, vinduet «Logg ut før nedlasting», arbeidsgiver i filnavnet (blir `Soknad_<dato>`).
 - **Kuttes ved tidsnød:** vinduet etter hver nedlasting (bare etter den første), «Tilbake» på innleggingen, «Gjenta passord».
 - **Kuttes aldri:** feilmeldinger, tastatur og fokus, skjermlesertekster, kontrast, ventetegnet, merkelappen «Testmodus», KI-merknaden.
 
@@ -438,12 +418,30 @@ Pynten bygges i en egen story etter at kjerneflyten virker i testmodus.
 | «Gjenta passord» ved registrering | FR-1 | Tillegg i UX | Unngå skrivefeil | linje 95 |
 | «Tilbake» på modusvalget (til startsiden) | FR-20 | Tillegg i UX | Blant annet hvis sensor går videre uten å slå på testmodus | linje 86 |
 | «Tilbake» på innleggingen (til modusvalget) | – | Tillegg i UX | Rette opp feil valg av modus | linje 74 |
-| Samtykket på nytt hver gang man kommer til startsiden, også i samme økt | FR-36 («hver gang brukeren logger inn») | Strengere enn PRD-en | Brukeren skal være inneforstått med hva det vil si å sende CV-en til en ekstern KI hver gang, og får en liten påminnelse om å fjerne personopplysninger før innsending | linje 130 |
-| «Feil e-post eller passord» uten rød ramme på feltene | FR-3 | Avvik fra addendum | Nettsiden vet ikke hvilket felt som er feil, og det er tryggere ikke å si det | linje 136 |
+| Samtykket på nytt hver gang man kommer til startsiden, også i samme økt | FR-36 («hver gang brukeren logger inn») | Strengere enn PRD-en | Brukeren skal være innforstått med hva det vil si å sende CV-en til en ekstern KI hver gang, og får en liten påminnelse om å fjerne personopplysninger før innsending | linje 130 |
+| «Feil e-post eller passord» uten rød ramme på feltene | FR-3 | Avvik fra addendumet | Nettsiden vet ikke hvilket felt som er feil, og det er tryggere ikke å si det | linje 136 |
 | KI-merknaden bare på sidene etter innlogging | FR-35 («hele tiden») | Presisering | Den står i hjørneraden sammen med «Logg ut» | linje 37, 137 |
 | Vindu etter hver nedlasting, med «Bli her» | FR-31 | Tillegg i UX | Man kan laste ned det andre formatet også | linje 56, 59 |
 | Vinduet «Logg ut før nedlasting» | FR-6, NFR-4 | Tillegg i UX | Brevet blir slettet ved utlogging | linje 131 |
 | Arbeidsgiver i filnavnet, som et ekstra felt i KI-svaret med nøkkelordene | FR-29 («Filnavnet bestemmes i UX») | Valg i UX | Søknadene er lette å skille | linje 52, 162 |
 | Startsiden starter alltid en ny søknad, også via «Tilbake» | FR-31, FR-32 | Presisering | Testmodus kan ikke byttes midt i en søknad | linje 152 |
 
-FR-1–FR-38 er gått gjennom. Krav uten skjermbilde (FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38) er arkitektur eller KI-instruks.
+FR-1–FR-38 er gått gjennom. Krav uten skjermbilde (FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38) hører til arkitekturen eller KI-instruksen.
+
+## Skisser
+
+Alle sider har skisse på PC og mobil, og sidene etter innlogging også på nettbrett (768 px). Skissene følger den ekte bredden, så de kan også prøves ved å gjøre nettleservinduet smalere. Skissene viser oppsett og oppførsel.
+
+| Skisse | Viser |
+|---|---|
+| `mockups/login-register-1.html` | Innlogging og registrering, alle feilmeldinger, «Du må logge inn først» |
+| `mockups/start-page-1.html` | Startsiden, samtykke med «i»-boks, testmodus av/på, uten API-nøkkel |
+| `mockups/mode-select-1.html` | Modusvalget med de to kortene (variant A), «Tilbake» og merkelappen «Testmodus». B og C er forkastet og tatt ut av skissen |
+| `mockups/input-page-1.html` | Innleggingen i begge modusene, feilboks med lenker, feiltekst under feltnavnet, testdata-hjelpetekst, ventetegn, KI-feil |
+| `mockups/result-page-1.html` | Resultatsiden i begge modusene (Full generering: Ingrid, Korrektur: Eirik med «Oppdater søknadsbrevet mitt»), nøkkelord som to lister (variant B), FR-18-linjen og tomme lister. Variant A er forkastet og tatt ut av skissen |
+| `mockups/letter-page-1.html` | Brevsiden i begge modusene, fyrverkeri, markeringer (endret, slått sammen, ny, fjernet, ingenting endret), nedlasting med filnavn, de tre vinduene, KI-feil og «Filen kan ikke lages» |
+| `mockups/download-options-1.html` | Tidlig forslag. Variant A ble valgt, med grønn hake fra B. Erstattet av brevsiden |
+| `mockups/korrektur-markings-1.html` | Tidlig forslag. Per setning ble valgt, per ord er forkastet. Erstattet av brevsiden |
+| `mockups/color-themes-1.html`, `mockups/color-themes-2.html`, `mockups/logo-fonts-1.html` | Valg av farger og logoskrift (se `DESIGN.md`) |
+| `mockups/border-contrast-1.html` | Sammenligning av rammefarger for skrivefelt. Hovedfargen er valgt (se `DESIGN.md`) |
+| `mockups/sketch-colors-1.html` | De seks fargene fra skissene slik de brukes (feilboks, «Dette kan du jobbe videre med», åpnet endret setning, ventetegn, fyrverkeri). Godkjent i runde 3 |

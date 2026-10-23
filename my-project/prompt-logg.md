@@ -259,3 +259,8 @@ Verktøy: Claude Code med BMAD-skillen `bmad-ux`. Tre hjelpere leste dokumentene
 | 161 | «ja» (om vinduet ved utlogging etter «Nytt forslag») / «ser bra ut, commit» | Etter «Nytt forslag» er brevet nytt og ikke lastet ned, så vinduet om utlogging kommer igjen |
 | 162 | «push» / «fortsett» / «ja» | Skissene ble oppdatert med endringene fra runde 3, én side om gangen. Alle sidene fikk en knapp for nettbrett (768 px) og følger nå den ekte bredden. Jeg sjekket hver skisse i nettleseren før vi gikk videre |
 | 163 | «ja» (om Eiriks krav og nøkkelord) | Resultatsiden fikk en Korrektur-variant med Eirik og Fjordbanken. Kravene og nøkkelordene var KI-ens forslag, og jeg godtok dem |
+| 164 | «fortsette» / «jA» | Skissene ble flyttet til `mockups/`. Fire hjelpere leste dokumentene, én for struktur og én for språk per dokument |
+| 165 | «OK» / «GODTA» / «EN OG EN» | Jeg godtok de rene feilene og flyttingen samlet, men ville ta forslagene som rørte ved mine tekster, ett og ett |
+| 166 | «PRØV PÅ NYTT OVER ALT» | KI-en foreslo «Prøv igjen» overalt, men jeg valgte «Prøv på nytt» overalt |
+| 167 | «SÅ LENGE JEG HAR EN SIDE SOM SENSOR KAN SE PÅ NÅR JEG GODKJENTE OG KODEREN FINNER HVA FARGENE BRUKES TIL ER JEG FORNØYD» | Fargene fra skissene ble flettet inn i hovedlista etter bruk, og godkjenningen står i `mine-valg-og-ki-feil.md` |
+| 168 | «BEHOLDE» (to ganger) / «JA SETT SOM FERDIG» | Jeg beholdt to ting slik de var. DESIGN.md og EXPERIENCE.md er satt til ferdig (`status: final`) |
