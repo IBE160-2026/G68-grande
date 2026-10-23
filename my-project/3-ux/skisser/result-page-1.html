@@ -25,7 +25,7 @@
   .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
   main { padding: 20px 16px 40px; }
   .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
-    margin: 0 auto; max-width: 960px; transition: max-width .3s ease; overflow: hidden; }
+    margin: 0 auto; max-width: 960px; transition: max-width .3s ease; overflow: clip; }
   body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
     text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 18px 0 0; white-space: nowrap; }
@@ -67,12 +67,6 @@
   .score strong { font-size: 1.6rem; color: var(--primary); }
   .meter { height: 12px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
   .meter span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: 8px; transition: width 1s ease; }
-  .kwA { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { border-radius: 16px; padding: 4px 12px; font-size: .9rem; border: 1px solid var(--border); }
-  .chip.hit { background: var(--success-tint); color: var(--success); border-color: var(--success); }
-  .chip.hit::before { content: "✓ "; font-weight: 700; }
-  .chip.miss { background: var(--surface); color: var(--text-muted); border-style: dashed; }
-  .chip.miss::before { content: "○ "; }
   .kwB { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   body.mobile .kwB { grid-template-columns: 1fr; }
   .kwB h4 { margin: 0 0 6px; font-size: .95rem; }
@@ -97,7 +91,12 @@
   .btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
   .btn-primary { background: var(--primary); color: var(--primary-contrast); font-weight: 600; }
   .btn-secondary { background: var(--surface); color: var(--primary); }
-  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  /* hjørneraden er festet til bunnen av skjermen (FR-35) */
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px;
+    position: sticky; bottom: 0; background: var(--background); border-top: 1px solid var(--border); z-index: 4; }
+  @media (max-height: 500px) { .corners { position: static; } }
+  .fr18 { margin: -6px 0 18px; text-align: center; font-size: .9rem; color: var(--text-muted); }
+  .empty { margin: 0; font-size: .93rem; }
   .ki-note { font-size: .78rem; color: var(--text-muted); }
   .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
     border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; }
@@ -124,15 +123,16 @@
 <body>
 <header class="page">
   <h1>Resultatsiden – skisse</h1>
-  <p>Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset. Prøv «i»-ikonene og ATS-forklaringen. Bytt mellom PC og mobil, og mellom de to måtene å vise nøkkelordene på.</p>
+  <p>Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset. Prøv «i»-ikonene og ATS-forklaringen. Bytt mellom PC og mobil, og prøv «Situasjon» for å se tomme lister. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
   </div>
   <div class="switch">
-    <span>Nøkkelord:</span>
-    <button class="tbtn" id="kA" aria-pressed="true">A. Merkelapper</button>
-    <button class="tbtn" id="kB" aria-pressed="false">B. To lister</button>
+    <span>Situasjon:</span>
+    <button class="tbtn sitopt" data-sit="normal" aria-pressed="true">Vanlig</button>
+    <button class="tbtn sitopt" data-sit="none" aria-pressed="false">CV-en dekker ingenting</button>
+    <button class="tbtn sitopt" data-sit="all" aria-pressed="false">CV-en dekker alt</button>
   </div>
   <div class="switch">
     <span>Svar fra KI når brevet lages:</span>
@@ -163,42 +163,28 @@
         <div class="gap">
           <div class="col covers">
             <h4>Dette dekker CV-en din</h4>
-            <ul>
-              <li>Erfaring med pasientkontakt</li>
-              <li>Gode norskkunnskaper, muntlig og skriftlig</li>
-              <li>Kan jobbe helg</li>
-              <li>Påbegynt helsefaglig utdanning</li>
-            </ul>
+            <div id="coversList"></div>
           </div>
           <div class="col work">
             <h4>Dette kan du jobbe videre med</h4>
-            <ul>
-              <li>Erfaring fra sykehus eller sykehjem</li>
-              <li>Kjennskap til journalsystemet DIPS</li>
-            </ul>
+            <div id="workList"></div>
           </div>
         </div>
       </section>
+
+      <p class="fr18">Gap-analysen og nøkkelordtreffet kan si litt forskjellig. Gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.</p>
 
       <section class="box">
         <h3>Nøkkelordtreff
           <span class="info"><button aria-label="Hva er nøkkelordtreff?" aria-expanded="false">i</button>
             <span class="tip" role="tooltip">En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.</span></span>
         </h3>
-        <div class="score"><strong>7 av 10 = 70 %</strong><span class="sub" style="margin:0">av nøkkelordene står i CV-en din</span></div>
+        <div class="score"><strong id="scoreText"></strong><span class="sub" style="margin:0">av nøkkelordene står i CV-en din</span></div>
         <div class="meter" aria-hidden="true"><span id="bar"></span></div>
 
-        <div class="kwA" id="listA">
-          <span class="chip hit">pasientkontakt</span><span class="chip hit">sykepleie</span><span class="chip hit">helg</span>
-          <span class="chip hit">omsorg</span><span class="chip hit">teamarbeid</span><span class="chip hit">førstehjelp</span>
-          <span class="chip hit">norsk</span><span class="chip miss">DIPS</span><span class="chip miss">sykehjem</span><span class="chip miss">turnus</span>
-        </div>
-
-        <div class="kwB" id="listB" hidden>
-          <div><h4>Står i CV-en (7)</h4>
-            <ul class="hits"><li>pasientkontakt</li><li>sykepleie</li><li>helg</li><li>omsorg</li><li>teamarbeid</li><li>førstehjelp</li><li>norsk</li></ul></div>
-          <div><h4>Står ikke i CV-en (3)</h4>
-            <ul class="misses"><li>DIPS</li><li>sykehjem</li><li>turnus</li></ul></div>
+        <div class="kwB" id="listB">
+          <div><h4 id="hitsH"></h4><div id="hitsList"></div></div>
+          <div><h4 id="missH"></h4><div id="missList"></div></div>
         </div>
       </section>
 
@@ -230,13 +216,29 @@
   }
   pc.onclick = () => setMobile(false); mob.onclick = () => setMobile(true);
 
-  // Nøkkelord A / B
-  const kA = document.getElementById('kA'), kB = document.getElementById('kB');
-  function setList(b) {
-    document.getElementById('listA').hidden = b; document.getElementById('listB').hidden = !b;
-    kA.setAttribute('aria-pressed', String(!b)); kB.setAttribute('aria-pressed', String(b));
+  // Situasjon: vanlig, eller tomme lister (CV-en dekker ingenting / alt)
+  const REQ = ['Erfaring med pasientkontakt', 'Gode norskkunnskaper, muntlig og skriftlig', 'Kan jobbe helg',
+    'Påbegynt helsefaglig utdanning', 'Erfaring fra sykehus eller sykehjem', 'Kjennskap til journalsystemet DIPS'];
+  const KW = ['pasientkontakt', 'sykepleie', 'helg', 'omsorg', 'teamarbeid', 'førstehjelp', 'norsk', 'DIPS', 'sykehjem', 'turnus'];
+  const SIT = { normal: { req: 4, kw: 7 }, none: { req: 0, kw: 0 }, all: { req: 6, kw: 10 } };
+  const list = (items, cls, empty) => items.length
+    ? `<ul class="${cls}">${items.map(i => `<li>${i}</li>`).join('')}</ul>`
+    : `<p class="empty">${empty}</p>`;
+  const $ = id => document.getElementById(id);
+  function setSit(name) {
+    const { req, kw } = SIT[name];
+    $('coversList').innerHTML = list(REQ.slice(0, req), '', 'CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med.');
+    $('workList').innerHTML = list(REQ.slice(req), '', 'Bra jobbet! CV-en din dekker alle kravene i annonsen. 🎉');
+    const hits = KW.slice(0, kw), miss = KW.slice(kw);
+    $('scoreText').textContent = `${kw} av ${KW.length} = ${Math.round(kw / KW.length * 100)} %`;
+    $('hitsH').textContent = `Står i CV-en (${hits.length})`;
+    $('missH').textContent = `Står ikke i CV-en (${miss.length})`;
+    $('hitsList').innerHTML = list(hits, 'hits', 'Ingen av nøkkelordene står i CV-en ennå.');
+    $('missList').innerHTML = list(miss, 'misses', 'Alle nøkkelordene står i CV-en din!');
+    $('bar').style.width = (kw / KW.length * 100) + '%';
+    document.querySelectorAll('.sitopt').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.sit === name)));
   }
-  kA.onclick = () => setList(false); kB.onclick = () => setList(true);
+  document.querySelectorAll('.sitopt').forEach(b => b.onclick = () => setSit(b.dataset.sit));
 
   // i-ikon: trykk eller fokus åpner, Esc lukker
   document.querySelectorAll('.info').forEach(info => {
@@ -273,7 +275,7 @@
   });
 
   // Prosentlinjen fylles når siden åpnes
-  requestAnimationFrame(() => setTimeout(() => document.getElementById('bar').style.width = '70%', 150));
+  requestAnimationFrame(() => setTimeout(() => setSit('normal'), 150));
 </script>
 </body>
 </html>

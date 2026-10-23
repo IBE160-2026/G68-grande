@@ -70,12 +70,15 @@
   .trash:hover { transform: scale(1.15); }
   .pastebox { display: flex; flex-direction: column; gap: 6px; }
   .pastebox .top { display: flex; justify-content: space-between; align-items: center; font-size: .88rem; color: var(--text-muted); }
-  textarea { font: inherit; font-size: .92rem; width: 100%; min-height: 160px; resize: vertical; border: 2px solid var(--border);
+  textarea { font: inherit; font-size: .92rem; width: 100%; min-height: 160px; resize: vertical; border: 2px solid var(--primary);
     border-radius: 14px; padding: 10px; color: var(--text); }
   body.mobile textarea { min-height: 200px; }
   .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 22px 0 8px; }
   .actions .btn-primary { padding: 12px 26px; font-size: 1.05rem; }
-  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  /* hjørneraden er festet til bunnen av skjermen (FR-35) */
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px;
+    position: sticky; bottom: 0; background: var(--background); border-top: 1px solid var(--border); z-index: 4; }
+  @media (max-height: 500px) { .corners { position: static; } }
   .ki-note { font-size: .78rem; color: var(--text-muted); }
   .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
     border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
@@ -100,7 +103,7 @@
 <header class="page">
   <h1>Innleggingssiden – skisse</h1>
   <p>Prøv å laste opp en fil (velg hvilken som helst), lime inn tekst og tømme med søppelbøtta. Trykk «Sjekk CV-en min» med tomme felt for å se feilboksen.
-    Filnavn som ikke slutter på <code>.pdf</code> gir «Feil filtype». Filnavn med <code>skannet</code> gir feilen for uleselig PDF, og filnavn med <code>stor</code> gir «Filen er for stor». Med «Svar fra KI» kan du prøve feilmeldingene når KI-en ikke svarer. I testmodus virker bare filnavn som begynner med <code>test</code>.</p>
+    Filnavn som ikke slutter på <code>.pdf</code> gir «Feil filtype». Filnavn med <code>skannet</code> gir feilen for uleselig PDF, og filnavn med <code>stor</code> gir «Filen er for stor». Med «Svar fra KI» kan du prøve feilmeldingene når KI-en ikke svarer. I testmodus virker bare filnavn som begynner med <code>test</code>. Lim inn mye tekst og rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
@@ -138,7 +141,7 @@
         <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
       </div>
 
-      <p class="testhint" id="testhint" hidden>🧪 Testmodus: bruk filene i mappen <code>testdata/</code> i prosjektet.</p>
+      <p class="testhint" id="testhint" hidden>Testmodus: bruk filene i mappen <code>testdata/</code> i prosjektet.</p>
 
       <div class="fields" id="fields"></div>
 

@@ -64,7 +64,10 @@
   .btn-done { background: var(--success-tint); color: var(--success); border-color: var(--success); font-weight: 600; }
   .btn-link { background: none; border: none; color: var(--primary); text-decoration: underline; font: inherit; cursor: pointer; padding: 6px; }
   .btn-link[disabled] { opacity: .5; cursor: wait; }
-  .corners { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; gap: 8px; }
+  /* hjørneraden er festet til bunnen av skjermen (FR-35) */
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; gap: 8px;
+    position: sticky; bottom: 0; background: var(--background); border-top: 1px solid var(--border); z-index: 4; }
+  @media (max-height: 500px) { .corners { position: static; } }
   .ki-note { font-size: .78rem; color: var(--text-muted); }
   .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
     border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
@@ -97,7 +100,7 @@
 <body>
 <header class="page">
   <h1>Brevsiden – skisse</h1>
-  <p>Fyrverkeriet kommer når siden åpnes og etter hvert nytt forslag. Prøv nedlastingsknappene, vinduet og «Nytt forslag». I Korrektur kan du trykke på de grønne setningene.</p>
+  <p>Fyrverkeriet kommer når siden åpnes og etter hvert nytt forslag. Prøv nedlastingsknappene, vinduet og «Nytt forslag». I Korrektur kan du trykke på de grønne setningene. Trykk «Logg ut» nederst før du har lastet ned for å se advarselen. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
@@ -140,7 +143,7 @@
     </div>
     <div class="corners">
       <span class="ki-note" id="kinote">ⓘ Teksten behandles av ekstern KI</span>
-      <button class="logout">Logg ut</button>
+      <button class="logout" id="logout">Logg ut</button>
     </div>
 
     <div class="overlay" id="dlDialog" hidden role="dialog" aria-modal="true" aria-labelledby="dl-t">
@@ -151,6 +154,17 @@
           <button class="btn btn-primary">Lag ny søknad</button>
           <button class="btn btn-secondary">Logg ut</button>
           <button class="btn-link" id="stay">Bli her</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="outDialog" hidden role="dialog" aria-modal="true" aria-labelledby="out-t">
+      <div class="dialog">
+        <h3 id="out-t">Du har ikke lastet ned brevet.</h3>
+        <p>Vil du logge ut likevel? Brevet blir slettet.</p>
+        <div class="row" style="margin-top:14px">
+          <button class="btn btn-primary" id="yesOut">Logg ut</button>
+          <button class="btn btn-secondary" id="noOut">Avbryt</button>
         </div>
       </div>
     </div>
@@ -214,18 +228,27 @@
     });
     document.querySelectorAll('[data-fmt]').forEach(b => { b.className = 'btn btn-primary'; b.textContent = 'Last ned som ' + b.dataset.fmt; });
     $('toast').textContent = '';
+    downloaded = false;   // et nytt brev er ikke lastet ned ennå
     fireworks();
   }
 
   // Nedlasting: grønn hake + vindu
-  let lastBtn = null;
+  let lastBtn = null, downloaded = false;
   document.querySelectorAll('[data-fmt]').forEach(b => b.onclick = () => {
     b.className = 'btn btn-done'; b.textContent = '✓ Lastet ned som ' + b.dataset.fmt;
     const name = mode === 'full' ? 'Soknad_Sykehuset_2026-10-21' : 'Soknad_Fjordbanken_2026-10-21';
     $('toast').textContent = 'Filnavn: ' + name + (b.dataset.fmt === 'Word' ? '.docx' : '.pdf');
-    lastBtn = b; open('dlDialog', 'stay');
+    downloaded = true; lastBtn = b; open('dlDialog', 'stay');
   });
   $('stay').onclick = () => close('dlDialog');
+
+  // Logg ut før nedlasting: advarsel (runde 2)
+  $('logout').onclick = () => {
+    if (downloaded) { alert('Du er logget ut og kommer til innloggingen.'); return; }
+    lastBtn = $('logout'); open('outDialog', 'noOut');
+  };
+  $('noOut').onclick = () => close('outDialog');
+  $('yesOut').onclick = () => { close('outDialog'); alert('Du er logget ut og kommer til innloggingen. Brevet er slettet.'); };
 
   // Nytt forslag: bekreftelse → venting → nytt brev + fyrverkeri
   $('again').onclick = () => { lastBtn = $('again'); open('newDialog', 'noNew'); };
@@ -254,7 +277,7 @@
   function close(id) { $(id).hidden = true; if (lastBtn) lastBtn.focus(); }
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
-    ['dlDialog', 'newDialog'].forEach(id => { if (!$(id).hidden) close(id); });
+    ['dlDialog', 'newDialog', 'outDialog'].forEach(id => { if (!$(id).hidden) close(id); });
   });
 
   // Fyrverkeri rundt overskriften: ca. 2,5 s, maks tre utbrudd i sekundet, hoppes over ved redusert bevegelse

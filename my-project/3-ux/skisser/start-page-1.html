@@ -31,7 +31,7 @@
   /* bryter */
   .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; }
   .toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .track { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; transition: background .2s ease; }
+  .track { width: 44px; height: 24px; background: var(--text-muted); border-radius: 12px; position: relative; transition: background .2s ease; }
   .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
     background: var(--surface); box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s ease; }
   .toggle input:checked + .track { background: var(--primary); }
@@ -59,7 +59,12 @@
     padding: 22px; max-width: 520px; margin: 0 auto; }
   .consent-text { margin: 0 0 14px; display: flex; gap: 8px; align-items: flex-start; }
   .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; cursor: pointer; }
-  .check input { width: 22px; height: 22px; accent-color: var(--primary); margin-top: 1px; flex-shrink: 0; }
+  .check input { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; margin: 1px 0 0; flex-shrink: 0;
+    border: 2px solid var(--primary); border-radius: 6px; background: var(--surface); cursor: pointer;
+    display: grid; place-content: center; }
+  .check input::before { content: "✓"; color: var(--primary-contrast); font-weight: 700; font-size: 15px; line-height: 1; visibility: hidden; }
+  .check input:checked { background: var(--primary); }
+  .check input:checked::before { visibility: visible; }
   .check input:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
   .err { display: none; color: var(--error); font-weight: 600; font-size: .9rem; margin: 8px 0 0 32px; }
   .consent.bad .err { display: block; }
@@ -82,7 +87,12 @@
   .go:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
   .go:active { transform: scale(.96); }
   .go:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
-  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px; }
+  /* hjørneraden er festet til bunnen av skjermen (FR-35) */
+  .corners { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px 14px; gap: 8px;
+    position: sticky; bottom: 0; background: var(--background); border-top: 1px solid var(--border);
+    border-radius: 0 0 22px 22px; z-index: 4; }
+  body.mobile .corners { border-radius: 0 0 26px 26px; }
+  @media (max-height: 500px) { .corners { position: static; } }
   .ki-note { font-size: .78rem; color: var(--text-muted); }
   .logout { font: inherit; font-size: .85rem; padding: 6px 12px; border-radius: var(--radius);
     border: 2px solid var(--primary); background: var(--surface); color: var(--primary); cursor: pointer; margin-left: auto; }
@@ -95,7 +105,7 @@
 <body>
 <header class="page">
   <h1>Startsiden – skisse</h1>
-  <p>Siden etter innlogging. Prøv bryteren oppe til høyre, «i»-ikonet og å trykke «Begynn å lage søknad» uten å krysse av.</p>
+  <p>Siden etter innlogging. Prøv bryteren oppe til høyre, «i»-ikonet og å trykke «Begynn å lage søknad» uten å krysse av. Rull opp og ned: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>

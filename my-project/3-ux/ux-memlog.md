@@ -1,6 +1,6 @@
 ---
 topic: UX for kode prosjekt (CV-verktøy)
-updated: 2026-10-22T23:11
+updated: 2026-10-23T22:28
 ---
 
 - (decision) Kilder: prd.md og addendum.md fra prd-kode-prosjekt-2026-10-09. Briefen brukes ikke direkte (allerede tatt inn i PRD).
@@ -163,3 +163,10 @@ updated: 2026-10-22T23:11
 - (change) Runde 3: DESIGN.md og EXPERIENCE.md oppdatert med beslutningene fra runde 3 (tema 1–6, valgene og gruppe 1).
 - (change) Retting: kontrasten for rammen i {colors.primary} mot hvit er 6,1:1, ikke 6,6:1 som det står i en tidligere oppføring (runde 2, rammefargen). Regnet ut på nytt av tre hjelpere i runde 3 (A-5, S-14, U10).
 - (decision) Runde 3: Grunnen til at samtykket krysses av hver gang man kommer til startsiden (Kristines ord): man skal være inneforstått med hva det vil si å sende CV-en sin til en ekstern KI hver gang, og dersom man ønsker å fjerne personalia før man sender det inn, får man en liten reminder. Kristine godtar også de små endringene i hjørner og luft som følger av avrundingen (U12).
+- (event) Pause 2026-10-22 etter runde 3. Alt er committet (2f8acdd), ikke pushet ennå. Neste gang: oppdatere skissene med endringene fra runde 2 og 3, flytte dem til mockups/, språkvask og status final.
+- (change) Skisseoppdatering steg 1: start-page-1.html har fått endringene fra runde 2: bryterens spor er grått (text-muted) når den er av, avkrysningsboksen har ramme i primary, og hjørneraden med KI-merknaden og «Logg ut» er festet nederst (sticky) med bakgrunn og tynn strek øverst.
+- (change) Skisseoppdatering steg 2: input-page-1.html har fått endringene fra runde 2: skrivefeltene har ramme i primary, 🧪 er fjernet fra hjelpeteksten for testdata, og hjørneraden er festet nederst. Teksten for skannet PDF var allerede riktig.
+- (change) Skisseoppdatering steg 3: result-page-1.html har fått endringene fra runde 2: FR-18-linjen mellom gap-analysen og nøkkelordtreffet, tekstene for tomme lister (valget «Situasjon»: vanlig, CV-en dekker ingenting, CV-en dekker alt), og hjørneraden festet nederst. Variant A (merkelapper) er tatt ut av skissen fordi B (to lister) er valgt.
+- (change) Skisseoppdatering steg 4: letter-page-1.html har fått endringene fra runde 2: vinduet «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» med [Logg ut] og [Avbryt] når man trykker «Logg ut» før nedlasting, og hjørneraden festet nederst. I skissen gjelder et nytt forslag som et nytt brev som ikke er lastet ned ennå.
+- (decision) Kristine bekrefter: etter «Nytt forslag» er brevet nytt og ikke lastet ned, så vinduet «Du har ikke lastet ned brevet» kommer igjen hvis man logger ut før det nye brevet er lastet ned.
+- (change) Skisseoppdatering steg 5: mode-select-1.html viser nå bare valgt forslag A (to kort med ikon), med den hvite «Tilbake»-knappen under kortene, merkelappen «Testmodus» og hjørneraden festet nederst. B og C er tatt ut. login-register-1.html: skrivefeltene har ramme i primary. «Feil e-post eller passord» ga allerede ingen rød ramme på feltene.
