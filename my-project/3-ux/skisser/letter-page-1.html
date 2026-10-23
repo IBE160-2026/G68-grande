@@ -26,24 +26,25 @@
   main { padding: 20px 16px 40px; }
   .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
     margin: 0 auto; max-width: 960px; display: flex; flex-direction: column; position: relative;
-    max-height: 860px; overflow-y: auto; transition: max-width .3s ease; }
+    max-height: 860px; overflow-y: auto; transition: max-width .3s ease; container-type: inline-size; }
+  body.tablet .frame { max-width: 768px; border: 10px solid #2b1d24; border-radius: 30px; }
   body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
   .bar { display: flex; justify-content: flex-end; padding: 14px 16px 0; min-height: 36px; }
   .badge { font-size: .78rem; font-weight: 600; background: var(--accent); color: var(--text); border-radius: 12px; padding: 2px 10px; }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
-    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 4px 0 0; white-space: nowrap; }
-  body.mobile .logo { font-size: 1.45rem; }
+    text-align: center; font-size: 2.2rem; margin: 4px 0 0; }
+  @container (max-width: 699px) { .logo { font-size: 1.45rem; } }
   .screen { padding: 8px 20px 10px; flex: 1; }
   .hero { position: relative; text-align: center; padding: 26px 0 18px; }
   .hero h2 { margin: 0; font-size: 1.5rem; position: relative; z-index: 1; }
-  body.mobile .hero h2 { font-size: 1.25rem; }
+  @container (max-width: 699px) { .hero h2 { font-size: 1.25rem; } }
   .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .legend { background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
     padding: 10px 14px; font-size: .88rem; margin: 0 auto 12px; max-width: 720px; }
   .legend p { margin: 0; }
   .letter { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow);
     padding: 26px 30px; max-width: 720px; margin: 0 auto; font-size: .98rem; }
-  body.mobile .letter { padding: 16px; font-size: .95rem; }
+  @container (max-width: 699px) { .letter { padding: 16px; font-size: .95rem; } }
   .letter p { margin: 0 0 12px; }
   .chg { color: inherit; background: var(--success-tint); text-decoration: underline; text-decoration-color: var(--success);
     text-decoration-thickness: 2px; text-underline-offset: 3px; border: none; padding: 0 2px; font: inherit; text-align: left;
@@ -89,6 +90,9 @@
   .kibox:focus { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
   .kibox strong { display: block; margin-bottom: 4px; }
   .toast { text-align: center; font-size: .85rem; color: var(--text-muted); margin: 6px 0 0; min-height: 1.3em; }
+  .removed { text-align: center; font-size: .88rem; color: var(--text-muted); margin: 10px auto 0; max-width: 720px; }
+  .dialog .fname { font-size: .88rem; color: var(--text-muted); margin: 0 0 8px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   [hidden] { display: none !important; }
   @keyframes hop { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-14px); } }
   @keyframes pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
@@ -100,9 +104,10 @@
 <body>
 <header class="page">
   <h1>Brevsiden – skisse</h1>
-  <p>Fyrverkeriet kommer når siden åpnes og etter hvert nytt forslag. Prøv nedlastingsknappene, vinduet og «Nytt forslag». I Korrektur kan du trykke på de grønne setningene. Trykk «Logg ut» nederst før du har lastet ned for å se advarselen. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
+  <p>Fyrverkeriet kommer når siden åpnes og etter hvert nytt forslag. Prøv nedlastingsknappene, vinduet og «Nytt forslag». I Korrektur kan du trykke på de grønne setningene: én er ny, og én er to setninger slått sammen. Prøv også «Ingenting endret» og «Filen kan ikke lages». Trykk «Logg ut» nederst før du har lastet ned for å se advarselen. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="tab" aria-pressed="false">Nettbrett (768 px)</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
   </div>
   <div class="switch">
@@ -119,20 +124,30 @@
     <button class="tbtn kiopt" data-ki="net" aria-pressed="false">Nettverksfeil</button>
     <button class="tbtn kiopt" data-ki="other" aria-pressed="false">Annen feil</button>
   </div>
+  <div class="switch">
+    <span>Korrektur:</span>
+    <button class="tbtn kopt" data-k="changed" aria-pressed="true">Setninger endret</button>
+    <button class="tbtn kopt" data-k="none" aria-pressed="false">Ingenting endret</button>
+    <span>Nedlasting:</span>
+    <button class="tbtn fopt" data-f="ok" aria-pressed="true">Virker</button>
+    <button class="tbtn fopt" data-f="fail" aria-pressed="false">Filen kan ikke lages</button>
+  </div>
 </header>
 <main>
   <div class="frame" id="frame">
     <div class="bar"><span class="badge" id="badge" hidden>Testmodus</span></div>
     <p class="logo">Søknadsassistenten</p>
+    <p class="sr" id="status" role="status"></p>
     <div class="screen">
-      <div class="kibox" id="kibox" tabindex="-1" role="alert" hidden>
+      <div class="kibox" id="kibox" tabindex="-1" hidden>
         <strong id="kimsg"></strong>
-        <span>Brevet du hadde, er beholdt.</span>
+        <span id="kisub">Brevet du hadde, er beholdt.</span>
         <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
       </div>
-      <div class="hero"><canvas id="fx" aria-hidden="true"></canvas><h2 id="title">Din ferdigstilte søknad!</h2></div>
+      <div class="hero"><canvas id="fx" aria-hidden="true"></canvas><h2 id="title" tabindex="-1">Din ferdigstilte søknad!</h2></div>
       <div class="legend" id="legend" hidden><p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p></div>
       <article class="letter" id="letter"></article>
+      <p class="removed" id="removed" hidden>1 setning er fjernet.</p>
 
       <div class="row">
         <button class="btn btn-primary" data-fmt="Word">Last ned som Word</button>
@@ -149,6 +164,7 @@
     <div class="overlay" id="dlDialog" hidden role="dialog" aria-modal="true" aria-labelledby="dl-t">
       <div class="dialog">
         <h3 id="dl-t">Brevet er lastet ned!</h3>
+        <p class="fname" id="dlName"></p>
         <p>Vil du lage en ny søknad eller logge ut?</p>
         <div class="row" style="margin-top:14px">
           <button class="btn btn-primary">Lag ny søknad</button>
@@ -180,10 +196,10 @@
       </div>
     </div>
 
-    <div class="wait" id="wait" hidden role="status" aria-live="polite">
+    <div class="wait" id="wait" hidden>
       <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
       <p class="big">På vei mot ny jobb</p>
-      <p class="small">Vi lager brevet ditt – det tar noen sekunder.</p>
+      <p class="small">Vi lager brevet ditt – det kan ta en liten stund.</p>
     </div>
   </div>
 </main>
@@ -211,18 +227,26 @@
     <p>Jeg søker på stillingen som deltids økonomiassistent hos Fjordbanken.
       <button class="chg" aria-expanded="false" data-old="Jeg er veldig interessert i jobben deres og tror jeg hadde passet bra.">Jeg er særlig interessert i stillingen fordi den kombinerer regnskap med kundekontakt.</button></p>
     <p>Jeg studerer finans ved Handelshøyskolen og er nå i tredje år. I fjor jobbet jeg som sommervikar i et regnskapsbyrå, der jeg førte bilag og avstemte kontoer.
-      <button class="chg" aria-expanded="false" data-old="Det var veldig lærerikt og jeg fikk mye ansvar.">Der fikk jeg tidlig ansvar for egne kunder og lærte å jobbe nøyaktig under tidspress.</button></p>
+      <button class="chg" aria-expanded="false" data-old="Det var veldig lærerikt.||Jeg fikk mye ansvar der.">Der fikk jeg tidlig ansvar for egne kunder og lærte å jobbe nøyaktig under tidspress.</button></p>
     <p>Ved siden av studiet er jeg kasserer i linjeforeningen.
       <button class="chg" aria-expanded="false" data-old="Jeg er flink med Excel og tall.">Jeg har god erfaring med Excel, blant annet med budsjett og pivottabeller.</button></p>
-    <p>Jeg ser frem til å høre fra dere.</p><p>Med vennlig hilsen<br>Eirik</p>`;
+    <p><button class="chg" aria-expanded="false" data-old="(Ny setning)">Jeg kommer gjerne på intervju når det passer for dere.</button>
+      Jeg ser frem til å høre fra dere.</p><p>Med vennlig hilsen<br>Eirik</p>`;
+  const KORR_SAME = KORR.replace(/<button class="chg"[^>]*>([^<]*)<\/button>/g, '$1');
+  let korr = 'changed';
 
   function render() {
     $('title').textContent = mode === 'full' ? 'Din ferdigstilte søknad!' : 'Din oppdaterte søknad er ferdig!';
+    const same = mode === 'korr' && korr === 'none';
     $('legend').hidden = mode === 'full';
-    $('letter').innerHTML = mode === 'full' ? (version % 2 ? FULL2 : FULL).join('') : KORR;
+    $('legend').innerHTML = same
+      ? '<p>Vi fant ingenting å endre. Brevet ditt er bra som det er.</p>'
+      : '<p><span class="chg" style="cursor:default">Grønn og understreket</span> = endret. Trykk på setningen for å se det du skrev.</p>';
+    $('letter').innerHTML = mode === 'full' ? (version % 2 ? FULL2 : FULL).join('') : (same ? KORR_SAME : KORR);
+    $('removed').hidden = mode === 'full' || same;
     document.querySelectorAll('#letter .chg').forEach(btn => {
       const old = document.createElement('span'); old.className = 'old'; old.hidden = true;
-      old.innerHTML = '<b>Du skrev</b>' + btn.dataset.old; btn.after(old);
+      old.innerHTML = '<b>Du skrev</b>' + btn.dataset.old.split('||').join('<br>'); btn.after(old);
       btn.onclick = () => { const o = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', String(!o)); old.hidden = o; };
     });
@@ -233,13 +257,27 @@
   }
 
   // Nedlasting: grønn hake + vindu
-  let lastBtn = null, downloaded = false;
-  document.querySelectorAll('[data-fmt]').forEach(b => b.onclick = () => {
+  let lastBtn = null, downloaded = false, fileFails = false, lastFmt = null;
+  function download(b) {
+    lastFmt = b;
+    if (fileFails) {   // filen kan ikke lages: rød boks øverst, brevet er ikke borte
+      showErr('Vi klarte ikke å lage filen. Prøv igjen.', 'Brevet er ikke borte.', () => download(b)); return;
+    }
+    $('kibox').hidden = true;
     b.className = 'btn btn-done'; b.textContent = '✓ Lastet ned som ' + b.dataset.fmt;
-    const name = mode === 'full' ? 'Soknad_Sykehuset_2026-10-21' : 'Soknad_Fjordbanken_2026-10-21';
-    $('toast').textContent = 'Filnavn: ' + name + (b.dataset.fmt === 'Word' ? '.docx' : '.pdf');
+    const name = (mode === 'full' ? 'Soknad_Sykehuset_2026-10-21' : 'Soknad_Fjordbanken_2026-10-21') + (b.dataset.fmt === 'Word' ? '.docx' : '.pdf');
+    $('toast').textContent = 'Filnavn: ' + name;
+    $('dlName').textContent = 'Filnavn: ' + name;
     downloaded = true; lastBtn = b; open('dlDialog', 'stay');
-  });
+  }
+  document.querySelectorAll('[data-fmt]').forEach(b => b.onclick = () => download(b));
+  let retryFn = null;
+  function showErr(msg, sub, fn) {
+    $('kimsg').textContent = msg; $('kisub').textContent = sub; retryFn = fn;
+    $('kibox').hidden = false;
+    $('frame').scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    $('kibox').focus({ preventScroll: true });
+  }
   $('stay').onclick = () => close('dlDialog');
 
   // Logg ut før nedlasting: advarsel (runde 2)
@@ -256,18 +294,26 @@
   let ki = 'ok';
   function makeNew() {
     $('kibox').hidden = true; $('again').disabled = true; $('wait').hidden = false;
+    $('status').textContent = 'Vi lager brevet ditt – det kan ta en liten stund.';
     setTimeout(() => {
-      $('wait').hidden = true; $('again').disabled = false;
-      if (ki === 'ok') { version++; render(); return; }
+      $('wait').hidden = true; $('again').disabled = false; $('status').textContent = '';
+      if (ki === 'ok') { version++; render(); $('title').focus(); return; }   // fokus til overskriften på det nye brevet
       // FR-28: KI-feil – det gamle brevet beholdes
-      $('kimsg').textContent = ki === 'net' ? 'Nettverksfeil, sjekk nettverkstilgangen.' : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.';
-      $('kibox').hidden = false;
-      $('frame').scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-      $('kibox').focus({ preventScroll: true });
+      showErr(ki === 'net' ? 'Nettverksfeil, sjekk nettverkstilgangen.' : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.',
+        'Brevet du hadde, er beholdt.', makeNew);
     }, 3000);
   }
   $('yesNew').onclick = () => { close('newDialog'); makeNew(); };
-  $('retry').onclick = makeNew;
+  $('retry').onclick = () => retryFn && retryFn();
+  document.querySelectorAll('.kopt').forEach(b => b.onclick = () => {
+    korr = b.dataset.k;
+    document.querySelectorAll('.kopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    if (mode !== 'korr') $('mKorr').click(); else render();
+  });
+  document.querySelectorAll('.fopt').forEach(b => b.onclick = () => {
+    fileFails = b.dataset.f === 'fail';
+    document.querySelectorAll('.fopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  });
   document.querySelectorAll('.kiopt').forEach(b => b.onclick = () => {
     ki = b.dataset.ki;
     document.querySelectorAll('.kiopt').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
@@ -276,6 +322,13 @@
   function open(id, focusId) { $(id).hidden = false; $(focusId).focus(); }
   function close(id) { $(id).hidden = true; if (lastBtn) lastBtn.focus(); }
   document.addEventListener('keydown', e => {
+    const dlg = ['dlDialog', 'newDialog', 'outDialog'].map($).find(d => !d.hidden);
+    if (dlg && e.key === 'Tab') {
+      const f = [...dlg.querySelectorAll('button')], first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!dlg.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    }
     if (e.key !== 'Escape') return;
     ['dlDialog', 'newDialog', 'outDialog'].forEach(id => { if (!$(id).hidden) close(id); });
   });
@@ -308,8 +361,12 @@
   }
 
   const setP = (a, b, f) => { a.setAttribute('aria-pressed', String(f)); b.setAttribute('aria-pressed', String(!f)); };
-  $('pc').onclick = () => { document.body.classList.remove('mobile'); setP($('pc'), $('mob'), true); setTimeout(fireworks, 320); };
-  $('mob').onclick = () => { document.body.classList.add('mobile'); setP($('pc'), $('mob'), false); setTimeout(fireworks, 320); };
+  function setSize(size) {
+    document.body.classList.toggle('tablet', size === 'tab'); document.body.classList.toggle('mobile', size === 'mob');
+    ['pc', 'tab', 'mob'].forEach(x => $(x).setAttribute('aria-pressed', String(x === size)));
+    setTimeout(fireworks, 320);
+  }
+  ['pc', 'tab', 'mob'].forEach(x => $(x).onclick = () => setSize(x));
   $('mFull').onclick = () => { mode = 'full'; setP($('mFull'), $('mKorr'), true); render(); };
   $('mKorr').onclick = () => { mode = 'korr'; setP($('mFull'), $('mKorr'), false); render(); };
   function setTest(on) { setP($('tOff'), $('tOn'), !on); $('badge').hidden = !on; $('kinote').style.visibility = on ? 'hidden' : 'visible'; }

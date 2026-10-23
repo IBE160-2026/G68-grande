@@ -25,11 +25,12 @@
   .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
   main { padding: 20px 16px 40px; }
   .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
-    margin: 0 auto; max-width: 960px; transition: max-width .3s ease; overflow: clip; }
+    margin: 0 auto; max-width: 960px; transition: max-width .3s ease; overflow: clip; container-type: inline-size; }
+  body.tablet .frame { max-width: 768px; border: 10px solid #2b1d24; border-radius: 30px; }
   body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
-    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 18px 0 0; white-space: nowrap; }
-  body.mobile .logo { font-size: 1.45rem; }
+    text-align: center; font-size: 2.2rem; margin: 18px 0 0; }
+  @container (max-width: 699px) { .logo { font-size: 1.45rem; } }
   .screen { padding: 8px 20px 10px; }
   .screen > h2 { text-align: center; margin: 4px 0 18px; font-size: 1.25rem; }
   .box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -46,11 +47,13 @@
   .info .tip { position: absolute; left: 50%; top: 32px; transform: translateX(-50%); width: 260px; z-index: 5;
     background: var(--text); color: #fff; font-size: .85rem; font-weight: 400; border-radius: 14px; padding: 10px 12px;
     box-shadow: var(--shadow); display: none; }
+  .info .tip::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; height: 10px; }  /* bro over glippen */
   .info.open .tip { display: block; animation: pop .15s ease; }
   @media (hover: hover) { .info:hover .tip { display: block; } }
   /* gap-analyse */
+  /* bruddpunkt 700 px: under står listene under hverandre */
   .gap { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  body.mobile .gap { grid-template-columns: 1fr; }
+  @container (max-width: 699px) { .gap { grid-template-columns: 1fr; } }
   .col { border-radius: 18px; padding: 14px; }
   .col h4 { margin: 0 0 8px; font-size: 1rem; }
   .col ul { margin: 0; padding: 0; list-style: none; }
@@ -68,12 +71,13 @@
   .meter { height: 12px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
   .meter span { display: block; height: 100%; width: 0; background: var(--primary); border-radius: 8px; transition: width 1s ease; }
   .kwB { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  body.mobile .kwB { grid-template-columns: 1fr; }
+  @container (max-width: 699px) { .kwB { grid-template-columns: 1fr; } }
   .kwB h4 { margin: 0 0 6px; font-size: .95rem; }
   .kwB ul { margin: 0; padding-left: 0; list-style: none; font-size: .93rem; }
   .kwB .hits li::before { content: "✓ "; color: var(--success); font-weight: 700; }
   .kwB .misses li::before { content: "○ "; color: var(--text-muted); }
   [hidden] { display: none !important; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   /* ATS */
   details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 18px; }
   summary { cursor: pointer; font-weight: 700; color: var(--primary); list-style: none; display: flex; justify-content: space-between; gap: 8px; }
@@ -123,10 +127,16 @@
 <body>
 <header class="page">
   <h1>Resultatsiden – skisse</h1>
-  <p>Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset. Prøv «i»-ikonene og ATS-forklaringen. Bytt mellom PC og mobil, og prøv «Situasjon» for å se tomme lister. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
+  <p><span id="who">Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset.</span> Prøv «i»-ikonene og ATS-forklaringen. Bytt mellom PC og mobil, og prøv «Situasjon» for å se tomme lister. Rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="tab" aria-pressed="false">Nettbrett (768 px)</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
+  </div>
+  <div class="switch">
+    <span>Modus:</span>
+    <button class="tbtn" id="mFull" aria-pressed="true">Full generering</button>
+    <button class="tbtn" id="mKorr" aria-pressed="false">Korrektur</button>
   </div>
   <div class="switch">
     <span>Situasjon:</span>
@@ -143,11 +153,12 @@
 </header>
 <main>
   <div class="frame">
+    <p class="sr" id="status" role="status"></p>
     <p class="logo">Søknadsassistenten</p>
     <div class="screen">
-      <h2>Slik passer CV-en din til stillingen</h2>
+      <h2 tabindex="-1">Slik passer CV-en din til stillingen</h2>
 
-      <div class="kibox" id="kibox" tabindex="-1" role="alert" hidden>
+      <div class="kibox" id="kibox" tabindex="-1" hidden>
         <strong id="kimsg"></strong>
         <span>Resultatet og det du har lagt inn, er ikke borte.</span>
         <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv igjen</button></div>
@@ -155,8 +166,8 @@
 
       <section class="box">
         <h3>Gap-analyse
-          <span class="info"><button aria-label="Hva er en gap-analyse?" aria-expanded="false">i</button>
-            <span class="tip" role="tooltip">En KI-vurdering av hvilke krav i annonsen CV-en dekker, og hvilke du kan jobbe videre med.</span></span>
+          <span class="info"><button aria-label="Hva er en gap-analyse?" aria-expanded="false" aria-controls="tip-gap">i</button>
+            <span class="tip" id="tip-gap">En KI-vurdering av hvilke krav i annonsen CV-en dekker, og hvilke du kan jobbe videre med.</span></span>
           <span class="ai-tag">Laget av KI</span>
         </h3>
         <p class="sub">Kravene fra annonsen, sammenlignet med CV-en din.</p>
@@ -176,8 +187,8 @@
 
       <section class="box">
         <h3>Nøkkelordtreff
-          <span class="info"><button aria-label="Hva er nøkkelordtreff?" aria-expanded="false">i</button>
-            <span class="tip" role="tooltip">En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.</span></span>
+          <span class="info"><button aria-label="Hva er nøkkelordtreff?" aria-expanded="false" aria-controls="tip-kw">i</button>
+            <span class="tip" id="tip-kw">En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.</span></span>
         </h3>
         <div class="score"><strong id="scoreText"></strong><span class="sub" style="margin:0">av nøkkelordene står i CV-en din</span></div>
         <div class="meter" aria-hidden="true"><span id="bar"></span></div>
@@ -200,32 +211,43 @@
       </div>
     </div>
     <div class="corners"><span class="ki-note">ⓘ Teksten behandles av ekstern KI</span><button class="logout">Logg ut</button></div>
-    <div class="wait" id="wait" hidden role="status" aria-live="polite">
+    <div class="wait" id="wait" hidden>
       <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
       <p class="big">På vei mot ny jobb</p>
-      <p class="small">Vi lager brevet ditt – det tar noen sekunder.</p>
+      <p class="small">Vi lager brevet ditt – det kan ta en liten stund.</p>
     </div>
   </div>
 </main>
 <script>
   // PC / mobil
-  const pc = document.getElementById('pc'), mob = document.getElementById('mob');
-  function setMobile(m) {
-    document.body.classList.toggle('mobile', m);
-    pc.setAttribute('aria-pressed', String(!m)); mob.setAttribute('aria-pressed', String(m));
+  function setSize(size) {
+    document.body.classList.toggle('tablet', size === 'tab'); document.body.classList.toggle('mobile', size === 'mob');
+    ['pc', 'tab', 'mob'].forEach(x => document.getElementById(x).setAttribute('aria-pressed', String(x === size)));
   }
-  pc.onclick = () => setMobile(false); mob.onclick = () => setMobile(true);
+  ['pc', 'tab', 'mob'].forEach(x => document.getElementById(x).onclick = () => setSize(x));
 
   // Situasjon: vanlig, eller tomme lister (CV-en dekker ingenting / alt)
-  const REQ = ['Erfaring med pasientkontakt', 'Gode norskkunnskaper, muntlig og skriftlig', 'Kan jobbe helg',
-    'Påbegynt helsefaglig utdanning', 'Erfaring fra sykehus eller sykehjem', 'Kjennskap til journalsystemet DIPS'];
-  const KW = ['pasientkontakt', 'sykepleie', 'helg', 'omsorg', 'teamarbeid', 'førstehjelp', 'norsk', 'DIPS', 'sykehjem', 'turnus'];
+  const DATA = {
+    full: { who: 'Ingrid har lagt inn CV-en sin og en annonse for «Pleieassistent, deltid» på Sykehuset.',
+      btn: 'Lag søknadsbrevet mitt',
+      req: ['Erfaring med pasientkontakt', 'Gode norskkunnskaper, muntlig og skriftlig', 'Kan jobbe helg',
+        'Påbegynt helsefaglig utdanning', 'Erfaring fra sykehus eller sykehjem', 'Kjennskap til journalsystemet DIPS'],
+      kw: ['pasientkontakt', 'sykepleie', 'helg', 'omsorg', 'teamarbeid', 'førstehjelp', 'norsk', 'DIPS', 'sykehjem', 'turnus'] },
+    korr: { who: 'Eirik har lagt inn CV-en sin, sitt eget brev og en annonse for «Økonomiassistent, deltid» hos Fjordbanken.',
+      btn: 'Oppdater søknadsbrevet mitt',
+      req: ['Studerer økonomi eller finans', 'Erfaring med regnskap', 'God på Excel', 'Nøyaktig og strukturert',
+        'Erfaring med kundekontakt', 'Kjennskap til regnskapssystemet Tripletex'],
+      kw: ['regnskap', 'Excel', 'bilag', 'avstemming', 'finans', 'budsjett', 'nøyaktig', 'kundekontakt', 'Tripletex', 'lønn'] }
+  };
+  let mode = 'full', sit = 'normal';
+  let REQ = DATA.full.req, KW = DATA.full.kw;
   const SIT = { normal: { req: 4, kw: 7 }, none: { req: 0, kw: 0 }, all: { req: 6, kw: 10 } };
   const list = (items, cls, empty) => items.length
     ? `<ul class="${cls}">${items.map(i => `<li>${i}</li>`).join('')}</ul>`
     : `<p class="empty">${empty}</p>`;
   const $ = id => document.getElementById(id);
   function setSit(name) {
+    sit = name;
     const { req, kw } = SIT[name];
     $('coversList').innerHTML = list(REQ.slice(0, req), '', 'CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med.');
     $('workList').innerHTML = list(REQ.slice(req), '', 'Bra jobbet! CV-en din dekker alle kravene i annonsen. 🎉');
@@ -240,13 +262,19 @@
   }
   document.querySelectorAll('.sitopt').forEach(b => b.onclick = () => setSit(b.dataset.sit));
 
-  // i-ikon: trykk eller fokus åpner, Esc lukker
+  function setMode(m) {
+    mode = m; REQ = DATA[m].req; KW = DATA[m].kw;
+    $('who').textContent = DATA[m].who; $('make').textContent = DATA[m].btn;
+    $('mFull').setAttribute('aria-pressed', String(m === 'full')); $('mKorr').setAttribute('aria-pressed', String(m === 'korr'));
+    setSit(sit);
+  }
+  $('mFull').onclick = () => setMode('full'); $('mKorr').onclick = () => setMode('korr');
+
+  // i-ikon: trykk, Enter eller mellomrom åpner og lukker, Esc lukker. Hover (CSS) åpner på PC. Fokus alene åpner ikke.
   document.querySelectorAll('.info').forEach(info => {
     const btn = info.querySelector('button');
     const set = open => { info.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); };
     btn.addEventListener('click', () => set(!info.classList.contains('open')));
-    btn.addEventListener('focus', () => set(true));
-    btn.addEventListener('blur', () => set(false));
     btn.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
   });
 
@@ -257,8 +285,10 @@
     document.getElementById('kibox').hidden = true;
     document.getElementById('make').disabled = true;
     document.getElementById('wait').hidden = false;
+    document.getElementById('status').textContent = 'Vi lager brevet ditt – det kan ta en liten stund.';
     setTimeout(() => {
       document.getElementById('wait').hidden = true; document.getElementById('make').disabled = false;
+      document.getElementById('status').textContent = '';
       if (ki === 'ok') { alert('Ferdig! Du kommer nå til brevsiden.'); return; }
       document.getElementById('kimsg').textContent = ki === 'net'
         ? 'Nettverksfeil, sjekk nettverkstilgangen.' : 'Noe gikk galt hos KI-tjenesten. Prøv på nytt.';

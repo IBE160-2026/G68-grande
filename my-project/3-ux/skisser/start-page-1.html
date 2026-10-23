@@ -25,7 +25,9 @@
   .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
   main { padding: 20px 16px 40px; }
   .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
-    margin: 0 auto; max-width: 960px; min-height: 600px; display: flex; flex-direction: column; transition: max-width .3s ease; }
+    margin: 0 auto; max-width: 960px; min-height: 600px; display: flex; flex-direction: column; transition: max-width .3s ease;
+    container-type: inline-size; }
+  body.tablet .frame { max-width: 768px; border: 10px solid #2b1d24; border-radius: 30px; }
   body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
   .bar { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 14px 16px 0; min-height: 44px; flex-wrap: wrap; }
   /* bryter */
@@ -37,21 +39,20 @@
   .toggle input:checked + .track { background: var(--primary); }
   .toggle input:checked + .track::after { transform: translateX(20px); }
   .toggle input:focus-visible + .track { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
-  .toggle input:disabled + .track { opacity: .6; }
+  .toggle input[aria-disabled="true"] + .track { opacity: .6; }
   .toggle.locked { cursor: not-allowed; }
   .nokey { flex-basis: 100%; text-align: right; font-size: .8rem; color: var(--text-muted); }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
-    text-align: center; font-size: clamp(1.35rem, 5vw, 2.4rem); margin: 6px 0 0; white-space: nowrap; }
-  body.mobile .logo { font-size: 1.45rem; }
+    text-align: center; font-size: 2.4rem; margin: 6px 0 0; }
+  @container (max-width: 699px) { .logo { font-size: 1.45rem; } }
   .screen { padding: 8px 20px 10px; flex: 1; }
   .hello { text-align: center; margin: 6px 0 4px; font-size: 1.3rem; }
   .lead { text-align: center; color: var(--text-muted); margin: 0 auto 22px; }
-  body:not(.mobile) .lead { white-space: nowrap; }
   .card { width: fit-content; max-width: 100%; padding: 12px 18px; border-radius: 18px; font-size: .92rem; }
   .consent-line { margin: 0 0 6px; text-align: center; color: var(--text-muted); }
   .go { padding: 18px 40px !important; font-size: 1.25rem !important; margin-top: 24px !important; }
-  body:not(.mobile) .go { padding: 24px 64px !important; font-size: 1.5rem !important; margin-top: 32px !important; }
-  body.mobile .go { width: 100%; }
+  @container (min-width: 700px) { .go { padding: 24px 64px !important; font-size: 1.5rem !important; margin-top: 32px !important; } }
+  @container (max-width: 699px) { .go { width: 100%; } }
   .consent-row { display: flex; justify-content: center; align-items: center; gap: 10px; }
   .consent-row .check { align-items: center; }
   .consent .err { text-align: center; margin-left: 0; }
@@ -79,6 +80,7 @@
     background: var(--text); color: #fff; font-size: .85rem; border-radius: 14px; padding: 12px 14px;
     box-shadow: var(--shadow); display: none; }
   .tip p { margin: 0 0 8px; } .tip p:last-child { margin: 0; }
+  .tip::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; height: 10px; }  /* bro over glippen */
   .info.open .tip { display: block; }
   @media (hover: hover) { .info:hover .tip { display: block; } }
   .go { display: block; margin: 20px auto 0; font: inherit; border-radius: var(--radius); padding: 14px 28px; cursor: pointer;
@@ -105,9 +107,10 @@
 <body>
 <header class="page">
   <h1>Startsiden – skisse</h1>
-  <p>Siden etter innlogging. Prøv bryteren oppe til høyre, «i»-ikonet og å trykke «Begynn å lage søknad» uten å krysse av. Rull opp og ned: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
+  <p>Siden etter innlogging. Prøv bryteren oppe til høyre, «i»-ikonet og å trykke «Begynn å lage søknad» uten å krysse av. Prøv også «Nettbrett» og å gjøre vinduet smalere. Rull opp og ned: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="tab" aria-pressed="false">Nettbrett (768 px)</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
   </div>
   <div class="switch">
@@ -120,7 +123,7 @@
   <div class="frame">
     <div class="bar">
       <label class="toggle" id="tLabel">
-        <input type="checkbox" id="testmode" role="switch">
+        <input type="checkbox" id="testmode" role="switch" aria-describedby="nokey">
         <span class="track" aria-hidden="true"></span>
         Testmodus
       </label>
@@ -137,15 +140,15 @@
           <div class="consent-row">
             <label class="check"><input type="checkbox" id="agree" aria-describedby="agree-err">
               Jeg samtykker til bruk av KI</label>
-            <span class="info"><button aria-label="Hva betyr samtykket?" aria-expanded="false">i</button>
-              <span class="tip" role="tooltip">
+            <span class="info"><button aria-label="Hva betyr samtykket?" aria-expanded="false" aria-controls="tip-consent">i</button>
+              <span class="tip" id="tip-consent">
                 <p><b>Hva samtykker jeg til?</b> Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til en ekstern KI-tjeneste.</p>
                 <p><b>Hvorfor sendes teksten?</b> KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.</p>
                 <p><b>Lagres noe?</b> Nei. Ingenting du legger inn, lagres etter at du logger ut.</p>
                 <p><b>Personopplysninger:</b> Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. Det er ditt valg.</p>
               </span></span>
           </div>
-          <div class="err" id="agree-err" role="alert">Du må samtykke før du kan begynne</div>
+          <div class="err" id="agree-err">Du må samtykke før du kan begynne</div>
         </div>
         <p class="testinfo" id="testinfo" hidden>Du er i testmodus. Nettsiden bruker ferdige svar, og ingenting sendes til ekstern KI.</p>
       </div>
@@ -161,9 +164,11 @@
 <script>
   const $ = id => document.getElementById(id);
   // PC / mobil
-  function setMobile(m) { document.body.classList.toggle('mobile', m);
-    $('pc').setAttribute('aria-pressed', String(!m)); $('mob').setAttribute('aria-pressed', String(m)); }
-  $('pc').onclick = () => setMobile(false); $('mob').onclick = () => setMobile(true);
+  function setSize(size) {
+    document.body.classList.toggle('tablet', size === 'tab'); document.body.classList.toggle('mobile', size === 'mob');
+    ['pc', 'tab', 'mob'].forEach(x => $(x).setAttribute('aria-pressed', String(x === size)));
+  }
+  ['pc', 'tab', 'mob'].forEach(x => $(x).onclick = () => setSize(x));
 
   // Testmodus av/på
   function applyTest() {
@@ -173,13 +178,14 @@
     $('kinote').style.visibility = on ? 'hidden' : 'visible';  // FR-35: merknad bare når testmodus er av
     $('consent').classList.remove('bad');
   }
+  $('testmode').addEventListener('click', e => { if ($('testmode').getAttribute('aria-disabled') === 'true') e.preventDefault(); });
   $('testmode').addEventListener('change', applyTest);
 
   // Situasjon: uten API-nøkkel låser testmodus på
   function setKey(noKey) {
     $('sNormal').setAttribute('aria-pressed', String(!noKey)); $('sNoKey').setAttribute('aria-pressed', String(noKey));
     $('testmode').checked = noKey ? true : false;
-    $('testmode').disabled = noKey;
+    $('testmode').setAttribute('aria-disabled', String(noKey));
     $('tLabel').classList.toggle('locked', noKey);
     $('nokey').hidden = !noKey;
     applyTest();
@@ -195,13 +201,11 @@
   });
   $('agree').addEventListener('change', () => { if ($('agree').checked) $('consent').classList.remove('bad'); });
 
-  // i-ikon
+  // i-ikon: trykk, Enter eller mellomrom åpner og lukker, Esc lukker. Hover (CSS) åpner på PC. Fokus alene åpner ikke.
   document.querySelectorAll('.info').forEach(info => {
     const btn = info.querySelector('button');
     const set = o => { info.classList.toggle('open', o); btn.setAttribute('aria-expanded', String(o)); };
     btn.addEventListener('click', () => set(!info.classList.contains('open')));
-    btn.addEventListener('focus', () => set(true));
-    btn.addEventListener('blur', () => set(false));
     btn.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
   });
 </script>

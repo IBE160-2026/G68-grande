@@ -25,17 +25,20 @@
   .tbtn[aria-pressed="true"] { background: var(--primary); color: var(--primary-contrast); }
   main { padding: 20px 16px 40px; }
   .frame { background: var(--background); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow);
-    margin: 0 auto; max-width: 960px; min-height: 560px; display: flex; flex-direction: column; transition: max-width .3s ease; }
+    margin: 0 auto; max-width: 960px; min-height: 560px; display: flex; flex-direction: column; transition: max-width .3s ease;
+    container-type: inline-size; }
+  body.tablet .frame { max-width: 768px; border: 10px solid #2b1d24; border-radius: 30px; }
   body.mobile .frame { max-width: 375px; border: 10px solid #2b1d24; border-radius: 36px; }
   .bar { display: flex; justify-content: flex-end; padding: 14px 16px 0; min-height: 36px; }
   .badge { font-size: .78rem; font-weight: 600; background: var(--accent); color: var(--text); border-radius: 12px; padding: 2px 10px; }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
-    text-align: center; font-size: clamp(1.35rem, 5vw, 2.2rem); margin: 4px 0 0; white-space: nowrap; }
-  body.mobile .logo { font-size: 1.45rem; }
+    text-align: center; font-size: 2.2rem; margin: 4px 0 0; }
+  @container (max-width: 699px) { .logo { font-size: 1.45rem; } }
   .screen { padding: 8px 20px 20px; flex: 1; }
   .screen h2 { text-align: center; margin: 4px 0 18px; font-size: 1.2rem; }
+  /* bruddpunkt 700 px: under står kortene under hverandre */
   .options { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
-  body.mobile .options { grid-template-columns: 1fr; }
+  @container (max-width: 699px) { .options { grid-template-columns: 1fr; } }
   button { font: inherit; color: inherit; cursor: pointer; }
   button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
   /* to store kort med ikon, hele kortet er en knapp */
@@ -73,9 +76,10 @@
 <body>
 <header class="page">
   <h1>Modusvalget – skisse</h1>
-  <p>Siden som kommer etter «Begynn å lage søknad». Hold musa over kortene og trykk. «Tilbake» fører til startsiden. Bytt til mobil og rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
+  <p>Siden som kommer etter «Begynn å lage søknad». Hold musa over kortene og trykk. «Tilbake» fører til startsiden. Prøv «Nettbrett» og å gjøre vinduet smalere. Bytt til mobil og rull: raden med KI-merknaden og «Logg ut» blir stående nederst.</p>
   <div class="switch">
     <button class="tbtn" id="pc" aria-pressed="true">PC</button>
+    <button class="tbtn" id="tab" aria-pressed="false">Nettbrett (768 px)</button>
     <button class="tbtn" id="mob" aria-pressed="false">Mobil (375 px)</button>
     <span>Testmodus:</span>
     <button class="tbtn" id="tOff" aria-pressed="true">Av</button>
@@ -104,8 +108,11 @@
 <script>
   const $ = id => document.getElementById(id);
   const setP = (a, b, f) => { a.setAttribute('aria-pressed', String(f)); b.setAttribute('aria-pressed', String(!f)); };
-  $('pc').onclick = () => { document.body.classList.remove('mobile'); setP($('pc'), $('mob'), true); };
-  $('mob').onclick = () => { document.body.classList.add('mobile'); setP($('pc'), $('mob'), false); };
+  function setSize(size) {
+    document.body.classList.toggle('tablet', size === 'tab'); document.body.classList.toggle('mobile', size === 'mob');
+    ['pc', 'tab', 'mob'].forEach(x => $(x).setAttribute('aria-pressed', String(x === size)));
+  }
+  ['pc', 'tab', 'mob'].forEach(x => $(x).onclick = () => setSize(x));
   function setTest(on) { setP($('tOff'), $('tOn'), !on); $('badge').hidden = !on; $('kinote').style.visibility = on ? 'hidden' : 'visible'; }
   $('tOff').onclick = () => setTest(false); $('tOn').onclick = () => setTest(true);
   document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => alert('Du valgte ' + b.dataset.go + '. Du kommer nå til innleggingen.'));

@@ -30,7 +30,7 @@
     padding: 28px 20px 24px; min-height: 560px; }
   body.mobile .frame { border: 10px solid #2b1d24; border-radius: 36px; }
   .logo { font-family: "Baloo 2", sans-serif; font-weight: 800; color: var(--primary);
-    text-align: center; font-size: clamp(1.35rem, 5vw, 2.4rem); margin: 0 0 18px; white-space: nowrap; }
+    text-align: center; font-size: clamp(1.35rem, 5vw, 2.4rem); margin: 0 0 18px; }
   body.mobile .logo { font-size: 1.45rem; }
   form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 22px; max-width: 360px; margin: 0 auto; box-shadow: var(--shadow); }
@@ -128,7 +128,7 @@
         <button class="btn" type="submit">Registrer deg</button>
         <p class="switchlink">Har du allerede en bruker? <a href="#login">Logg inn</a></p>
       </form>
-      <p class="tips">Prøv: <code>test@test.no</code> gir «Denne e-posten er allerede registrert» (FR-2).</p>
+      <p class="tips">Prøv: <code>test@test.no</code> gir «Denne e-posten er allerede registrert» (FR-2), og <code>ola@</code> gir «E-posten er ikke gyldig».</p>
     </div>
   </section>
 
@@ -175,6 +175,7 @@
     e.preventDefault();
     const em = document.getElementById('re'), pw = document.getElementById('rp'), pw2 = document.getElementById('rp2');
     setErr(em, !em.value.trim() ? 'Fyll inn e-post'
+      : !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim()) ? 'E-posten er ikke gyldig'   // feil form, for eksempel «ola@»
       : em.value.trim() === 'test@test.no' ? 'Denne e-posten er allerede registrert' : '');
     setErr(pw, !pw.value ? 'Fyll inn passord' : pw.value.length < 8 ? 'Passordet må ha minst 8 tegn' : '');
     setErr(pw2, !pw2.value ? 'Gjenta passordet' : pw2.value !== pw.value ? 'Passordene er ikke like' : '');
