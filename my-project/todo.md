@@ -68,6 +68,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Hvis tid
 
 - [ ] Mørk modus (fargene er lagret som variabler, så den kan legges til uten å bygge om)
+- [ ] Prøve Teal, Rezi og Kickresume selv for å bekrefte funnene i konkurrentanalysen om det som mangler hos dem
 
 ## Før innlevering
 
