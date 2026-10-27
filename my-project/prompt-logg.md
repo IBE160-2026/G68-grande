@@ -264,3 +264,18 @@ Verktøy: Claude Code med BMAD-skillen `bmad-ux`. Tre hjelpere leste dokumentene
 | 166 | «PRØV PÅ NYTT OVER ALT» | KI-en foreslo «Prøv igjen» overalt, men jeg valgte «Prøv på nytt» overalt |
 | 167 | «SÅ LENGE JEG HAR EN SIDE SOM SENSOR KAN SE PÅ NÅR JEG GODKJENTE OG KODEREN FINNER HVA FARGENE BRUKES TIL ER JEG FORNØYD» | Fargene fra skissene ble flettet inn i hovedlista etter bruk, og godkjenningen står i `mine-valg-og-ki-feil.md` |
 | 168 | «BEHOLDE» (to ganger) / «JA SETT SOM FERDIG» | Jeg beholdt to ting slik de var. DESIGN.md og EXPERIENCE.md er satt til ferdig (`status: final`) |
+
+## 2026-10-27 – Faglærers sesjonslogg og konkurrentanalyse
+
+Verktøy: Claude Code med faglærers skill `sesjonslogg` og BMAD-skillen `bmad-deep-recon` (typen «competitive»). Beslutningene for konkurrentanalysen er logget i `4-konkurrentanalyse/konkurrentanalyse-memlog.md`.
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 169 | «git pull» | KI-en hentet `CLAUDE.md` og skillen `sesjonslogg`, som faglærer hadde lagt rett i repoet |
+| 170 | «supert, jeg ønsker egentlig å fortsette å logge slik jeg gjør i dag, dajeg ønsker en kontinuitet gjennom hele prosjektet, men at jeg kan ha med sesjonsloggen også siden læreren har kommet med den som en anbefaling. […] Kanskje issues er er hoved også legger vi inn to do der?» / «ja ser bra ut, ønsker også en readme for to do og issues!» | Jeg fortsetter med mine egne logger og bruker sesjonsloggen i tillegg. Jeg foreslo `issues.md` som hovedliste, men KI-en anbefalte `todo.md` fordi den har vært med fra starten, og jeg godtok det. En README i `.logs/kristine/` forklarer begge deler |
+| 171 | «ja det ser bra ut, men logs/kristine er det i repoet mitt?» | KI-en forklarte at mappa ligger i repoet, men kan være skjult fordi navnet begynner med punktum |
+| 172 | «jeg ønsker også at du kjører en bmad-deep-recon og competetive research om det er en egen ting, dette er noe læreren anbefalte oss å gjøre, skulle helst vært gjort før PRD, men tenker vi kan gjøre det nå og legge inn funnene i en egen mappe så jeg kan vise til dette eventuelt» | Jeg valgte at KI-en skulle gjøre søket selv, sjekke både posisjoneringen og hva vi kan lære, og bare se på de fire konkurrentene fra briefen |
+| 173 | «så lenge resultatet ikke endrer på noe vi allerede har laget er det bare å kjøre» | Fem hjelpere søkte i to runder. Differensieringen i briefen holder: ingen av de fire forklarer hvordan poengsummen regnes ut, ingen har KI-korrektur av eget brev med markerte endringer, og ingen støtter norsk. Brief, PRD og UX er ikke endret. Funnene ligger i `4-konkurrentanalyse/` |
+| 174 | «COMMIT» / «JA» | Committet, og denne delen av prompt-loggen er skrevet |
+
+**Hva jeg lærte om å styre KI-en:** Under PRD-arbeidet oppdaget jeg at jeg er veldig nøye og vil se alt KI-en gjør til punkt og prikke. Det gir kontroll, men tar mye tid. For å bli ferdig i tide må jeg stole mer på KI-ens avgjørelser i det som er lett å rette, og heller bruke tiden på det som er viktig.
