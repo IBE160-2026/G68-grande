@@ -24,6 +24,10 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`skisser/`](3-ux/skisser/) | Skisser av alle sidene på PC, nettbrett og mobil, og forslagene jeg valgte mellom (åpnes i nettleseren) |
 | [`gjennomganger/`](3-ux/gjennomganger/) | Den kritiske gjennomgangen av UX: sjekkliste, tilgjengelighet og sensor-blikk, en samlet rapport (`validation-report.html`) og språkvasken (`review-struktur-og-sprak.md`) |
 | [`mine-valg-og-ki-feil.md`](3-ux/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i UX, og hvilke KI-feil jeg fant |
+| **`4-konkurrentanalyse/`** | |
+| [`konkurrentanalyse.md`](4-konkurrentanalyse/konkurrentanalyse.md) | Konkurrentanalyse av Jobscan, Rezi, Teal og Kickresume, gjort etter UX (se README i mappen) |
+| [`konkurrentanalyse-memlog.md`](4-konkurrentanalyse/konkurrentanalyse-memlog.md) | Beslutningslogg for konkurrentanalysen: plan, kilder og påstander |
+| [`sokenotater/`](4-konkurrentanalyse/sokenotater/) | Notatene fra hvert søk, som rapporten er skrevet ut fra |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |

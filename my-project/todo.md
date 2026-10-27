@@ -2,6 +2,8 @@
 
 Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og legg til nye punkter når vi oppdager dem.
 
+Åpne punkter fra sesjonsloggene står også i `.logs/kristine/issues.md` (se `.logs/kristine/README.md`).
+
 ## Ferdigstilling av PRD
 
 - [x] Steg 1: gjennomgang av beslutningsloggen (memlog)
@@ -56,7 +58,10 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] Om «Nytt forslag» i testmodus gir det samme ferdige brevet eller et annet
   - [ ] Automatisk utlogging: helst ikke, men hvis ja, varsle minst 20 sekunder før
   - [ ] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38
+  - Fra konkurrentanalysen:
+  - [ ] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?)
 - [ ] Epics og stories
+- [x] Konkurrentanalyse av Jobscan, Rezi, Teal og Kickresume (anbefalt av faglærer, gjort etter UX, ligger i 4-konkurrentanalyse/)
 
 ## Før innlevering
 
@@ -66,5 +71,6 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Før innlevering
 
+- [ ] Sjekke på nytt at ingen av konkurrentene har fått norsk eller korrektur av eget brev med markerte endringer (konkurrentanalysen sier sjekk fra 7. november)
 - [ ] Lage en kort prompt-logg med de viktigste valgene for hele prosjektet, til sensor (den lange loggen beholdes)
   - Ta med `3-ux/mine-valg-og-ki-feil.md` (UX er ferdig der), og legg til brief, PRD, arkitektur og koding
