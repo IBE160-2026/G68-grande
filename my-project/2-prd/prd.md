@@ -269,6 +269,8 @@ Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på
 | README testet på en ren klone | 11. desember |
 | Levering | 15. desember |
 
+**Merknad (3. november):** Datoene ble ikke fulgt. Jeg har ikke hatt tid, og jeg har ventet på at faglærer skal begynne med sitt prosjekt, slik at jeg kan følge undervisningen. Leveringen 15. desember står fast.
+
 ## 8. Åpne spørsmål
 
 | Spørsmål | Eier | Når |
