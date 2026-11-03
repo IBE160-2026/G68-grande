@@ -144,7 +144,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 
 - **NFR-1:** Passord lagres hashet, aldri som klartekst.
 - **NFR-2:** API-nøkkelen ligger bare lokalt og havner aldri i Git. Repoet har en `.env.example` som viser hvilke innstillinger som trengs, uten ekte verdier.
-- **NFR-3:** Ekte CV-er havner aldri i Git. Bare fiktive testdata ligger i repoet, i en egen mappe, sammen med en fasit for hver CV og stillingsannonse.
+- **NFR-3:** Ekte CV-er havner aldri i Git. Bare fiktive testdata ligger i repoet, i en egen mappe, sammen med en fasit for hver CV og stillingsannonse, med en kort begrunnelse for hvert krav som er dekket eller mangler.
 - **NFR-4:** CV, stillingsannonse, søknadsbrev og nøkkelordliste lagres ikke mellom øktene. Bare brukerkontoen lagres, i en lokal database.
 - **NFR-5:** Innloggingen fungerer lokalt uten noen ekstern tjeneste.
 
