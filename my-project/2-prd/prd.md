@@ -156,7 +156,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 ### Kjørbarhet og testing
 
 - **NFR-8:** Sensor kan få nettsiden i gang på 10–15 minutter ved å følge README. Første gang nettsiden startes, lages databasen og testbrukeren automatisk. README har:
-  - en kort beskrivelse av hva nettsiden gjør
+  - en kort beskrivelse av hva nettsiden gjør og hvem den er for
   - forutsetninger med versjoner
   - eksakte kommandoer for installasjon og oppstart
   - hvilke innstillinger som trengs, med henvisning til `.env.example` (NFR-2)
