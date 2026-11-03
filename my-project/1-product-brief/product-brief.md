@@ -113,3 +113,4 @@ Sjekket 10. oktober 2026.
 - Rezi: [rezi.ai, AI Keyword Targeting](https://www.rezi.ai/docs/ai-keyword-targeting-explained), [rezi.ai](https://rezi.ai/lp/home), [Scoutify, anmeldelse](https://scoutify.com/blog/rezi-review/)
 - Teal: [Teal hjelpeside, Cover Letter Generator](https://tealhq.helpscoutdocs.com/article/68-using-ai-cover-letter-generator)
 - Kickresume: [kickresume.com](https://www.kickresume.com)
+- ATS (sjekket 3. november 2026): [Fuller, J. B., «How to Tap the Talent Automated HR Platforms Miss», Harvard Business School Working Knowledge, 5. november 2021](https://www.library.hbs.edu/working-knowledge/how-to-tap-the-talent-automated-hr-platforms-miss). Om lag to tredjedeler (63 %) av arbeidsgiverne i undersøkelsen, fra USA, Storbritannia og Tyskland, brukte et rekrutteringssystem, og over 90 % av dem brukte det til å sortere eller rangere søkerne før noen leste søknadene. Det finnes ingen tilsvarende norske tall.
