@@ -31,7 +31,7 @@ En søknad som føles som *deres egen stemme*, ikke en generisk KI-tekst — og 
 
 ### Hva gjør dette annerledes
 
-Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes ut med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske.
+Mange av funksjonene i Søknadsassistenten finnes allerede i andre verktøy. Jobscan, Rezi, Teal og Kickresume tilbyr for eksempel både nøkkelordsjekk mot en stillingsannonse og KI-skrevne søknadsbrev (sjekket 10. oktober 2026, se kilder). Søknadsassistenten konkurrerer derfor ikke på antall funksjoner. Det som kan skille den fra de andre, er at nøkkelordtreffet regnes ut med en åpen telleregel som brukeren kan forstå og etterprøve, og at nettsiden forklarer begrepene for studenter som søker jobb for første gang. Korrektur er et likeverdig alternativ til Full generering fordi helt KI-genererte søknadsbrev lett blir gjenkjennelige og generiske. [Konkurrentanalysen](../4-konkurrentanalyse/konkurrentanalyse.md) (27. oktober 2026) fant at ingen av de fire konkurrentene støtter norsk, eller har KI-korrektur av eget søknadsbrev med markerte endringer. Dette ble funnet i dokumentasjonen deres, ikke ved å prøve verktøyene, og sjekkes på nytt før levering.
 
 Den ærlige begrensningen: det unike fortrinnet er ikke teknisk sofistikering, men en åpen telleregel og forklaringer for studenter som gir en enkel, tydelig opplevelse fremfor bredde.
 
@@ -163,6 +163,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
   - e-post og passord til testbrukeren
   - hvor testdataene og fasiten ligger (NFR-3)
   - hvordan testene kjøres (NFR-9)
+  - kjente begrensninger, for eksempel i telleregelen (FR-17) og i testmodus (FR-34)
   - to–tre skjermbilder med ekte KI på (FR-38)
   - en oversikt over mappestrukturen
   - lenker til planleggingsdokumentene og prompt-loggen

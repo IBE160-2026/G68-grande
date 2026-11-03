@@ -8,7 +8,7 @@ status: complete
 preset: 'standard'
 validation: 'normal'
 created: '2026-10-27'
-updated: '2026-10-27'
+updated: '2026-11-03'
 claims_verified: 8
 claims_unverified: 11
 claims_overturned: 1
@@ -18,7 +18,7 @@ claims_overturned: 1
 
 **Beslutningen denne researchen skal støtte:** 1) Stemmer det som står under «Hva gjør dette annerledes» i product brief (åpen telleregel for nøkkelordtreff, Korrektur med markerte endringer, forklaringer for studenter)? 2) Hva gjør konkurrentene bra som vi kan lære av, uten å utvide omfanget?
 
-**Merk:** Analysen ble gjort 27. oktober 2026, etter at product brief, PRD og UX var ferdige. Den endrer ingen av de dokumentene. Den viser om valgene holder, og hva vi kan ta med oss videre.
+**Merk:** Analysen ble gjort 27. oktober 2026, etter at product brief, PRD og UX var ferdige. Den viser om valgene holder, og hva vi kan ta med oss videre. Først endret den ingen av dokumentene. 3. november 2026 ble to ting lagt inn i PRD-en med utgangspunkt i analysen: en setning under «Hva gjør dette annerledes» om at ingen av konkurrentene støtter norsk eller KI-korrektur av eget brev med markerte endringer (anbefaling 1), og et krav om at README skal ha kjente begrensninger (NFR-8, anbefaling 6).
 
 ## Sammendrag
 
@@ -87,7 +87,7 @@ Det ble ikke gjort et eget motargument-søk (red team var av). Det sterkeste mot
 
 ## Anbefalinger
 
-Ingen av disse endrer brief, PRD eller UX. De er læringspunkter til arkitektur og stories.
+Anbefalingene er læringspunkter til arkitektur og stories. Anbefaling 1 og 6 førte senere til to små tillegg i PRD-en (se merknaden øverst).
 
 1. **Behold differensieringen som den er** (høy sikkerhet for punktene 1 og 3 i sammendraget, middels for punkt 2). → Bekrefter brief og PRD.
 2. **Vis telleregelen rett ved poengsummen**, for eksempel «7 av 10 nøkkelord fra annonsen står i CV-en». Det er det konkurrentene ikke gjør (middels sikkerhet, bygger på at vi ikke fant noe) [3][9][15][23]. → Stories for nøkkelordtreffet.
