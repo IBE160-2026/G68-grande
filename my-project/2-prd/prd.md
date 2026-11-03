@@ -242,7 +242,7 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 10. Feil filtype, tomme felt og en uleselig PDF gir riktig feilmelding. (FR-4, FR-9, FR-10, FR-11)
 11. Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i den fiktive CV-en. Sjekkes manuelt mot fasit. (FR-37)
 12. I Korrektur beholder det forbedrede brevet brukerens innhold, eksempler og rekkefølge. Sjekkes manuelt med testdataene. (FR-23, FR-24)
-13. En medstudent som ser resultatsiden for en av test-CV-ene, kan med egne ord forklare hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. (FR-14, FR-18)
+13. En person som ikke kjenner prosjektet, helst en student eller noen som har søkt jobb nylig, ser resultatsiden for en av test-CV-ene, og kan med egne ord forklare hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. (FR-14, FR-18)
 
 ## 6. Risiko
 
