@@ -228,7 +228,7 @@ Betaling, automatisk innsending, oversikt over tidligere søknader og mobilapp.
 
 ## 5. Suksesskriterier
 
-Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11 og 12 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Resultatet skrives i testplanen (NFR-12).
+Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11 og 12 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Feiler én kjøring, forbedres instruksen (prompten) én gang, og alle tre kjøres på nytt. Feiler det fortsatt, skrives kriteriet som ikke bestått i testplanen, med hva som gikk galt. Resultatet skrives i testplanen (NFR-12).
 
 1. Gap-analysen viser alle krav som fasiten sier mangler, og ingen krav som fasiten sier er dekket, står under «mangler». (FR-14)
 2. Nøkkelordtreffet gir nøyaktig den prosenten fasiten sier, når nøkkelordlisten er fast. (FR-17)
