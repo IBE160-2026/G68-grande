@@ -23,7 +23,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Etter PRD-en
 
-- [ ] Prøve branch og pull request én gang med Claude før kodingen starter (for eksempel en liten endring i README)
+- [x] Prøve branch og pull request én gang med Claude før kodingen starter (PR #1, NFR-8 «hvem den er for», 3. november)
 - [x] UX (skisser av modusvalget og resultatsiden, se addendum)
   - [x] Utseende: farger (Myk fersken), former, bevegelse, skrift og logo
   - [x] Brukerreise 1: Ingrid, Full generering
