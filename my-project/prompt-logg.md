@@ -278,4 +278,32 @@ Verktøy: Claude Code med faglærers skill `sesjonslogg` og BMAD-skillen `bmad-d
 | 173 | «så lenge resultatet ikke endrer på noe vi allerede har laget er det bare å kjøre» | Fem hjelpere søkte i to runder. Differensieringen i briefen holder: ingen av de fire forklarer hvordan poengsummen regnes ut, ingen har KI-korrektur av eget brev med markerte endringer, og ingen støtter norsk. Brief, PRD og UX er ikke endret. Funnene ligger i `4-konkurrentanalyse/` |
 | 174 | «COMMIT» / «JA» | Committet, og denne delen av prompt-loggen er skrevet |
 
+## 2026-11-03 – Suksesskriterier, sjekk mot sensorveiledningen og første pull request
+
+Verktøy: Claude Code. Ingen BMAD-skill, bare samtale, nettsøk og GitHub.
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 175 | «git pull» | Ingenting nytt fra faglærer |
+| 176 | «hvilke mål har vi satt for prosjektet som vi må nå for å lykkes med prosjektet?» | KI-en viste visjonen, de 13 suksesskriteriene og det som aldri kuttes, og sa at jeg lå bak milepælene |
+| 177 | «akkurat den tidsplanen er det bare å se bort i fra, men okei så vi har suksesskriterier, det er det viktigste for meg» | KI-en måler nå fremdriften mot suksesskriteriene, ikke mot milepældatoene |
+| 178 | «ikke helt ennå, er synes du produkt briefen min og prd min er bra?» | Ærlig vurdering: suksesskriteriene kan testes, differensieringen er ærlig og nødlisten er god. Fem bekymringer: stort omfang, strengt «tre av tre» med ekte KI, fasit som skjønnsvurdering, medstudent til kriterium 13 og ingen kilde på ATS |
+| 179 | «kan du lagre disse bekymringene?» | Lagt inn i `todo.md` |
+| 180 | «takk, videre kan du se om det jeg har gjort passer til sensorveiledningen?» | Planleggingen og prosessen passer godt. Fem hull: arkitektur og stories mangler, ingen branch eller PR ennå, README lenket ikke til alt, milepælene var ikke forklart, og NFR-8 manglet «hvem den er for» |
+| 181 | «4) hvor ligger denne listen? skal den være synlig for læreren?» / «okei, A ikke hatt tid og ventet på at læreren skal begynne med sitt prosjekt så jeg kan følge undervisningen» | Jeg valgte å beholde milepælene og legge til en merknad med min forklaring, i stedet for å slette dem |
+| 182 | «readme må også oppdateres så den viser til alt» | README lenker nå til UX, konkurrentanalysen, sesjonsloggene og TO DO, i en ny seksjon om prosess og KI-bruk |
+| 183 | «ja vi må jo ha med en hvem den er for, trodde dette sto både i brief og prd?» | Målgruppen sto der, men NFR-8 sa ikke at README skal fortelle det. **KI-feil:** KI-en laget en branch uten å spørre meg først |
+| 184 | «jeg skjønner ikke dette med main og branch, trodde dette ikke kom før kodingen?» / «A» / «ferdig, git pull» | KI-en forklarte main, branch og pull request. Jeg valgte å prøve det nå. Første pull request (PR #1), som jeg merget selv på GitHub |
+| 185 | «står det beskrevet hvorfro vi gjorde denne mergen? det er jo en litt rar merge» | Grunnen står i PR #1 og i commit-meldingen. Merge-commiten viser bare til PR-en |
+| 186 | «få se bekymringene på nytt» / «nei, men jeg ønsker å løse dem» | Vi gikk gjennom de fem bekymringene én og én |
+| 187 | «1) er forsåvidt enig, min forståelse på læreren er at denne uken blir vi ferdig han ferdig med UX og arkitektur […] er 22 november mulig da?» / «ja det er bedre» | KI-en foreslo at hele flyten skulle virke 22. november. Jeg spurte om det var mulig, og etter å ha regnet på helgene sa KI-en at det var for tidlig. Nå er det to sjekkpunkter i risikotabellen i PRD-en: 22. og 29. november |
+| 188 | «videre til 2) hva er sannsynligheten for at vi ikke får det til? og er det bedre å være føre-var?» / «ja» | Gap-analysen har størst risiko. Plan B ligger i del 5 i PRD-en. Promptene testes tidlig når de ekte KI-svarene til testmodus lages (FR-38) |
+| 189 | «ok» | NFR-3: fasiten skal ha en kort begrunnelse for hvert krav |
+| 190 | «kan hvem som helst gjøre dette? ettersom at jeg studerer på nett kjenner jeg ingen andre på studie» / «ja det er bra, det blir en kollega» | Kriterium 13 sier nå «en person som ikke kjenner prosjektet» i stedet for «en medstudent» |
+| 191 | «det er greit, beholde nøkkelord» | Kilde på ATS fra Harvard Business School lagt til i brief og PRD. **KI-feil:** KI-en sa først «over 90 % av arbeidsgiverne», men da kilden ble sjekket, var det 63 %, og over 90 % av dem. Tallet 88 % fra omtalene fantes ikke i kilden |
+| 192 | «videre så lurer jeg på om det analysen vi gjorde deep recon som havnet under konkurrentanalyse kræsjer med noe vi har laget så langt» / «1) hva mener du med dette? […]» / «okei men hvis vi kjører en ny analyse, og det har kommet endringer vil dette få konsekvenser for oss?» / «okei da er jeg enig i endringene» | Ingen motsigelser. PRD-en fikk en forsiktig formulert setning om norsk og KI-korrektur som fortrinn, og et krav om kjente begrensninger i README (NFR-8). Konkurrentanalysen sier nå hva den førte til |
+| 193 | «jeg skjønte ikke helt dette med NRF-8» / «vi kan oppdaterer readme nå da, sånn at den har alt som den skal inneholde» / «supert» | README fikk det som er sant nå (hva nettsiden gjør, hvem den er for og kjente begrensninger), og overskrifter merket «kommer» for resten, slik at den ikke beskriver kode som ikke finnes |
+
 **Hva jeg lærte om å styre KI-en:** Under PRD-arbeidet oppdaget jeg at jeg er veldig nøye og vil se alt KI-en gjør til punkt og prikke. Det gir kontroll, men tar mye tid. For å bli ferdig i tide må jeg stole mer på KI-ens avgjørelser i det som er lett å rette, og heller bruke tiden på det som er viktig.
+
+**3. november:** Lært hvordan man gjennomfører en PR, med branch og main. Ble også påminnet at det er viktig å sjekke kildene ordentlig før man tar dem i bruk.
