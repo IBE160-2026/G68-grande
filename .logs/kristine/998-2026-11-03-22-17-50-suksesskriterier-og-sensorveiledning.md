@@ -28,6 +28,7 @@ Gå gjennom målene for prosjektet (suksesskriteriene), få en ærlig vurdering 
 - **Konkurrentanalysen** kræsjer ikke med noe. PRD-en fikk en forsiktig formulert setning om norsk og KI-korrektur som fortrinn, og NFR-8 et krav om kjente begrensninger. Konkurrentanalysen sier nå hva den førte til (`5bace46`).
 - **README** har nå hva nettsiden gjør, hvem den er for og kjente begrensninger, og overskrifter merket «kommer» for det som avhenger av koden (`3f7a5f4`).
 - **Prompt-loggen:** prompt 175–193 og «Hva jeg lærte» for 3. november (`8beec49`).
+- **Hva blir vanskelig å kode:** tre krevende punkter (markerte endringer i Korrektur, PDF-lesing, at testmodus kjenner igjen testdataene) og tre middels punkter (fast KI-format, PDF med æøå, telleregelen med æøå). Alle står i `todo.md` under arkitektur, sammen med to raske prøver før stories (`b2367ab`). Alt ble pushet til GitHub.
 - **TO DO:** krysset av for første PR (`4170d38`). Nye seksjoner: «Under kodingen» med sjekkpunktene, og README-punktet under «Før innlevering».
 
 ### Åpne punkter
