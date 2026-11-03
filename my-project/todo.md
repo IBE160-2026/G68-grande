@@ -58,6 +58,16 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] Om «Nytt forslag» i testmodus gir det samme ferdige brevet eller et annet
   - [ ] Automatisk utlogging: helst ikke, men hvis ja, varsle minst 20 sekunder før
   - [ ] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38
+  - To raske prøver før stories lages (fra vurderingen av hva som blir vanskelig å kode, 3. november):
+  - [ ] Lese en fiktiv CV med to kolonner med PDF-biblioteket og se hva som kommer ut
+  - [ ] Prøve Korrektur-prompten én gang og se om setningsparene `{ny, gammel}` blir gode
+  - Vanskelig å kode, ha i bakhodet (🔴 krevende, 🟡 middels):
+  - [ ] 🔴 Markerte endringer i Korrektur (FR-23): KI-en kan slå sammen, dele opp eller fjerne setninger. Løsning: setningspar `{ny, gammel}`. Reserve: nødlisten punkt 4
+  - [ ] 🔴 Lese tekst fra PDF (FR-8, FR-11): kolonner og tabeller kan komme i feil rekkefølge, og «uleselig» er vanskelig å avgjøre. Løsning: velge bibliotek, eller kjent begrensning. Reserve: innlimt tekst, nødlisten punkt 5
+  - [ ] 🔴 Testmodus kjenner igjen testdataene (FR-34): PDF-tekst og innlimt tekst blir ikke helt like. Løsning: «vaske» teksten (små bokstaver, mellomrom) før sammenligning
+  - [ ] 🟡 Svar fra KI-en i fast format (FR-28): bruke JSON og sjekke svaret
+  - [ ] 🟡 Word og PDF ut (FR-29): PDF trenger en skrifttype med æ, ø og å
+  - [ ] 🟡 Telleregelen med æøå (FR-17): i JavaScript regnes ikke «ø» som bokstav når koden finner hele ord, Python gjør det riktig. Tas med når språket velges
   - Fra konkurrentanalysen:
   - [ ] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?)
 - [ ] Epics og stories
