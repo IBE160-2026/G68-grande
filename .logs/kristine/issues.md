@@ -15,3 +15,5 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første PDF-story: prøve pypdf på CV med to kolonner og med tabell, ellers kjent begrensning
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Bestemme listen over typiske KI-fraser (FR-24) før prompten for brevet skrives
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Neste steg: epics og stories
+- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Spørre læreren om publisering på Vercel er et krav (ellers holder lokal kjøring etter README)
+- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første kode-story: `!.env.example` og `instance/` i `.gitignore`
