@@ -10,6 +10,8 @@ En kort oversikt over hva jeg bestemte selv i arkitekturarbeidet, og hvilke feil
 4. **pypdf for å lese PDF.** Kolonner og tabeller prøves først. Går det dårlig, blir det en kjent begrensning. (198)
 5. **Koden delt i tre lag.** Jeg godkjente at reglene ligger for seg selv, slik at de kan testes uten nettleser og API-nøkkel, og at testmodus og ekte KI er to utgaver av det samme. (199)
 6. **Grunn ved endring venter.** En kort grunn ved hver endring i Korrektur var en god idé fra konkurrentanalysen, men den legges til bare hvis det blir tid. (200)
+7. **Ingen publisering på Vercel.** Jeg spurte faglærer, og det er ikke et krav. Nettsiden kjøres lokalt etter README, og KI-nøkkelen holdes borte fra nettet. (203)
+8. **Koden legges i `backend/`.** Jeg ba om en sjekk mot sensorveiledningen. Den viste at lærerens CI bare kjører testene i `backend/`. Jeg valgte å følge lærerens oppsett i stedet for å skrive om CI. (204)
 
 ## KI-feil jeg fant
 
@@ -22,3 +24,4 @@ KI-en lot fire uavhengige hjelpere lese utkastet kritisk. Rapportene ligger i [`
 5. **Telleregelen var beskrevet feil.** Utkastet sa «ord-grenser», som kan leses som at «Python» ikke er et treff i «python-utvikler». Det går mot FR-17.
 6. **En reserve som ikke virket.** KI-en skrev at `pip install .` kunne brukes i stedet for uv. En hjelper prøvde det, og det virket ikke.
 7. **Python var ikke installert.** KI-en tok først for gitt at Python fantes på PC-en min. Det gjorde det ikke, og derfor ble installasjonen endret til uv.
+8. **Lærerens CI ble oversett.** KI-en la koden i rotmappa uten å se på lærerens CI-fil, som bare kjører testene i `backend/`. Testene ville da blitt hoppet over uten at noen merket det. Det ble oppdaget da jeg ba om en sjekk mot sensorveiledningen. (204)

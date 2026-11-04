@@ -23,7 +23,7 @@ Dokumentet inneholder bare de tekniske beslutningene som må ligge fast før kod
 
 ## Paradigme
 
-**Lagdelt monolitt:** én Flask-app der serveren lager HTML-sidene. Koden er delt i tre lag.
+**Lagdelt monolitt:** én Flask-app der serveren lager HTML-sidene. All kode ligger i `backend/`, fordi lærerens CI bare kjører Python-testene der. Mappene under er relative til `backend/`. Koden er delt i tre lag.
 
 | Lag | Mappe | Inneholder |
 | --- | --- | --- |
@@ -231,6 +231,15 @@ flowchart TD
 - **Prevents:** at brevreglene ender opp spredt i koden, eller at KI-en får mer å bygge på enn brukeren har lagt inn.
 - **Rule:** `prompts/brev.md` og `prompts/korrektur.md` inneholder kravene i FR-24 og FR-37, også listen over typiske KI-fraser. KI-en får bare CV, annonse og eventuelt eget brev. `testdata/<case>/fasit.md` har en sjekkliste for kriterium 11 og 12.
 
+### AD-15 — Sporbar vei fra plan til kode
+
+- **Binds:** alle, NFR-9, NFR-12
+- **Prevents:** at koden ikke kan spores tilbake til krav og stories, eller at arkitekturen blir stående som et dokument som ble laget én gang og aldri brukt.
+- **Rule:**
+  - **PR-tittel:** viser story og FR-nummer.
+  - **Tester:** hver testfil og testfunksjon nevner FR-nummeret den tester, i navnet eller i docstringen.
+  - **Avvik:** avviker koden fra arkitekturen, oppdateres arkitekturen (begge kopiene) og beslutningsloggen med dato og grunn, på samme måte som for PRD-en.
+
 ## Felles konvensjoner
 
 | Tema | Konvensjon |
@@ -241,7 +250,10 @@ flowchart TD
 | Prompter | Én fil per KI-oppgave i `prompts/<oppgave>.md`, versjonert i Git. |
 | Konstanter | Grenser (5 MB, 16 MB, 50 bokstaver, 90 s, 30 tegn) ligger i `soknad/innstillinger.py`. |
 | Maler | Felles elementer (merkelappen «Testmodus», KI-merknaden og hjørneraden) ligger bare i `base.html`. Alle sider arver den. |
-| Tester og CI | `tests/` speiler `soknad/`. CI kjører `ruff check`, `ruff format --check` og `pytest` på Linux og Windows ved hver PR. Ruff-regelen `PLW1514` (åpne filer uten encoding) er slått på. |
+| Tester og CI | `tests/` speiler `soknad/`. Lærerens `.github/workflows/ci.yml` utvides i backend-jobben, den byttes ikke ut. CI kjører `ruff check`, `ruff format --check` og `pytest` på Linux og Windows ved hver PR. Ruff-regelen `PLW1514` (åpne filer uten encoding) er slått på. |
+| Ryddig kode | Ingen utkommentert kode og ingen rester fra forkastede KI-forsøk i `main`. |
+| Testplan | `my-project/testplan.md`, sammen med den andre prosessdokumentasjonen. |
+| README | Én kommando for å installere uv på Windows og én på Mac, og deretter de eksakte kommandoene under Drift. |
 
 ## Stack
 
@@ -265,27 +277,28 @@ flowchart TD
 
 ```text
 G68-grande/
-  soknad/                # Flask-appen
-    __init__.py          # create_app(test_config), leser .env, lager database og testbruker
-    innstillinger.py     # grenser og konstanter
-    web/                 # ruter, tekster.py, templates/ (base.html + sider), static/ (css, js, fonts/Baloo2)
-    kjerne/              # okt, steg, feil, telleregel, inndata, ki_svar, testdata_match, filnavn
-    adaptere/            # ki.py (EkteKI, TestKI), pdf_inn.py, fil_ut.py, db.py, oktlager.py
-    fonts/               # TTF-skrift med æøå til PDF ut
-  prompts/               # nokkelord.md, gap.md, brev.md, korrektur.md
-  scripts/
-    lag_testsvar.py      # kjører EkteKI på testdata og skriver ki-svar/*.json (FR-38)
-  testdata/
-    case-1-<navn>/       # cv.pdf, cv.txt, annonse.pdf, annonse.txt, (eget-brev.*), fasit.md, ki-svar/*.json
-    feil/                # skannet.pdf, feil-type.docx
-  tests/
-  docs/
-    testplan.md          # NFR-12
-  .env.example
-  .python-version
-  pyproject.toml         # + uv.lock
+  backend/               # all kode (lærerens CI kjører testene her)
+    soknad/              # Flask-appen
+      __init__.py        # create_app(test_config), leser .env, lager database og testbruker
+      innstillinger.py   # grenser og konstanter
+      web/               # ruter, tekster.py, templates/ (base.html + sider), static/ (css, js, fonts/Baloo2)
+      kjerne/            # okt, steg, feil, telleregel, inndata, ki_svar, testdata_match, filnavn
+      adaptere/          # ki.py (EkteKI, TestKI), pdf_inn.py, fil_ut.py, db.py, oktlager.py
+      fonts/             # TTF-skrift med æøå til PDF ut
+    prompts/             # nokkelord.md, gap.md, brev.md, korrektur.md
+    scripts/
+      lag_testsvar.py    # kjører EkteKI på testdata og skriver ki-svar/*.json (FR-38)
+    testdata/
+      case-1-<navn>/     # cv.pdf, cv.txt, annonse.pdf, annonse.txt, (eget-brev.*), fasit.md, ki-svar/*.json
+      feil/              # skannet.pdf, feil-type.docx
+    tests/
+    instance/            # brukere.db (i .gitignore)
+    .env.example
+    .python-version
+    pyproject.toml       # + uv.lock
+  my-project/            # plan- og prosessdokumenter, også testplan.md (NFR-12)
   README.md
-  .github/workflows/ci.yml
+  .github/workflows/ci.yml   # lærerens CI, utvidet med ruff og Windows
 ```
 
 ```mermaid
@@ -299,7 +312,7 @@ flowchart LR
   F -->|bare vanlig modus, etter samtykke| CL[Claude API]
 ```
 
-**Drift:** nettsiden kjører bare lokalt, i én prosess. README har to kommandoer: `uv sync` og `uv run flask --app soknad run`. uv henter riktig Python selv. Det finnes ingen hosting, ingen sky og ingen e-posttjeneste.
+**Drift:** nettsiden kjører bare lokalt, i én prosess. Etter at uv er installert, har README tre kommandoer: `cd backend`, `uv sync` og `uv run flask --app soknad run`. uv henter riktig Python selv. Det finnes ingen hosting, ingen sky og ingen e-posttjeneste. Faglærer bekreftet 4. november at publisering på Vercel ikke er et krav.
 
 ## Krav → arkitektur
 
@@ -314,7 +327,7 @@ flowchart LR
 | FR-32–FR-36, FR-38 Testmodus og samtykke | `adaptere/ki.py` (TestKI), `kjerne/testdata_match`, `testdata/`, `scripts/` | AD-3, AD-4, AD-7, AD-10, AD-12 |
 | NFR-1–NFR-5 Sikkerhet | `adaptere/db.py`, `adaptere/oktlager.py`, `.env` | AD-7, AD-12 |
 | NFR-6, NFR-7 Tilgjengelighet og bredder | `web/templates/`, `web/static/` | DESIGN.md og EXPERIENCE.md, konvensjonen for maler |
-| NFR-8–NFR-10, NFR-12 Kjørbarhet og testing | README, `tests/`, CI, `prompts/`, `docs/testplan.md` | AD-2, AD-12, konvensjonene |
+| NFR-8–NFR-10, NFR-12 Kjørbarhet og testing | README, `backend/tests/`, CI, `backend/prompts/`, `my-project/testplan.md` | AD-2, AD-12, AD-15, konvensjonene |
 | NFR-11 KI-tjeneste | `adaptere/ki.py` | AD-13 |
 
 ## Utsatt

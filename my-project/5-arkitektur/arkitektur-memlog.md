@@ -2,7 +2,7 @@
 scope: Søknadsassistenten versjon 1: hele nettsiden (FR-1–FR-38, NFR-1–NFR-12)
 purpose: Byggegrunnlag for epics og stories; synlig for faglærer og sensor i GitHub (kopi i my-project/5-arkitektur/)
 altitude: feature
-updated: 2026-11-04T21:25
+updated: 2026-11-04T22:40
 ---
 
 - (constraint) Inndata: PRD (status final, 2026-10-12) + addendum, UX DESIGN.md/EXPERIENCE.md (final), TO DO-lista. Greenfield, ingen kode ennå.
@@ -58,3 +58,9 @@ updated: 2026-11-04T21:25
 - (event) PRD (FR-12 = 5 MB, grunn ved endring under «Gjøres hvis det blir tid») og UX (høyst 5 MB) oppdatert i begge kopier, med linje i beslutningsloggene.
 - (event) spine finalized
 - (constraint) Bekreftet av faglærer 4. november 2026: publisering på Vercel er IKKE et krav. Det holder at nettsiden kan kjøres lokalt etter README. Faglærer er enig i at KI-nøkkelen ikke bør ligge åpent på nett. Beslutningen om bare lokal kjøring (Drift, AD-7, AD-12) står fast.
+- (event) Oppdatering etter sjekk mot sensorveiledningen (Sensorveiledning.pdf, del 1, sju kriterier). Status: godt dekket; fire hull funnet.
+- (decision) All kode ligger i backend/ (valgt av Kristine, alternativ A): lærerens CI (.github/workflows/ci.yml) kjører Python-testene bare når backend/pyproject.toml finnes, ellers hopper den over dem uten å feile. backend/ inneholder soknad/, prompts/, scripts/, testdata/, tests/, pyproject.toml, uv.lock, .python-version, .env.example og instance/. README: cd backend, uv sync, uv run flask --app soknad run. Forkastet B: beholde rotmappa og skrive om lærerens CI.
+- (decision) Lærerens CI-jobb for backend utvides (ikke byttes ut) med ruff check, ruff format --check og en Windows-kjøring i tillegg til Linux. pytest ligger i dev-avhengighetene. Rutine.
+- (decision) Ny regel AD-15 (sensorveiledningen, kriterium 1): sporbarhet fra plan til kode. PR-tittel viser story og FR. Hver testfil og testfunksjon nevner FR-nummeret den tester i navn eller docstring. Avviker koden fra arkitekturen, oppdateres arkitekturen (begge kopier) og beslutningsloggen med dato og grunn, slik PRD-en allerede har regel for. Rutine.
+- (decision) Konvensjoner (sensorveiledningen, kriterium 5–7): ingen utkommentert kode eller rester fra forkastede KI-forsøk i main; README har én installasjonskommando for uv på Windows og én på Mac; testplanen ligger i my-project/testplan.md (prosessdokumentasjon), ikke i backend/. Rutine.
+- (event) Spine oppdatert etter sjekk mot sensorveiledningen: backend/, AD-15, konvensjoner for ryddig kode, testplan og README. Kopiert til my-project/5-arkitektur/.
