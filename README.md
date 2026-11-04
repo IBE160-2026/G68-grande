@@ -10,7 +10,7 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX og konkurrentanalyse). Arkitektur og koding pågår. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse og arkitektur). Epics, stories og koding pågår. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
@@ -54,11 +54,13 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
   - [EXPERIENCE.md](my-project/3-ux/EXPERIENCE.md): hvordan nettsiden virker, med sidene, tekstene, feilmeldingene, tilgjengelighet og brukerreisene
   - [Skisser](my-project/3-ux/skisser/): skisser av alle sidene på PC, nettbrett og mobil (åpnes i nettleseren)
 - [Konkurrentanalyse](my-project/4-konkurrentanalyse/konkurrentanalyse.md): Jobscan, Rezi, Teal og Kickresume, sammenlignet med Søknadsassistenten
+- [Arkitektur](my-project/5-arkitektur/arkitektur.md): de tekniske valgene (Python og Flask, Claude Opus 5.5, pypdf) og reglene koden skal følge
 
 ## Prosess og KI-bruk
 
 - [Oversikt over alle dokumentene](my-project/README.md): hvert dokument med utkast, tilbakemeldinger, gjennomganger og beslutningslogger
 - [Prompt-logg](my-project/prompt-logg.md): de viktigste forespørslene jeg har gitt KI-en underveis
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
+- [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant
 - [Sesjonslogger](.logs/kristine/README.md): hva som ble gjort i hver arbeidsøkt, med [åpne punkter](.logs/kristine/issues.md)
 - [TO DO-liste](my-project/todo.md): hva som er gjort, og hva som gjenstår

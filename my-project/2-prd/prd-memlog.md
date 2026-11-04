@@ -170,3 +170,4 @@ updated: 2026-10-12T22:51
 - (change) README-er: «(under arbeid)» fjernet ved PRD i begge. my-project/README fikk rad for 2-prd/gjennomganger/ (manglet). Rot-README fikk lenke til addendum. Bruker ba om at det som mangler i README, tas med
 - (event) PRD finalized
 - (decision) Åpent spørsmål avklart (etter final): product brief tilsvarer proposal (brukers svar). Raden i del 8 merket «Avklart 12. oktober», kuttlisten trenger ikke endres. TO DO krysset av
+- (change) Etter arkitekturen (4. november 2026): FR-12 fikk grensen 5 MB per fil (bestemt i arkitekturen). «Kort grunn ved hver endring i Korrektur» (fra konkurrentanalysen, Kickresume) lagt under «Gjøres hvis det blir tid», bekreftet av Kristine.

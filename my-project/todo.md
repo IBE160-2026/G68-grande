@@ -38,26 +38,26 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
     - [x] Oppdatere skissene med endringene fra runde 2 (FR-18-linjen, rammefarge, bryter, tomme lister, logg ut-vindu, fast rad nederst, tekst for skannet PDF, ingen 🧪)
     - [x] Oppdatere skissene med endringene fra runde 3 (resultatsiden i Korrektur, feiltekst under feltet, filnavn i vinduet, ny ventetekst, felt side om side fra 1000 px, «1 setning er fjernet», ekte `@media` og prøve 768 px)
     - [x] Språkvask og sette dokumentene til ferdig (`status: final`)
-- [ ] Arkitektur
+- [x] Arkitektur (ferdig 4. november, se `5-arkitektur/`)
   - Fra PRD-en og addendumet:
-  - [ ] Grensen for filstørrelse (FR-12), så UX-teksten «høyst X MB» får et tall
-  - [ ] Hvordan teksten leses ut av PDF-filer (FR-8, FR-11)
-  - [ ] Få og godt dokumenterte biblioteker for å lese PDF og lage Word og PDF, med begrunnelse (fra faglærer)
-  - [ ] CV-er med kolonner og tabeller: støtte dem eller skrive det som kjent begrensning (jeg vil prøve å støtte tabeller)
-  - [ ] KI-tjeneste (NFR-11): Claude-modell, kostnad og hvordan API-nøkkelen holdes utenfor Git
-  - [ ] Hvor lenge nettsiden venter på KI-en før det regnes som at den ikke svarer (FR-28)
-  - [ ] Mappene for testdata og fasit (NFR-3)
-  - [ ] Hvordan testmodus kjenner igjen testdataene, også med ekstra mellomrom (FR-34)
-  - [ ] Ett programmeringsspråk for hele nettsiden? (enklere installasjon for sensor, NFR-8)
-  - [ ] Linter og formatterer som CI sjekker
+  - [x] Grensen for filstørrelse (FR-12), så UX-teksten «høyst X MB» får et tall (løst: 5 MB)
+  - [x] Hvordan teksten leses ut av PDF-filer (FR-8, FR-11) (løst: pypdf)
+  - [x] Få og godt dokumenterte biblioteker for å lese PDF og lage Word og PDF, med begrunnelse (fra faglærer) (løst: pypdf, python-docx, fpdf2)
+  - [x] CV-er med kolonner og tabeller: støtte dem eller skrive det som kjent begrensning (jeg vil prøve å støtte tabeller) (løst: prøves i første PDF-story, ellers kjent begrensning)
+  - [x] KI-tjeneste (NFR-11): Claude-modell, kostnad og hvordan API-nøkkelen holdes utenfor Git (løst: Opus 5.5, tak 250 kr, nøkkelen i `.env`)
+  - [x] Hvor lenge nettsiden venter på KI-en før det regnes som at den ikke svarer (FR-28) (løst: 90 s og ett nytt forsøk)
+  - [x] Mappene for testdata og fasit (NFR-3)
+  - [x] Hvordan testmodus kjenner igjen testdataene, også med ekstra mellomrom (FR-34) (løst: vasket tekst, AD-10)
+  - [x] Ett programmeringsspråk for hele nettsiden? (enklere installasjon for sensor, NFR-8) (løst: Python)
+  - [x] Linter og formatterer som CI sjekker (løst: ruff og pytest i GitHub Actions)
   - Fra UX:
-  - [ ] Bestemme om logoskriften Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet
-  - [ ] Bestemme hva nettleserens egen tilbakeknapp gjør midt i en søknad
-  - [ ] Formatet på KI-svaret i Korrektur (setningspar `{ny, gammel}`)
-  - [ ] Arbeidsgiveren i filnavnet som et ekstra felt i KI-svaret med nøkkelordene
-  - [ ] Om «Nytt forslag» i testmodus gir det samme ferdige brevet eller et annet
-  - [ ] Automatisk utlogging: helst ikke, men hvis ja, varsle minst 20 sekunder før
-  - [ ] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38
+  - [x] Bestemme om logoskriften Baloo 2 lastes fra Google Fonts eller ligger som fil i prosjektet (løst: fil i prosjektet)
+  - [x] Bestemme hva nettleserens egen tilbakeknapp gjør midt i en søknad (løst: AD-8)
+  - [x] Formatet på KI-svaret i Korrektur (setningspar `{ny, gammel}`) (løst: AD-4 og AD-5)
+  - [x] Arbeidsgiveren i filnavnet som et ekstra felt i KI-svaret med nøkkelordene
+  - [x] Om «Nytt forslag» i testmodus gir det samme ferdige brevet eller et annet (løst: to ferdige brev per testcase)
+  - [x] Automatisk utlogging: helst ikke, men hvis ja, varsle minst 20 sekunder før (løst: ingen automatisk utlogging)
+  - [x] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38 (løst: AD-4, AD-6, AD-14)
   - To raske prøver før stories lages (fra vurderingen av hva som blir vanskelig å kode, 3. november):
   - [ ] Lese en fiktiv CV med to kolonner med PDF-biblioteket og se hva som kommer ut
   - [ ] Prøve Korrektur-prompten én gang og se om setningsparene `{ny, gammel}` blir gode
@@ -69,7 +69,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] 🟡 Word og PDF ut (FR-29): PDF trenger en skrifttype med æ, ø og å
   - [ ] 🟡 Telleregelen med æøå (FR-17): i JavaScript regnes ikke «ø» som bokstav når koden finner hele ord, Python gjør det riktig. Tas med når språket velges
   - Fra konkurrentanalysen:
-  - [ ] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?)
+  - [x] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?) (løst: «Gjøres hvis det blir tid» i PRD-en)
+- [ ] Når ekte KI skal kobles på: lage konto i Claude Console (platform.claude.com), kjøpe kreditt (for eksempel 10 dollar) og la auto-reload være AV. Lage API-nøkkel og legge den i `.env`
 - [ ] Epics og stories
   - [x] Holde omfanget stramt: 38 krav og bare helger igjen. Bruk nødlisten i PRD-en (del 4) tidlig heller enn sent (løst: sjekkpunkter 22. og 29. november i risikotabellen i PRD-en)
 - [ ] Suksesskriteriene (bekymringer fra gjennomgangen av brief og PRD 3. november)

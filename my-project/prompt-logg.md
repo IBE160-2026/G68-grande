@@ -307,3 +307,18 @@ Verktøy: Claude Code. Ingen BMAD-skill, bare samtale, nettsøk og GitHub.
 **Hva jeg lærte om å styre KI-en:** Under PRD-arbeidet oppdaget jeg at jeg er veldig nøye og vil se alt KI-en gjør til punkt og prikke. Det gir kontroll, men tar mye tid. For å bli ferdig i tide må jeg stole mer på KI-ens avgjørelser i det som er lett å rette, og heller bruke tiden på det som er viktig.
 
 **3. november:** Lært hvordan man gjennomfører en PR, med branch og main. Ble også påminnet at det er viktig å sjekke kildene ordentlig før man tar dem i bruk.
+
+## 2026-11-04 – Arkitektur
+
+Verktøy: Claude Code med BMAD-skillen `bmad-architecture` (veiledet). Alle beslutninger er logget i [`arkitektur-memlog.md`](5-arkitektur/arkitektur-memlog.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 194 | `/bmad-architecture` | KI-en leste PRD, addendum, UX og TO DO, og spurte om arbeidsmåte og hvem som skal lese dokumentet |
+| 195 | «1) Veiledet 2) altså dette skal også inn i github og skal være synlig for lærer og sensor også» | Veiledet arbeidsmåte. Kopi i `my-project/5-arkitektur/` |
+| 196 | «jeg har aldri kodet før så alt dette er nytt, det som er viktigst for meg er hva som er enklest, men som kan levere ett godt resultat» | Python + Flask, ett språk for hele nettsiden |
+| 197 | «1) jeg vet ikke, jeg har laget en bruker slik at jeg kan bruke claude code […] Jeg ønsker ikke bruke mer enn 250kr. 2) kan bruke opus. 3) hva betyr .env? og 4) hvordan vet jeg når jeg trekkes […]» | Claude Opus 5.5. Tak på 250 kr med forhåndsbetalt kreditt og auto-reload slått av. Pris per KI-kall vises i terminalen. KI-en forklarte `.env` |
+| 198 | «Ja pypdf høres bra ut» | pypdf for å lese PDF. Kolonner og tabeller prøves først, ellers blir det en kjent begrensning |
+| 199 | «1) ser bra ut 2) stusser litt over denne med formatet på KI-svaret i korrektur […] stusser også over neste med arbeidsgiver i filnavnet? Kan du ta meg kjapt gjennom FR-34 igjen […] 3) da mener du at det skal være en begrunnelse for hvilke endringer som er gjort i CV'en […]» | Lagdelingen godkjent. KI-en forklarte at formatet er dataene bak UX-visningen, at filnavnet allerede var bestemt i UX, og hvordan testmodus vasker teksten |
+| 200 | «2a og 2b da skjønner jeg, 3) ja det hørtes veldig bra ut, men enig at det legges til dersom tid» | «Kort grunn ved hver endring» settes under «Gjøres hvis det blir tid» i PRD-en |
+| 201 | «ja du kan gjøre alt sammen, du trenger ikke lage word kopi […] feil nummer to om økt, hva mener du med det og dette med å runde opp osv med 12,5% er dette for designet?» | KI-en forklarte økten og avrundingen. Arkitekturen satt til ferdig, PRD og UX fikk 5 MB, og alt ble kopiert hit. **KI-feil:** se [mine valg og KI-feil](5-arkitektur/mine-valg-og-ki-feil.md) |

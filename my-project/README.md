@@ -28,6 +28,11 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`konkurrentanalyse.md`](4-konkurrentanalyse/konkurrentanalyse.md) | Konkurrentanalyse av Jobscan, Rezi, Teal og Kickresume, gjort etter UX (se README i mappen) |
 | [`konkurrentanalyse-memlog.md`](4-konkurrentanalyse/konkurrentanalyse-memlog.md) | Beslutningslogg for konkurrentanalysen: plan, kilder og påstander |
 | [`sokenotater/`](4-konkurrentanalyse/sokenotater/) | Notatene fra hvert søk, som rapporten er skrevet ut fra |
+| **`5-arkitektur/`** | |
+| [`arkitektur.md`](5-arkitektur/arkitektur.md) | Arkitekturen: de tekniske valgene og reglene (AD-1 til AD-14) som koden skal følge |
+| [`arkitektur-memlog.md`](5-arkitektur/arkitektur-memlog.md) | Beslutningslogg for arkitekturen: hva som ble bestemt, alternativene, og hvorfor |
+| [`gjennomganger/`](5-arkitektur/gjennomganger/) | Den kritiske gjennomgangen av arkitekturen: mot PRD og UX, sjekkliste, versjoner og en «motstander» som lette etter hull |
+| [`mine-valg-og-ki-feil.md`](5-arkitektur/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i arkitekturen, og hvilke KI-feil som ble funnet |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |

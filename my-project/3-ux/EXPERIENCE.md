@@ -137,7 +137,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 | Tomt felt | «CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst.» | FR-9 |
 | Feil filtype | «CV: Feil filtype, prøv PDF.» | FR-10 |
 | Uleselig PDF | «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» | FR-11 |
-| For stor fil | «CV: Filen er for stor. Den kan være på høyst X MB.» (tallet bestemmes i arkitekturen) | FR-12 |
+| For stor fil | «CV: Filen er for stor. Den kan være på høyst 5 MB.» (tallet er bestemt i arkitekturen) | FR-12 |
 | Ikke testdata i testmodus | «CV: I testmodus fungerer bare testdataene fra mappen testdata/.» | FR-34 |
 
 Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den samme teksten står også med rødt under feltnavnet i feltet med feil.

@@ -196,3 +196,4 @@ updated: 2026-10-23T23:22
 - (change) Språkvask gruppe 3, nr. 15: Kristine vil at sensor kan se når hun godkjente fargene, og at den som koder finner hva de brukes til. Derfor er de fire fargene fra skissene flettet inn i hovedlista i DESIGN.md etter hva de brukes til, og under lista står én linje om at de (og error-tint) kom fra skissene og ble godkjent av Kristine i runde 3, med lenke til sketch-colors-1.html. I my-project/3-ux/mine-valg-og-ki-feil.md er punkt 10 «Fargene fra skissene» lagt til.
 - (decision) Språkvask gruppe 3, nr. 16: Kristine beholder de tekniske skjermleserdetaljene i tabellcellene i Component Patterns (Innleggingsfelt, Testmodus-bryter). Språkvasken er ferdig.
 - (event) spines finalized
+- (change) Etter arkitekturen (4. november 2026): «høyst X MB» i teksten for for stor fil (FR-12) ble «høyst 5 MB».

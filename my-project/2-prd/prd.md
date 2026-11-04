@@ -62,7 +62,7 @@ Kravene beholder numrene de fikk da de ble skrevet, slik at henvisninger ikke br
 - **FR-9:** Alle feltene som vises, må være fylt ut før brukeren kan gå videre. CV og stillingsannonse er alltid med, fordi gap-analysen og nøkkelordtreffet bygger på dem. Mangler noe, får brukeren en feilmelding som sier hva som mangler.
 - **FR-10:** Hvis brukeren laster opp en fil som ikke er PDF, får brukeren feilmeldingen «Feil filtype, prøv PDF».
 - **FR-11:** Hvis nettsiden ikke klarer å lese teksten i en PDF, for eksempel fordi den er skannet, får brukeren beskjed om å lime inn teksten i stedet.
-- **FR-12:** Nettsiden har en øvre grense for filstørrelse. Er filen for stor, får brukeren en feilmelding som sier dette. Selve grensen bestemmes i arkitekturen.
+- **FR-12:** Nettsiden har en øvre grense for filstørrelse. Er filen for stor, får brukeren en feilmelding som sier dette. Grensen er 5 MB per fil (bestemt i arkitekturen).
 - **FR-13:** Brukeren kan angre, altså fjerne eller bytte ut en fil eller tekst de har lagt inn, før de går videre.
 
 ### 2.3 Gap-analyse og nøkkelordtreff
@@ -200,6 +200,7 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 |---|---|
 | Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
 | Beholde CV-en når brukeren går til startsiden for å lage en ny søknad, slik at de kan søke på flere stillinger uten å laste opp CV-en på nytt | Ny funksjon, prioritert bort på grunn av tid. I versjon 1 starter en ny søknad med tomme felt (FR-31) |
+| Kort grunn ved hver endring i Korrektur, for eksempel «mer formell tone», som Kickresumes «What we changed» | Ny funksjon fra konkurrentanalysen, prioritert bort på grunn av tid. Svarformatet fra KI-en har plass til den (arkitekturen, AD-4) |
 | Automatisk test av hele flyten i testmodus | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
 
 ### Nødliste ved tidsnød
