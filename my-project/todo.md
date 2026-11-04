@@ -70,7 +70,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] 🟡 Telleregelen med æøå (FR-17): i JavaScript regnes ikke «ø» som bokstav når koden finner hele ord, Python gjør det riktig. Tas med når språket velges
   - Fra konkurrentanalysen:
   - [x] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?) (løst: «Gjøres hvis det blir tid» i PRD-en)
-- [ ] Spørre faglærer om publisering på Vercel er et krav, eller om det holder at sensor kjører nettsiden lokalt etter README. Er det et krav: lage en utgave som bare kjører testmodus, mot slutten (arkitekturen må da endres for økt og brukere)
+- [x] Spørre faglærer om publisering på Vercel er et krav, eller om det holder at sensor kjører nettsiden lokalt etter README. Er det et krav: lage en utgave som bare kjører testmodus, mot slutten (arkitekturen må da endres for økt og brukere) (avklart 4. november: ikke et krav, lokal kjøring etter README holder)
 - [ ] Første kode-story: i `.gitignore` legge til `!.env.example` (regelen `.env.*` skjuler den nå, NFR-2) og `instance/` (databasen, AD-12)
 - [ ] Når ekte KI skal kobles på: lage konto i Claude Console (platform.claude.com), kjøpe kreditt (for eksempel 10 dollar) og la auto-reload være AV. Lage API-nøkkel og legge den i `.env`
 - [ ] Epics og stories

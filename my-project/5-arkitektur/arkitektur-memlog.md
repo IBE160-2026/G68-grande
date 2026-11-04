@@ -57,3 +57,4 @@ updated: 2026-11-04T21:25
 - (direction) Samtykke: UX (hver gang startsiden åpnes) er strengere enn PRD FR-36 (hver innlogging), og UX har allerede skrevet det som et bevisst avvik. Ingen konflikt; arkitekturen følger UX.
 - (event) PRD (FR-12 = 5 MB, grunn ved endring under «Gjøres hvis det blir tid») og UX (høyst 5 MB) oppdatert i begge kopier, med linje i beslutningsloggene.
 - (event) spine finalized
+- (constraint) Bekreftet av faglærer 4. november 2026: publisering på Vercel er IKKE et krav. Det holder at nettsiden kan kjøres lokalt etter README. Faglærer er enig i at KI-nøkkelen ikke bør ligge åpent på nett. Beslutningen om bare lokal kjøring (Drift, AD-7, AD-12) står fast.
