@@ -107,6 +107,10 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Før innlevering
 
+- [ ] Refleksjonsrapporten (del 2, teller 30 % av karakteren). Sensorveiledningen for del 1 sier bare at refleksjonen over prosessen vurderes i del 2
+  - [ ] Spørre faglærer om den overordnede sensorveiledningen eller oppgaveteksten for del 2: hva rapporten skal inneholde, hvor lang den skal være, og fristen
+  - [ ] Sette av tid til rapporten i planen (uke 50 er allerede satt av til testplan, README og buffer, og eksamen i et annet fag er 11. desember)
+  - Råmateriale som allerede finnes: prompt-loggen, «mine valg og KI-feil» for hvert dokument, beslutningsloggene og sesjonsloggene
 - [ ] Fylle ut README-seksjonene merket «kommer» (installasjon, testdata og tester, skjermbilder, mappestruktur), og legge til nye kjente begrensninger (NFR-8)
 - [ ] Sjekke på nytt at ingen av konkurrentene har fått norsk eller korrektur av eget brev med markerte endringer (konkurrentanalysen sier sjekk fra 7. november)
 - [ ] Lage en kort prompt-logg med de viktigste valgene for hele prosjektet, til sensor (den lange loggen beholdes)
