@@ -98,6 +98,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 - [ ] Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
+- [ ] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
+- [ ] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2)
 - [ ] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6)
 - [ ] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten
 
