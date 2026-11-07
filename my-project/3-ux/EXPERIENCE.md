@@ -2,7 +2,7 @@
 name: Søknadsassistenten
 status: final
 created: 2026-10-20
-updated: 2026-10-23
+updated: 2026-11-07
 sources:
   - ../../prds/prd-kode-prosjekt-2026-10-09/prd.md
   - ../../prds/prd-kode-prosjekt-2026-10-09/addendum.md
@@ -128,6 +128,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 - Overskrift Korrektur: «Legg inn CV-en din, brevet ditt og stillingsannonsen».
 - Felt: «📄 CV» (CV-en din) · «✉️ Ditt søknadsbrev» (Brevet du har skrevet selv, bare Korrektur) · «📢 Stillingsannonse» (Annonsen for jobben du søker på).
 - Knapper i hvert felt: «Last opp PDF», «Lim inn tekst». Over tekstboksen: «Lim inn teksten her».
+- Hjelpetekst over feltene, i begge modusene: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» (prøve med pypdf 7. november 2026: fra Canva kom all teksten med, men overskriftene havnet på feil sted)
 - Knapper nederst: «Tilbake», «Sjekk CV-en min».
 - Bare i testmodus: «Testmodus: bruk filene i mappen testdata/ i prosjektet.»
 - Feilboks, overskrift: «Noe må fikses før du kan gå videre:». Én linje per feil, med feltnavnet først (fra skissen):

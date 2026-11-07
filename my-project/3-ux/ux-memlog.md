@@ -197,3 +197,4 @@ updated: 2026-10-23T23:22
 - (decision) Språkvask gruppe 3, nr. 16: Kristine beholder de tekniske skjermleserdetaljene i tabellcellene i Component Patterns (Innleggingsfelt, Testmodus-bryter). Språkvasken er ferdig.
 - (event) spines finalized
 - (change) Etter arkitekturen (4. november 2026): «høyst X MB» i teksten for for stor fil (FR-12) ble «høyst 5 MB».
+- (change) Etter prøven med pypdf (7. november 2026): CV fra Word ble lest riktig, men fra Canva havnet overskriftene på feil sted. Kristine valgte å legge en hjelpetekst over feltene på innleggingssiden: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» Lagt inn i EXPERIENCE.md (Innlegging) og i skissen input-page-1.html.

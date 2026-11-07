@@ -59,7 +59,9 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Automatisk utlogging: helst ikke, men hvis ja, varsle minst 20 sekunder før (løst: ingen automatisk utlogging)
   - [x] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38 (løst: AD-4, AD-6, AD-14)
   - To raske prøver før stories lages (fra vurderingen av hva som blir vanskelig å kode, 3. november):
-  - [ ] Lese en fiktiv CV med to kolonner med PDF-biblioteket og se hva som kommer ut
+  - [x] Lese en fiktiv CV med to kolonner med PDF-biblioteket og se hva som kommer ut (gjort 7. november med Ola Nordmann-CV fra Word: æøå riktig, venstre kolonne først og så høyre, ingenting blandet. Overskrift og første linje havner på samme linje, men det går fint for KI-en. Vanlig `extract_text()` holder. Samme dag med Ola Nordmann-CV fra Canva: all tekst og æøå kommer med, og linjer som hører sammen står sammen, men overskriftene havner på feil sted (for eksempel «Personalia» etter utdanningen og «Kurs og sertifiseringer» etter kurset), og layout-modusen ga ingenting. Ingen ny løsning i koden: reserven er innlimt tekst)
+  - [ ] README, kjente begrensninger: PDF-lesingen er testet med CV-er fra Word og Canva. Fra Canva kommer all teksten med, men i rotete rekkefølge, så da kan teksten limes inn i stedet
+  - [ ] Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig (hva som er utdanning, jobb og oppsummering)
   - [ ] Prøve Korrektur-prompten én gang og se om setningsparene `{ny, gammel}` blir gode
   - Vanskelig å kode, ha i bakhodet (🔴 krevende, 🟡 middels):
   - [ ] 🔴 Markerte endringer i Korrektur (FR-23): KI-en kan slå sammen, dele opp eller fjerne setninger. Løsning: setningspar `{ny, gammel}`. Reserve: nødlisten punkt 4
