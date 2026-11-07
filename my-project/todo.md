@@ -108,7 +108,9 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Før innlevering
 
 - [ ] Refleksjonsrapporten (del 2, teller 30 % av karakteren). Sensorveiledningen for del 1 sier bare at refleksjonen over prosessen vurderes i del 2
-  - [ ] Spørre faglærer om den overordnede sensorveiledningen eller oppgaveteksten for del 2: hva rapporten skal inneholde, hvor lang den skal være, og fristen
+  - [x] Få malen for rapporten (fått 7. november, forventet lengde 3000–5000 ord. Malen og notatene ligger bare på min PC, fordi de hører til del 2)
+  - [ ] Samle stoff underveis i notatene (KI-feil fra PR-ene, tekniske utfordringer, lærdommer)
+  - [ ] Spørre faglærer om fristen for rapporten, hvis den ikke står noe sted
   - [ ] Sette av tid til rapporten i planen (uke 50 er allerede satt av til testplan, README og buffer, og eksamen i et annet fag er 11. desember)
   - Råmateriale som allerede finnes: prompt-loggen, «mine valg og KI-feil» for hvert dokument, beslutningsloggene og sesjonsloggene
 - [ ] Fylle ut README-seksjonene merket «kommer» (installasjon, testdata og tester, skjermbilder, mappestruktur), og legge til nye kjente begrensninger (NFR-8)
