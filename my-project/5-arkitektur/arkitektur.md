@@ -7,7 +7,7 @@ paradigm: 'lagdelt monolitt (web → kjerne ← adaptere), serverrendret, med KI
 scope: 'Søknadsassistenten versjon 1: hele nettsiden, FR-1–FR-38 og NFR-1–NFR-12'
 status: final
 created: '2026-11-04'
-updated: '2026-11-04'
+updated: '2026-11-07'
 binds: ['FR-1–FR-38', 'NFR-1–NFR-12']
 sources:
   - '../../prds/prd-kode-prosjekt-2026-10-09/prd.md'
@@ -110,6 +110,8 @@ flowchart TD
   - **fjernet** når `ny == null`
 
   Visningen sammenligner aldri tekst selv. Brevet som vises og lastes ned, er alle `ny` som ikke er null, satt sammen, med nytt avsnitt der `nytt_avsnitt` er sann, og uten markering. «Nytt forslag» sender alltid brukerens opprinnelige `eget_brev`.
+
+  **Deling:** Korrektur-prompten sier at én setning aldri deles i to oppføringer. Blir en lang setning til to, står begge i samme `ny`. Slik betyr «ny» bare innhold som ikke fantes i brevet. Regelen kom fra prøven i chatten 7. november 2026: der ble andre halvdel av en delt setning vist som «(Ny setning)», selv om innholdet sto i brevet fra før.
 
 ### AD-6 — Telleregelen ligger ett sted
 
