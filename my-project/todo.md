@@ -19,7 +19,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 - [x] Spørre faglærer om product brief regnes som proposal
 - [x] Skrive «Hva jeg lærte» i prompt-loggen
-- [ ] Bestemme lista over typiske KI-fraser (FR-24, ligger i addendum)
+- [x] Bestemme lista over typiske KI-fraser (FR-24, ligger i addendum) (bestemt 7. november: 17 fraser i fem grupper)
 
 ## Etter PRD-en
 

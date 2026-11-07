@@ -38,11 +38,29 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 
 ## Til prompten for brevet
 
-- **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Listen er et utkast og er ikke bestemt ennå (åpent punkt, eier: Kristine). Eksempler så langt:
-  - «Jeg er lidenskapelig opptatt av …»
-  - «I dagens raskt skiftende arbeidsmarked …»
-  - «Jeg er overbevist om at jeg vil være en verdifull ressurs …»
-  - «Med min solide bakgrunn innen …»
+- **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Det gjelder begge modusene. I Korrektur skriver KI-en om slike fraser hvis brukeren har brukt dem selv. Listen ble bestemt av Kristine 7. november 2026.
+  - Store, tomme åpninger:
+    - «I dagens raskt skiftende arbeidsmarked …»
+    - «I en verden der …»
+    - «Det er med stor glede og entusiasme at jeg søker …»
+    - «Jeg skriver for å uttrykke min interesse for …»
+  - Overdrevne følelsesord:
+    - «Jeg er lidenskapelig opptatt av …»
+    - «Jeg er begeistret for muligheten til …»
+    - «drevet av en genuin interesse for …»
+  - Påstander uten bevis:
+    - «Jeg er overbevist om at jeg vil være en verdifull ressurs …»
+    - «Med min solide bakgrunn innen …»
+    - «en unik kombinasjon av ferdigheter»
+  - Ordvalg som er oversatt fra engelsk KI-tekst:
+    - «landskap», som i «det digitale landskapet»
+    - «navigere», som i «navigere komplekse utfordringer»
+    - «sømløst»
+    - «i skjæringspunktet mellom …»
+    - «en spennende reise»
+  - Avslutninger:
+    - «Jeg ser frem til muligheten til å bidra til deres videre suksess»
+    - «Takk for at du tok deg tid til å lese søknaden min»
 
 ## Arbeidsmåte
 
