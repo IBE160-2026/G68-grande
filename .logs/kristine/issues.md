@@ -25,3 +25,4 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
 - [ ] 2026-11-07 [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md) — Neste steg: story 1.1 med egen branch og PR (`bmad-build`), og oppdatere kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` når en story blir ferdig
 - [ ] 2026-11-07 [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md) — Hvis story 7.2 (PDF ut) kuttes: kriterium 5 må endres, slik PRD-en allerede sier for punkt 5 på nødlisten
+- [ ] 2026-11-07 [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md) — Refleksjonsrapporten (del 2, 30 %): spørre faglærer om den overordnede sensorveiledningen eller oppgaveteksten for del 2, og sette av tid til rapporten i planen
