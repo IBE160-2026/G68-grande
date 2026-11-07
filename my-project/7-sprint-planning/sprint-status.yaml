@@ -1,0 +1,91 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 11-07-2026 19:11
+last_updated: 11-07-2026 19:11
+project: kode prosjekt
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet: backlog
+  1-2-logge-inn-med-testbrukeren: backlog
+  1-3-registrere-seg-som-ny-bruker: backlog
+  1-4-logge-ut-og-bare-innloggede-kommer-inn: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-telleregelen-for-nøkkelordtreff: backlog
+  2-2-fiktive-testdata-og-fasit-for-første-testcase: backlog
+  2-3-testmodus-kjenner-igjen-testdataene: backlog
+  2-4-startsiden-får-testmodus-og-knappen-videre-og-modusvalget-la: backlog
+  2-5-lime-inn-cv-og-stillingsannonse: backlog
+  2-6-hele-resultatsiden-med-forklaringer-og-tilbake: backlog
+  2-7-ventetegn-og-feil-fra-ki-en: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-se-søknadsbrevet: backlog
+  3-2-laste-ned-brevet-som-word: backlog
+  3-3-vinduet-etter-nedlasting: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-koble-til-claude-for-nøkkelord-og-gap-analyse: backlog
+  4-2-brevet-fra-claude: backlog
+  4-3-slå-av-testmodus-med-samtykke-og-ki-merknad: backlog
+  4-4-ekte-ki-svar-i-testmodus: backlog
+  4-5-et-testcase-til-og-kriterium-3: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-velge-korrektur-og-legge-inn-eget-brev: backlog
+  5-2-forbedret-brev-fra-ki-en: backlog
+  5-3-se-hva-som-er-endret-i-korrektur: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-laste-opp-pdf: backlog
+  6-2-feilmeldinger-for-filer: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-nytt-forslag: backlog
+  7-2-laste-ned-brevet-som-pdf: backlog
+  7-3-gjenbruke-nøkkelordlisten-når-bare-cv-en-er-endret: backlog
+  7-4-pynt-fyrverkeri-og-bevegelse: backlog
+  7-5-logg-ut-før-nedlasting-og-arbeidsgiver-i-filnavnet: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-readme-for-sensor: backlog
+  8-2-testplan-og-prøve-fra-en-ny-kopi: backlog
+  epic-8-retrospective: optional

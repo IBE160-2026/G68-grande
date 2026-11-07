@@ -96,7 +96,9 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Under kodingen
 
-- [ ] Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR
+- [x] Sprint planning (`bmad-sprint-planning`) (ferdig 7. november: planen er klar til koding, `sprint-status.yaml` har 8 epics og 31 stories, se `7-sprint-planning/`)
+- [ ] Neste steg: story 1.1 med egen branch og PR (`bmad-build`). Kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` oppdateres når en story blir ferdig
+- [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [ ] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
 - [ ] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2)

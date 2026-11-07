@@ -36,6 +36,8 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | **`6-epics-og-stories/`** | |
 | [`epics.md`](6-epics-og-stories/epics.md) | Epics og stories: kravene delt opp i 8 epics og 31 stories med akseptansekriterier, i den rekkefølgen de skal kodes |
 | [`mine-valg-og-ki-feil.md`](6-epics-og-stories/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i epics og stories, og hvilke KI-feil som ble funnet |
+| **`7-sprint-planning/`** | |
+| [`sprint-status.yaml`](7-sprint-planning/sprint-status.yaml) | Sprint-status: alle epics og stories med status (backlog, i arbeid, til gjennomgang, ferdig), oppdateres når en story blir ferdig |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
