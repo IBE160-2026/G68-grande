@@ -325,3 +325,21 @@ Verktøy: Claude Code med BMAD-skillen `bmad-architecture` (veiledet). Alle besl
 | 202 | «fått dette av læreren min, jeg begynte med å logge inn på vercel, men når jeg skal sjekke innstillingene finner jeg ikke alle innstillingene» / «okei så vercel skal jeg egentlig ikke bry meg om?» | KI-en viste hvor innstillingene er skjult, men rådet meg til å vente, fordi det ikke finnes kode ennå, og fordi Vercel passer dårlig med øktene, databasen og API-nøkkelen. GitHub CLI var allerede installert og innlogget |
 | 203 | «kan du formulere en kort melding til læreren angående vercel» / «kortere og mindre teknisk» / læreren svarte at det «IKKE er et krav» | Vercel er ikke et krav, og nettsiden kjøres lokalt etter README. Svaret er ført inn i beslutningsloggen for arkitekturen |
 | 204 | «kan du nå da sjekke at vi ligger i stand til å svare på sensorveiledningen på en god måte?» / «1) A til de andre) supert» | Godt dekket, men KI-en fant at lærerens CI bare kjører testene i `backend/`. Arkitekturen fikk mappa `backend/`, regel AD-15 (sporbarhet fra plan til kode) og konvensjoner for ryddig kode, testplan og README |
+
+## 2026-11-07 – Epics og stories
+
+Verktøy: Claude Code med BMAD-skillen `bmad-create-epics-and-stories`. Planen ligger i [`6-epics-og-stories/`](6-epics-og-stories/).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 205 | `/bmad-create-epics-and-stories` / «hva er steg 1?» | KI-en forklarte steg 1: kravene fra PRD, UX og arkitekturen samlet i fire lister (38 FR, 12 NFR, tilleggskrav fra arkitekturen og 24 UX-krav) |
+| 206 | «jeg har ikke godkjent den» / «c» | **KI-feil:** KI-en sa at steg 1 var godkjent fordi det sto i fila, men jeg hadde ikke godkjent det. Kravlistene ble lagt fram på nytt, og jeg godkjente dem |
+| 207 | «hvis jeg forstår rett nå så er epics og stories kodingen?» | KI-en forklarte at epics og stories er planen for kodingen, ikke selve kodingen |
+| 208 | «sånn jeg ser det er det jo fler av sidene som mangler i epicsen, typ startsiden?» / «dette ser bra ut, C» | Epicene var skrevet ut fra kravnumrene, så sidene var vanskelige å se. Hver epic fikk en linje «Sider:», og jeg godkjente de 8 epicene |
+| 209 | «JA» / «Det er enkelte ting her jeg ikke henger med på, mye linker osv så for meg blir det rotetem men det ser jo for så vidt greit ut» / «har du en enkel epic 1» / «epic 1 ser bra ut, det som er bestemt av deg ser også bra ut» | Storiene ble vist med mange koder og filnavn. Nå får jeg en enkel utgave i chatten, og detaljene står bare i fila for den som skal kode |
+| 210 | «ja, eneste jeg lurer på er hvor startsiden er, for nå går vi rett fra innlogging til modusvalg ser det ut som (full generering/ forbedre)» / «ja gjør det» | KI-en viste at startsiden bygges i tre runder (Epic 1, 2 og 4). Tittelen på story 2.4 ble tydeligere |
+| 211 | «hva mente du med koden mot claude» / «ja» | KI-en forklarte delen av nettsiden som sender teksten til Claude og tar imot svaret, og hvorfor den kommer før bryteren |
+| 212 | «ja» / «nei det er fint» / «ja» | Epic 3–8 godkjent. Pynten kommer etter punktene på nødlisten |
+| 213 | «synes du jeg skal la flere agenter se på det?» / «C» | KI-en rådet meg til å gå rett til sluttsjekken i stedet for Party Mode, fordi grunnlaget allerede var gjennomgått. Sjekken fant og rettet tre stories som ventet på en senere story |
+| 214 | `/code-review` / `/effort max` / «nå som vi har satt max, kan du ta en ny sjekk?» | **KI-feil:** Den første sluttsjekken så bare etter kravnumre. Den grundige sjekken leste kravteksten og fant 8 feil (se [mine valg og KI-feil](6-epics-og-stories/mine-valg-og-ki-feil.md)). `/code-review` fant feil i loggen fra forrige økt |
+| 215 | «1) ok 2) ok 3) hva mener du med feil type? 4) ok 5) ok 6) ok 7) ok 8) ok og ok til de små tilleggene» / «c» | Alt rettet, og planen har 31 stories. KI-en forklarte at «feil type» er en fil som ikke er PDF, og at `.gitignore` ville skjult Word-filen |

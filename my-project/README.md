@@ -33,6 +33,9 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`arkitektur-memlog.md`](5-arkitektur/arkitektur-memlog.md) | Beslutningslogg for arkitekturen: hva som ble bestemt, alternativene, og hvorfor |
 | [`gjennomganger/`](5-arkitektur/gjennomganger/) | Den kritiske gjennomgangen av arkitekturen: mot PRD og UX, sjekkliste, versjoner og en «motstander» som lette etter hull |
 | [`mine-valg-og-ki-feil.md`](5-arkitektur/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i arkitekturen, og hvilke KI-feil som ble funnet |
+| **`6-epics-og-stories/`** | |
+| [`epics.md`](6-epics-og-stories/epics.md) | Epics og stories: kravene delt opp i 8 epics og 31 stories med akseptansekriterier, i den rekkefølgen de skal kodes |
+| [`mine-valg-og-ki-feil.md`](6-epics-og-stories/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i epics og stories, og hvilke KI-feil som ble funnet |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |

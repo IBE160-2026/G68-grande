@@ -60,8 +60,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Krav uten skjermbilde: FR-15, avrundingen i FR-17, FR-24, FR-37, FR-38 (løst: AD-4, AD-6, AD-14)
   - To raske prøver før stories lages (fra vurderingen av hva som blir vanskelig å kode, 3. november):
   - [x] Lese en fiktiv CV med to kolonner med PDF-biblioteket og se hva som kommer ut (gjort 7. november med Ola Nordmann-CV fra Word: æøå riktig, venstre kolonne først og så høyre, ingenting blandet. Overskrift og første linje havner på samme linje, men det går fint for KI-en. Vanlig `extract_text()` holder. Samme dag med Ola Nordmann-CV fra Canva: all tekst og æøå kommer med, og linjer som hører sammen står sammen, men overskriftene havner på feil sted (for eksempel «Personalia» etter utdanningen og «Kurs og sertifiseringer» etter kurset), og layout-modusen ga ingenting. Ingen ny løsning i koden: reserven er innlimt tekst)
-  - [ ] README, kjente begrensninger: PDF-lesingen er testet med CV-er fra Word og Canva. Fra Canva kommer all teksten med, men i rotete rekkefølge, så da kan teksten limes inn i stedet
-  - [ ] Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig (hva som er utdanning, jobb og oppsummering)
+  - [ ] README, kjente begrensninger: PDF-lesingen er testet med CV-er fra Word og Canva. Fra Canva kommer all teksten med, men i rotete rekkefølge, så da kan teksten limes inn i stedet (story 8.1)
+  - [ ] Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig (hva som er utdanning, jobb og oppsummering) (story 4.4)
   - [x] Prøve Korrektur-prompten én gang og se om setningsparene `{ny, gammel}` blir gode (gjort 7. november i chatten med et fiktivt brev fra Ola Nordmann til Nordlys Data AS: formen fra AD-4 klarer endret, slått sammen, fjernet, ny og uendret, og sjekken «alle `gammel` satt sammen = originalbrevet» gikk gjennom. Funn: når én setning deles i to, blir andre halvdel en «ny setning» med tom `gammel`, selv om innholdet var der fra før. Ikke testet med API-et ennå)
   - [x] Korrektur-prompten: regel om at en setning aldri deles i to oppføringer. Blir en lang setning til to, står begge i samme `ny`. Da betyr «ny setning» bare innhold som er helt nytt (lagt inn i arkitekturen, AD-5, 7. november. Storyen for Korrektur-prompten må følge den)
   - Vanskelig å kode, ha i bakhodet (🔴 krevende, 🟡 middels):
@@ -74,14 +74,14 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - Fra konkurrentanalysen:
   - [x] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?) (løst: «Gjøres hvis det blir tid» i PRD-en)
 - [x] Spørre faglærer om publisering på Vercel er et krav, eller om det holder at sensor kjører nettsiden lokalt etter README. Er det et krav: lage en utgave som bare kjører testmodus, mot slutten (arkitekturen må da endres for økt og brukere) (avklart 4. november: ikke et krav, lokal kjøring etter README holder)
-- [ ] Første kode-story: i `.gitignore` legge til `!.env.example` (regelen `.env.*` skjuler den nå, NFR-2) og `instance/` (databasen, AD-12)
-- [ ] Når ekte KI skal kobles på: lage konto i Claude Console (platform.claude.com), kjøpe kreditt (for eksempel 10 dollar) og la auto-reload være AV. Lage API-nøkkel og legge den i `.env`
-- [ ] Epics og stories
+- [ ] Første kode-story: i `.gitignore` legge til `!.env.example` (regelen `.env.*` skjuler den nå, NFR-2) og `instance/` (databasen, AD-12) (lagt inn i story 1.1. `!.env.example` står allerede i `.gitignore`, så bare `instance/` mangler)
+- [ ] Når ekte KI skal kobles på: lage konto i Claude Console (platform.claude.com), kjøpe kreditt (for eksempel 10 dollar) og la auto-reload være AV. Lage API-nøkkel og legge den i `.env` (før story 4.1)
+- [x] Epics og stories (ferdig 7. november: 8 epics og 31 stories, se `6-epics-og-stories/`)
   - [x] Holde omfanget stramt: 38 krav og bare helger igjen. Bruk nødlisten i PRD-en (del 4) tidlig heller enn sent (løst: sjekkpunkter 22. og 29. november i risikotabellen i PRD-en)
 - [ ] Suksesskriteriene (bekymringer fra gjennomgangen av brief og PRD 3. november)
   - [x] Bestemme på forhånd hva jeg gjør hvis et kriterium med ekte KI (1, 3, 11, 12) feiler én av tre ganger, og skrive det ærlig i testplanen (løst: plan B i innledningen til del 5 i PRD-en)
-  - [ ] Stories: når de ekte KI-svarene til testmodus lages (FR-38), kjøre hver prompt tre ganger og sjekke mot fasiten, så kriterium 1, 3, 11 og 12 testes tidlig
-  - [ ] Testdata: lage CV-er med tydelige hull (for eksempel «førerkort» eller «SQL»), ikke grensetilfeller, særlig for gap-analysen (kriterium 1)
+  - [ ] Stories: når de ekte KI-svarene til testmodus lages (FR-38), kjøre hver prompt tre ganger og sjekke mot fasiten, så kriterium 1, 3, 11 og 12 testes tidlig (story 4.4, 4.5 og 5.2)
+  - [ ] Testdata: lage CV-er med tydelige hull (for eksempel «førerkort» eller «SQL»), ikke grensetilfeller, særlig for gap-analysen (kriterium 1) (story 2.2 og 4.5)
   - [x] Skrive fasiten for gap-analysen nøye, med en kort begrunnelse per krav (om et krav er dekket, er en skjønnsvurdering) (løst: lagt inn som krav i NFR-3 i PRD-en)
   - [ ] Avtale med en kollega innen 20. november for kriterium 13 (testen gjøres etter 29. november, gjerne helgen 5.–6. desember, på Teams eller med skjermbilde)
   - [x] Vurdere å legge til en kilde på at mange arbeidsgivere bruker ATS (problembeskrivelsen i brief og PRD) (løst: Harvard Business School-kilde under Kilder i begge)
@@ -96,6 +96,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 ## Under kodingen
 
+- [ ] Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR
+- [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [ ] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6)
 - [ ] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten
 
