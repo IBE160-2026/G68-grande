@@ -12,8 +12,11 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-03 [suksesskriterier-og-sensorveiledning](998-2026-11-03-22-17-50-suksesskriterier-og-sensorveiledning.md) — Testdata: CV-er med tydelige hull, ikke grensetilfeller
 - [ ] 2026-11-03 [suksesskriterier-og-sensorveiledning](998-2026-11-03-22-17-50-suksesskriterier-og-sensorveiledning.md) — Før innlevering: fylle ut README-seksjonene merket «kommer», og legge til nye kjente begrensninger
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Når ekte KI kobles på: konto i Claude Console, kreditt med auto-reload AV, API-nøkkel i `.env`
-- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første PDF-story: prøve pypdf på CV med to kolonner og med tabell, ellers kjent begrensning
-- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Bestemme listen over typiske KI-fraser (FR-24) før prompten for brevet skrives
+- [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første PDF-story: prøve pypdf på CV med to kolonner og med tabell, ellers kjent begrensning (løst 2026-11-07: prøvd med CV fra Word og Canva, `extract_text()` holder, reserven er innlimt tekst)
+- [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Bestemme listen over typiske KI-fraser (FR-24) før prompten for brevet skrives (løst 2026-11-07: 17 fraser i addendum)
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Neste steg: epics og stories
 - [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Spørre læreren om publisering på Vercel er et krav (ellers holder lokal kjøring etter README) (løst 2026-11-04: ikke et krav)
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første kode-story: `!.env.example` og `instance/` i `.gitignore`
+- [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — README, kjente begrensninger: PDF-lesingen er testet med Word og Canva, fra Canva kommer teksten i rotete rekkefølge, og da kan den limes inn
+- [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig
+- [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når testsvarene lages (FR-38): test som sjekker at ingen av KI-frasene i addendum står i brevene
