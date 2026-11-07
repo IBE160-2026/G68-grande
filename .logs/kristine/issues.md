@@ -20,6 +20,8 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — README, kjente begrensninger: PDF-lesingen er testet med Word og Canva, fra Canva kommer teksten i rotete rekkefølge, og da kan den limes inn
 - [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig
 - [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når testsvarene lages (FR-38): test som sjekker at ingen av KI-frasene i addendum står i brevene (lagt inn i story 4.4 og 5.2, og nå også i `todo.md`)
-- [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR
+- [x] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR (løst 2026-11-07: sprint planning er gjort, se [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md). Story 1.1 er nytt punkt nederst)
 - [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare kolonner prøvd)
 - [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
+- [ ] 2026-11-07 [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md) — Neste steg: story 1.1 med egen branch og PR (`bmad-build`), og oppdatere kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` når en story blir ferdig
+- [ ] 2026-11-07 [sprint-planning](994-2026-11-07-19-11-39-sprint-planning.md) — Hvis story 7.2 (PDF ut) kuttes: kriterium 5 må endres, slik PRD-en allerede sier for punkt 5 på nødlisten
