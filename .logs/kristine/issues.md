@@ -12,11 +12,14 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-03 [suksesskriterier-og-sensorveiledning](998-2026-11-03-22-17-50-suksesskriterier-og-sensorveiledning.md) — Testdata: CV-er med tydelige hull, ikke grensetilfeller
 - [ ] 2026-11-03 [suksesskriterier-og-sensorveiledning](998-2026-11-03-22-17-50-suksesskriterier-og-sensorveiledning.md) — Før innlevering: fylle ut README-seksjonene merket «kommer», og legge til nye kjente begrensninger
 - [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Når ekte KI kobles på: konto i Claude Console, kreditt med auto-reload AV, API-nøkkel i `.env`
-- [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første PDF-story: prøve pypdf på CV med to kolonner og med tabell, ellers kjent begrensning (løst 2026-11-07: prøvd med CV fra Word og Canva, `extract_text()` holder, reserven er innlimt tekst)
+- [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første PDF-story: prøve pypdf på CV med to kolonner og med tabell, ellers kjent begrensning (løst 2026-11-07: prøvd med CV fra Word og Canva, `extract_text()` holder, reserven er innlimt tekst) (merknad 2026-11-07 fra `/code-review`: bare kolonner ble prøvd, ikke tabell. Tabellprøven er nytt punkt nederst, story 6.1)
 - [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Bestemme listen over typiske KI-fraser (FR-24) før prompten for brevet skrives (løst 2026-11-07: 17 fraser i addendum)
-- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Neste steg: epics og stories
+- [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Neste steg: epics og stories (løst 2026-11-07: 8 epics og 31 stories, se [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md))
 - [x] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Spørre læreren om publisering på Vercel er et krav (ellers holder lokal kjøring etter README) (løst 2026-11-04: ikke et krav)
-- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første kode-story: `!.env.example` og `instance/` i `.gitignore`
+- [ ] 2026-11-04 [arkitektur](997-2026-11-04-21-26-43-arkitektur.md) — Første kode-story: `!.env.example` og `instance/` i `.gitignore` (`!.env.example` står der fra før, så bare `instance/` mangler, story 1.1)
 - [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — README, kjente begrensninger: PDF-lesingen er testet med Word og Canva, fra Canva kommer teksten i rotete rekkefølge, og da kan den limes inn
 - [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når ekte KI kobles på: prøve om KI-en forstår Canva-teksten riktig
-- [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når testsvarene lages (FR-38): test som sjekker at ingen av KI-frasene i addendum står i brevene
+- [ ] 2026-11-07 [prover-for-stories](996-2026-11-07-13-20-31-prover-for-stories.md) — Når testsvarene lages (FR-38): test som sjekker at ingen av KI-frasene i addendum står i brevene (lagt inn i story 4.4 og 5.2, og nå også i `todo.md`)
+- [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Neste steg: sprint planning (`bmad-sprint-planning`), og så story 1.1 med egen branch og PR
+- [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare kolonner prøvd)
+- [ ] 2026-11-07 [epics-og-stories](995-2026-11-07-14-53-09-epics-og-stories.md) — Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
