@@ -385,7 +385,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-08 – Story 1.4: Logge ut, og bare innloggede kommer inn
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md), og koden i [PR #5](https://github.com/IBE160-2026/G68-grande/pull/5).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -393,3 +393,4 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 236 | «Beholde hele» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 6 av 19 funn ble rettet. Den viktigste: trykket man tilbake rett etter innlogging, sto «Du må logge inn først» og «Logg ut» på samme side. Meldingen kom også for alle verdier i adressen, og en test for gammel cookie på innloggingssiden manglet. Ett funn er utsatt til README (se [spec-en](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md)) |
 | 237 | «denne siden fungerer ikke» | Nettsiden kjørte ikke. KI-en startet den, og jeg prøvde innlogging, «Logg ut» og «Du må logge inn først». Alt virket |
 | 238 | «det virket ikke, jeg kommer tilbake til velkommen» / «det fungerer ikke nå heller» / «Lite skript» | **KI-feil:** tilbakeknappen etter utlogging viste fortsatt «Velkommen». Beskjeden til nettleseren om ikke å lagre sidene holder ikke i nyere Chrome og Edge, og det andre forsøket (å be nettleseren slette lagrede sider) hjalp heller ikke. Jeg valgte et lite skript som laster siden på nytt, og da sender serveren til innloggingen |
+| 239 | «ja nå stemmer det, push» | Tilbakeknappen virket med skriptet. Branchen ble pushet og PR #5 laget |
