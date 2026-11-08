@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "skjemafelt.html" import felt %}
+{% block tittel %}{{ tekster.REGISTRER_TITTEL }}{% endblock %}
+
+{% block innhold %}
+<form class="skjema" method="post" action="{{ url_for('web.registrer') }}" novalidate>
+  <h1 class="skjema-overskrift">{{ tekster.REGISTRER_OVERSKRIFT }}</h1>
+  {{ felt("epost", tekster.FELT_EPOST, "email", "email", feltfeil.get("epost"), fokus, epost) }}
+  {{ felt("passord", tekster.FELT_PASSORD, "password", "new-password",
+          feltfeil.get("passord"), fokus, hjelp=tekster.PASSORD_HJELP) }}
+  {{ felt("gjenta", tekster.FELT_GJENTA, "password", "new-password",
+          feltfeil.get("gjenta"), fokus) }}
+  <button class="hovedknapp" type="submit">{{ tekster.REGISTRER_KNAPP }}</button>
+  <p class="lenkerad">{{ tekster.TIL_INNLOGGING_TEKST }}
+    <a href="{{ url_for('web.logg_inn') }}">{{ tekster.TIL_INNLOGGING_LENKE }}</a></p>
+</form>
+{% endblock %}

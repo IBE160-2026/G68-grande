@@ -1,0 +1,17 @@
+{# Ett felt: etikett over, hjelpetekst og feiltekst under, koblet til feltet med
+   aria-describedby. Brukes av innloggingen og registreringen. #}
+{% macro felt(navn, etikett, type, autocomplete, feil, fokus, verdi="", hjelp=None) -%}
+{%- set beskrevet = [] -%}
+{%- if hjelp %}{% set _ = beskrevet.append(navn ~ "-hjelp") %}{% endif -%}
+{%- if feil %}{% set _ = beskrevet.append(navn ~ "-feil") %}{% endif -%}
+<div class="felt">
+  <label for="{{ navn }}">{{ etikett }}</label>
+  <input id="{{ navn }}" name="{{ navn }}" type="{{ type }}" autocomplete="{{ autocomplete }}"
+    {%- if verdi %} value="{{ verdi }}"{% endif %}
+    {%- if feil %} aria-invalid="true"{% endif %}
+    {%- if beskrevet %} aria-describedby="{{ beskrevet | join(' ') }}"{% endif %}
+    {%- if fokus == navn %} autofocus{% endif %}>
+  {% if hjelp %}<p class="hjelpetekst" id="{{ navn }}-hjelp">{{ hjelp }}</p>{% endif %}
+  {% if feil %}<p class="feiltekst" id="{{ navn }}-feil">{{ feil }}</p>{% endif %}
+</div>
+{%- endmacro %}

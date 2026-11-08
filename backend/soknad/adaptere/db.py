@@ -44,3 +44,26 @@ def finn_bruker(sti, epost, passord) -> int | None:
     if rad is None or not check_password_hash(rad[1], passord):
         return None
     return rad[0]
+
+
+def epost_finnes(sti, epost) -> bool:
+    """Sier om e-posten (normalisert) er registrert fra før."""
+    with _koble_til(sti) as db:
+        rad = db.execute(
+            "SELECT 1 FROM brukere WHERE epost = ?", (normaliser_epost(epost),)
+        ).fetchone()
+    return rad is not None
+
+
+def lag_bruker(sti, epost, passord) -> int | None:
+    """Lagrer en ny bruker med normalisert e-post og bare hashen av passordet, og gir
+    id-en. Gir None hvis e-posten finnes (for eksempel kom den inn i mellomtiden)."""
+    try:
+        with _koble_til(sti) as db, db:
+            markor = db.execute(
+                "INSERT INTO brukere (epost, passord_hash) VALUES (?, ?)",
+                (normaliser_epost(epost), generate_password_hash(passord)),
+            )
+            return markor.lastrowid
+    except sqlite3.IntegrityError:
+        return None

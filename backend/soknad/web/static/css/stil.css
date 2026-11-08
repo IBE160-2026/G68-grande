@@ -172,7 +172,7 @@ svg {
   text-align: center;
 }
 
-/* Skjema (innlogging): et hvitt kort, høyst 360 px bredt */
+/* Skjema (innlogging og registrering): et hvitt kort, høyst 360 px bredt */
 
 .skjema {
   max-width: var(--form-max);
@@ -222,6 +222,26 @@ svg {
   font-size: var(--size-small);
   font-weight: 600;
   color: var(--error);
+}
+
+/* Hjelpetekst under feltet, for eksempel «Minst 8 tegn» */
+.hjelpetekst {
+  margin: var(--space-1) 0 0;
+  font-size: var(--size-small);
+  color: var(--text-muted);
+}
+
+/* Lenkeraden under skjemaet: «Ny her? Registrer deg her» og «… Logg inn» */
+.lenkerad {
+  margin: var(--space-4) 0 0;
+  font-size: var(--size-label);
+  text-align: center;
+}
+
+.lenkerad a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* Skjemafeil: rød boks over feltene, får fokus */

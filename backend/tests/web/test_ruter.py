@@ -76,11 +76,12 @@ def test_nfr8_ukjent_side_gir_404(client):
 def test_nfr6_ingenting_hentes_utenfra(app, innlogget_client):
     """NFR-6: ingen Google Fonts eller andre nettadresser på sidene eller i stilen."""
     innlogging = app.test_client().get("/logg-inn").get_data(as_text=True)
+    registrering = app.test_client().get("/registrer").get_data(as_text=True)
     html = innlogget_client.get("/").get_data(as_text=True)
     css = STIL.read_text(encoding="utf-8")
-    for side in (innlogging, html):
+    for side in (innlogging, registrering, html):
         assert "<script" not in side
-    for innhold in (innlogging, html, css):
+    for innhold in (innlogging, registrering, html, css):
         assert "fonts.googleapis" not in innhold
         assert "fonts.gstatic" not in innhold
         assert not re.search(r"(?:src|href|srcset)\s*=\s*[\"']?(?:https?:)?//", innhold)

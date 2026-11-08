@@ -1,4 +1,4 @@
-"""Tester for innloggingssiden og login_required (FR-3, FR-4, FR-5, FR-7, NFR-6)."""
+"""Tester for innloggingssiden og login_required (FR-3, FR-4, FR-5, FR-6, FR-7, NFR-6)."""
 
 import re
 from html.parser import HTMLParser
@@ -86,11 +86,9 @@ def test_nfr6_skjemaet_har_novalidate_og_ingen_feil_eller_fokus_foer_innsending(
     assert "<script" not in html
 
 
-def test_fr3_ingen_registrering_eller_utlogging_ennaa(app, innlogget_client):
-    """FR-3: registrering, utlogging og «Du må logge inn først» kommer i story 1.3 og 1.4."""
+def test_fr6_fr7_ingen_utlogging_ennaa(app, innlogget_client):
+    """FR-6/FR-7: «Logg ut» og «Du må logge inn først» kommer i story 1.4."""
     html = app.test_client().get("/logg-inn").get_data(as_text=True)
-    assert "Registrer" not in html
-    assert "Ny her?" not in html
     assert "Du må logge inn først" not in html
     assert "Logg ut" not in innlogget_client.get("/").get_data(as_text=True)
 
