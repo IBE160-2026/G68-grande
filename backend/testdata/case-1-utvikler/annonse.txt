@@ -1,0 +1,33 @@
+Junior utvikler – Testvik Utvikling AS
+
+Testvik Utvikling AS er et lite programvareselskap i Eksempelby. Vi lager nettsider og interne verktøy for kunder i hele regionen. Nå søker vi en junior utvikler som vil lære mye og jobbe tett med erfarne kolleger.
+
+Arbeidsoppgaver:
+- Utvikle og vedlikeholde nettsider og webtjenester
+- Lage nye funksjoner sammen med teamet
+- Skrive tester og rette feil
+- Delta i møter med kunder
+
+Vi ser etter deg som:
+- Har eller fullfører en bachelorgrad i informatikk eller IT
+- Har erfaring med Python, gjerne med rammeverket Flask
+- Kan HTML og CSS
+- Har erfaring med SQL og relasjonsdatabaser
+- Bruker Git til versjonskontroll
+- Har jobbet med Linux
+- Har erfaring med Docker
+- Kjenner smidig utvikling, gjerne Scrum
+- Har førerkort klasse B, fordi du av og til skal besøke kunder
+- Snakker og skriver godt norsk og engelsk
+
+Vi tilbyr:
+- En trygg start med en fast fadder de første månedene
+- Fleksibel arbeidstid
+- Gode muligheter for kurs og videre utdanning
+
+Søknadsfrist: 1. mars 2027
+Tiltredelse: august 2027
+
+Kontaktperson: Ola Nordmann, utviklingsleder
+E-post: ola.nordmann@example.com
+Telefon: 123 45 678
