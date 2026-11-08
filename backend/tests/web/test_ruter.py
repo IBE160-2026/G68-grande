@@ -79,8 +79,10 @@ def test_nfr6_ingenting_hentes_utenfra(app, innlogget_client):
     registrering = app.test_client().get("/registrer").get_data(as_text=True)
     html = innlogget_client.get("/").get_data(as_text=True)
     css = STIL.read_text(encoding="utf-8")
-    for side in (innlogging, registrering, html):
+    for side in (innlogging, registrering):
         assert "<script" not in side
+    # Etter innlogging finnes bare det lokale skriptet for tilbakeknappen.
+    assert re.findall(r"<script[^>]*>", html) == ['<script src="/static/js/tilbake.js" defer>']
     for innhold in (innlogging, registrering, html, css):
         assert "fonts.googleapis" not in innhold
         assert "fonts.gstatic" not in innhold

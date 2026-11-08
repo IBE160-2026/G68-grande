@@ -382,3 +382,15 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 232 | «Behold hele» / «Godkjenn og fortsett» / «Ja» (hjelpeagenter) | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 3 av 16 funn var ekte og ble rettet, alle i testene: sjekken av at ingenting hentes utenfra, så ikke på den nye siden, testen av escaping kunne bestått selv om e-posten forsvant, og koblingen av «Minst 8 tegn» og feilteksten ble ikke testet ved for kort passord (se [spec-en](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md)) |
 | 233 | «ja start siden for meg» / «det funket utmerket, push» | KI-en startet nettsiden, og jeg prøvde ny bruker, alle feilene og innlogging med den nye brukeren i nettleseren. Branchen ble pushet og PR #4 laget |
 | 234 | «flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #4. Story 1.3 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
+
+## 2026-11-08 – Story 1.4: Logge ut, og bare innloggede kommer inn
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md), og koden i [PR #5](https://github.com/IBE160-2026/G68-grande/pull/5).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 235 | `/bmad-build` / «1.4» | KI-en laget en egen branch og skrev planen (spec) for story 1.4: «Logg ut» i hjørneraden, «Du må logge inn først» når man ikke er logget inn, og en test som går gjennom alle sidene |
+| 236 | «Beholde hele» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 6 av 19 funn ble rettet. Den viktigste: trykket man tilbake rett etter innlogging, sto «Du må logge inn først» og «Logg ut» på samme side. Meldingen kom også for alle verdier i adressen, og en test for gammel cookie på innloggingssiden manglet. Ett funn er utsatt til README (se [spec-en](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md)) |
+| 237 | «denne siden fungerer ikke» | Nettsiden kjørte ikke. KI-en startet den, og jeg prøvde innlogging, «Logg ut» og «Du må logge inn først». Alt virket |
+| 238 | «det virket ikke, jeg kommer tilbake til velkommen» / «det fungerer ikke nå heller» / «Lite skript» | **KI-feil:** tilbakeknappen etter utlogging viste fortsatt «Velkommen». Beskjeden til nettleseren om ikke å lagre sidene holder ikke i nyere Chrome og Edge, og det andre forsøket (å be nettleseren slette lagrede sider) hjalp heller ikke. Jeg valgte et lite skript som laster siden på nytt, og da sender serveren til innloggingen |
+| 239 | «ja nå stemmer det, push» | Tilbakeknappen virket med skriptet. Branchen ble pushet og PR #5 laget |
