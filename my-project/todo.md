@@ -98,7 +98,9 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 
 - [x] Sprint planning (`bmad-sprint-planning`) (ferdig 7. november: planen er klar til koding, `sprint-status.yaml` har 8 epics og 31 stories, se `7-sprint-planning/`)
 - [x] Story 1.1 med egen branch og PR (`bmad-build`). Kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` oppdateres når en story blir ferdig (ferdig 8. november: PR #2 flettet, CI grønn på Linux og Windows)
-- [ ] Neste steg: story 1.2 «Logge inn med testbrukeren» med egen branch og PR (`bmad-build`)
+- [x] Story 1.2 «Logge inn med testbrukeren» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #3 flettet, CI grønn på Linux og Windows)
+- [ ] Neste steg: story 1.3 «Registrere seg som ny bruker» med egen branch og PR (`bmad-build`)
+- [ ] Story 1.3 og 1.4: endre testen `test_fr3_ingen_registrering_eller_utlogging_ennaa` (den sjekker at registrering og «Logg ut» mangler)
 - [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [ ] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
