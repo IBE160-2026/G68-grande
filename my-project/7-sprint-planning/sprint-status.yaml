@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-08-2026 17:09
+last_updated: 11-08-2026 17:39
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -95,35 +95,35 @@ action_items:
     action: "logg_inn_bruker kaller logg_ut_bruker, så økten ryddes ett sted før story
       2.4 legger Soknad i den"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-2-innlogget-bruker-på-logg-inn-og-registre"
     epic: 1
     action: "Innlogget bruker på /logg-inn og /registrer sendes til startsiden (bestemt
       av Kristine)"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-3-samle-testhjelperne-i-én-fil-og-slutte-å"
     epic: 1
     action: "Samle testhjelperne i én fil og slutte å hente dem fra andre testfiler,
       med samme sjekk av escaping på begge sidene"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-4-stramme-lagsjekken-for-kjerne-og-testen"
     epic: 1
     action: "Stramme lagsjekken for kjerne/ og testen av tilbake.js (betingelsen if
       (hendelse.persisted))"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-5-prøve-innloggingen-registreringen-og-sta"
     epic: 1
     action: "Prøve innloggingen, registreringen og startsiden med hjørneraden ved
       320 px, 768 px og 200 % zoom"
     owner: "Kristine"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-6-prosess-spec-ens-manual-checks-sier-nøya"
     epic: 1
