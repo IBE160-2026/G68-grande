@@ -172,6 +172,104 @@ svg {
   text-align: center;
 }
 
+/* Skjema (innlogging): et hvitt kort, høyst 360 px bredt */
+
+.skjema {
+  max-width: var(--form-max);
+  margin: var(--space-6) auto var(--space-7);
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow);
+}
+
+.skjema-overskrift {
+  margin: 0 0 var(--space-4);
+  font-size: var(--size-heading-page);
+  line-height: var(--line-height-heading-page);
+  text-align: center;
+}
+
+.felt {
+  margin-bottom: var(--space-4);
+}
+
+.felt label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--size-label);
+  font-weight: 600;
+}
+
+/* Tekstfelt: ramme i primary (kontrast), rød ramme ved feil */
+.felt input {
+  width: 100%;
+  padding: 10px var(--space-3);
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-sm);
+}
+
+.felt input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.feiltekst {
+  margin: var(--space-1) 0 0;
+  font-size: var(--size-small);
+  font-weight: 600;
+  color: var(--error);
+}
+
+/* Skjemafeil: rød boks over feltene, får fokus */
+.skjemafeil {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--size-small);
+  font-weight: 600;
+  color: var(--error);
+  background: var(--error-tint);
+  border: 1px solid var(--error);
+  border-radius: var(--rounded-sm);
+}
+
+/* Hovedknapp: løfter seg 2 px med skygge, krymper til 96 % ved trykk, 55 % når låst */
+.hovedknapp {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-1);
+  padding: var(--space-3) var(--space-5);
+  font: inherit;
+  font-weight: 600;
+  color: var(--primary-contrast);
+  background: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-lg);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.hovedknapp:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.hovedknapp:active {
+  transform: scale(0.96);
+}
+
+.hovedknapp:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Redusert bevegelse: alle animasjoner og overganger av */
 
 @media (prefers-reduced-motion: reduce) {
@@ -181,5 +279,10 @@ svg {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+
+  .hovedknapp:hover,
+  .hovedknapp:active {
+    transform: none;
   }
 }

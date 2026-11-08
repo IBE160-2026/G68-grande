@@ -54,7 +54,7 @@ uv run flask --app soknad run
 | `ANTHROPIC_MODEL` | Hvilken Claude-modell som brukes | `claude-opus-5-5` |
 | `SECRET_KEY` | Signerer innloggingen | En tilfeldig nøkkel lages ved hver oppstart |
 
-*Kommer:* e-post og passord til testbrukeren. Nettsiden kan kjøres i testmodus uten API-nøkkel.
+**Testbruker:** logg inn med e-post `test@example.com` og passord `testpassord1`. Du trenger ikke registrere deg. Databasen (`backend/instance/brukere.db`) og testbrukeren lages automatisk første gang nettsiden starter. Vil du begynne på nytt med en tom database, stopper du nettsiden og sletter mappen `backend/instance/`. Innloggingen huskes bare i minnet, så når nettsiden startes på nytt, er alle logget ut og må logge inn igjen. Nettsiden kan kjøres i testmodus uten API-nøkkel.
 
 ## Testdata og tester
 
