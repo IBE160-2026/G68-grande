@@ -1,0 +1,1 @@
+"""Adapterne: database og øktlager."""

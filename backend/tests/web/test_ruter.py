@@ -1,4 +1,5 @@
-"""Tester for startsiden, base.html og stilen (NFR-6, NFR-7, NFR-8, UX-DR1)."""
+"""Tester for startsiden, base.html og stilen (NFR-6, NFR-7, NFR-8, UX-DR1).
+Startsiden krever innlogging, så testene logger inn med testbrukeren først."""
 
 import re
 from html.parser import HTMLParser
@@ -28,16 +29,16 @@ def tagger_i(html):
     return leser.tagger
 
 
-def test_nfr8_startsiden_svarer_200(client):
-    """NFR-8: startsiden virker på en ny kopi."""
-    svar = client.get("/")
+def test_nfr8_startsiden_svarer_200(innlogget_client):
+    """NFR-8: startsiden virker på en ny kopi (etter innlogging med testbrukeren)."""
+    svar = innlogget_client.get("/")
     assert svar.status_code == 200
     assert svar.mimetype == "text/html"
 
 
-def test_nfr6_startsiden_har_lang_tittel_og_landemerker(client):
+def test_nfr6_startsiden_har_lang_tittel_og_landemerker(innlogget_client):
     """NFR-6: lang="nb", egen sidetittel, header/main/footer og nøyaktig én h1."""
-    html = client.get("/").get_data(as_text=True)
+    html = innlogget_client.get("/").get_data(as_text=True)
     tagger = tagger_i(html)
     navn = [tag for tag, _ in tagger]
 
@@ -48,18 +49,18 @@ def test_nfr6_startsiden_har_lang_tittel_og_landemerker(client):
     assert navn.count("h1") == 1
 
 
-def test_nfr6_logoen_er_ikke_en_overskrift(client):
+def test_nfr6_logoen_er_ikke_en_overskrift(innlogget_client):
     """NFR-6: logoen står i header, men er ikke en overskrift."""
-    html = client.get("/").get_data(as_text=True)
+    html = innlogget_client.get("/").get_data(as_text=True)
     header = re.search(r"<header[^>]*>(.*?)</header>", html, re.S).group(1)
     assert tekster.LOGO == "Søknadsassistenten"
     assert tekster.LOGO in header
     assert not re.search(r"<h[1-6]", header)
 
 
-def test_nfr8_startsiden_viser_velkomst_og_ingress(client):
+def test_nfr8_startsiden_viser_velkomst_og_ingress(innlogget_client):
     """NFR-8: startsiden viser «Velkommen! 👋» som h1 og ingressen fra tekster.py."""
-    html = client.get("/").get_data(as_text=True)
+    html = innlogget_client.get("/").get_data(as_text=True)
     assert re.search(r"<h1[^>]*>\s*Velkommen! 👋\s*</h1>", html)
     assert tekster.START_INGRESS == (
         "Her lager du et søknadsbrev som passer til stillingen du vil søke på."
@@ -72,25 +73,27 @@ def test_nfr8_ukjent_side_gir_404(client):
     assert client.get("/finnes-ikke").status_code == 404
 
 
-def test_nfr6_ingenting_hentes_utenfra(client):
-    """NFR-6: ingen Google Fonts eller andre nettadresser på siden eller i stilen."""
-    html = client.get("/").get_data(as_text=True)
+def test_nfr6_ingenting_hentes_utenfra(app, innlogget_client):
+    """NFR-6: ingen Google Fonts eller andre nettadresser på sidene eller i stilen."""
+    innlogging = app.test_client().get("/logg-inn").get_data(as_text=True)
+    html = innlogget_client.get("/").get_data(as_text=True)
     css = STIL.read_text(encoding="utf-8")
-    for innhold in (html, css):
+    for side in (innlogging, html):
+        assert "<script" not in side
+    for innhold in (innlogging, html, css):
         assert "fonts.googleapis" not in innhold
         assert "fonts.gstatic" not in innhold
         assert not re.search(r"(?:src|href|srcset)\s*=\s*[\"']?(?:https?:)?//", innhold)
         assert not re.search(r"url\(\s*[\"']?(?:https?:)?//", innhold)
         assert not re.search(r"@import\s+(?:url\(\s*)?[\"']?(?:https?:)?//", innhold)
-    assert "<script" not in html
 
 
-def test_nfr8_stil_og_skrift_lastes_lokalt(client):
+def test_nfr8_stil_og_skrift_lastes_lokalt(innlogget_client):
     """NFR-8: stilen og Baloo 2-filen ligger i prosjektet og kan lastes."""
-    html = client.get("/").get_data(as_text=True)
+    html = innlogget_client.get("/").get_data(as_text=True)
     assert "/static/css/stil.css" in html
-    assert client.get("/static/css/stil.css").status_code == 200
-    skrift = client.get("/static/fonts/Baloo2-ExtraBold.woff2")
+    assert innlogget_client.get("/static/css/stil.css").status_code == 200
+    skrift = innlogget_client.get("/static/fonts/Baloo2-ExtraBold.woff2")
     assert skrift.status_code == 200
     assert skrift.data[:4] == b"wOF2"
     assert (WEB / "static" / "fonts" / "OFL.txt").is_file()

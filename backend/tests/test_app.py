@@ -8,6 +8,9 @@ import soknad
 from soknad import create_app
 from soknad.innstillinger import MAKS_FORESPORSEL, STANDARD_MODELL
 
+# Leses når testfilen importeres, før autouse-fiksturen bytter den ut med tmp_path.
+EKTE_INSTANCE_MAPPE = soknad.INSTANCE_MAPPE
+
 
 @pytest.fixture
 def uten_env(monkeypatch, tmp_path):
@@ -88,3 +91,10 @@ def test_nfr2_env_example_har_ingen_verdier():
         if linje.strip() and not linje.strip().startswith("#")
     ]
     assert linjer == ["ANTHROPIC_API_KEY=", "ANTHROPIC_MODEL=", "SECRET_KEY="]
+
+
+def test_nfr8_databasen_ligger_i_backend_instance():
+    """NFR-8: utenfor testene ligger databasen i backend/instance/."""
+    assert EKTE_INSTANCE_MAPPE == Path(soknad.__file__).resolve().parent.parent / "instance"
+    assert EKTE_INSTANCE_MAPPE.name == "instance"
+    assert EKTE_INSTANCE_MAPPE.parent.name == "backend"
