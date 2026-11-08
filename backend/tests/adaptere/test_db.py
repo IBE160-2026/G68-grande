@@ -1,4 +1,4 @@
-"""Tester for databasen og testbrukeren (FR-3, NFR-1, NFR-5, NFR-8)."""
+"""Tester for databasen, testbrukeren og nye brukere (FR-1, FR-2, FR-3, NFR-1, NFR-5, NFR-8)."""
 
 import sqlite3
 from contextlib import closing
@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash
 
 from soknad import create_app
 from soknad.adaptere import db
-from soknad.adaptere.db import finn_bruker, lag_database
+from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker, lag_database
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
 
 
@@ -93,3 +93,50 @@ def test_fr3_epost_med_store_bokstaver_og_mellomrom_virker(db_sti):
 def test_fr3_feil_passord_eller_ukjent_epost_gir_none(db_sti, epost, passord):
     """FR-3: feil passord (også med mellomrom eller store bokstaver) eller ukjent e-post."""
     assert finn_bruker(db_sti, epost, passord) is None
+
+
+# --- Nye brukere ---
+
+
+def test_fr1_lag_bruker_lagrer_normalisert_epost_og_bare_hash(db_sti):
+    """FR-1/NFR-1: ny bruker får ny id, e-posten lagres normalisert og passordet bare som hash."""
+    bruker_id = lag_bruker(db_sti, "  Ola@X.no ", "passord12")
+    assert isinstance(bruker_id, int)
+    rad = next(r for r in _rader(db_sti) if r[0] == bruker_id)
+    assert rad[1] == "ola@x.no"
+    assert rad[2] != "passord12"
+    assert check_password_hash(rad[2], "passord12")
+    assert b"passord12" not in db_sti.read_bytes()
+
+
+def test_fr1_ny_bruker_kan_logge_inn_med_andre_bokstaver(db_sti):
+    """FR-1/FR-3: den nye brukeren finnes igjen med e-post i andre bokstaver."""
+    bruker_id = lag_bruker(db_sti, "ola@x.no", "passord12")
+    assert finn_bruker(db_sti, " OLA@x.NO ", "passord12") == bruker_id
+    assert finn_bruker(db_sti, "ola@x.no", "passord13") is None
+
+
+def test_fr2_lag_bruker_gir_none_naar_eposten_finnes(db_sti):
+    """FR-2: finnes e-posten (også testbrukeren), lagres ingen ny rad."""
+    lag_bruker(db_sti, "ola@x.no", "passord12")
+    for_forsok = _rader(db_sti)
+    assert lag_bruker(db_sti, " Ola@X.no ", "annetpassord") is None
+    assert lag_bruker(db_sti, TESTBRUKER_EPOST.upper(), "passord12") is None
+    assert _rader(db_sti) == for_forsok
+
+
+def test_fr2_epost_finnes(db_sti):
+    """FR-2: epost_finnes sammenligner normalisert e-post."""
+    assert epost_finnes(db_sti, TESTBRUKER_EPOST)
+    assert epost_finnes(db_sti, " Test@Example.COM ")
+    assert not epost_finnes(db_sti, "ola@x.no")
+    lag_bruker(db_sti, "ola@x.no", "passord12")
+    assert epost_finnes(db_sti, "OLA@x.no")
+
+
+def test_nfr1_lag_bruker_bruker_werkzeugs_vanlige_hash(db_sti, monkeypatch):
+    """NFR-1: utenfor testene hashes nye passord med werkzeugs vanlige hash (scrypt)."""
+    monkeypatch.setattr(db, "generate_password_hash", werkzeug.security.generate_password_hash)
+    bruker_id = lag_bruker(db_sti, "ola@x.no", "passord12")
+    rad = next(r for r in _rader(db_sti) if r[0] == bruker_id)
+    assert rad[2].startswith("scrypt:")
