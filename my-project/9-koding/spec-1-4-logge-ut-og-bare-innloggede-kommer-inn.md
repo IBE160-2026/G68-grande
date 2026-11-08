@@ -85,8 +85,12 @@ context:
 - `test_alle_sider.py` lager eksempelverdier etter type, og `any(...)` får den første verdien i alfabetisk rekkefølge.
 - Etter gjennomgangen (6 rettelser): 132 tester, `ruff check` og `ruff format --check` grønne.
 - KI-en har ikke prøvd sidene i nettleseren, fordi sidene etter innlogging krever en innlogget økt. Kristine sjekker 375 og 1280 px.
+- Kristine prøvde i nettleseren: alt virket, unntatt tilbakeknappen etter utlogging, som viste «Velkommen». Serverloggen viste at nettleseren hentet siden fra minnet uten å spørre serveren (nyere Chrome og Edge gjør det selv med `Cache-Control: no-store`). `Clear-Site-Data: "cache"` ved utlogging hjalp heller ikke, så den ble fjernet igjen.
+- Kristine valgte et lite skript: `static/js/tilbake.js` laster siden på nytt når nettleseren viser den fra minnet (`pageshow` med `persisted`). Det lastes bare på sidene etter innlogging, i `<head>` i `base.html`. Testene som krevde at sidene ikke har `<script>`, godtar nå bare dette lokale skriptet etter innlogging. 133 tester, ruff grønn.
 
 ## Spec Change Log
+
+- 2026-11-08, etter Kristines prøve i nettleseren: tilbakeknappen etter utlogging viste startsiden fra nettleserens minne, selv om Always-delen lover at det ikke skal skje. Kristine godkjente et unntak fra «Ingen JavaScript»: et lite lokalt skript (`static/js/tilbake.js`) bare på sidene etter innlogging. Det endrer aldri data, slik arkitekturen krever. Den låste delen er ikke endret, men skriptet hører til den samme regelen om tilbakeknappen. KEEP: `Cache-Control: no-store` i `login_required` blir værende.
 
 ## Review Triage Log
 
