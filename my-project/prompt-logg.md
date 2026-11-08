@@ -427,9 +427,10 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-08 – Story 2.2: Fiktive testdata og fasit for første testcase
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md), og koden i [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 256 | `/bmad-build` / «2.2» / «Ja, hele økta» | KI-en laget en egen branch og skrev planen (spec) for testdataene: en fiktiv student-CV og en annonse for junior utvikler med tydelige hull (blant annet SQL og førerkort), en fasit, to håndlagde KI-svar og en test som sjekker at fasiten og telleregelen gir samme prosent |
 | 257 | «Godkjenn og fortsett» | En hjelpeagent laget utkastet (7 av 11 nøkkelord = 64 %), og tre andre gikk gjennom det. **KI-feil:** testen sjekket bare nøkkelordene som er treff, så «MySQL» i CV-en kunne gitt «SQL = Nei» uten at noe feilet. Tabellen med kravene ble aldri lest, en tom arbeidsgiver ble godtatt, og README beskrev innliming i testmodus som om den alt fantes. KI-en tømte også fasiten ved en feil da den prøvde om testen virket, men la den tilbake fra en kopi. 14 funn: 6 rettet, 8 avvist med begrunnelse. 182 tester |
+| 258 | «kan du åpne alle for meg» / «push» | KI-en åpnet CV-en, annonsen og fasiten i Notisblokk, og jeg leste dem og godkjente innholdet. Branchen ble pushet, og PR #8 ble laget med merknad om KI-feilene |
