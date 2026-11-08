@@ -69,7 +69,7 @@ uv run ruff format --check
 
 `uv run pytest` kjører alle testene. `uv run ruff check` sjekker koden, blant annet at alle filer åpnes med en oppgitt `encoding` (vi bruker alltid utf-8), og `uv run ruff format --check` sjekker formateringen. De samme sjekkene kjører automatisk på GitHub (fanen «Actions») på både Linux og Windows ved hver PR.
 
-*Kommer:* hvor de fiktive testdataene og fasiten ligger.
+**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn i testmodus når innleggingssiden er ferdig (story 2.5), og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har håndlagde KI-svar, slik at nettsiden kan kjøres i testmodus uten API-nøkkel. De byttes senere ut med ekte KI-svar. Fasiten viser hvilke krav CV-en dekker og mangler, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
 
 ## Skjermbilder
 
