@@ -104,7 +104,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Etter retrospektiven for epic 1: rette fire småting i en egen PR før story 2.1 (oppryddingen av økten ett sted, innlogget bruker sendes til startsiden fra innloggingen og registreringen, testhjelperne i én fil, og to strengere tester). Se [`9-koding/epic-1-retro-2026-11-08.md`](9-koding/epic-1-retro-2026-11-08.md) (ferdig 8. november: PR #6 flettet, CI grønn på Linux og Windows, 152 tester)
 - [x] Prøve innloggingen, registreringen og startsiden med «Logg ut» ved 320 px, 768 px og 200 % zoom (fra retrospektiven for epic 1) (gjort 8. november: alt ser riktig ut)
 - [ ] Fra retrospektiven: når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde), skal planen si nøyaktig hva jeg prøver i nettleseren før push. Avvises samme funn i to stories, skal jeg få det som en beslutning
-- [ ] Story 2.1 «Telleregelen for nøkkelordtreff» med egen branch og PR (`bmad-build`) (kodet og gjennomgått 8. november, venter på PR)
+- [x] Story 2.1 «Telleregelen for nøkkelordtreff» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #7 flettet, CI grønn på Linux og Windows, 175 tester)
+- [ ] Neste steg: story 2.2 «Fiktive testdata og fasit for første testcase» med egen branch og PR (`bmad-build`). Claude lager utkastet, jeg godkjenner innholdet
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
