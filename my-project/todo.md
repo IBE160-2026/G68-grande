@@ -100,7 +100,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 1.1 med egen branch og PR (`bmad-build`). Kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` oppdateres når en story blir ferdig (ferdig 8. november: PR #2 flettet, CI grønn på Linux og Windows)
 - [x] Story 1.2 «Logge inn med testbrukeren» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #3 flettet, CI grønn på Linux og Windows)
 - [x] Story 1.3 «Registrere seg som ny bruker» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #4 flettet, CI grønn på Linux og Windows)
-- [ ] Story 1.4 «Logge ut, og bare innloggede kommer inn» med egen branch og PR (`bmad-build`) (kodet og gjennomgått 8. november, testen `test_fr6_fr7_ingen_utlogging_ennaa` er fjernet. Gjenstår: prøve i nettleseren, push, PR og fletting)
+- [x] Story 1.4 «Logge ut, og bare innloggede kommer inn» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #5 flettet, CI grønn på Linux og Windows. Epic 1 er ferdig)
+- [ ] Neste steg: story 2.1 «Telleregelen for nøkkelordtreff» med egen branch og PR (`bmad-build`)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
 - [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)

@@ -394,3 +394,4 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 237 | «denne siden fungerer ikke» | Nettsiden kjørte ikke. KI-en startet den, og jeg prøvde innlogging, «Logg ut» og «Du må logge inn først». Alt virket |
 | 238 | «det virket ikke, jeg kommer tilbake til velkommen» / «det fungerer ikke nå heller» / «Lite skript» | **KI-feil:** tilbakeknappen etter utlogging viste fortsatt «Velkommen». Beskjeden til nettleseren om ikke å lagre sidene holder ikke i nyere Chrome og Edge, og det andre forsøket (å be nettleseren slette lagrede sider) hjalp heller ikke. Jeg valgte et lite skript som laster siden på nytt, og da sender serveren til innloggingen |
 | 239 | «ja nå stemmer det, push» | Tilbakeknappen virket med skriptet. Branchen ble pushet og PR #5 laget |
+| 240 | «flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #5. Story 1.4 og hele epic 1 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
