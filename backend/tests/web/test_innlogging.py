@@ -1,51 +1,18 @@
 """Tester for innloggingssiden og login_required (FR-3, FR-4, FR-5, FR-6, FR-7, NFR-6)."""
 
 import re
-from html.parser import HTMLParser
 
 import pytest
+from flask import session
 
 from soknad.adaptere.db import finn_bruker
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
 from soknad.kjerne.feil import FeilType
 from soknad.kjerne.okt import Innlogging
+from soknad.web import innlogging as innlogging_modul
 from soknad.web import ruter, tekster
-from soknad.web.innlogging import OKT_ID
-
-
-class Tagger(HTMLParser):
-    """Samler alle starttagger med attributter."""
-
-    def __init__(self):
-        super().__init__()
-        self.tagger = []
-
-    def handle_starttag(self, tag, attrs):
-        self.tagger.append((tag, dict(attrs)))
-
-
-def tagger_i(html):
-    leser = Tagger()
-    leser.feed(html)
-    return leser.tagger
-
-
-def felt(html, felt_id):
-    """Attributtene til input-feltet med denne id-en."""
-    return next(a for t, a in tagger_i(html) if t == "input" and a.get("id") == felt_id)
-
-
-def med_autofocus(html):
-    return [a.get("id") for _, a in tagger_i(html) if "autofocus" in a]
-
-
-def logg_inn(client, epost=TESTBRUKER_EPOST, passord=TESTBRUKER_PASSORD):
-    return client.post("/logg-inn", data={"epost": epost, "passord": passord})
-
-
-def er_innlogget(client):
-    return client.get("/").status_code == 200
-
+from soknad.web.innlogging import OKT_ID, logg_inn_bruker
+from tests.web.hjelpere import er_innlogget, felt, logg_inn, med_autofocus, okt_id, tagger_i
 
 # --- Siden ---
 
@@ -115,17 +82,41 @@ def test_fr3_cookien_har_bare_okt_id_og_okten_ligger_i_minnet(app, client):
     assert innlogging.testmodus is True
 
 
-def test_fr3_ny_innlogging_gir_ny_okt_id_og_sletter_den_gamle(app, client):
-    """FR-3: hver innlogging gir ny økt-id, og den gamle økten slettes fra minnet."""
+def test_fr3_innlogging_fra_gammel_cookie_gir_ny_okt_id(app, client):
+    """FR-3: innlogging fra en gammel cookie (økten er ikke i minnet etter omstart) gir
+    startsiden og ny økt-id."""
     logg_inn(client)
-    with client.session_transaction() as okt:
-        gammel = okt[OKT_ID]
-    logg_inn(client)
-    with client.session_transaction() as okt:
-        ny = okt[OKT_ID]
-    assert ny != gammel
-    assert app.extensions["oktlager"].hent(gammel) is None
+    gammel = okt_id(client)
+    app.extensions["oktlager"].slett(gammel)
+    svar = logg_inn(client)
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    ny = okt_id(client)
+    assert ny not in (None, gammel)
     assert app.extensions["oktlager"].hent(ny) is not None
+
+
+def test_fr3_ny_innlogging_rydder_den_gamle_okten_med_logg_ut_bruker(app, monkeypatch):
+    """FR-3/FR-6: logg_inn_bruker sletter en eksisterende økt med logg_ut_bruker, så økten
+    ryddes bare ett sted, og lager en ny med ny økt-id."""
+    kall = []
+    ekte = innlogging_modul.logg_ut_bruker
+
+    def spion():
+        kall.append(True)
+        ekte()
+
+    monkeypatch.setattr(innlogging_modul, "logg_ut_bruker", spion)
+    lager = app.extensions["oktlager"]
+    with app.test_request_context():
+        gammel = lager.ny(Innlogging(1, testmodus=True))
+        session[OKT_ID] = gammel
+        logg_inn_bruker(2)
+        ny = session[OKT_ID]
+    assert kall == [True]
+    assert lager.hent(gammel) is None
+    assert ny != gammel
+    assert lager.hent(ny) == Innlogging(2, testmodus=True)
 
 
 def test_fr3_epost_med_store_bokstaver_og_mellomrom_logger_inn(client):
@@ -177,7 +168,8 @@ def test_fr3_feil_passord_eller_ukjent_epost_gir_skjemafeil(client, epost, passo
 def test_fr3_eposten_som_vises_igjen_er_escapet(client):
     """FR-3: e-posten som skrives tilbake i value="…" etter feil innlogging, er escapet."""
     html = logg_inn(client, epost='"><script>x</script>', passord="feil").get_data(as_text=True)
-    assert "<script>x</script>" not in html
+    assert felt(html, "epost")["value"] == '"><script>x</script>'
+    assert "<script" not in html
 
 
 # --- Tomme felt ---
@@ -243,3 +235,45 @@ def test_fr7_gammel_cookie_uten_okt_i_minnet_er_utlogget(app, client):
     assert svar.location == "/logg-inn?ikke_innlogget=1"
     with client.session_transaction() as okt:
         assert OKT_ID not in okt
+
+
+# --- Alt innlogget ---
+
+
+@pytest.mark.parametrize("adresse", ["/logg-inn", "/logg-inn?ikke_innlogget=1"])
+def test_fr3_innlogget_paa_innloggingen_gir_startsiden(app, innlogget_client, adresse):
+    """FR-3/FR-5: den som alt er logget inn og åpner innloggingen, sendes til startsiden,
+    og økten er uendret."""
+    for_svar = okt_id(innlogget_client)
+    svar = innlogget_client.get(adresse)
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    assert okt_id(innlogget_client) == for_svar
+    assert app.extensions["oktlager"].hent(for_svar) is not None
+    assert "Velkommen! 👋" in innlogget_client.get("/").get_data(as_text=True)
+
+
+def test_fr3_innlogget_som_sender_innlogging_beholder_okten(app, innlogget_client, monkeypatch):
+    """FR-3: sender den innloggede innloggingen for en annen bruker, sendes hun til
+    startsiden uten at noe sjekkes, med samme økt-id og samme bruker."""
+    oppsett = app.test_client().post(
+        "/registrer", data={"epost": "ola@x.no", "passord": "passord12", "gjenta": "passord12"}
+    )
+    assert oppsett.status_code == 302
+    lager = app.extensions["oktlager"]
+    for_svar = okt_id(innlogget_client)
+    bruker_for = lager.hent(for_svar)
+
+    def ikke_kall(*args, **kwargs):
+        raise AssertionError("ingenting skal sjekkes når man alt er logget inn")
+
+    monkeypatch.setattr(ruter, "sjekk_innlogging", ikke_kall)
+    monkeypatch.setattr(ruter, "finn_bruker", ikke_kall)
+    svar = logg_inn(innlogget_client, epost="ola@x.no", passord="passord12")
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    assert okt_id(innlogget_client) == for_svar
+    assert lager.hent(for_svar) == bruker_for
+    assert bruker_for.bruker_id == finn_bruker(
+        app.config["DATABASE"], TESTBRUKER_EPOST, TESTBRUKER_PASSORD
+    )

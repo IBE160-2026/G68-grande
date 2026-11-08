@@ -395,3 +395,17 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 238 | «det virket ikke, jeg kommer tilbake til velkommen» / «det fungerer ikke nå heller» / «Lite skript» | **KI-feil:** tilbakeknappen etter utlogging viste fortsatt «Velkommen». Beskjeden til nettleseren om ikke å lagre sidene holder ikke i nyere Chrome og Edge, og det andre forsøket (å be nettleseren slette lagrede sider) hjalp heller ikke. Jeg valgte et lite skript som laster siden på nytt, og da sender serveren til innloggingen |
 | 239 | «ja nå stemmer det, push» | Tilbakeknappen virket med skriptet. Branchen ble pushet og PR #5 laget |
 | 240 | «flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #5. Story 1.4 og hele epic 1 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
+
+## 2026-11-08 – Retrospektiv for epic 1
+
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-1-retro-2026-11-08.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 241 | «du kan lukke den nå, og ja vi kjører en retrospectiv» | KI-en stoppet nettsiden, samlet commitene, PR-ene, spec-ene og sesjonsloggene for epic 1, prøvde hele flyten med en ekte server, og lot tre hjelpere gå gjennom all koden i epicen samlet. Ingen feil for brukeren, men 4 småting i koden bør ordnes før epic 2, og bredde og zoom er bare delvis prøvd |
+| 242 | «Hva mente du med punkt 1?» / «ok til startsiden» | KI-en forklarte at økten ryddes to steder i koden, og hva som skjer når man er innlogget og åpner innloggingen. Jeg valgte at man da sendes til startsiden |
+| 243 | «vil dette med startsiden dersom du er logget inn fra før stride imot PRD?» | KI-en sjekket PRD-en, UX og arkitekturen: det strider ikke imot noe, det fyller et hull i planen |
+| 244 | «Godkjent med punkter» / «jeg ønsker at du gjør rettingene nå» | Epic 1 er godkjent med 7 åpne punkter i sprint-statusen. De fire småtingene i koden rettes nå i en egen PR |
+| 245 | «Samlet i én PR» / «Godkjenn og fortsett» | KI-en laget en egen branch og plan for de fire rettingene. En hjelpeagent kodet dem, og tre andre gikk gjennom koden. **KI-feil:** to tester sjekket noe som alltid var sant (testen slettet selv det den skulle sjekke at ble slettet), og sjekken av lagene i koden forbød ikke biblioteker som leser filer eller går på nett, selv om arkitekturen sier det. Begge er rettet. 152 tester |
+| 246 | «jeg kommer ikke til velkommen når jeg skriver inn 127.0.0.1:5000/logg-inn …» / «da skjønner jeg, det funket nå» | Serverloggen viste at jeg ikke var logget inn: nettsiden var startet på nytt, og da glemmer den alle innlogginger. Etter ny innlogging virket det |
+| 247 | «det funker med bredden også» / «ja fikk også prøvd zoom, push» | Jeg prøvde 320 px, 768 px og 200 % zoom, og alt så riktig ut. Branchen ble pushet, og PR-en ble laget |

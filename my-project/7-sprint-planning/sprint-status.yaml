@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-08-2026 16:50
+last_updated: 11-08-2026 17:09
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -40,7 +40,7 @@ development_status:
   1-2-logge-inn-med-testbrukeren: done
   1-3-registrere-seg-som-ny-bruker: done
   1-4-logge-ut-og-bare-innloggede-kommer-inn: done
-  epic-1-retrospective: optional
+  epic-1-retrospective: done
 
   epic-2: backlog
   2-1-telleregelen-for-nøkkelordtreff: backlog
@@ -89,3 +89,53 @@ development_status:
   8-1-readme-for-sensor: backlog
   8-2-testplan-og-prøve-fra-en-ny-kopi: backlog
   epic-8-retrospective: optional
+action_items:
+  - id: "epic-1-retro-item-1-logg_inn_bruker-kaller-logg_ut_bruker-så"
+    epic: 1
+    action: "logg_inn_bruker kaller logg_ut_bruker, så økten ryddes ett sted før story
+      2.4 legger Soknad i den"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-2-innlogget-bruker-på-logg-inn-og-registre"
+    epic: 1
+    action: "Innlogget bruker på /logg-inn og /registrer sendes til startsiden (bestemt
+      av Kristine)"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-3-samle-testhjelperne-i-én-fil-og-slutte-å"
+    epic: 1
+    action: "Samle testhjelperne i én fil og slutte å hente dem fra andre testfiler,
+      med samme sjekk av escaping på begge sidene"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-4-stramme-lagsjekken-for-kjerne-og-testen"
+    epic: 1
+    action: "Stramme lagsjekken for kjerne/ og testen av tilbake.js (betingelsen if
+      (hendelse.persisted))"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-5-prøve-innloggingen-registreringen-og-sta"
+    epic: 1
+    action: "Prøve innloggingen, registreringen og startsiden med hjørneraden ved
+      320 px, 768 px og 200 % zoom"
+    owner: "Kristine"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-6-prosess-spec-ens-manual-checks-sier-nøya"
+    epic: 1
+    action: "Prosess: spec-ens Manual checks sier nøyaktig hva som prøves i nettleseren
+      når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde)"
+    owner: "KI (Claude) skriver, Kristine prøver"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-1-retro-item-7-prosess-avvises-samme-funn-i-to-stories"
+    epic: 1
+    action: "Prosess: avvises samme funn i to stories, tas det opp med Kristine som
+      en beslutning"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"

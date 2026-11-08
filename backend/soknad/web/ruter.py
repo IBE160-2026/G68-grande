@@ -37,11 +37,12 @@ def logg_ut():
 
 @web.route("/logg-inn", methods=["GET", "POST"])
 def logg_inn():
+    if gjeldende_innlogging() is not None:
+        # Alt logget inn: rett til startsiden. Ingenting sjekkes, og økten er uendret.
+        return redirect(url_for("web.start"))
     if request.method == "GET":
         # Sendt hit fra en side som krever innlogging: «Du må logge inn først».
-        # Ikke når man alt er logget inn (for eksempel tilbakeknappen rett etter innlogging).
-        ikke_innlogget = request.args.get("ikke_innlogget") == "1"
-        vis = ikke_innlogget and gjeldende_innlogging() is None
+        vis = request.args.get("ikke_innlogget") == "1"
         melding = tekster.MA_LOGGE_INN if vis else None
         return _vis_skjema("logg_inn.html", epost="", feil=[], skjemafeil=melding)
 
@@ -60,6 +61,9 @@ def logg_inn():
 
 @web.route("/registrer", methods=["GET", "POST"])
 def registrer():
+    if gjeldende_innlogging() is not None:
+        # Alt logget inn: rett til startsiden. Ingenting sjekkes eller lagres.
+        return redirect(url_for("web.start"))
     if request.method == "GET":
         return _vis_skjema("registrer.html", epost="", feil=[])
 

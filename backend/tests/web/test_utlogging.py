@@ -1,18 +1,9 @@
 """Tester for utloggingen, hjørneraden og «Du må logge inn først» (FR-6, FR-7, NFR-6, NFR-7)."""
 
 import re
-from pathlib import Path
 
 from soknad.web import tekster
-from soknad.web.innlogging import OKT_ID
-from tests.web.test_innlogging import er_innlogget, logg_inn, med_autofocus, tagger_i
-
-STIL = Path(__file__).resolve().parents[2] / "soknad" / "web" / "static" / "css" / "stil.css"
-
-
-def okt_id(client):
-    with client.session_transaction() as okt:
-        return okt.get(OKT_ID)
+from tests.web.hjelpere import STIL, er_innlogget, logg_inn, med_autofocus, okt_id, tagger_i
 
 
 def footer(html):
@@ -162,9 +153,12 @@ def test_fr7_innlogging_fra_meldingssiden_gir_startsiden(client):
 
 
 def test_fr7_ingen_melding_naar_man_alt_er_innlogget(innlogget_client):
-    """FR-7: tilbake til /logg-inn?ikke_innlogget=1 etter innlogging gir ingen melding."""
-    html = innlogget_client.get("/logg-inn?ikke_innlogget=1").get_data(as_text=True)
-    assert tekster.MA_LOGGE_INN not in html
+    """FR-7: tilbake til /logg-inn?ikke_innlogget=1 etter innlogging gir startsiden
+    i stedet for meldingen."""
+    svar = innlogget_client.get("/logg-inn?ikke_innlogget=1")
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    assert er_innlogget(innlogget_client)
 
 
 def test_fr7_bare_ikke_innlogget_1_gir_meldingen(client):
@@ -179,7 +173,9 @@ def test_fr7_gammel_cookie_gir_ingen_hjornerad_paa_aapne_sider(app, client):
     logg_inn(client)
     app.extensions["oktlager"].slett(okt_id(client))
     for side in ("/logg-inn", "/registrer"):
-        html = client.get(side).get_data(as_text=True)
+        svar = client.get(side)
+        assert svar.status_code == 200, side
+        html = svar.get_data(as_text=True)
         assert "hjornerad" not in html, side
         assert "<form" not in footer(html), side
 
@@ -213,9 +209,12 @@ def test_fr6_skriptet_for_tilbakeknappen_bare_etter_innlogging(app, innlogget_cl
     skript = innlogget_client.get("/static/js/tilbake.js")
     assert skript.status_code == 200
     tekst = skript.get_data(as_text=True)
-    assert 'addEventListener("pageshow"' in tekst
-    assert "persisted" in tekst
-    assert "location.reload()" in tekst
+    assert re.search(r'addEventListener\("pageshow",\s*function\s*\(\s*hendelse\s*\)', tekst)
+    # Siden lastes på nytt bare når hendelse.persisted er sann (ellers en evig løkke).
+    assert re.search(
+        r"if\s*\(\s*hendelse\.persisted\s*\)\s*\{\s*window\.location\.reload\(\);\s*\}", tekst
+    )
+    assert tekst.count("location.reload()") == 1
 
 
 # --- Stilen ---

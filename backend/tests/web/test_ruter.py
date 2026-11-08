@@ -2,31 +2,11 @@
 Startsiden krever innlogging, så testene logger inn med testbrukeren først."""
 
 import re
-from html.parser import HTMLParser
-from pathlib import Path
 
 from soknad.web import tekster
+from tests.web.hjelpere import STIL, WEB, tagger_i
 
-WEB = Path(__file__).resolve().parents[2] / "soknad" / "web"
-STIL = WEB / "static" / "css" / "stil.css"
 MALER = sorted((WEB / "templates").glob("*.html"))
-
-
-class Tagger(HTMLParser):
-    """Samler alle starttagger med attributter."""
-
-    def __init__(self):
-        super().__init__()
-        self.tagger = []
-
-    def handle_starttag(self, tag, attrs):
-        self.tagger.append((tag, dict(attrs)))
-
-
-def tagger_i(html):
-    leser = Tagger()
-    leser.feed(html)
-    return leser.tagger
 
 
 def test_nfr8_startsiden_svarer_200(innlogget_client):

@@ -161,19 +161,85 @@ def test_fr2_kjernen_sjekker_ikke_om_eposten_finnes():
     assert sjekk_registrering("test@example.com", "passord12", "passord12") == []
 
 
-def _importerte_moduler(fil):
-    tre = ast.parse(fil.read_text(encoding="utf-8"))
-    for node in ast.walk(tre):
+FORBUDT_I_KJERNEN = (
+    "flask",
+    "werkzeug",
+    "sqlite3",
+    "os",
+    "pathlib",
+    "io",
+    "shutil",
+    "subprocess",
+    "socket",
+    "urllib",
+    "http",
+    "requests",
+    "httpx",
+    "anthropic",
+    "pypdf",
+    "docx",
+    "soknad.adaptere",
+    "soknad.web",
+)
+
+
+def _importerte_moduler(kilde):
+    """Hele navnet på alt kildeteksten importerer. «from a import b» gir både a og a.b, så
+    «from soknad import web» også blir funnet. Relative importer regnes fra soknad.kjerne."""
+    for node in ast.walk(ast.parse(kilde)):
         if isinstance(node, ast.Import):
-            yield from (navn.name.split(".")[0] for navn in node.names)
-        elif isinstance(node, ast.ImportFrom) and node.module:
-            yield node.module.split(".")[0]
+            yield from (navn.name for navn in node.names)
+        elif isinstance(node, ast.ImportFrom):
+            pakke = ["soknad", "kjerne"][: 3 - node.level] if node.level else []
+            modul = ".".join([*pakke, *([node.module] if node.module else [])])
+            yield modul
+            yield from (f"{modul}.{navn.name}" for navn in node.names)
 
 
-def test_nfr5_kjernen_importerer_ikke_flask_werkzeug_eller_sqlite3():
-    """NFR-5: kjernen er regler uten I/O og importerer aldri flask, werkzeug eller sqlite3."""
+def _forbudte_importer(kilde):
+    return {
+        modul
+        for modul in _importerte_moduler(kilde)
+        if any(modul == f or modul.startswith(f + ".") for f in FORBUDT_I_KJERNEN)
+    }
+
+
+def test_nfr5_kjernen_importerer_ikke_io_adaptere_eller_web():
+    """NFR-5: kjernen er regler uten I/O og importerer aldri I/O-biblioteker (flask, os,
+    pathlib, anthropic og de andre i FORBUDT_I_KJERNEN), soknad.adaptere eller soknad.web."""
     filer = sorted(KJERNE.glob("*.py"))
     assert filer
     for fil in filer:
-        forbudt = set(_importerte_moduler(fil)) & {"flask", "werkzeug", "sqlite3"}
+        forbudt = _forbudte_importer(fil.read_text(encoding="utf-8"))
         assert not forbudt, (fil.name, forbudt)
+
+
+@pytest.mark.parametrize(
+    "kilde",
+    [
+        "import flask",
+        "import os",
+        "from anthropic import Anthropic",
+        "from pathlib import Path",
+        "from werkzeug.security import generate_password_hash",
+        "import sqlite3",
+        "from soknad.adaptere.db import finn_bruker",
+        "import soknad.web.tekster",
+        "from soknad import web",
+        "from soknad.adaptere import oktlager",
+        "from ..web import tekster",
+        "from .. import adaptere",
+    ],
+)
+def test_nfr5_lagsjekken_slaar_til(kilde):
+    """NFR-5: lagsjekken over finner faktisk forbudte importer, også i soknad-pakken."""
+    assert _forbudte_importer(kilde)
+
+
+def test_nfr5_lagsjekken_godtar_kjernens_egne_importer():
+    """NFR-5: kjernens egne importer og soknad.innstillinger er lov."""
+    kilde = (
+        "import re\nfrom dataclasses import dataclass\nfrom soknad.innstillinger import X\n"
+        "from soknad.kjerne.feil import FeilType\nfrom .okt import Innlogging"
+    )
+    assert _forbudte_importer(kilde) == set()
