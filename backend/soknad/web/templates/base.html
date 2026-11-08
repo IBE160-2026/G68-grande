@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block tittel %}{% endblock %} – {{ tekster.LOGO }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/stil.css') }}">
+</head>
+<body>
+  <header class="topp">
+    <p class="logo">{{ tekster.LOGO }}</p>
+  </header>
+  <main class="innhold">
+    {% block innhold %}{% endblock %}
+  </main>
+  <footer class="bunn"></footer>
+</body>
+</html>

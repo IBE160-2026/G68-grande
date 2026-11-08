@@ -60,6 +60,9 @@ playwright-report/
 !.env.*.example
 *.log
 
+# Lokal database (backend/instance/brukere.db) lages ved oppstart
+instance/
+
 # BMAD: keep shared framework, skills, plans and documentation
 _bmad/config.user.toml
 _bmad/custom/*.user.toml

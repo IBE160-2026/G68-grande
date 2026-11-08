@@ -74,7 +74,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - Fra konkurrentanalysen:
   - [x] Vurdere en kort grunn ved hver endring i Korrektur, som Kickresumes «What we changed» (passer det med setningsparene {ny, gammel}?) (løst: «Gjøres hvis det blir tid» i PRD-en)
 - [x] Spørre faglærer om publisering på Vercel er et krav, eller om det holder at sensor kjører nettsiden lokalt etter README. Er det et krav: lage en utgave som bare kjører testmodus, mot slutten (arkitekturen må da endres for økt og brukere) (avklart 4. november: ikke et krav, lokal kjøring etter README holder)
-- [ ] Første kode-story: i `.gitignore` legge til `!.env.example` (regelen `.env.*` skjuler den nå, NFR-2) og `instance/` (databasen, AD-12) (lagt inn i story 1.1. `!.env.example` står allerede i `.gitignore`, så bare `instance/` mangler)
+- [x] Første kode-story: i `.gitignore` legge til `!.env.example` (regelen `.env.*` skjuler den nå, NFR-2) og `instance/` (databasen, AD-12) (lagt inn i story 1.1. `!.env.example` står allerede i `.gitignore`, så bare `instance/` mangler) (gjort 8. november i story 1.1)
 - [ ] Når ekte KI skal kobles på: lage konto i Claude Console (platform.claude.com), kjøpe kreditt (for eksempel 10 dollar) og la auto-reload være AV. Lage API-nøkkel og legge den i `.env` (før story 4.1)
 - [x] Epics og stories (ferdig 7. november: 8 epics og 31 stories, se `6-epics-og-stories/`)
   - [x] Holde omfanget stramt: 38 krav og bare helger igjen. Bruk nødlisten i PRD-en (del 4) tidlig heller enn sent (løst: sjekkpunkter 22. og 29. november i risikotabellen i PRD-en)
@@ -97,7 +97,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 ## Under kodingen
 
 - [x] Sprint planning (`bmad-sprint-planning`) (ferdig 7. november: planen er klar til koding, `sprint-status.yaml` har 8 epics og 31 stories, se `7-sprint-planning/`)
-- [ ] Neste steg: story 1.1 med egen branch og PR (`bmad-build`). Kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` oppdateres når en story blir ferdig
+- [ ] Neste steg: story 1.1 med egen branch og PR (`bmad-build`). Kopien av `sprint-status.yaml` i `my-project/7-sprint-planning/` oppdateres når en story blir ferdig (8. november: koden er ferdig og committet på branchen `story/1-1-ny-kopi`. Gjenstår: se på nettsiden i nettleseren, push, PR med merknad om KI-feil, grønn CI på Linux og Windows, og flette)
 - [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [ ] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag

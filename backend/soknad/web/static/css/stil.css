@@ -1,0 +1,185 @@
+/*
+ * Søknadsassistenten – felles stil.
+ * Alle design-tokens fra DESIGN.md («Myk fersken») står i :root under.
+ * Ingen fargekoder andre steder: bruk alltid var(--navn).
+ */
+
+@font-face {
+  font-family: "Baloo 2";
+  src: url("../fonts/Baloo2-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Farger */
+  --primary: #a23e6c;
+  --primary-contrast: #ffffff;
+  --accent: #f6b8a0;
+  --background: #fff7f5;
+  --surface: #ffffff;
+  --text: #3a2530;
+  --text-muted: #6e5560;
+  --border: #eed7dd;
+  --success: #2f7a57;
+  --success-tint: #e4f3eb;
+  --error: #b4232f;
+  --error-tint: #fbe6e8;
+  --focus-ring: #3b5bdb;
+  --work-on: #8a3a20;
+  --work-on-tint: #fdeee8;
+  --changed-active: #cfebdc;
+  --dot-middle: #c0618c;
+  --fireworks-gold: #f2c14e;
+
+  /* Slør over siden: text med 45 % og background med 94 % styrke */
+  --veil: rgba(58, 37, 48, 0.45);
+  --wait-cover: rgba(255, 247, 245, 0.94);
+
+  /* Skygge */
+  --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
+  --shadow-hover: 0 12px 30px rgba(162, 62, 108, 0.22);
+
+  /* Skrift */
+  --font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-logo: "Baloo 2", var(--font-body);
+  --line-height-body: 1.5;
+  --size-logo: clamp(1.35rem, 5vw, 2.4rem);
+  --line-height-logo: 1.2;
+  --size-wait-title: 1.5rem;
+  --size-body: 1rem;
+  --size-heading-page: 1.2rem;
+  --line-height-heading-page: 1.3;
+  --size-heading-welcome: 1.3rem;
+  --size-heading-letter: 1.5rem;
+  --size-heading-letter-mobile: 1.25rem;
+  --size-heading-box: 1.1rem;
+  --size-score: 1.6rem;
+  --size-label: 0.92rem;
+  --size-small: 0.88rem;
+  --size-caption: 0.78rem;
+  --size-tag: 0.75rem;
+  --size-button-hero: 1.5rem;
+  --size-button-hero-mobile: 1.25rem;
+
+  /* Hjørner */
+  --rounded-xs: 8px;
+  --rounded-sm: 14px;
+  --rounded-md: 18px;
+  --rounded-lg: 26px;
+  --rounded-full: 9999px;
+
+  /* Avstander */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --page-side: 20px;
+  --page-side-mobile: 16px;
+
+  /* Bredder */
+  --content-max: 1100px;
+  --letter-max: 720px;
+  --form-max: 360px;
+}
+
+/* Grunnoppsett */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--line-height-body);
+  overflow-wrap: break-word;
+}
+
+.topp,
+.innhold,
+.bunn {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--page-side);
+}
+
+.innhold {
+  flex: 1;
+}
+
+@media (max-width: 699px) {
+  .topp,
+  .innhold,
+  .bunn {
+    padding-inline: var(--page-side-mobile);
+  }
+}
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Logo: Baloo 2 ExtraBold, sentrert, på én linje ved vanlig tekststørrelse */
+
+.logo {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-logo);
+  font-weight: 800;
+  font-size: var(--size-logo);
+  line-height: var(--line-height-logo);
+  color: var(--primary);
+  text-align: center;
+}
+
+/* Startsiden */
+
+.velkommen {
+  margin: var(--space-2) 0 var(--space-1);
+  font-size: var(--size-heading-welcome);
+  font-weight: 700;
+  text-align: center;
+}
+
+.ingress {
+  margin: 0 0 var(--space-6);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Redusert bevegelse: alle animasjoner og overganger av */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
