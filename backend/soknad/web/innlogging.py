@@ -39,9 +39,9 @@ def login_required(visning):
 
 
 def logg_inn_bruker(bruker_id: int) -> None:
-    """Sletter den gamle økten og lager en ny med ny, tilfeldig økt-id."""
-    oktlager().slett(session.get(OKT_ID))
-    session.clear()
+    """Sletter den gamle økten med logg_ut_bruker (så økten ryddes bare ett sted) og lager
+    en ny med ny, tilfeldig økt-id."""
+    logg_ut_bruker()
     # Testmodus er alltid på fram til Epic 4.
     session[OKT_ID] = oktlager().ny(Innlogging(bruker_id, testmodus=True))
 

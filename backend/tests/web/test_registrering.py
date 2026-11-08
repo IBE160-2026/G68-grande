@@ -9,22 +9,16 @@ from pathlib import Path
 import pytest
 
 from soknad.adaptere.db import finn_bruker
-from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
+from soknad.innstillinger import TESTBRUKER_EPOST
 from soknad.kjerne.feil import FeilType
 from soknad.kjerne.okt import Innlogging
 from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID
-from tests.web.test_innlogging import felt, med_autofocus, tagger_i
-
-STIL = Path(__file__).resolve().parents[2] / "soknad" / "web" / "static" / "css" / "stil.css"
+from tests.web.hjelpere import STIL, er_innlogget, felt, logg_inn, med_autofocus, okt_id, tagger_i
 
 
 def registrer(client, epost="ola@x.no", passord="passord12", gjenta="passord12"):
     return client.post("/registrer", data={"epost": epost, "passord": passord, "gjenta": gjenta})
-
-
-def er_innlogget(client):
-    return client.get("/").status_code == 200
 
 
 def antall_brukere(app):
@@ -175,17 +169,16 @@ def test_nfr1_passordet_lagres_bare_som_hash(app, client):
 
 def test_fr1_auto_innlogging_gir_ny_okt_id_med_den_nye_brukeren(app, client):
     """FR-1: registreringen logger inn den nye brukeren med ny økt-id og testmodus=True,
-    og en gammel økt slettes."""
-    client.post("/logg-inn", data={"epost": TESTBRUKER_EPOST, "passord": TESTBRUKER_PASSORD})
-    with client.session_transaction() as okt:
-        gammel = okt[OKT_ID]
+    også fra en gammel cookie (økten er ikke i minnet etter omstart)."""
+    logg_inn(client)
+    gammel = okt_id(client)
+    app.extensions["oktlager"].slett(gammel)
     registrer(client)
     with client.session_transaction() as okt:
         assert list(okt.keys()) == [OKT_ID]
         ny = okt[OKT_ID]
     lager = app.extensions["oktlager"]
     assert ny != gammel
-    assert lager.hent(gammel) is None
     ny_id = finn_bruker(app.config["DATABASE"], "ola@x.no", "passord12")
     assert ny_id is not None
     assert lager.hent(ny) == Innlogging(ny_id, testmodus=True)
@@ -335,3 +328,39 @@ def test_fr1_eposten_som_vises_igjen_er_escapet(client):
     html = registrer(client, epost='"><script>x</script>').get_data(as_text=True)
     assert felt(html, "epost")["value"] == '"><script>x</script>'
     assert "<script" not in html
+
+
+# --- Alt innlogget ---
+
+
+def test_fr1_innlogget_paa_registreringen_gir_startsiden(app, innlogget_client):
+    """FR-1/FR-5: den som alt er logget inn og åpner registreringen, sendes til startsiden,
+    og økten er uendret."""
+    for_svar = okt_id(innlogget_client)
+    svar = innlogget_client.get("/registrer")
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    assert okt_id(innlogget_client) == for_svar
+    assert app.extensions["oktlager"].hent(for_svar) is not None
+
+
+def test_fr1_innlogget_som_sender_registrering_lagrer_ingenting(
+    app, innlogget_client, ingen_databasesjekk, monkeypatch
+):
+    """FR-1: sender den innloggede en registrering med ny e-post, sendes hun til startsiden
+    uten at noe sjekkes eller lagres, og økten og brukeren er de samme."""
+
+    def ikke_kall(*args, **kwargs):
+        raise AssertionError("ingenting skal sjekkes når man alt er logget inn")
+
+    monkeypatch.setattr(ruter, "sjekk_registrering", ikke_kall)
+    lager = app.extensions["oktlager"]
+    for_svar = okt_id(innlogget_client)
+    bruker_for = lager.hent(for_svar)
+    for_forsok = antall_brukere(app)
+    svar = registrer(innlogget_client, epost="ny@x.no")
+    assert svar.status_code == 302
+    assert svar.location == "/"
+    assert antall_brukere(app) == for_forsok
+    assert okt_id(innlogget_client) == for_svar
+    assert lager.hent(for_svar) == bruker_for
