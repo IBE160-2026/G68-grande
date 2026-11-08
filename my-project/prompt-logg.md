@@ -347,3 +347,17 @@ Verktøy: Claude Code med BMAD-skillen `bmad-create-epics-and-stories`. Planen l
 | 217 | «kan du sjekke at vi ligger riktig an med tanke på sensorveiledning, og om det står noe om refleskjonsrapporten i denne sensorveiledningen?» / «ja» | KI-en sjekket repoet mot de sju kriteriene og fant at vi ligger godt an. Refleksjonsrapporten (30 %) nevnes bare kort og manglet i planen, så den kom inn i TO DO. README fikk lenker til epics, sprint-status og mine valg i epics |
 | 218 | «Her får du den slik at du kan lagre den, og ta med deg ting på veien mens vi jobber» (limte inn malen for refleksjonsrapporten) | Malen ble lagret, sammen med en notatfil der KI-en samler stoff underveis (KI-feil, utfordringer og lærdommer), sortert etter delene i malen |
 | 219 | «usikker på om dette skal inn på github ettersom at det ikke er en del av del 1» / «ja» | KI-en anbefalte å holde malen og notatene utenfor GitHub, fordi de hører til del 2 og malen er faglærers dokument. Mappen ble lagt i `.gitignore` før den ble pushet, og ligger bare på min PC |
+
+## 2026-11-08 – Story 1.1: Nettsiden starter fra en ny kopi av repoet
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/), og koden i [PR #2](https://github.com/IBE160-2026/G68-grande/pull/2).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 220 | `/bmad-build` / «Ja, story 1.1» / «Ja, bruk dem» (hjelpeagenter) | KI-en laget en egen branch og et sammendrag av planene for epic 1, og skrev planen (spec) for story 1.1 |
+| 221 | «Behold samlet» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg valgte å holde den samlet fordi alt er grunnmuren. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 8 av 25 funn var ekte og ble rettet, blant annet port 5000 på Mac og en test som manglet for tomme verdier i `.env` (se [spec-en](9-koding/spec-1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet.md)) |
+| 222 | «jeg skjønte ikke hva jeg skulle gjøre i den andre terminalen» | KI-en startet nettsiden for meg i stedet, så jeg bare trengte å åpne adressen i nettleseren |
+| 223 | «jeg får opp verktøyvinduet, men får ikke den til mobilstørrelse» / «jeg fikk det til nå, hadde ikke åpnet verktøysiden helt» | KI-en forklarte mobil-ikonet i verktøyvinduet (F12). Jeg sjekket siden ved 375 px |
+| 224 | «ja det ser veldig bra ut! regner med at startsiden ikke er ferdig, da det i de neste stegene kommer mer om begynn søknad og KI-samtykke osv?» | KI-en bekreftet at startsiden bygges videre i story 1.2–1.4, 2.4 og 4.3 |
+| 225 | «push» / «jeg har flettet nå» | Branchen ble pushet og PR #2 laget. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 1.1 er satt til ferdig |
+| 226 | «du kan pushe, husk å ha med promptlog og memlog også om det er nødvendig […] skulle gjerne hatt at PR #2 heter Story 1.1 ferdig eller noe i den duren der. Skal jeg trykke på den knappen som heter delete branch nå?» | Prompt-loggen ble oppdatert, og planen og kodegjennomgangen ble kopiert til `9-koding/`. PR #2 fikk nytt navn |

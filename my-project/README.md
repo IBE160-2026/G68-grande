@@ -38,6 +38,9 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`mine-valg-og-ki-feil.md`](6-epics-og-stories/mine-valg-og-ki-feil.md) | Kort oversikt over hva jeg bestemte selv i epics og stories, og hvilke KI-feil som ble funnet |
 | **`7-sprint-planning/`** | |
 | [`sprint-status.yaml`](7-sprint-planning/sprint-status.yaml) | Sprint-status: alle epics og stories med status (backlog, i arbeid, til gjennomgang, ferdig), oppdateres når en story blir ferdig |
+| **`9-koding/`** | |
+| [`epic-1-context.md`](9-koding/epic-1-context.md) | Sammendrag av planene for epic 1 (innlogging), som KI-en bruker når storiene i epicen kodes |
+| [`spec-1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet.md`](9-koding/spec-1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet.md) | Planen for story 1.1 med oppgaver og akseptansekriterier, og kodegjennomgangen: alle 25 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist ([PR #2](https://github.com/IBE160-2026/G68-grande/pull/2)) |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
