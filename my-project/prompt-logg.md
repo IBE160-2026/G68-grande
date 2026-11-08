@@ -410,3 +410,13 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 | 246 | «jeg kommer ikke til velkommen når jeg skriver inn 127.0.0.1:5000/logg-inn …» / «da skjønner jeg, det funket nå» | Serverloggen viste at jeg ikke var logget inn: nettsiden var startet på nytt, og da glemmer den alle innlogginger. Etter ny innlogging virket det |
 | 247 | «det funker med bredden også» / «ja fikk også prøvd zoom, push» | Jeg prøvde 320 px, 768 px og 200 % zoom, og alt så riktig ut. Branchen ble pushet, og PR-en ble laget |
 | 248 | «flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #6. Punkt 1–5 fra retrospektiven er krysset av i sprint-statusen og TO DO. Punkt 6 og 7 (arbeidsmåten) gjelder fra story 2.1 |
+
+## 2026-11-08 – Story 2.1: Telleregelen for nøkkelordtreff
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-1-telleregelen-for-nokkelordtreff.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 249 | `/bmad-build` / «2.1» / «Ja, bruk hjelpeagenter» | KI-en laget en egen branch, en hjelpeagent samlet det viktigste for epic 2 i [`epic-2-context.md`](9-koding/epic-2-context.md), og KI-en skrev planen (spec) for telleregelen |
+| 250 | «er du ferdig eller skjedde det en feil nå» | **KI-feil:** KI-en stoppet midt i arbeidet uten å si fra, rett før den skulle skrive planen. Ingenting var feil, og den fortsatte |
+| 251 | «Behold hele» / «Godkjenn og fortsett» | En hjelpeagent kodet telleregelen, og tre andre leste koden kritisk. **KI-feil:** alle testene var grønne, men de ville ikke oppdaget tre feil i selve regelen: om grensen på 4 tegn ble flyttet, om «SQL» ga treff i «MySQL», eller om «C++» ga treff i en CV med bare «C». 21 funn: 6 rettelser i testene, 2 punkter utsatt (tekst fra PDF i story 6.1 og en ny linje i README i story 8.1), resten avvist med begrunnelse. 175 tester |
