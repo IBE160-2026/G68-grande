@@ -374,9 +374,10 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 230 | «jegg har flettet nå» | CI var grønn på Linux og Windows, og jeg flettet PR #3. Story 1.2 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
 ## 2026-11-08 – Story 1.3: Registrere seg som ny bruker
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md), og koden i [PR #4](https://github.com/IBE160-2026/G68-grande/pull/4).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 231 | `/bmad-build` / «1.3» | KI-en laget en egen branch og skrev planen (spec) for story 1.3: registreringssiden, alle feilmeldingene og lenkene mellom innlogging og registrering |
 | 232 | «Behold hele» / «Godkjenn og fortsett» / «Ja» (hjelpeagenter) | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 3 av 16 funn var ekte og ble rettet, alle i testene: sjekken av at ingenting hentes utenfra, så ikke på den nye siden, testen av escaping kunne bestått selv om e-posten forsvant, og koblingen av «Minst 8 tegn» og feilteksten ble ikke testet ved for kort passord (se [spec-en](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md)) |
+| 233 | «ja start siden for meg» / «det funket utmerket, push» | KI-en startet nettsiden, og jeg prøvde ny bruker, alle feilene og innlogging med den nye brukeren i nettleseren. Branchen ble pushet og PR #4 laget |
