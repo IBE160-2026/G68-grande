@@ -33,10 +33,11 @@ Kristine startet `/bmad-build` med «2.2». Nettsiden skal ha fiktive testdata m
 - **KI-feil i hovedøkta:** KI-en prøvde om testen virket ved å endre fasiten med vilje. Etterpå prøvde den å legge fila tilbake med Git, men fila var ikke lagret i Git ennå, og ble tømt. Den ble lagt tilbake fra en kopi KI-en hadde tatt først, og den er helt lik originalen (samme kontrollsum, `20a262a`).
 - 182 tester grønne (175 før), `ruff check` og `ruff format --check` grønne.
 - Commits: `0881b4a` (testdataene, testene og README), `51a0d3c` (spec i `my-project/9-koding/`, prompt-logg 256–257 og TO DO).
+- Kristine fikk CV-en, annonsen og fasiten åpnet i Notisblokk, leste dem og sa «push». Branchen er pushet, og [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8) er laget med merknad om KI-feilene (prompt-logg 258).
 - `sprint-status.yaml`: story 2.2 er `review`. Kopien i `my-project/7-sprint-planning/` oppdateres når PR-en er flettet.
 - Notater til refleksjonsrapporten lagt inn i `my-project/8-refleksjonsrapport/notater.md` (3.3 og 5.5).
 - Ingenting å prøve i nettleseren, fordi ingen side bruker testdataene ennå (story 2.3 og 2.5).
 
 ### Åpne punkter
-- Story 2.2: Kristine leser `cv.txt`, `annonse.txt` og `fasit.md` og sjekker at alt er fiktivt, at hullene er tydelige og at begrunnelsene stemmer. Så push, PR med merknad om KI-feil, grønn CI på Linux og Windows, og flette. Deretter story 2.2 til `done`, og oppdatere kopien av `sprint-status.yaml` og `todo.md`.
+- Story 2.2: grønn CI på Linux og Windows, og flette [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8). Deretter story 2.2 til `done`, og oppdatere kopien av `sprint-status.yaml` og `todo.md`.
 - Neste steg: story 2.3 «Testmodus kjenner igjen testdataene» med egen branch og PR.
