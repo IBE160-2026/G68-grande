@@ -99,7 +99,7 @@ def test_fr6_hjornerad_med_logg_ut_etter_innlogging(innlogget_client):
     assert re.search(r"<button[^>]*>\s*Logg ut\s*</button>", rad)
     assert html.count(tekster.LOGG_UT_KNAPP) == 1
     assert re.search(r'<footer class="bunn hjornerad"', html)
-    assert "<script" not in html
+    assert "<script" not in rad
 
 
 def test_fr6_ingen_hjornerad_uten_innlogging(client):
@@ -200,6 +200,22 @@ def test_fr6_sider_med_innlogging_lagres_ikke_i_nettleseren(innlogget_client):
     svar = innlogget_client.get("/")
     assert svar.status_code == 200
     assert svar.headers["Cache-Control"] == "no-store"
+
+
+def test_fr6_skriptet_for_tilbakeknappen_bare_etter_innlogging(app, innlogget_client):
+    """FR-6: sidene etter innlogging har tilbake.js, som laster siden på nytt når
+    nettleseren viser den fra minnet. Innloggingen og registreringen har det ikke."""
+    html = innlogget_client.get("/").get_data(as_text=True)
+    assert '<script src="/static/js/tilbake.js" defer></script>' in html
+    utlogget = app.test_client()
+    for side in ("/logg-inn", "/registrer"):
+        assert "tilbake.js" not in utlogget.get(side).get_data(as_text=True), side
+    skript = innlogget_client.get("/static/js/tilbake.js")
+    assert skript.status_code == 200
+    tekst = skript.get_data(as_text=True)
+    assert 'addEventListener("pageshow"' in tekst
+    assert "persisted" in tekst
+    assert "location.reload()" in tekst
 
 
 # --- Stilen ---

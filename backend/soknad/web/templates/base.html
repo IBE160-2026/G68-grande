@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block tittel %}{% endblock %} – {{ tekster.LOGO }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/stil.css') }}">
+  {%- if innlogget %}
+  <script src="{{ url_for('static', filename='js/tilbake.js') }}" defer></script>
+  {%- endif %}
 </head>
 <body>
   <header class="topp">
