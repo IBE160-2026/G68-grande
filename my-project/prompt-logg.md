@@ -361,3 +361,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 224 | «ja det ser veldig bra ut! regner med at startsiden ikke er ferdig, da det i de neste stegene kommer mer om begynn søknad og KI-samtykke osv?» | KI-en bekreftet at startsiden bygges videre i story 1.2–1.4, 2.4 og 4.3 |
 | 225 | «push» / «jeg har flettet nå» | Branchen ble pushet og PR #2 laget. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 1.1 er satt til ferdig |
 | 226 | «du kan pushe, husk å ha med promptlog og memlog også om det er nødvendig […] skulle gjerne hatt at PR #2 heter Story 1.1 ferdig eller noe i den duren der. Skal jeg trykke på den knappen som heter delete branch nå?» | Prompt-loggen ble oppdatert, og planen og kodegjennomgangen ble kopiert til `9-koding/`. PR #2 fikk nytt navn |
+
+## 2026-11-08 – Story 1.2: Logge inn med testbrukeren
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-2-logge-inn-med-testbrukeren.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 227 | `/bmad-build` / «1.2» | KI-en laget en egen branch og skrev planen (spec) for story 1.2: database med testbrukeren, innloggingssiden og innlogging som krav for startsiden |
+| 228 | «Behold hele» / «Godkjenn og fortsett» / «Ja, bruk agenter» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 9 av 19 funn var ekte og ble rettet, blant annet en test som aldri kunne feile (sjekk av at passordet ikke logges), at knappen fortsatt hoppet ved redusert bevegelse, og at «testmodus på» sto to steder (se [spec-en](9-koding/spec-1-2-logge-inn-med-testbrukeren.md)) |
