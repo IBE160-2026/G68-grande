@@ -424,3 +424,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 253 | «hvorfor lager vi ikke alt bare på main da?» / «ja ta det med til refleksonsrapport» | KI-en forklarte at branch og PR gir en CI-sjekk før koden kommer inn i main og et spor sensor kan følge (kriterium 1 og 3), selv når jeg jobber alene. Jeg beholdt arbeidsmåten, og forklaringen er lagt inn i notatene til refleksjonsrapporten |
 | 254 | «Pull request successfully merged and closed» / «pleier også å få en sånn delete knapp» | CI var grønn på Linux og Windows, og jeg flettet PR #7. Branchen ble ikke slettet automatisk, og knappen for å slette den manglet, fordi jeg hadde pushet to commits (rad 253 og loggen) etter at PR-en var flettet. GitHub viser ikke knappen når branchen har noe som ikke er flettet. KI-en la de to endringene inn i main for hånd. Story 2.1 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
 | 255 | «hvorfor skal du slette dem? eller er det fordi de allerede er i main?» / «du kan pushe og slette branchene» | KI-en forklarte at en flettet branch bare er en kopi av noe som alt er i main, og at PR-ene og historikken blir liggende. Branchene ligger under organisasjonen, på github.com/IBE160-2026/G68-grande/branches. Main ble pushet, og de flettede branchene for story 1.3, 1.4 og 2.1 ble slettet på GitHub og lokalt |
+
+## 2026-11-08 – Story 2.2: Fiktive testdata og fasit for første testcase
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 256 | `/bmad-build` / «2.2» / «Ja, hele økta» | KI-en laget en egen branch og skrev planen (spec) for testdataene: en fiktiv student-CV og en annonse for junior utvikler med tydelige hull (blant annet SQL og førerkort), en fasit, to håndlagde KI-svar og en test som sjekker at fasiten og telleregelen gir samme prosent |
+| 257 | «Godkjenn og fortsett» | En hjelpeagent laget utkastet (7 av 11 nøkkelord = 64 %), og tre andre gikk gjennom det. **KI-feil:** testen sjekket bare nøkkelordene som er treff, så «MySQL» i CV-en kunne gitt «SQL = Nei» uten at noe feilet. Tabellen med kravene ble aldri lest, en tom arbeidsgiver ble godtatt, og README beskrev innliming i testmodus som om den alt fantes. KI-en tømte også fasiten ved en feil da den prøvde om testen virket, men la den tilbake fra en kopi. 14 funn: 6 rettet, 8 avvist med begrunnelse. 182 tester |
