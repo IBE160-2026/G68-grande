@@ -364,9 +364,10 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-08 – Story 1.2: Logge inn med testbrukeren
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-2-logge-inn-med-testbrukeren.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-2-logge-inn-med-testbrukeren.md), og koden i [PR #3](https://github.com/IBE160-2026/G68-grande/pull/3).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 227 | `/bmad-build` / «1.2» | KI-en laget en egen branch og skrev planen (spec) for story 1.2: database med testbrukeren, innloggingssiden og innlogging som krav for startsiden |
 | 228 | «Behold hele» / «Godkjenn og fortsett» / «Ja, bruk agenter» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 9 av 19 funn var ekte og ble rettet, blant annet en test som aldri kunne feile (sjekk av at passordet ikke logges), at knappen fortsatt hoppet ved redusert bevegelse, og at «testmodus på» sto to steder (se [spec-en](9-koding/spec-1-2-logge-inn-med-testbrukeren.md)) |
+| 229 | «du kan starte den for meg» / «det det ser bra ut, alt funker, push!» | KI-en startet nettsiden, og jeg prøvde testbrukeren, tomme felt og feil passord i nettleseren. Branchen ble pushet og PR #3 laget |
