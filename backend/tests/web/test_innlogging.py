@@ -86,13 +86,6 @@ def test_nfr6_skjemaet_har_novalidate_og_ingen_feil_eller_fokus_foer_innsending(
     assert "<script" not in html
 
 
-def test_fr6_fr7_ingen_utlogging_ennaa(app, innlogget_client):
-    """FR-6/FR-7: «Logg ut» og «Du må logge inn først» kommer i story 1.4."""
-    html = app.test_client().get("/logg-inn").get_data(as_text=True)
-    assert "Du må logge inn først" not in html
-    assert "Logg ut" not in innlogget_client.get("/").get_data(as_text=True)
-
-
 # --- Riktig innlogging ---
 
 
@@ -233,10 +226,10 @@ def test_fr4_feiltekstene_ligger_i_tekster():
 
 
 def test_fr7_startsiden_uten_okt_sender_til_innloggingen(client):
-    """FR-7: GET / uten økt gir 302 til /logg-inn."""
+    """FR-7: GET / uten økt gir 302 til /logg-inn?ikke_innlogget=1."""
     svar = client.get("/")
     assert svar.status_code == 302
-    assert svar.location == "/logg-inn"
+    assert svar.location == "/logg-inn?ikke_innlogget=1"
 
 
 def test_fr7_gammel_cookie_uten_okt_i_minnet_er_utlogget(app, client):
@@ -247,6 +240,6 @@ def test_fr7_gammel_cookie_uten_okt_i_minnet_er_utlogget(app, client):
     app.extensions["oktlager"].slett(okt_id)
     svar = client.get("/")
     assert svar.status_code == 302
-    assert svar.location == "/logg-inn"
+    assert svar.location == "/logg-inn?ikke_innlogget=1"
     with client.session_transaction() as okt:
         assert OKT_ID not in okt

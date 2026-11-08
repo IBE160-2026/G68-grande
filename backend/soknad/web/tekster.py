@@ -29,6 +29,12 @@ PASSORD_HJELP = f"Minst {MIN_PASSORD_LENGDE} tegn"
 TIL_INNLOGGING_TEKST = "Har du allerede en bruker?"
 TIL_INNLOGGING_LENKE = "Logg inn"
 
+# Hjørneraden nederst på alle sider etter innlogging.
+LOGG_UT_KNAPP = "Logg ut"
+
+# Skjemafeil-boksen på innloggingen når man prøver en side uten å være logget inn.
+MA_LOGGE_INN = "Du må logge inn først"
+
 # Feiltekstene slås opp med (felt, type). felt=None betyr hele skjemaet.
 FEILTEKSTER = {
     ("epost", FeilType.TOM): "Fyll inn e-post",

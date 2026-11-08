@@ -98,6 +98,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Omtrent like høyt som hjørneraden, så feltet med fokus aldri havner bak raden */
+  scroll-padding-bottom: 4.5rem;
 }
 
 body {
@@ -290,6 +292,73 @@ svg {
   box-shadow: none;
 }
 
+/* Sekundærknapp: hvit med ramme og tekst i primary. Samme hover, trykk og låst som hovedknappen */
+.sekundaerknapp {
+  padding: var(--space-3) var(--space-5);
+  font: inherit;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-lg);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Liten variant, for eksempel «Logg ut» i hjørneraden */
+.sekundaerknapp.liten {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--size-small);
+}
+
+.sekundaerknapp:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.sekundaerknapp:active {
+  transform: scale(0.96);
+}
+
+.sekundaerknapp:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Hjørneraden (corner-row): festet nederst på skjermen på alle sider etter innlogging.
+ * «Logg ut» til høyre, plass til KI-merknaden til venstre (Epic 4). */
+.hjornerad {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  background: var(--background);
+  border-top: 1px solid var(--border);
+}
+
+.utlogging {
+  margin: 0 0 0 auto;
+}
+
+/* Lave skjermer (liggende mobil, stor zoom): raden står nederst på siden i stedet */
+@media (max-height: 500px) {
+  html {
+    scroll-padding-bottom: 0;
+  }
+
+  .hjornerad {
+    position: static;
+  }
+}
+
 /* Redusert bevegelse: alle animasjoner og overganger av */
 
 @media (prefers-reduced-motion: reduce) {
@@ -302,7 +371,9 @@ svg {
   }
 
   .hovedknapp:hover,
-  .hovedknapp:active {
+  .hovedknapp:active,
+  .sekundaerknapp:hover,
+  .sekundaerknapp:active {
     transform: none;
   }
 }
