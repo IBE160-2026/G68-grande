@@ -18,11 +18,58 @@ Søknadsassistenten er en nettside som hjelper studenter med å skrive et søkna
 
 ## Installasjon og oppstart
 
-*Kommer.* Her kommer forutsetninger med versjoner, eksakte kommandoer for installasjon og oppstart, innstillingene i `.env.example`, og e-post og passord til testbrukeren. Nettsiden kan kjøres i testmodus uten API-nøkkel.
+**Forutsetninger:** [uv](https://docs.astral.sh/uv/) versjon 0.12 eller nyere. uv henter selv riktig Python (3.14, låst i `backend/.python-version`, minst 3.12) og alle pakkene. Du trenger ikke installere Python først.
+
+**1. Installer uv** (bare første gang):
+
+- Windows (PowerShell):
+
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+
+- Mac og Linux:
+
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+
+Lukk og åpne terminalen igjen etterpå, så kommandoen `uv` blir funnet.
+
+**2. Start nettsiden** fra mappen der repoet ligger:
+
+```bash
+cd backend
+uv sync
+uv run flask --app soknad run
+```
+
+Åpne så <http://127.0.0.1:5000> i nettleseren. Stopp nettsiden med `Ctrl+C` i terminalen. Er port 5000 opptatt (ofte på Mac), starter du med `uv run flask --app soknad run --port 5001` og åpner <http://127.0.0.1:5001>.
+
+**Innstillinger (valgfritt):** nettsiden starter uten noe oppsett. Vil du endre innstillingene, kopierer du `backend/.env.example` til `backend/.env` og fyller inn verdiene der. `.env` havner aldri i Git.
+
+| Innstilling | Hva den gjør | Hvis den er tom |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | Nøkkel til Claude API | Nettsiden kjører i testmodus |
+| `ANTHROPIC_MODEL` | Hvilken Claude-modell som brukes | `claude-opus-5-5` |
+| `SECRET_KEY` | Signerer innloggingen | En tilfeldig nøkkel lages ved hver oppstart |
+
+*Kommer:* e-post og passord til testbrukeren. Nettsiden kan kjøres i testmodus uten API-nøkkel.
 
 ## Testdata og tester
 
-*Kommer.* Her kommer hvor de fiktive testdataene og fasiten ligger, og hvordan de automatiske testene kjøres.
+De automatiske testene og kodesjekken kjøres fra `backend/`:
+
+```bash
+cd backend
+uv run pytest
+uv run ruff check
+uv run ruff format --check
+```
+
+`uv run pytest` kjører alle testene. `uv run ruff check` sjekker koden, blant annet at alle filer åpnes med en oppgitt `encoding` (vi bruker alltid utf-8), og `uv run ruff format --check` sjekker formateringen. De samme sjekkene kjører automatisk på GitHub (fanen «Actions») på både Linux og Windows ved hver PR.
+
+*Kommer:* hvor de fiktive testdataene og fasiten ligger.
 
 ## Skjermbilder
 
