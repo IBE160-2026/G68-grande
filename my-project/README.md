@@ -45,6 +45,7 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`spec-1-3-registrere-seg-som-ny-bruker.md`](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md) | Planen for story 1.3 med oppgaver og akseptansekriterier, og kodegjennomgangen: alle 16 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist ([PR #4](https://github.com/IBE160-2026/G68-grande/pull/4)) |
 | [`spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md`](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md) | Planen for story 1.4 med oppgaver og akseptansekriterier, og kodegjennomgangen: alle 19 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist ([PR #5](https://github.com/IBE160-2026/G68-grande/pull/5)) |
 | [`epic-1-retro-2026-11-08.md`](9-koding/epic-1-retro-2026-11-08.md) | Retrospektiven for epic 1: hva som virket, funn på tvers av storiene, lærdommer om arbeidsmåten og 7 punkter som skal gjøres (godkjent med åpne punkter) |
+| [`spec-retro-1-rettinger.md`](9-koding/spec-retro-1-rettinger.md) | Planen for rettingene etter retrospektiven for epic 1, og kodegjennomgangen: alle 13 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
