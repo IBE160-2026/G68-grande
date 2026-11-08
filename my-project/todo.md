@@ -102,7 +102,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 1.3 «Registrere seg som ny bruker» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #4 flettet, CI grønn på Linux og Windows)
 - [x] Story 1.4 «Logge ut, og bare innloggede kommer inn» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #5 flettet, CI grønn på Linux og Windows. Epic 1 er ferdig)
 - [ ] Etter retrospektiven for epic 1: rette fire småting i en egen PR før story 2.1 (oppryddingen av økten ett sted, innlogget bruker sendes til startsiden fra innloggingen og registreringen, testhjelperne i én fil, og to strengere tester). Se [`9-koding/epic-1-retro-2026-11-08.md`](9-koding/epic-1-retro-2026-11-08.md) (kodet og gjennomgått 8. november på branchen `retro-1-rettinger`, 152 tester. Gjenstår: prøve i nettleseren, push, PR og fletting)
-- [ ] Prøve innloggingen, registreringen og startsiden med «Logg ut» ved 320 px, 768 px og 200 % zoom (fra retrospektiven for epic 1)
+- [x] Prøve innloggingen, registreringen og startsiden med «Logg ut» ved 320 px, 768 px og 200 % zoom (fra retrospektiven for epic 1) (gjort 8. november: alt ser riktig ut)
 - [ ] Fra retrospektiven: når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde), skal planen si nøyaktig hva jeg prøver i nettleseren før push. Avvises samme funn i to stories, skal jeg få det som en beslutning
 - [ ] Neste steg: story 2.1 «Telleregelen for nøkkelordtreff» med egen branch og PR (`bmad-build`)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
