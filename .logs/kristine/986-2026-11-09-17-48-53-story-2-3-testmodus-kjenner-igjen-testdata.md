@@ -17,7 +17,10 @@ Kristine ba om story 2.3 med `/bmad-build`, og ville at spec-en skulle åpnes n�
 - 231 tester grønne (182 før), `ruff check` og `ruff format --check` grønne.
 - Commits på branchen: `e88e470` (koden) og `2677f3d` (spec-kopi, `my-project/README.md` med radene for epic 2 og story 2.1–2.3, TO DO og prompt-logg 260–261). Notatene til refleksjonsrapporten er oppdatert (4.2).
 - Sprint-status: story 2.3 er satt til `review`.
-- Ikke pushet. Ingen side bruker koden ennå. Det kobles på i story 2.5.
+- Ingen side bruker koden ennå. Det kobles på i story 2.5.
+- Branchen ble pushet, og [PR #9](https://github.com/IBE160-2026/G68-grande/pull/9) ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og Kristine flettet PR-en.
+- Etter flettingen, på main: story 2.3 er satt til `done` i sprint-statusen, og `f2a64d5` har PR-lenken i `my-project/README.md`, TO DO og prompt-logg 262–263. De flettede branchene for story 2.2 og 2.3 er slettet på PC-en.
+- `issues.md`: punktet «Neste steg: story 2.3» er lukket.
 
 ### Åpne punkter
-- Ingen nye. Punktet om story 2.3 i `issues.md` står åpent til PR-en er flettet.
+- Neste steg: story 2.4 «Startsiden får testmodus og knappen videre, og modusvalget lages» med egen branch og PR (`bmad-build`).
