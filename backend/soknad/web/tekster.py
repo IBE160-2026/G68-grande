@@ -13,6 +13,14 @@ START_OVERSKRIFT = "Velkommen! 👋"
 START_INGRESS = "Her lager du et søknadsbrev som passer til stillingen du vil søke på."
 START_KNAPP = "Begynn å lage søknad"
 
+# Bryteren på startsiden og merkelappen oppe til høyre på de andre sidene (FR-32, FR-33).
+TESTMODUS = "Testmodus"
+TESTMODUS_STATUS = (
+    "Du er i testmodus. Nettsiden bruker ferdige svar, og ingenting sendes til ekstern KI."
+)
+# Under bryteren når ANTHROPIC_API_KEY mangler.
+MANGLER_NOKKEL = "Mangler API-nøkkel, se README"
+
 # «Tilbake» på modusvalget (og senere på innleggingen og resultatsiden).
 TILBAKE_KNAPP = "Tilbake"
 

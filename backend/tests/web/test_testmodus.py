@@ -1,0 +1,211 @@
+"""Tester for bryteren «Testmodus» på startsiden, teksten om testmodus og merkelappen
+«Testmodus» på de andre sidene (FR-32, FR-33, UX-DR9)."""
+
+import re
+
+import pytest
+
+from soknad import create_app
+from soknad.web import tekster
+from tests.web.hjelpere import (
+    STIL,
+    css_blokk,
+    header,
+    logg_inn,
+    main,
+    sett_testmodus,
+    tagger_i,
+)
+
+
+def bryter(html):
+    """Attributtene til bryteren (role="switch"), eller None."""
+    return next((a for t, a in tagger_i(html) if a.get("role") == "switch"), None)
+
+
+def merkelapper(html):
+    return [a for _, a in tagger_i(html) if a.get("class") == "merkelapp"]
+
+
+def innlogget_med_nokkel(nokkel):
+    """En innlogget klient i en app der ANTHROPIC_API_KEY er satt til nokkel."""
+    app = create_app({"TESTING": True, "SECRET_KEY": "test-nokkel", "ANTHROPIC_API_KEY": nokkel})
+    client = app.test_client()
+    assert logg_inn(client).status_code == 302
+    return client
+
+
+# --- Matrisen ---
+
+
+def test_fr32_uten_nokkel_er_bryteren_paa_og_last_med_nokkeltekst(innlogget_client):
+    """FR-32: uten API-nøkkel er bryteren på og låst, og «Mangler API-nøkkel, se README» står
+    under, koblet med aria-describedby. Teksten om testmodus står i statusområdet."""
+    html = innlogget_client.get("/").get_data(as_text=True)
+    topp = header(html)
+    assert bryter(topp) == {
+        "class": "bryter",
+        "type": "button",
+        "role": "switch",
+        "aria-checked": "true",
+        "aria-disabled": "true",
+        "aria-describedby": "nokkeltekst",
+    }
+    nokkeltekst = r'<p class="nokkeltekst" id="nokkeltekst">\s*Mangler API-nøkkel, se README'
+    assert re.search(nokkeltekst, topp)
+    assert tekster.TESTMODUS_STATUS in main(html)
+
+
+def test_fr32_med_nokkel_er_bryteren_fortsatt_last_uten_nokkeltekst():
+    """FR-32: med API-nøkkel er bryteren fortsatt på og låst fram til Epic 4, men uten
+    nøkkeltekst og uten aria-describedby."""
+    html = innlogget_med_nokkel("sk-test").get("/").get_data(as_text=True)
+    attributter = bryter(header(html))
+    assert attributter["aria-checked"] == "true"
+    assert attributter["aria-disabled"] == "true"
+    assert "aria-describedby" not in attributter
+    assert tekster.MANGLER_NOKKEL not in html
+    assert 'id="nokkeltekst"' not in html
+    assert tekster.TESTMODUS_STATUS in main(html)
+
+
+def test_fr32_nokkel_med_bare_mellomrom_regnes_som_mangler():
+    """FR-32: en nøkkel med bare mellomrom gir det samme som ingen nøkkel."""
+    html = innlogget_med_nokkel("   ").get("/").get_data(as_text=True)
+    assert bryter(header(html))["aria-describedby"] == "nokkeltekst"
+    assert tekster.MANGLER_NOKKEL in header(html)
+
+
+@pytest.mark.parametrize("side", ["/modus", "/innlegging"])
+def test_fr33_merkelappen_paa_sidene_etter_startsiden(innlogget_client, side):
+    """FR-33: modusvalget og innleggingen har merkelappen «Testmodus» i header, og ingen
+    bryter."""
+    innlogget_client.get("/")
+    innlogget_client.post("/")
+    if side == "/innlegging":
+        innlogget_client.post("/modus", data={"modus": "full_generering"})
+    html = innlogget_client.get(side).get_data(as_text=True)
+    topp = header(html)
+    assert merkelapper(topp) == [{"class": "merkelapp"}]
+    assert re.search(r'<span class="merkelapp">\s*Testmodus\s*</span>', topp)
+    assert bryter(html) is None
+    assert tekster.MANGLER_NOKKEL not in html
+
+
+def test_fr33_ingen_merkelapp_paa_startsiden(innlogget_client):
+    """FR-33: startsiden har bryteren, ikke merkelappen."""
+    html = innlogget_client.get("/").get_data(as_text=True)
+    assert merkelapper(html) == []
+    assert bryter(html) is not None
+
+
+@pytest.mark.parametrize("side", ["/logg-inn", "/registrer"])
+def test_fr32_fr33_utlogget_har_verken_bryter_merkelapp_eller_statustekst(client, side):
+    """FR-32/FR-33: innloggingen og registreringen har ingen bryter, merkelapp eller
+    tekst om testmodus."""
+    html = client.get(side).get_data(as_text=True)
+    assert bryter(html) is None
+    assert merkelapper(html) == []
+    assert 'class="topplinje"' not in html
+    assert tekster.TESTMODUS_STATUS not in html
+
+
+# --- Resten ---
+
+
+def test_fr32_bryteren_star_ikke_i_et_skjema(innlogget_client):
+    """FR-32: bryteren står i header, utenfor alle skjemaer, så et trykk sender ingenting.
+    Etiketten «Testmodus» står inne i knappen, og sporet er skjult for skjermlesere."""
+    topp = header(innlogget_client.get("/").get_data(as_text=True))
+    assert "<form" not in topp
+    knapp = re.search(r'<button class="bryter"[^>]*>(.*?)</button>', topp, re.S).group(1)
+    assert re.search(r'<span class="spor" aria-hidden="true"></span>\s*Testmodus\s*$', knapp)
+
+
+def test_fr32_statusomradet_har_role_status_mellom_ingressen_og_knappen(innlogget_client):
+    """FR-32/UX-DR9: teksten om testmodus står i et role="status"-område mellom ingressen
+    og «Begynn å lage søknad»."""
+    innhold = main(innlogget_client.get("/").get_data(as_text=True))
+    assert tekster.TESTMODUS_STATUS == (
+        "Du er i testmodus. Nettsiden bruker ferdige svar, og ingenting sendes til ekstern KI."
+    )
+    status = re.search(r'<p class="testinfo" role="status">(.*?)</p>', innhold, re.S)
+    assert status.group(1) == tekster.TESTMODUS_STATUS
+    assert innhold.index('class="ingress"') < status.start() < innhold.index('class="begynn"')
+
+
+def test_fr32_fr33_testmodus_av_gir_tom_status_og_ingen_merkelapp(app, innlogget_client):
+    """FR-32/FR-33: er testmodus av i innloggingen (Epic 4), er bryteren av, statusområdet
+    tomt og merkelappen borte. Testmodus kan ikke slås av på nettsiden ennå, så innloggingen
+    byttes med sett_testmodus."""
+    sett_testmodus(app, innlogget_client, False)
+    html = innlogget_client.get("/").get_data(as_text=True)
+    assert bryter(html)["aria-checked"] == "false"
+    assert '<p class="testinfo" role="status"></p>' in html
+    innlogget_client.post("/")
+    svar = innlogget_client.get("/modus")
+    assert svar.status_code == 200
+    html = svar.get_data(as_text=True)
+    assert 'class="topplinje"' in html
+    assert merkelapper(html) == []
+
+
+def test_fr32_last_bryter_har_blekt_spor_og_44_x_24():
+    """FR-32/UX-DR9: sporet er 44 × 24 px, i primary når bryteren er på, og 60 % synlig når
+    den er låst. Etiketten blekes ikke og har text-farge og vekt 600."""
+    css = STIL.read_text(encoding="utf-8")
+    spor = css_blokk(css, ".bryter .spor")
+    assert "width: 44px" in spor
+    assert "aspect-ratio: 44 / 24" in spor
+    assert "var(--primary)" in css_blokk(css, '.bryter[aria-checked="true"] .spor')
+    assert "opacity: 0.6" in css_blokk(css, '.bryter[aria-disabled="true"] .spor')
+    etikett = css_blokk(css, ".bryter")
+    assert "color: var(--text)" in etikett
+    assert "font-weight: 600" in etikett
+    last = css_blokk(css, '.bryter[aria-disabled="true"]')
+    assert "opacity" not in etikett + last
+    assert "color" not in last
+
+
+def test_fr32_bryteren_synes_i_hoykontrastmodus():
+    """FR-32/NFR-6: i høykontrastmodus (forced-colors) fjernes bakgrunn og skygge, så sporet
+    får en ramme og knotten en systemfarge."""
+    css = STIL.read_text(encoding="utf-8")
+    hoykontrast = re.search(r"@media \(forced-colors: active\)\s*\{(.*?)\n\}", css, re.S).group(1)
+    assert "border: 1px solid CanvasText" in hoykontrast
+    assert "background: CanvasText" in hoykontrast
+
+
+def test_fr32_fr33_raden_oppe_til_hoyre_og_nokkelteksten_under():
+    """FR-32/FR-33: raden står til høyre og brytes, og nøkkelteksten står på egen linje under
+    bryteren, høyrestilt og i liten, dempet skrift. Raden står før logoen i header."""
+    css = STIL.read_text(encoding="utf-8")
+    rad = css_blokk(css, ".topplinje")
+    assert "justify-content: flex-end" in rad
+    assert "flex-wrap: wrap" in rad
+    nokkel = css_blokk(css, ".nokkeltekst")
+    for verdi in ("flex-basis: 100%", "var(--size-caption)", "var(--text-muted)", "right"):
+        assert verdi in nokkel
+
+
+def test_fr33_raden_star_for_logoen(innlogget_client):
+    """FR-33: raden med bryteren eller merkelappen står før logoen i header (oppe til høyre)."""
+    topp = header(innlogget_client.get("/").get_data(as_text=True))
+    assert topp.index('class="topplinje"') < topp.index('class="logo"')
+
+
+def test_fr33_merkelappen_er_fersken_uten_nowrap():
+    """FR-33/UX-DR9: merkelappen har accent-bakgrunn, text-farge, rounded-sm, size-tag og
+    vekt 600. Ingen nowrap og ingen fast høyde."""
+    css = STIL.read_text(encoding="utf-8")
+    merkelapp = css_blokk(css, ".merkelapp")
+    for verdi in (
+        "var(--accent)",
+        "var(--text)",
+        "var(--rounded-sm)",
+        "var(--size-tag)",
+        "font-weight: 600",
+    ):
+        assert verdi in merkelapp
+    assert "height" not in merkelapp
+    assert "nowrap" not in css

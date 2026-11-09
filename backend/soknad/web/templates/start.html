@@ -1,8 +1,24 @@
 {% extends "base.html" %}
 {% block tittel %}{{ tekster.START_TITTEL }}{% endblock %}
+{% block topplinje %}
+{#- Bryteren er låst på fram til Epic 4. aria-disabled (ikke disabled), så den kan nås med Tab.
+    Den står ikke i et skjema og sender ingenting. #}
+<button class="bryter" type="button" role="switch"
+  aria-checked="{{ 'true' if testmodus else 'false' }}" aria-disabled="true"
+  {%- if mangler_nokkel %} aria-describedby="nokkeltekst"{% endif %}>
+  <span class="spor" aria-hidden="true"></span>
+  {{ tekster.TESTMODUS }}
+</button>
+{%- if mangler_nokkel %}
+<p class="nokkeltekst" id="nokkeltekst">{{ tekster.MANGLER_NOKKEL }}</p>
+{%- endif %}
+{% endblock %}
 {% block innhold %}
 <h1 class="velkommen">{{ tekster.START_OVERSKRIFT }}</h1>
 <p class="ingress">{{ tekster.START_INGRESS }}</p>
+{#- Teksten kommer med siden og leses i vanlig rekkefølge. role="status" betyr først noe når
+    teksten endres uten at siden lastes på nytt (kanskje i Epic 4), så området finnes alltid. #}
+<p class="testinfo" role="status">{% if testmodus %}{{ tekster.TESTMODUS_STATUS }}{% endif %}</p>
 <form class="begynn" method="post" action="{{ url_for('web.start') }}">
   <button class="stor-knapp" type="submit">{{ tekster.START_KNAPP }}</button>
 </form>
