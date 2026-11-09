@@ -111,7 +111,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Story 2.4.1 «Flyten fra startsiden til innleggingen» (ferdig 9. november: PR #10 flettet, CI grønn på Linux og Windows, 272 tester)
   - [x] Story 2.4.2 «Testmodus på startsiden og merkelappen» (ferdig 9. november: PR #11 flettet, CI grønn på Linux og Windows, 288 tester)
 - [ ] Neste steg: story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`). Delt i to 9. november:
-  - [ ] Story 2.5.1 «Innleggingssiden» (feltene, «Lim inn tekst», søppelbøtta, feilboksen og «Tilbake»): kodet, gjennomgått og prøvd i nettleseren, 333 tester. Gjenstår: PR og flette
+  - [x] Story 2.5.1 «Innleggingssiden» (ferdig 9. november: PR #12 flettet, CI grønn på Linux og Windows, 333 tester)
   - [ ] Story 2.5.2 «Analysen og første resultatside» (testsvarene hentes, nøkkelordlisten lagres, og resultatsiden viser 64 %), med egen branch og PR
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)
