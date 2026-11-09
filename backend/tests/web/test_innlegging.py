@@ -391,3 +391,10 @@ def test_ux_dr8_soppelbotta_er_minst_24_px_og_feil_er_rode():
     assert "var(--error-tint)" in css_blokk(css, ".feilboks")
     assert "dashed" in css_blokk(css, ".testhjelp")
     assert "display: none !important" in css_blokk(css, "[hidden]")
+
+
+def test_ux_dr7_lim_inn_viser_fokusringen_ogsa_etter_museklikk():
+    """UX-DR7: en lenke i feilboksen gir fokus til «Lim inn tekst». Ringen vises med :focus,
+    ikke bare :focus-visible, så den synes også når lenken ble trykket med musa."""
+    blokk = css_blokk(STIL.read_text(encoding="utf-8"), ".lim-inn:focus")
+    assert "outline: 3px solid var(--focus-ring)" in blokk
