@@ -1,6 +1,64 @@
 {% extends "base.html" %}
 {% block tittel %}{{ tekster.INNLEGGING_TITTEL }}{% endblock %}
+{% block skript %}
+  <script src="{{ url_for('static', filename='js/innlegging.js') }}" defer></script>
+{%- endblock %}
 {% block innhold %}
 <h1 class="side-overskrift">{{ tekster.INNLEGGING_OVERSKRIFT }}</h1>
-{#- Feltene for CV og stillingsannonse kommer i story 2.5. #}
+{#- Feilboksen får fokus når siden kommer tilbake med feil, og da leser skjermlesere den opp.
+    Den har ikke role="alert", så den ikke leses opp to ganger (UX-DR7). #}
+{%- if feltfeil %}
+<div class="feilboks" id="feilboks" tabindex="-1" autofocus>
+  <p class="feilboks-overskrift">{{ tekster.FEILBOKS_OVERSKRIFT }}</p>
+  <ul>
+    {%- for navn, feil in feltfeil.items() %}
+    <li><a href="#{{ navn }}-felt">{{ feil }}</a></li>
+    {%- endfor %}
+  </ul>
+</div>
+{%- endif %}
+{%- if testmodus %}
+<p class="testhjelp">{{ tekster.TESTDATA_HJELP }}</p>
+{%- endif %}
+<form method="post" action="{{ url_for('web.innlegging') }}" novalidate>
+  <div class="felt-rad">
+    {%- for navn, felt in tekster.INNLEGGINGSFELT.items() %}
+    {%- set feil = feltfeil.get(navn) %}
+    {%- set fylt = tekst[navn] != "" %}
+    {#- Tomt felt: bare «Lim inn tekst». Fylt felt: tekstboksen med søppelbøtta.
+        Tekstboksen står alltid i skjemaet, så teksten sendes med også når den er skjult.
+        innlegging.js bytter mellom de to uten å spørre serveren (AD-1). #}
+    <section class="innleggingsfelt{% if feil %} har-feil{% endif %}" id="{{ navn }}-felt"
+      tabindex="-1" aria-labelledby="{{ navn }}-navn">
+      <h2 class="feltnavn" id="{{ navn }}-navn"><span aria-hidden="true">{{ felt.ikon }}</span> {{ felt.navn }}</h2>
+      {%- if feil %}
+      <p class="feiltekst" id="{{ navn }}-feil">{{ feil }}</p>
+      {%- endif %}
+      <div class="tom-tilstand"{% if fylt %} hidden{% endif %}>
+        <button class="sekundaerknapp lim-inn" type="button" id="{{ navn }}-lim-inn"
+          aria-label="{{ tekster.lim_inn_skjermleser(navn) }}"
+          {%- if feil %} aria-describedby="{{ navn }}-feil"{% endif %}>{{ tekster.LIM_INN_KNAPP }}</button>
+      </div>
+      <div class="limeboks"{% if not fylt %} hidden{% endif %}>
+        <div class="limeboks-topp">
+          <label for="{{ navn }}-tekst"><span class="skjult">{{ felt.navn }}: </span>{{ tekster.LIM_INN_ETIKETT }}</label>
+          <button class="soppelbotte" type="button" aria-label="{{ tekster.tom_skjermleser(navn) }}"
+            data-tomt="{{ tekster.er_tomt_skjermleser(navn) }}"><span aria-hidden="true">🗑️</span></button>
+        </div>
+        {#- Linjeskiftet etter <textarea> fjernes av nettleseren, så et linjeskift først i
+            teksten blir ikke borte. #}
+        <textarea id="{{ navn }}-tekst" name="{{ navn }}"
+          {%- if feil %} aria-invalid="true" aria-describedby="{{ navn }}-feil"{% endif %}>
+{{ tekst[navn] }}</textarea>
+      </div>
+    </section>
+    {%- endfor %}
+  </div>
+  {#- Statusområdet finnes hele tiden. Søppelbøtta skriver «CV-feltet er tømt» i det. #}
+  <p class="skjult" id="innlegging-status" role="status"></p>
+  <div class="knapperad mellomrom">
+    <button class="sekundaerknapp" type="submit" name="handling" value="tilbake">{{ tekster.TILBAKE_KNAPP }}</button>
+    <button class="hovedknapp" type="submit" name="handling" value="sjekk">{{ tekster.SJEKK_KNAPP }}</button>
+  </div>
+</form>
 {% endblock %}

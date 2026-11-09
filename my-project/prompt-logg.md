@@ -469,3 +469,15 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 270 | «Godkjenn og fortsett» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** KI-en brukte først en fast høyde på bryteren, som en test fra før ikke tillater. Bryteren var usynlig i Windows' høykontrastmodus, en kommentar lovet at skjermlesere leser teksten opp når den kommer (den kommer med siden), og en test skrev rett i øktlageret, samme type feil som i 2.4.1. 14 funn: 8 rettet og 6 avvist med begrunnelse. 288 tester |
 | 271 | «kan du åpne siden for meg» / «det ser bra ut!» | KI-en startet nettsiden og åpnet den i nettleseren. Jeg prøvde bryteren, Tab til bryteren, merkelappen på modusvalget og innleggingen og smal skjerm, og alt så bra ut |
 | 272 | «push» / «flettet» | Branchen ble pushet, og PR #11 ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 2.4 (både 2.4.1 og 2.4.2) er satt til ferdig i TO DO og i sprint-statusen |
+
+## 2026-11-09 – Story 2.5.1: Innleggingssiden
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-5-1-innleggingssiden.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 273 | `/bmad-build` «2.5 åpne spec-en sånn ta jeg kan lese den først» | KI-en skrev planen (spec) for hele story 2.5 og åpnet den i Notisblokk. Den var på ca. 2800 tokens, langt over grensen på 1600, og KI-en foreslo å dele den i to, som med 2.4 |
+| 274 | «1» (dele) | KI-en skrev en ny spec for 2.5.1 (innleggingssiden: feltene, «Lim inn tekst», søppelbøtta, feilboksen og «Tilbake») og la 2.5.2 (analysen og resultatsiden) i lista over utsatt arbeid |
+| 275 | «1» (Godkjenn og fortsett) / «hva skjedde?» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. Jeg spurte hva som skjedde da ruff fant feil: det var bare linjeskift og rekkefølgen på importer, som ruff rettet selv. **KI-feil:** to skjermlesertekster ble feil første gang («Tøm cV-feltet»), en test slo av testmodus uten å se at søknaden da forsvant, en test sjekket `hidden` på feil element og kunne aldri feile, og en CSS-regel for innleggingen gjaldt alle knapperader. 20 funn: 5 rettet, 14 avvist med begrunnelse og 1 utsatt (ingen nettlesertester av skriptet). 332 tester |
+| 276 | «åpne nettsiden» / «… trykker på lenken … så skjer det ingenting» | KI-en startet nettsiden. Jeg prøvde alt, og fant at en lenke i feilboksen så ut til å ikke gjøre noe. **KI-feil:** fokus gikk til riktig knapp, men nettleseren viser ikke fokusringen etter et museklikk. KI-en la til en synlig ring og en test. Etterpå virket alt. 333 tester |
+

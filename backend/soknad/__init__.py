@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask
 
 from soknad.adaptere.db import lag_database
+from soknad.adaptere.ki import TestKI
 from soknad.adaptere.oktlager import Oktlager
 from soknad.innstillinger import MAKS_FORESPORSEL, STANDARD_MODELL
 
@@ -44,6 +45,8 @@ def create_app(test_config=None):
     lag_database(app.config["DATABASE"])
     # Hver app får sitt eget øktlager i minnet.
     app.extensions["oktlager"] = Oktlager()
+    # Testmodus: de ferdige KI-svarene og testcasene, lest fra testdata/ én gang.
+    app.extensions["test_ki"] = TestKI()
 
     from soknad.web import web
 

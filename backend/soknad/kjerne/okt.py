@@ -59,3 +59,23 @@ def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
     """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen gjelder ikke lenger,
     fordi analysen kjøres på nytt før resultatsiden. CV, annonse og nøkkelordlisten beholdes."""
     return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None)
+
+
+def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad:
+    """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). Er begge feltene
+    like som før, er søknaden uendret. Ellers gjelder ikke resultatene lenger: nøkkelordlisten,
+    arbeidsgiveren og gap-analysen nullstilles, og steget blir høyst innlegging, så
+    resultatsiden ikke vises før analysen har lyktes igjen (AD-8). Gjenbruk av
+    nøkkelordlisten når bare CV-en er endret, kommer i Epic 7."""
+    if soknad.cv == cv and soknad.annonse == annonse:
+        return soknad
+    return replace(
+        soknad,
+        cv=cv,
+        annonse=annonse,
+        nokkelord=None,
+        nokkelord_annonse=None,
+        arbeidsgiver=None,
+        gap=None,
+        steg=min(soknad.steg, Steg.INNLEGGING),
+    )

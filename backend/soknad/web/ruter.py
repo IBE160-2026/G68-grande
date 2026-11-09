@@ -4,11 +4,11 @@ from flask import current_app, redirect, render_template, request, url_for
 
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, InndataFeil
-from soknad.kjerne.inndata import sjekk_innlogging, sjekk_registrering
-from soknad.kjerne.okt import Modus, Soknad, begynn, velg_modus
+from soknad.kjerne.inndata import sjekk_innlegging, sjekk_innlogging, sjekk_registrering
+from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, begynn, sett_inndata, velg_modus
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster, web
-from soknad.web.flyt import gjeldende_soknad, krever_steg, lagre_soknad
+from soknad.web.flyt import gjeldende_soknad, ki, krever_steg, lagre_soknad
 from soknad.web.innlogging import (
     gjeldende_innlogging,
     logg_inn_bruker,
@@ -60,12 +60,28 @@ def modus():
     return redirect(url_for("web.innlegging"))
 
 
-@web.route("/innlegging")
+@web.route("/innlegging", methods=["GET", "POST"])
 @login_required
 @krever_steg(Steg.INNLEGGING)
 def innlegging():
-    """Innleggingen. Feltene kommer i story 2.5."""
-    return render_template("innlegging.html")
+    """Innleggingen. POST lagrer alltid feltene med sett_inndata. «Tilbake» sender til
+    modusvalget uten å sjekke dem. «Sjekk CV-en min» sjekker alle feltene samtidig og viser
+    siden på nytt, uten redirect. Analysen og resultatsiden kommer i story 2.5.2."""
+    if request.method == "GET":
+        return _vis_innlegging(gjeldende_soknad(), feil=[])
+    handling = request.form.get("handling")
+    if handling not in ("tilbake", "sjekk"):
+        # Ukjent knapp: samme side på nytt, og søknaden er uendret.
+        return _vis_innlegging(gjeldende_soknad(), feil=[]), 400
+    cv = request.form.get("cv", "")
+    annonse = request.form.get("annonse", "")
+    soknad = sett_inndata(gjeldende_soknad(), cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
+    lagre_soknad(soknad)
+    if handling == "tilbake":
+        return redirect(url_for("web.modus"))
+    innlogging = gjeldende_innlogging()
+    caser = ki().caser if innlogging.testmodus else None
+    return _vis_innlegging(soknad, feil=sjekk_innlegging(cv, annonse, caser))
 
 
 @web.route("/logg-ut", methods=["POST"])
@@ -126,6 +142,14 @@ def registrer():
         feil = [InndataFeil("epost", FeilType.EPOST_FINNES)]
     # Feil: samme side på nytt uten redirect. E-posten står igjen, passordene aldri.
     return _vis_skjema("registrer.html", epost=epost, feil=feil)
+
+
+def _vis_innlegging(soknad, feil):
+    """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
+    feltene på siden, høyst én per felt."""
+    feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
+    tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
+    return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil)
 
 
 def _vis_skjema(mal, epost, feil, skjemafeil=None):

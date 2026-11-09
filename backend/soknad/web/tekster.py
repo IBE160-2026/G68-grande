@@ -49,6 +49,45 @@ MODUS_KORT = {
 
 INNLEGGING_TITTEL = "Legg inn CV og annonse"
 INNLEGGING_OVERSKRIFT = "Legg inn CV-en din og stillingsannonsen"
+# Over feltene, bare i testmodus (FR-34).
+TESTDATA_HJELP = "Testmodus: bruk filene i mappen testdata/ i prosjektet."
+LIM_INN_KNAPP = "Lim inn tekst"
+LIM_INN_ETIKETT = "Lim inn teksten her"
+SJEKK_KNAPP = "Sjekk CV-en min"
+FEILBOKS_OVERSKRIFT = "Noe må fikses før du kan gå videre:"
+
+
+class Innleggingsfelt(NamedTuple):
+    """Et felt på innleggingen: ikon, feltnavn og navnet på feltet i skjermlesertekstene.
+    Feltnavnet står også først i feiltekstene og i skjermlesertekstene til knappene."""
+
+    ikon: str
+    navn: str
+    tomt: str
+
+
+# Feltene i rekkefølge. Ditt søknadsbrev kommer i Epic 5.
+INNLEGGINGSFELT = {
+    "cv": Innleggingsfelt("📄", "CV", "CV-feltet"),
+    "annonse": Innleggingsfelt("📢", "Stillingsannonse", "annonsefeltet"),
+}
+
+
+def lim_inn_skjermleser(felt: str) -> str:
+    """«Lim inn tekst, CV»"""
+    return f"{LIM_INN_KNAPP}, {INNLEGGINGSFELT[felt].navn}"
+
+
+def tom_skjermleser(felt: str) -> str:
+    """Søppelbøtta: «Tøm CV-feltet», «Tøm annonsefeltet»."""
+    return f"Tøm {INNLEGGINGSFELT[felt].tomt}"
+
+
+def er_tomt_skjermleser(felt: str) -> str:
+    """Etter tømming: «CV-feltet er tømt», «Annonsefeltet er tømt»."""
+    tomt = INNLEGGINGSFELT[felt].tomt
+    return f"{tomt[0].upper()}{tomt[1:]} er tømt"
+
 
 LOGG_INN_TITTEL = "Logg inn"
 LOGG_INN_OVERSKRIFT = "Logg inn"
@@ -86,6 +125,10 @@ FEILTEKSTER = {
     ("gjenta", FeilType.TOM): "Gjenta passordet",
     ("gjenta", FeilType.PASSORD_ULIKE): "Passordene er ikke like",
     (None, FeilType.FEIL_INNLOGGING): "Feil e-post eller passord",
+    ("cv", FeilType.TOM): "CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst.",
+    ("annonse", FeilType.TOM): (
+        "Stillingsannonse: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
+    ),
     ("cv", FeilType.IKKE_TESTDATA): (
         "CV: I testmodus fungerer bare testdataene fra mappen testdata/."
     ),

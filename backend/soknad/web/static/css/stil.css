@@ -575,6 +575,176 @@ svg {
   box-shadow: none;
 }
 
+/* Skjult på skjermen, men lest av skjermlesere. Uten fast høyde og uten fast linje (NFR-7):
+ * clip-path skjuler teksten selv om den brytes. */
+.skjult {
+  position: absolute;
+  width: 1px;
+  max-height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  border: 0;
+}
+
+/* hidden skal alltid skjule, også når en klasse setter display */
+[hidden] {
+  display: none !important;
+}
+
+/* Innleggingen (UX-DR8, UX-DR9) */
+
+/* Hjelpeteksten om testdata: stiplet ramme, bare i testmodus */
+.testhjelp {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--size-small);
+  color: var(--text-muted);
+  border: 2px dashed var(--accent);
+  border-radius: var(--rounded-sm);
+}
+
+/* Feilboksen (error-box): øverst, samler alle feilene, hver feil er en lenke til feltet */
+.feilboks {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  color: var(--error);
+  background: var(--error-tint);
+  border: 2px solid var(--error);
+  border-radius: var(--rounded-md);
+}
+
+.feilboks-overskrift {
+  margin: 0 0 var(--space-2);
+  font-weight: 700;
+}
+
+.feilboks ul {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.feilboks a {
+  color: var(--error);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Feltene står under hverandre, og side om side først fra 1000 px */
+.felt-rad {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 1000px) {
+  .felt-rad {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Innleggingsfelt (upload-field): hvitt kort, rød ramme ved feil */
+.innleggingsfelt {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow);
+}
+
+.innleggingsfelt.har-feil {
+  border-color: var(--error);
+}
+
+.feltnavn {
+  margin: 0 0 var(--space-3);
+  font-size: var(--size-heading-box);
+}
+
+.innleggingsfelt .feiltekst {
+  margin: 0 0 var(--space-3);
+}
+
+/* Over tekstboksen: «Lim inn teksten her» til venstre, søppelbøtta til høyre */
+.limeboks-topp {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.limeboks-topp label {
+  font-size: var(--size-label);
+  font-weight: 600;
+}
+
+/* Tekstboksen kan dras større: ca. 160 px høy på PC, 200 px på mobil */
+.limeboks textarea {
+  display: block;
+  width: 100%;
+  min-height: 160px;
+  padding: var(--space-3);
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-sm);
+  resize: vertical;
+}
+
+@media (max-width: 699px) {
+  .limeboks textarea {
+    min-height: 200px;
+  }
+}
+
+.limeboks textarea[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+/* Søppelbøtta (trash-button): uten ramme og bakgrunn, minst 24 × 24 px (WCAG 2.5.8),
+ * blir 15 % større ved hover */
+.soppelbotte {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: var(--space-1);
+  font: inherit;
+  line-height: 1;
+  background: none;
+  border: 0;
+  border-radius: var(--rounded-xs);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+/* «Lim inn tekst» får fokus fra en lenke i feilboksen. Nettleseren viser ikke ringen for
+ * :focus-visible etter et museklikk, så ringen vises for :focus. Knappen skjules uansett når
+ * man trykker på den selv. */
+.lim-inn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.soppelbotte:hover {
+  transform: scale(1.15);
+}
+
+/* Knapperaden på innleggingen: «Tilbake» til venstre, «Sjekk CV-en min» til høyre */
+.knapperad.mellomrom {
+  justify-content: space-between;
+}
+
+.knapperad.mellomrom .hovedknapp {
+  display: inline-block;
+  width: auto;
+  margin-top: 0;
+}
+
 /* Hjørneraden (corner-row): festet nederst på skjermen på alle sider etter innlogging.
  * «Logg ut» til høyre, plass til KI-merknaden til venstre (Epic 4). */
 .hjornerad {
@@ -636,7 +806,8 @@ svg {
   .stor-knapp:hover,
   .stor-knapp:active,
   .modus-kort:hover,
-  .modus-kort:active {
+  .modus-kort:active,
+  .soppelbotte:hover {
     transform: none;
   }
 }
