@@ -19,9 +19,11 @@ Kristine ba om story 2.5 «Lime inn CV og stillingsannonse» med `/bmad-build`, 
 - Tester: 44 nye, 332 i alt, alle grønne. `ruff check` og `ruff format --check` er uten feil.
 - Gjennomgangen ga 20 funn: 5 rettet, 14 avvist med begrunnelse og 1 utsatt (ingen nettlesertester av `innlegging.js`, ført i `deferred-work.md`). Alt står i tabellen i spec-en.
 - Spec-en har status `done`. Story 2.5 står som `in-progress` i `sprint-status.yaml` til 2.5.2 også er ferdig.
-- Ikke sjekket i nettleseren ennå: «Lim inn tekst», søppelbøtta, fokus fra feilboksen og bredder.
+- Prøvd i nettleseren av Kristine: alt virket, bortsett fra at en lenke i feilboksen så ut til å ikke gjøre noe (fokusringen vises ikke etter et museklikk). Rettet med `.lim-inn:focus` og en test i commit `022b315`. 333 tester.
+- Spec-kopi, oversikten, TO DO og prompt-logg 273–276 i commit `810f3c1`.
+- Kristine så at CI på `main` var rød etter PR #11. PR-en selv var grønn, men to kjøringer på `main` manglet jobber (midlertidig feil hos GitHub, alle jobbene som kjørte, var grønne). CI ble kjørt på nytt og ble grønn.
+- Branchen ble pushet, og [PR #12](https://github.com/IBE160-2026/G68-grande/pull/12) ble laget med merknad om KI-feil. CI var grønn på Linux og Windows, og Kristine flettet PR-en (`34d7b39`). TO DO, kopien av sprint-statusen og prompt-logg 277 er oppdatert på `main`.
 
 ### Åpne punkter
-- Story 2.5.1: prøve i nettleseren («Lim inn tekst», søppelbøtta, feilboksen med to lenker, «Tilbake» beholder teksten, 375 og 1280 px). Deretter spec-kopi, push, PR med merknad om KI-feil, grønn CI og flette.
 - Story 2.5.2 «Analysen og første resultatside» med egen branch og PR (`bmad-build`), etter at 2.5.1 er flettet.
 - Ingen automatisk test kjører `innlegging.js`. Kan vurderes i story 8.2 (testplanen).
