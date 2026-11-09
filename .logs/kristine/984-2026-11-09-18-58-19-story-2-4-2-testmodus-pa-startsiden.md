@@ -22,7 +22,7 @@ Lage story 2.4.2 med `bmad-build`: andre halvdel av story 2.4, det som viser at 
 - Prøvd i nettleseren av Kristine (nettsiden startet og åpnet av KI-en): bryteren, teksten om testmodus, Tab til bryteren, merkelappen og smal skjerm. Alt så bra ut.
 - Spec-kopi i `my-project/9-koding/`, rad i `my-project/README.md`, TO DO og prompt-logg 269–271 (commit `70ec72c`). Notat om høykontrastmodus i notatene til refleksjonsrapporten (ikke i Git).
 - [PR #11](https://github.com/IBE160-2026/G68-grande/pull/11) laget med merknad om KI-feil. CI grønn på Linux og Windows, og Kristine flettet den.
-- Etter flettingen: story 2.4 er satt til `done` i `sprint-status.yaml` (og kopien i `my-project/7-sprint-planning/`), TO DO og prompt-logg 272 (commit `3844b74` på main, ikke pushet).
+- Etter flettingen: story 2.4 er satt til `done` i `sprint-status.yaml` (og kopien i `my-project/7-sprint-planning/`), TO DO og prompt-logg 272 (commit `3844b74` på main, pushet til GitHub sammen med loggen).
 
 ### Åpne punkter
 - Neste steg: story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`).
