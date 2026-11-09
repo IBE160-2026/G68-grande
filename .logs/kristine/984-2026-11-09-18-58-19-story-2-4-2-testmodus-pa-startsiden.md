@@ -19,8 +19,11 @@ Lage story 2.4.2 med `bmad-build`: andre halvdel av story 2.4, det som viser at 
 - Funnet om at en test skriver rett i øktlageret kom også i 2.4.1. Denne gangen ble det rettet i stedet for avvist (prosesspunktet fra retrospektiven).
 - Tester: 16 nye, 288 i alt, alle grønne. `ruff check` og `ruff format --check` grønne.
 - Story 2.4 står som `review` i `sprint-status.yaml`. Spec-en er `done`.
-- Ikke sjekket ennå: hvordan sidene ser ut i nettleseren.
+- Prøvd i nettleseren av Kristine (nettsiden startet og åpnet av KI-en): bryteren, teksten om testmodus, Tab til bryteren, merkelappen og smal skjerm. Alt så bra ut.
+- Spec-kopi i `my-project/9-koding/`, rad i `my-project/README.md`, TO DO og prompt-logg 269–271 (commit `70ec72c`). Notat om høykontrastmodus i notatene til refleksjonsrapporten (ikke i Git).
+- [PR #11](https://github.com/IBE160-2026/G68-grande/pull/11) laget med merknad om KI-feil. CI grønn på Linux og Windows, og Kristine flettet den.
+- Etter flettingen: story 2.4 er satt til `done` i `sprint-status.yaml` (og kopien i `my-project/7-sprint-planning/`), TO DO og prompt-logg 272 (commit `3844b74` på main, ikke pushet).
 
 ### Åpne punkter
-- Story 2.4.2: prøve i nettleseren (bryteren og teksten på startsiden, Tab til bryteren og trykk uten at noe skjer, merkelappen på modusvalget og innleggingen, ingen rulling sidelengs ved 320 og 375 px). Deretter spec-kopi, push, PR med merknad om KI-feil, grønn CI og flette.
+- Neste steg: story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`).
 - Epic 4: når testmodus kan slås av, er raden oppe til høyre tom på de andre sidene, men tar fortsatt litt plass over logoen.
