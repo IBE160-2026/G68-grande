@@ -458,3 +458,13 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 266 | «supert, da kan du begynne når du er klar» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** noen testbeskrivelser lovet mer enn testen sjekket (for eksempel «ingen annen knapp har større skrift»), og to tester ville feilet på framtidig tekst som inneholder «Velg» eller «Korrektur». 13 funn: 3 rettet, 9 avvist med begrunnelse og 1 utsatt (CSRF, som gjelder hele nettsiden). 272 tester |
 | 267 | «start nettsiden så jeg får prøvd» / «det ser veldig bra ut, stopp nettsiden» | KI-en startet nettsiden og åpnet den i nettleseren. Jeg prøvde startsiden, modusvalget, innleggingen, «Tilbake» og smal skjerm, og alt så bra ut |
 | 268 | «push» / «flettet» | Branchen ble pushet, og PR #10 ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 2.4.1 er satt til ferdig i TO DO. Story 2.4 står fortsatt som påbegynt i sprint-statusen, fordi 2.4.2 gjenstår |
+
+## 2026-11-09 – Story 2.4.2: Testmodus på startsiden og merkelappen
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-4-2-testmodus-pa-startsiden-og-merkelappen.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 269 | `/bmad-build` «2.4.2» | KI-en skrev planen (spec) for andre halvdel av story 2.4: bryteren «Testmodus» på startsiden, «Mangler API-nøkkel, se README», teksten om testmodus og merkelappen «Testmodus» på de andre sidene. Den var på ca. 1900 tokens, litt over grensen på 1600, men med bare ett mål. KI-en tok selv to valg: bare sporet på bryteren er blekt (ordet «Testmodus» har full farge), og teksten om testmodus står over den store knappen, som i skissen |
+| 270 | «Godkjenn og fortsett» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** KI-en brukte først en fast høyde på bryteren, som en test fra før ikke tillater. Bryteren var usynlig i Windows' høykontrastmodus, en kommentar lovet at skjermlesere leser teksten opp når den kommer (den kommer med siden), og en test skrev rett i øktlageret, samme type feil som i 2.4.1. 14 funn: 8 rettet og 6 avvist med begrunnelse. 288 tester |
+| 271 | «kan du åpne siden for meg» / «det ser bra ut!» | KI-en startet nettsiden og åpnet den i nettleseren. Jeg prøvde bryteren, Tab til bryteren, merkelappen på modusvalget og innleggingen og smal skjerm, og alt så bra ut |
