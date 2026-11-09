@@ -7,7 +7,13 @@
 <h1 class="side-overskrift">{{ tekster.INNLEGGING_OVERSKRIFT }}</h1>
 {#- Feilboksen får fokus når siden kommer tilbake med feil, og da leser skjermlesere den opp.
     Den har ikke role="alert", så den ikke leses opp to ganger (UX-DR7). #}
-{%- if feltfeil %}
+{%- if ki_feil %}
+{#- En KI-feil står alene i boksen, uten lenker. «Det du har lagt inn, er ikke borte.» og
+    «Prøv på nytt» kommer i story 2.7. #}
+<div class="feilboks" id="feilboks" tabindex="-1" autofocus>
+  <p class="feilboks-overskrift">{{ ki_feil }}</p>
+</div>
+{%- elif feltfeil %}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
   <p class="feilboks-overskrift">{{ tekster.FEILBOKS_OVERSKRIFT }}</p>
   <ul>

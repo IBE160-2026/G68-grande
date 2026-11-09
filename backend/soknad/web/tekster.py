@@ -89,6 +89,19 @@ def er_tomt_skjermleser(felt: str) -> str:
     return f"{tomt[0].upper()}{tomt[1:]} er tømt"
 
 
+RESULTAT_TITTEL = "Resultat"
+RESULTAT_OVERSKRIFT = "Slik passer CV-en din til stillingen"
+GAP_OVERSKRIFT = "Gap-analyse"
+GAP_DEKKER = "Dette dekker CV-en din"
+GAP_MANGLER = "Dette kan du jobbe videre med"
+NOKKELORD_OVERSKRIFT = "Nøkkelordtreff"
+
+
+def nokkelordtreff(antall_treff: int, antall: int, prosent: int) -> str:
+    """«7 av 11 = 64 %», med vanlig mellomrom før %."""
+    return f"{antall_treff} av {antall} = {prosent} %"
+
+
 LOGG_INN_TITTEL = "Logg inn"
 LOGG_INN_OVERSKRIFT = "Logg inn"
 LOGG_INN_KNAPP = "Logg inn"
