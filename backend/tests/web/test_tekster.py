@@ -1,0 +1,38 @@
+"""Tester for feiltekstene til de nye feilene: ikke_testdata på CV- og annonsefeltet og alle
+typene KI-feil har en tekst (FR-28, FR-34, AD-9)."""
+
+import pytest
+
+from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
+from soknad.web import tekster
+
+
+@pytest.mark.parametrize("felt", ["cv", "annonse"])
+def test_fr34_ikke_testdata_har_tekst_for_feltet(felt):
+    """FR-34: ikke_testdata har en tekst på både CV- og annonsefeltet."""
+    tekst = tekster.feiltekst(InndataFeil(felt, FeilType.IKKE_TESTDATA))
+    assert tekst.endswith("I testmodus fungerer bare testdataene fra mappen testdata/.")
+
+
+def test_fr34_feltnavnet_star_forst_i_teksten():
+    """FR-34: teksten begynner med feltnavnet, slik som i UX."""
+    assert tekster.feiltekst(InndataFeil("cv", FeilType.IKKE_TESTDATA)).startswith("CV: ")
+    assert tekster.feiltekst(InndataFeil("annonse", FeilType.IKKE_TESTDATA)).startswith(
+        "Stillingsannonse: "
+    )
+
+
+@pytest.mark.parametrize("type", list(KIFeilType))
+def test_fr28_hver_ki_feil_har_tekst(type):
+    """FR-28: hver type KI-feil har en tekst."""
+    assert tekster.ki_feiltekst(KIFeil(type))
+
+
+def test_fr28_ki_feiltekstene_fra_ux():
+    """FR-28: nettverksfeil har egen tekst. Andre feil og ubrukelige svar har samme tekst."""
+    assert tekster.ki_feiltekst(KIFeil(KIFeilType.NETTVERK)) == (
+        "Nettverksfeil, sjekk nettverkstilgangen."
+    )
+    andre = "Noe gikk galt hos KI-tjenesten. Prøv på nytt."
+    assert tekster.ki_feiltekst(KIFeil(KIFeilType.ANNET)) == andre
+    assert tekster.ki_feiltekst(KIFeil(KIFeilType.UBRUKELIG_SVAR)) == andre

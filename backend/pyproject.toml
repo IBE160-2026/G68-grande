@@ -17,6 +17,8 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+# En klasse som pytest ikke kan samle (for eksempel TestKI uten __test__ = False), gir feil.
+filterwarnings = ["error::pytest.PytestCollectionWarning"]
 
 [tool.ruff]
 target-version = "py312"

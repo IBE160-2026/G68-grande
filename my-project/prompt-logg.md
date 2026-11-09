@@ -435,3 +435,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 257 | «Godkjenn og fortsett» | En hjelpeagent laget utkastet (7 av 11 nøkkelord = 64 %), og tre andre gikk gjennom det. **KI-feil:** testen sjekket bare nøkkelordene som er treff, så «MySQL» i CV-en kunne gitt «SQL = Nei» uten at noe feilet. Tabellen med kravene ble aldri lest, en tom arbeidsgiver ble godtatt, og README beskrev innliming i testmodus som om den alt fantes. KI-en tømte også fasiten ved en feil da den prøvde om testen virket, men la den tilbake fra en kopi. 14 funn: 6 rettet, 8 avvist med begrunnelse. 182 tester |
 | 258 | «kan du åpne alle for meg» / «push» | KI-en åpnet CV-en, annonsen og fasiten i Notisblokk, og jeg leste dem og godkjente innholdet. Branchen ble pushet, og PR #8 ble laget med merknad om KI-feilene |
 | 259 | «da var den flettet, ser vi kun har 5 prosent igjen til vi når 100 så venter med 2.3» | CI var grønn, og jeg flettet PR #8. Story 2.2 er satt til ferdig, og sprint-statusen og TO DO er oppdatert. Story 2.3 venter til neste økt, fordi bruksgrensen hos Claude snart var nådd |
+
+## 2026-11-09 – Story 2.3: Testmodus kjenner igjen testdataene
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 260 | `/bmad-build` «2.3, åpne spec-en når den er klar så jeg kan lese den» | KI-en skrev planen (spec) og åpnet den i Notisblokk: testmodus vasker teksten (mellomrom, linjeskift og store bokstaver betyr ikke noe) og kjenner igjen testdataene, CV-en avgjør testcaset, feilen havner på riktig felt, og de ferdige KI-svarene sjekkes før de brukes. KI-en valgte selv at begge feltene får feil når både CV og annonse er feil |
+| 261 | «Behold samlet» / «Godkjenn og fortsett» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** et KI-svar der alle nøkkelordene var tomme tekster, ble godtatt og ville krasjet senere i tellingen, selv om testen for testdataene hadde en strengere regel. Akseptansekriteriet «ingen advarsel om `TestKI`» var bare sjekket én gang for hånd, og ingenting ville stoppet det hvis det ble brutt. 15 funn: 6 rettet, 9 avvist med begrunnelse. 231 tester |

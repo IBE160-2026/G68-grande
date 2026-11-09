@@ -46,7 +46,7 @@ def test_fr3_utfylt_skjema_gir_ingen_feil():
 
 
 def test_fr3_feiltypene_er_lukket_liste():
-    """FR-3/FR-4: feiltypene i Epic 1 er nøyaktig disse."""
+    """FR-3/FR-4/FR-34: feiltypene så langt er nøyaktig disse."""
     assert [t.value for t in FeilType] == [
         "tom",
         "epost_finnes",
@@ -54,6 +54,7 @@ def test_fr3_feiltypene_er_lukket_liste():
         "passord_kort",
         "passord_ulike",
         "feil_innlogging",
+        "ikke_testdata",
     ]
     assert FeilType.FEIL_INNLOGGING == "feil_innlogging"
 

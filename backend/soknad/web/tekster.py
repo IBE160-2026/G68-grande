@@ -1,7 +1,7 @@
 """Alle tekster brukeren ser, samlet på ett sted."""
 
 from soknad.innstillinger import MIN_PASSORD_LENGDE
-from soknad.kjerne.feil import FeilType, InndataFeil
+from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 
 LOGO = "Søknadsassistenten"
 
@@ -45,8 +45,25 @@ FEILTEKSTER = {
     ("gjenta", FeilType.TOM): "Gjenta passordet",
     ("gjenta", FeilType.PASSORD_ULIKE): "Passordene er ikke like",
     (None, FeilType.FEIL_INNLOGGING): "Feil e-post eller passord",
+    ("cv", FeilType.IKKE_TESTDATA): (
+        "CV: I testmodus fungerer bare testdataene fra mappen testdata/."
+    ),
+    ("annonse", FeilType.IKKE_TESTDATA): (
+        "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen testdata/."
+    ),
+}
+
+# Feil fra KI-en (FR-28). Et ubrukelig svar får samme tekst som andre feil.
+KI_FEILTEKSTER = {
+    KIFeilType.NETTVERK: "Nettverksfeil, sjekk nettverkstilgangen.",
+    KIFeilType.ANNET: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
+    KIFeilType.UBRUKELIG_SVAR: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
 }
 
 
 def feiltekst(feil: InndataFeil) -> str:
     return FEILTEKSTER[(feil.felt, feil.type)]
+
+
+def ki_feiltekst(feil: KIFeil) -> str:
+    return KI_FEILTEKSTER[feil.type]

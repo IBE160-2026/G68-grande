@@ -1,1 +1,1 @@
-"""Adapterne: database og øktlager."""
+"""Adapterne: database, øktlager og KI."""
