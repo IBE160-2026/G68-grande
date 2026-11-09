@@ -21,6 +21,6 @@ Kristine startet `bmad-build` for story 2.5.2, andre halvdel av story 2.5. Når 
 - Commit `87f8687`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 278–281. Notatet i `notater.md` er lagt inn (mappen er git-ignorert).
 
 ### Åpne punkter
-- Story 2.5.2: push, PR med merknad om KI-feil, grønn CI og flette. Story 2.5 er da ferdig (prøvd i nettleseren 2026-11-09, alt så bra ut).
-- Retro-punkt 7: funnet «to POST-er samtidig, den siste vinner» er nå avvist i to stories (2.5.1 og 2.5.2). Kristine bestemmer: la `opptatt` i story 2.7 løse det (forslaget), eller gjøre noe nå.
+- Story 2.5.2: grønn CI og flette [PR #13](https://github.com/IBE160-2026/G68-grande/pull/13). Deretter story 2.5 til `done` i sprint-statusen og TO DO.
+- Retro-punkt 7: Kristine bestemte at låsingen av knappen (`opptatt`) i story 2.7 løser «to POST-er samtidig» (løst).
 - Epic 4: `ki_svar.kontroller` bør fjerne tomme punkter i KI-svar, og KI-feil bør logges (oppgaven og feiltypen, aldri CV eller annonse).
