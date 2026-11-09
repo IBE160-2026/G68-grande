@@ -17,8 +17,10 @@ Kristine startet `bmad-build` for story 2.5.2, andre halvdel av story 2.5. Når 
 - Tester: 28 nye, 361 i alt, alle grønne. `ruff check` og `ruff format --check` uten feil. Testen for suksesskriterium 2 leser tallene fra `fasit.md`. `FeilendeKI` ligger i `tests/web/hjelpere.py`, så story 2.7 kan bruke den.
 - Gjennomgang: 14 funn. 9 er rettet (de fleste i testene, pluss en kommentar), 2 er utsatt til Epic 4 i `deferred-work.md` (tomme punkter i KI-svar og logging av KI-feil), og 3 er avvist. Testhull-laget fant ingen hull.
 - Commit `083e295` på branchen (lokalt, ikke pushet). Sprint-status: story 2.5 står på `review`.
+- Kristine prøvde resultatsiden i nettleseren, og alt så bra ut. Hun spurte om ventetegnet, som kommer i story 2.7.
+- Commit `87f8687`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 278–281. Notatet i `notater.md` er lagt inn (mappen er git-ignorert).
 
 ### Åpne punkter
-- Story 2.5.2: prøve i nettleseren. Lim inn `cv.txt` og `annonse.txt` fra `backend/testdata/case-1-utvikler/` og se resultatsiden med fanetittelen «Resultat – Søknadsassistenten», 6 + 4 punkter og «7 av 11 = 64 %». Trykk F5 og se samme prosent. Skriv `/resultat` rett etter innlogging og havn på startsiden. Ingen rulling sidelengs ved 375 px. Deretter spec-kopi, oversikten, TO DO og prompt-logg, push, PR med merknad om KI-feil, grønn CI og fletting. Story 2.5 er da ferdig.
+- Story 2.5.2: push, PR med merknad om KI-feil, grønn CI og flette. Story 2.5 er da ferdig (prøvd i nettleseren 2026-11-09, alt så bra ut).
 - Retro-punkt 7: funnet «to POST-er samtidig, den siste vinner» er nå avvist i to stories (2.5.1 og 2.5.2). Kristine bestemmer: la `opptatt` i story 2.7 løse det (forslaget), eller gjøre noe nå.
 - Epic 4: `ki_svar.kontroller` bør fjerne tomme punkter i KI-svar, og KI-feil bør logges (oppgaven og feiltypen, aldri CV eller annonse).
