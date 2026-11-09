@@ -21,6 +21,7 @@ Kristine ba om story 2.3 med `/bmad-build`, og ville at spec-en skulle åpnes n�
 - Branchen ble pushet, og [PR #9](https://github.com/IBE160-2026/G68-grande/pull/9) ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og Kristine flettet PR-en.
 - Etter flettingen, på main: story 2.3 er satt til `done` i sprint-statusen, og `f2a64d5` har PR-lenken i `my-project/README.md`, TO DO og prompt-logg 262–263. De flettede branchene for story 2.2 og 2.3 er slettet på PC-en.
 - `issues.md`: punktet «Neste steg: story 2.3» er lukket.
+- Main er pushet etter at Kristine ba om det («push»): `f2a64d5` og loggcommiten, opp til `6e8a11f`.
 
 ### Åpne punkter
 - Neste steg: story 2.4 «Startsiden får testmodus og knappen videre, og modusvalget lages» med egen branch og PR (`bmad-build`).
