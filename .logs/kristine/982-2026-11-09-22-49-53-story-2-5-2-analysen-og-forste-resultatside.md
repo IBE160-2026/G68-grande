@@ -19,8 +19,10 @@ Kristine startet `bmad-build` for story 2.5.2, andre halvdel av story 2.5. Når 
 - Commit `083e295` på branchen (lokalt, ikke pushet). Sprint-status: story 2.5 står på `review`.
 - Kristine prøvde resultatsiden i nettleseren, og alt så bra ut. Hun spurte om ventetegnet, som kommer i story 2.7.
 - Commit `87f8687`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 278–281. Notatet i `notater.md` er lagt inn (mappen er git-ignorert).
+- Kristine bestemte at låsingen av knappen i story 2.7 løser «to trykk samtidig» (retro-punkt 7). [PR #13](https://github.com/IBE160-2026/G68-grande/pull/13) ble laget med grønn CI, og Kristine flettet den. Commit `9fc3e64` på `main`: story 2.5 satt til ferdig i sprint-statusen og kopien, PR-lenken i oversikten, TO DO og prompt-logg 282.
 
 ### Åpne punkter
-- Story 2.5.2: grønn CI og flette [PR #13](https://github.com/IBE160-2026/G68-grande/pull/13). Deretter story 2.5 til `done` i sprint-statusen og TO DO.
+- Story 2.5.2 er ferdig: [PR #13](https://github.com/IBE160-2026/G68-grande/pull/13) flettet med grønn CI, og story 2.5 står som ferdig i sprint-statusen og TO DO (løst).
+- Neste steg: story 2.6 «Hele resultatsiden med forklaringer og «Tilbake»» med egen branch og PR (`bmad-build`).
 - Retro-punkt 7: Kristine bestemte at låsingen av knappen (`opptatt`) i story 2.7 løser «to POST-er samtidig» (løst).
 - Epic 4: `ki_svar.kontroller` bør fjerne tomme punkter i KI-svar, og KI-feil bør logges (oppgaven og feiltypen, aldri CV eller annonse).
