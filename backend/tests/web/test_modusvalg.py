@@ -8,7 +8,7 @@ from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from soknad.web.flyt import SIDE_FOR_STEG
-from tests.web.hjelpere import STIL, sett_soknad, soknaden, tagger_i
+from tests.web.hjelpere import STIL, main, sett_soknad, soknaden, tagger_i
 
 
 @pytest.fixture
@@ -18,10 +18,6 @@ def paa_modus(app, innlogget_client):
     innlogget_client.post("/")
     assert soknaden(app, innlogget_client).steg == Steg.MODUS
     return innlogget_client
-
-
-def main(html):
-    return re.search(r"<main[^>]*>(.*?)</main>", html, re.S).group(1)
 
 
 # --- Matrisen ---

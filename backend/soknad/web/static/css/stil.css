@@ -40,6 +40,7 @@
   /* Skygge */
   --shadow: 0 8px 24px rgba(162, 62, 108, 0.14);
   --shadow-hover: 0 12px 30px rgba(162, 62, 108, 0.22);
+  --shadow-knob: 0 1px 3px rgba(58, 37, 48, 0.25);
 
   /* Skrift */
   --font-body: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -147,6 +148,95 @@ svg {
   outline-offset: 2px;
 }
 
+/* Raden oppe til høyre (bare etter innlogging): bryteren «Testmodus» på startsiden,
+ * merkelappen «Testmodus» på de andre sidene. Brytes når teksten blir stor. */
+
+.topplinje {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  padding-top: var(--space-3);
+}
+
+/* Bryteren (testmode-toggle): en knapp med spor og knott, etiketten ved siden av.
+ * Låst fram til Epic 4: bare sporet er 60 % synlig, etiketten har full farge. */
+.bryter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  font: inherit;
+  font-size: var(--size-label);
+  font-weight: 600;
+  color: var(--text);
+  background: none;
+  border: 0;
+  border-radius: var(--rounded-xs);
+  cursor: pointer;
+}
+
+.bryter[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.bryter .spor {
+  position: relative;
+  flex: none;
+  /* 44 × 24 px, uten fast høyde */
+  width: 44px;
+  aspect-ratio: 44 / 24;
+  background: var(--text-muted);
+  border-radius: var(--rounded-full);
+  transition: background 0.2s ease;
+}
+
+.bryter .spor::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  aspect-ratio: 1;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: var(--shadow-knob);
+  transition: transform 0.2s ease;
+}
+
+.bryter[aria-checked="true"] .spor {
+  background: var(--primary);
+}
+
+.bryter[aria-checked="true"] .spor::after {
+  transform: translateX(20px);
+}
+
+.bryter[aria-disabled="true"] .spor {
+  opacity: 0.6;
+}
+
+/* «Mangler API-nøkkel, se README»: på egen linje under bryteren */
+.nokkeltekst {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--size-caption);
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Merkelappen «Testmodus» (testmode-badge): bare visning */
+.merkelapp {
+  display: inline-block;
+  padding: 2px var(--space-3);
+  font-size: var(--size-tag);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--accent);
+  border-radius: var(--rounded-sm);
+}
+
 /* Logo: Baloo 2 ExtraBold, sentrert, på én linje ved vanlig tekststørrelse */
 
 .logo {
@@ -172,6 +262,28 @@ svg {
   margin: 0 0 var(--space-6);
   color: var(--text-muted);
   text-align: center;
+}
+
+/* Teksten om testmodus: et hvitt kort i midten, over den store knappen (statusområde).
+ * Uten tekst (testmodus av, Epic 4) tar området ingen plass. */
+.testinfo {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--size-label);
+  color: var(--text-muted);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow);
+}
+
+.testinfo:empty {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
 }
 
 .begynn {
@@ -490,6 +602,19 @@ svg {
 
   .hjornerad {
     position: static;
+  }
+}
+
+/* Høykontrastmodus (forced-colors): bakgrunn og skygge fjernes, så bryterens spor får en
+ * ramme og knotten en systemfarge. Da synes bryteren og om den er på. */
+
+@media (forced-colors: active) {
+  .bryter .spor {
+    border: 1px solid CanvasText;
+  }
+
+  .bryter .spor::after {
+    background: CanvasText;
   }
 }
 

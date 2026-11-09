@@ -20,8 +20,14 @@ from soknad.web.innlogging import (
 @web.app_context_processor
 def felles_tekster():
     """Gjør tekstene tilgjengelige i alle maler (logoen står i base.html), og sier om
-    brukeren er logget inn. Da får alle sider etter innlogging hjørneraden med «Logg ut»."""
-    return {"tekster": tekster, "innlogget": gjeldende_innlogging() is not None}
+    brukeren er logget inn og om testmodus er på. Da får alle sider etter innlogging
+    hjørneraden med «Logg ut», og merkelappen «Testmodus» når testmodus er på."""
+    innlogging = gjeldende_innlogging()
+    return {
+        "tekster": tekster,
+        "innlogget": innlogging is not None,
+        "testmodus": innlogging is not None and innlogging.testmodus,
+    }
 
 
 @web.route("/", methods=["GET", "POST"])
@@ -33,7 +39,9 @@ def start():
         lagre_soknad(begynn(gjeldende_soknad()))
         return redirect(url_for("web.modus"))
     lagre_soknad(Soknad())
-    return render_template("start.html")
+    # Bryteren er låst på fram til Epic 4. Uten nøkkel står «Mangler API-nøkkel, se README».
+    mangler_nokkel = not (current_app.config.get("ANTHROPIC_API_KEY") or "").strip()
+    return render_template("start.html", mangler_nokkel=mangler_nokkel)
 
 
 @web.route("/modus", methods=["GET", "POST"])
