@@ -4,7 +4,7 @@ import dataclasses
 
 import pytest
 
-from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, begynn, velg_modus
+from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, begynn, sett_inndata, velg_modus
 from soknad.kjerne.steg import Steg
 
 
@@ -95,3 +95,63 @@ def test_fr20_velg_modus_nullstiller_gap_og_beholder_tekstene():
     assert ny == dataclasses.replace(soknad, steg=Steg.INNLEGGING, gap=None)
     # Den gamle søknaden er uendret.
     assert soknad.steg == Steg.RESULTAT
+
+
+# --- sett_inndata (story 2.5.1) ---
+
+
+def _med_resultater(steg=Steg.RESULTAT):
+    return Soknad(
+        steg=steg,
+        modus=Modus.FULL_GENERERING,
+        cv=Tekstfelt("min cv"),
+        annonse=Tekstfelt("annonsen"),
+        nokkelord=("python", "sql"),
+        nokkelord_annonse="annonsen",
+        arbeidsgiver="Firma AS",
+        gap={"dekker": ["python"], "mangler": ["sql"]},
+    )
+
+
+def test_fr19_sett_inndata_med_like_tekster_endrer_ingenting():
+    """FR-19/AD-8: sendes de samme tekstene på nytt, er søknaden den samme, også nøkkelordlisten
+    og steget."""
+    soknad = _med_resultater()
+    assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
+
+
+@pytest.mark.parametrize(
+    ("cv", "annonse"),
+    [("ny cv", "annonsen"), ("min cv", "ny annonse"), ("min cv ", "annonsen")],
+)
+def test_fr19_sett_inndata_med_endret_tekst_nullstiller_resultatene(cv, annonse):
+    """FR-19/AD-8: er en av tekstene endret (også bare et mellomrom), lagres tekstene, og
+    nøkkelordlisten, arbeidsgiveren og gap-analysen nullstilles. Steget blir innlegging."""
+    soknad = _med_resultater()
+    ny = sett_inndata(soknad, cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
+    assert ny == dataclasses.replace(
+        soknad,
+        cv=Tekstfelt(cv),
+        annonse=Tekstfelt(annonse),
+        nokkelord=None,
+        nokkelord_annonse=None,
+        arbeidsgiver=None,
+        gap=None,
+        steg=Steg.INNLEGGING,
+    )
+    # Den gamle søknaden er uendret.
+    assert soknad.nokkelord == ("python", "sql")
+
+
+@pytest.mark.parametrize("steg", [Steg.INNLEGGING, Steg.RESULTAT, Steg.BREV])
+def test_fr19_sett_inndata_gir_hoyst_steg_innlegging(steg):
+    """AD-8: med endret tekst blir steget innlegging, uansett hvor langt søknaden var kommet."""
+    ny = sett_inndata(_med_resultater(steg), cv=Tekstfelt("ny"), annonse=Tekstfelt("ny"))
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr13_sett_inndata_kan_tomme_feltene():
+    """FR-13: tomme felt lagres også (søppelbøtta, så «Tilbake»)."""
+    ny = sett_inndata(_med_resultater(), cv=Tekstfelt(""), annonse=Tekstfelt(""))
+    assert ny.cv == Tekstfelt("")
+    assert ny.annonse == Tekstfelt("")

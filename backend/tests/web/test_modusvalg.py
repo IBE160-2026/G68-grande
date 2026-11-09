@@ -204,12 +204,11 @@ def test_fr20_modus_kortene_har_tokens_og_bruddpunkt():
 # --- Innleggingen ---
 
 
-def test_fr20_innleggingen_har_bare_overskriften(app, innlogget_client):
-    """FR-20: innleggingen har h1 «Legg inn CV-en din og stillingsannonsen» og ingen skjema
-    ennå (story 2.5)."""
+def test_fr20_innleggingen_har_overskriften(app, innlogget_client):
+    """FR-20: innleggingen har én h1, «Legg inn CV-en din og stillingsannonsen», og egen
+    sidetittel. Feltene testes i test_innlegging.py (story 2.5.1)."""
     sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
     html = innlogget_client.get("/innlegging").get_data(as_text=True)
     assert re.search(r"<h1[^>]*>\s*Legg inn CV-en din og stillingsannonsen\s*</h1>", html)
     assert [t for t, _ in tagger_i(html)].count("h1") == 1
-    assert "<form" not in main(html)
     assert f"<title>{tekster.INNLEGGING_TITTEL} – Søknadsassistenten</title>" in html

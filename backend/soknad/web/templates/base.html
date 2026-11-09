@@ -8,6 +8,7 @@
   {%- if innlogget %}
   <script src="{{ url_for('static', filename='js/tilbake.js') }}" defer></script>
   {%- endif %}
+  {%- block skript %}{% endblock %}
 </head>
 <body>
   <header class="topp">

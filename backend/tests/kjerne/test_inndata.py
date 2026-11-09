@@ -9,8 +9,14 @@ import pytest
 
 from soknad.innstillinger import MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
-from soknad.kjerne.inndata import normaliser_epost, sjekk_innlogging, sjekk_registrering
+from soknad.kjerne.inndata import (
+    normaliser_epost,
+    sjekk_innlegging,
+    sjekk_innlogging,
+    sjekk_registrering,
+)
 from soknad.kjerne.okt import Innlogging
+from soknad.kjerne.testdata_match import lag_testcase
 
 KJERNE = Path(__file__).resolve().parents[2] / "soknad" / "kjerne"
 
@@ -244,3 +250,47 @@ def test_nfr5_lagsjekken_godtar_kjernens_egne_importer():
         "from soknad.kjerne.feil import FeilType\nfrom .okt import Innlogging"
     )
     assert _forbudte_importer(kilde) == set()
+
+
+# --- Innleggingen (story 2.5.1) ---
+
+CV = "Sara Eksempel\nKan Python og Flask."
+ANNONSE = "Junior utvikler hos Testvik Utvikling AS."
+CASER = [lag_testcase("case-1-utvikler", CV, ANNONSE)]
+TOM_CV = InndataFeil("cv", FeilType.TOM)
+TOM_ANNONSE = InndataFeil("annonse", FeilType.TOM)
+IKKE_TESTDATA_CV = InndataFeil("cv", FeilType.IKKE_TESTDATA)
+IKKE_TESTDATA_ANNONSE = InndataFeil("annonse", FeilType.IKKE_TESTDATA)
+
+
+def test_fr9_begge_tomme_gir_to_feil_samtidig_cv_forst():
+    """FR-9: tomme felt, også med bare mellomrom og linjeskift, gir tom på begge, CV først."""
+    assert sjekk_innlegging("", "  \n\t", CASER) == [TOM_CV, TOM_ANNONSE]
+    assert sjekk_innlegging("", "", None) == [TOM_CV, TOM_ANNONSE]
+
+
+def test_fr34_testdata_gir_ingen_feil():
+    """FR-34: CV og annonse fra samme testcase gir ingen feil, også med andre mellomrom."""
+    assert sjekk_innlegging(CV, ANNONSE, CASER) == []
+    assert sjekk_innlegging("  sara eksempel kan python og flask ", ANNONSE, CASER) == []
+
+
+def test_fr34_egen_cv_gir_ikke_testdata_pa_cv():
+    """FR-34: en CV som ikke er testdata, gir ikke_testdata bare på CV-en."""
+    assert sjekk_innlegging("Min egen CV", ANNONSE, CASER) == [IKKE_TESTDATA_CV]
+
+
+def test_fr9_fr34_tom_cv_og_egen_annonse_gir_en_feil_per_felt():
+    """FR-9/FR-34: tom CV og egen annonse gir tom på CV og ikke_testdata på annonsen."""
+    assert sjekk_innlegging(" ", "Min egen annonse", CASER) == [TOM_CV, IKKE_TESTDATA_ANNONSE]
+
+
+def test_fr34_egen_cv_og_tom_annonse_gir_cv_forst():
+    """FR-9/FR-34: feilene står i rekkefølgen cv, annonse, uansett type."""
+    assert sjekk_innlegging("Min egen CV", "", CASER) == [IKKE_TESTDATA_CV, TOM_ANNONSE]
+
+
+def test_fr34_uten_testmodus_sjekkes_bare_tomme_felt():
+    """FR-34: med caser=None (ikke testmodus) gir egen tekst ingen feil."""
+    assert sjekk_innlegging("Min egen CV", "Min egen annonse", None) == []
+    assert sjekk_innlegging("Min egen CV", "", None) == [TOM_ANNONSE]

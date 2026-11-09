@@ -2,8 +2,9 @@
 
 from functools import wraps
 
-from flask import redirect, session, url_for
+from flask import current_app, redirect, session, url_for
 
+from soknad.adaptere.ki import TestKI
 from soknad.kjerne.okt import Soknad
 from soknad.kjerne.steg import Steg, kan_vises
 from soknad.web.innlogging import OKT_ID, oktlager
@@ -14,6 +15,12 @@ SIDE_FOR_STEG = {
     Steg.MODUS: "web.modus",
     Steg.INNLEGGING: "web.innlegging",
 }
+
+
+def ki() -> TestKI:
+    """KI-en for denne økten. Fram til Epic 4 er det alltid TestKI. Da velges utgaven ut fra
+    Innlogging.testmodus, og typen blir KI-grensesnittet."""
+    return current_app.extensions["test_ki"]
 
 
 def gjeldende_soknad() -> Soknad:

@@ -4,6 +4,7 @@ import re
 
 from soknad.innstillinger import MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
+from soknad.kjerne.testdata_match import Testcase, finn_case
 
 # Gyldig form på e-post: noe@noe.noe, uten mellomrom og med bare én @.
 GYLDIG_EPOST = re.compile(r"[^@\s]+@[^@\s]+\.[^@\s]+")
@@ -45,3 +46,23 @@ def sjekk_registrering(epost: str, passord: str, gjenta: str) -> list[InndataFei
         # Ulike sjekkes bare når begge passordfeltene er fylt.
         feil.append(InndataFeil("gjenta", FeilType.PASSORD_ULIKE))
     return feil
+
+
+# Feltene på innleggingen, i den rekkefølgen de står på siden.
+INNLEGGINGSFELT = ("cv", "annonse")
+
+
+def sjekk_innlegging(cv: str, annonse: str, caser: list[Testcase] | None) -> list[InndataFeil]:
+    """Finner feil i innleggingen. Alle feilene kommer samtidig, høyst én per felt og i
+    rekkefølgen cv, annonse. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så
+    testdata når caser ikke er None (testmodus, FR-34). finn_case gir ikke ikke_testdata
+    på et tomt felt (AD-9)."""
+    feil = [
+        InndataFeil(navn, FeilType.TOM)
+        for navn, tekst in zip(INNLEGGINGSFELT, (cv, annonse), strict=True)
+        if not tekst.strip()
+    ]
+    if caser is not None:
+        _, testdatafeil = finn_case(cv, annonse, caser)
+        feil += testdatafeil
+    return sorted(feil, key=lambda f: INNLEGGINGSFELT.index(f.felt))
