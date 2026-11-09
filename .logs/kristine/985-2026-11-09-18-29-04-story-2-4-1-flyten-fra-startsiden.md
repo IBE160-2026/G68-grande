@@ -22,8 +22,10 @@ Kristine ba om story 2.4 med `/bmad-build`, og ville lese spec-en før koden ble
 - Ikke pushet, og ingen PR ennå.
 - `issues.md`: punktet «Neste steg: story 2.4» er lukket og erstattet av punktene under.
 - Kristine prøvde nettsiden i nettleseren (startet med `uv run flask --app soknad run`): «det ser veldig bra ut». Nettsiden er stoppet igjen.
+- Branchen ble pushet etter at Kristine ba om det («push»), og [PR #10](https://github.com/IBE160-2026/G68-grande/pull/10) ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og Kristine flettet PR-en (`d07049d`). Branchen er slettet på GitHub og på PC-en.
+- Etter flettingen, på main: `234611a` har PR-lenken i `my-project/README.md`, TO DO (2.4.1 ferdig), prompt-logg 267–268 og en oppdatert kopi av `sprint-status.yaml` i `my-project/7-sprint-planning/`. Kopien sto fortsatt med story 2.3 som `backlog`. Main er ikke pushet etter dette.
+- Story 2.4 står fortsatt som `in-progress` i sprint-statusen, fordi 2.4.2 gjenstår.
 
 ### Åpne punkter
-- Story 2.4.1: push, PR med merknad om KI-feil, grønn CI og flette.
 - Story 2.4.2 «Det som viser testmodus» (bryteren, teksten om testmodus og merkelappen «Testmodus») med egen branch og PR (`bmad-build`). Story 2.4 er ferdig når begge er flettet.
 - Bestemme om `SESSION_COOKIE_SAMESITE="Lax"` skal settes, eller om CSRF bare nevnes i README (story 8.1, sammen med punktet om CSRF fra story 1.4).
