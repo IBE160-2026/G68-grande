@@ -438,9 +438,11 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.3: Testmodus kjenner igjen testdataene
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md), og koden i [PR #9](https://github.com/IBE160-2026/G68-grande/pull/9).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 260 | `/bmad-build` «2.3, åpne spec-en når den er klar så jeg kan lese den» | KI-en skrev planen (spec) og åpnet den i Notisblokk: testmodus vasker teksten (mellomrom, linjeskift og store bokstaver betyr ikke noe) og kjenner igjen testdataene, CV-en avgjør testcaset, feilen havner på riktig felt, og de ferdige KI-svarene sjekkes før de brukes. KI-en valgte selv at begge feltene får feil når både CV og annonse er feil |
 | 261 | «Behold samlet» / «Godkjenn og fortsett» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** et KI-svar der alle nøkkelordene var tomme tekster, ble godtatt og ville krasjet senere i tellingen, selv om testen for testdataene hadde en strengere regel. Akseptansekriteriet «ingen advarsel om `TestKI`» var bare sjekket én gang for hånd, og ingenting ville stoppet det hvis det ble brutt. 15 funn: 6 rettet, 9 avvist med begrunnelse. 231 tester |
+| 262 | «ja supert» | Branchen ble pushet, og PR #9 ble laget med merknad om KI-feilene |
+| 263 | «da var det flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #9. Story 2.3 er satt til ferdig, og sprint-statusen og TO DO er oppdatert. Branchen ble slettet på GitHub da PR-en ble flettet, og de flettede branchene for story 2.2 og 2.3 er slettet på PC-en |
