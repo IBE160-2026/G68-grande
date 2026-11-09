@@ -29,6 +29,18 @@ def test_fr6_logg_ut_sletter_okten_og_sender_til_innloggingen(app, innlogget_cli
     assert okt_id(innlogget_client) is None
 
 
+def test_fr6_logg_ut_sletter_ogsaa_soknaden(app, innlogget_client):
+    """FR-6/AD-7: utloggingen sletter søknaden, og etter ny innlogging er det ingen søknad."""
+    innlogget_client.post("/")
+    gammel = okt_id(innlogget_client)
+    assert app.extensions["oktlager"].hent_soknad(gammel) is not None
+    innlogget_client.post("/logg-ut")
+    assert app.extensions["oktlager"].hent_soknad(gammel) is None
+    logg_inn(innlogget_client)
+    assert app.extensions["oktlager"].hent_soknad(okt_id(innlogget_client)) is None
+    assert innlogget_client.get("/modus").location == "/"
+
+
 def test_fr6_etter_utlogging_kreves_innlogging_igjen(innlogget_client):
     """FR-6/FR-7: etter utlogging gir GET / 302 til /logg-inn?ikke_innlogget=1."""
     innlogget_client.post("/logg-ut")

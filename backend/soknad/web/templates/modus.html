@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block tittel %}{{ tekster.MODUS_TITTEL }}{% endblock %}
+{% block innhold %}
+<h1 class="side-overskrift">{{ tekster.MODUS_OVERSKRIFT }}</h1>
+<form class="modus-liste" method="post" action="{{ url_for('web.modus') }}">
+  {%- for modus, kort in tekster.MODUS_KORT.items() %}
+  {#- Hele kortet er én knapp, uten egen «Velg». Ikonet er bare pynt. #}
+  <button class="modus-kort" type="submit" name="modus" value="{{ modus }}">
+    <span class="ikon" aria-hidden="true">{{ kort.ikon }}</span>
+    <span class="navn">{{ kort.navn }}</span>
+    <span class="handling">{{ kort.handling }}</span>
+    <span class="forklaring">{{ kort.forklaring }}</span>
+  </button>
+  {%- endfor %}
+</form>
+<div class="knapperad">
+  <a class="sekundaerknapp" href="{{ url_for('web.start') }}">{{ tekster.TILBAKE_KNAPP }}</a>
+</div>
+{% endblock %}

@@ -47,7 +47,6 @@ def logg_inn_bruker(bruker_id: int) -> None:
 
 
 def logg_ut_bruker() -> None:
-    """Sletter innloggingen fra øktlageret og tømmer cookien."""
-    # Fra Epic 2 slettes også Soknad for denne økten her.
+    """Sletter innloggingen og søknaden fra øktlageret og tømmer cookien."""
     oktlager().slett(session.get(OKT_ID))
     session.clear()

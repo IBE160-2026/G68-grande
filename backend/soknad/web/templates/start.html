@@ -3,4 +3,7 @@
 {% block innhold %}
 <h1 class="velkommen">{{ tekster.START_OVERSKRIFT }}</h1>
 <p class="ingress">{{ tekster.START_INGRESS }}</p>
+<form class="begynn" method="post" action="{{ url_for('web.start') }}">
+  <button class="stor-knapp" type="submit">{{ tekster.START_KNAPP }}</button>
+</form>
 {% endblock %}

@@ -1,13 +1,46 @@
 """Alle tekster brukeren ser, samlet på ett sted."""
 
+from typing import NamedTuple
+
 from soknad.innstillinger import MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
+from soknad.kjerne.okt import Modus
 
 LOGO = "Søknadsassistenten"
 
 START_TITTEL = "Startside"
 START_OVERSKRIFT = "Velkommen! 👋"
 START_INGRESS = "Her lager du et søknadsbrev som passer til stillingen du vil søke på."
+START_KNAPP = "Begynn å lage søknad"
+
+# «Tilbake» på modusvalget (og senere på innleggingen og resultatsiden).
+TILBAKE_KNAPP = "Tilbake"
+
+MODUS_TITTEL = "Velg modus"
+MODUS_OVERSKRIFT = "Hva vil du gjøre i dag?"
+
+
+class ModusKort(NamedTuple):
+    """Teksten på et modus-kort: ikon, modusnavn, handling og forklaring."""
+
+    ikon: str
+    navn: str
+    handling: str
+    forklaring: str
+
+
+# Kortene i rekkefølge. Korrektur kommer i Epic 5.
+MODUS_KORT = {
+    Modus.FULL_GENERERING: ModusKort(
+        "✨",
+        "Full generering",
+        "Skriv nytt brev",
+        "Du legger inn CV-en og annonsen, så skriver vi et brev til deg.",
+    ),
+}
+
+INNLEGGING_TITTEL = "Legg inn CV og annonse"
+INNLEGGING_OVERSKRIFT = "Legg inn CV-en din og stillingsannonsen"
 
 LOGG_INN_TITTEL = "Logg inn"
 LOGG_INN_OVERSKRIFT = "Logg inn"

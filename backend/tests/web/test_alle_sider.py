@@ -65,7 +65,7 @@ def test_nfr9_fr7_alle_sider_krever_innlogging(app):
             assert svar.location == "/logg-inn?ikke_innlogget=1", f"{metode} {sti}"
         testet.add(regel.endpoint)
     # Sjekker at testen faktisk fant sidene vi vet om.
-    assert {"web.start", "web.logg_ut"} <= testet
+    assert {"web.start", "web.logg_ut", "web.modus", "web.innlegging"} <= testet
 
 
 def test_nfr9_eksempelverdi_feiler_for_ukjent_type():
