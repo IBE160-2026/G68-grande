@@ -108,7 +108,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 2.2 «Fiktive testdata og fasit for første testcase» med egen branch og PR (`bmad-build`). Claude lager utkastet, jeg godkjenner innholdet (ferdig 8. november: PR #8 flettet, CI grønn på Linux og Windows, 182 tester)
 - [x] Story 2.3 «Testmodus kjenner igjen testdataene» med egen branch og PR (`bmad-build`) (ferdig 9. november: PR #9 flettet, CI grønn på Linux og Windows, 231 tester)
 - [ ] Neste steg: story 2.4 «Startsiden får testmodus og knappen videre, og modusvalget lages» med egen branch og PR (`bmad-build`). Delt i to 9. november:
-  - [ ] Story 2.4.1 «Flyten fra startsiden til innleggingen»: kodet og gjennomgått, 272 tester. Gjenstår: prøve i nettleseren, PR og flette
+  - [x] Story 2.4.1 «Flyten fra startsiden til innleggingen» (ferdig 9. november: PR #10 flettet, CI grønn på Linux og Windows, 272 tester)
   - [ ] Story 2.4.2 «Det som viser testmodus» (bryteren, teksten om testmodus og merkelappen «Testmodus»), med egen branch og PR
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)

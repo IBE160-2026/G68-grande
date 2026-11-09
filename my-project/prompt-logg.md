@@ -449,10 +449,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.4.1: Flyten fra startsiden til innleggingen
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md), og koden i [PR #10](https://github.com/IBE160-2026/G68-grande/pull/10).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 264 | `/bmad-build` «2.4 legg ved spec-en så jeg kan lese den først» / «kan du åpne specen» | KI-en skrev planen (spec) for hele story 2.4 og åpnet den. Den var på ca. 2500 tokens, over grensen på 1600. KI-en tok selv tre valg jeg ville se i nettleseren: innleggingssiden har bare overskriften til story 2.5, bryteren er låst på også med API-nøkkel fram til Epic 4, og «Tilbake» står til venstre slik epics-fila sier (i skissen står den i midten) |
 | 265 | «går det an å dele den i to?» / «okei blir det 2.4.1 og 2.4.2 da typ?» | KI-en foreslo å dele mellom flyten (søknaden i økten, stegene, «Begynn å lage søknad», modusvalget og innleggingssiden) og det som viser testmodus (bryteren, teksten og merkelappen). 2.4.2 er skrevet ned i lista over utsatt arbeid, og story 2.4 er ferdig når begge er flettet |
 | 266 | «supert, da kan du begynne når du er klar» | KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** noen testbeskrivelser lovet mer enn testen sjekket (for eksempel «ingen annen knapp har større skrift»), og to tester ville feilet på framtidig tekst som inneholder «Velg» eller «Korrektur». 13 funn: 3 rettet, 9 avvist med begrunnelse og 1 utsatt (CSRF, som gjelder hele nettsiden). 272 tester |
+| 267 | «start nettsiden så jeg får prøvd» / «det ser veldig bra ut, stopp nettsiden» | KI-en startet nettsiden og åpnet den i nettleseren. Jeg prøvde startsiden, modusvalget, innleggingen, «Tilbake» og smal skjerm, og alt så bra ut |
+| 268 | «push» / «flettet» | Branchen ble pushet, og PR #10 ble laget med merknad om KI-feilene. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 2.4.1 er satt til ferdig i TO DO. Story 2.4 står fortsatt som påbegynt i sprint-statusen, fordi 2.4.2 gjenstår |
