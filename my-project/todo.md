@@ -110,13 +110,15 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 2.4 «Startsiden får testmodus og knappen videre, og modusvalget lages» med egen branch og PR (`bmad-build`). Delt i to 9. november (ferdig 9. november):
   - [x] Story 2.4.1 «Flyten fra startsiden til innleggingen» (ferdig 9. november: PR #10 flettet, CI grønn på Linux og Windows, 272 tester)
   - [x] Story 2.4.2 «Testmodus på startsiden og merkelappen» (ferdig 9. november: PR #11 flettet, CI grønn på Linux og Windows, 288 tester)
-- [ ] Neste steg: story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`)
+- [ ] Neste steg: story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`). Delt i to 9. november:
+  - [ ] Story 2.5.1 «Innleggingssiden» (feltene, «Lim inn tekst», søppelbøtta, feilboksen og «Tilbake»): kodet, gjennomgått og prøvd i nettleseren, 333 tester. Gjenstår: PR og flette
+  - [ ] Story 2.5.2 «Analysen og første resultatside» (testsvarene hentes, nøkkelordlisten lagres, og resultatsiden viser 64 %), med egen branch og PR
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
 - [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
-- [ ] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag
+- [x] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag (delt i 2.5.1 og 2.5.2 9. november, fordi spec-en var for lang)
 - [ ] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2)
 - [ ] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6)
 - [ ] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten
