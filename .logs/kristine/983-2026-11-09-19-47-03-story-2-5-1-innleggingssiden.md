@@ -23,6 +23,7 @@ Kristine ba om story 2.5 «Lime inn CV og stillingsannonse» med `/bmad-build`, 
 - Spec-kopi, oversikten, TO DO og prompt-logg 273–276 i commit `810f3c1`.
 - Kristine så at CI på `main` var rød etter PR #11. PR-en selv var grønn, men to kjøringer på `main` manglet jobber (midlertidig feil hos GitHub, alle jobbene som kjørte, var grønne). CI ble kjørt på nytt og ble grønn.
 - Branchen ble pushet, og [PR #12](https://github.com/IBE160-2026/G68-grande/pull/12) ble laget med merknad om KI-feil. CI var grønn på Linux og Windows, og Kristine flettet PR-en (`34d7b39`). TO DO, kopien av sprint-statusen og prompt-logg 277 er oppdatert på `main`.
+- Etter flettingen: `main` er pushet, og CI var grønn. Den røde kjøringen for «Merge pull request #11» ble også kjørt på nytt og ble grønn. Kristine fikk vist hvor branchene, PR-ene og Actions ligger på GitHub. Hvordan man sjekker om noe feiler med en PR, står nå i `my-project/8-refleksjonsrapport/notater.md` (punkt 3.1 og 7.1, mappen er utelatt fra Git).
 
 ### Åpne punkter
 - Story 2.5.2 «Analysen og første resultatside» med egen branch og PR (`bmad-build`), etter at 2.5.1 er flettet.
