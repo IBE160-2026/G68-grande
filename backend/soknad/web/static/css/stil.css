@@ -174,6 +174,137 @@ svg {
   text-align: center;
 }
 
+.begynn {
+  margin: var(--space-7) 0;
+  text-align: center;
+}
+
+/* Stor knapp (button-hero): «Begynn å lage søknad», den største knappen på startsiden.
+ * Under 700 px: mindre skrift og hele bredden. */
+.stor-knapp {
+  display: inline-block;
+  padding: var(--space-6) calc(2 * var(--space-7));
+  font: inherit;
+  font-size: var(--size-button-hero);
+  font-weight: 600;
+  color: var(--primary-contrast);
+  background: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-lg);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.stor-knapp:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.stor-knapp:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 699px) {
+  .stor-knapp {
+    width: 100%;
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--size-button-hero-mobile);
+  }
+}
+
+/* Sideoverskrift (h1) på sidene etter startsiden */
+
+.side-overskrift {
+  margin: var(--space-2) 0 var(--space-5);
+  font-size: var(--size-heading-page);
+  line-height: var(--line-height-heading-page);
+  text-align: center;
+}
+
+/* Modusvalget: kortene står under hverandre, og side om side fra 700 px. Et kort alene
+ * står i midten. */
+
+.modus-liste {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+/* Modus-kort (mode-card): hele kortet er én knapp */
+.modus-kort {
+  flex: 1 1 100%;
+  padding: var(--space-6) var(--space-5);
+  font: inherit;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+@media (min-width: 700px) {
+  .modus-kort {
+    flex-basis: calc(50% - var(--space-4) / 2);
+    flex-grow: 0;
+  }
+}
+
+.modus-kort:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
+}
+
+.modus-kort:active {
+  transform: scale(0.97);
+}
+
+.modus-kort .ikon {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: 2.4rem;
+  line-height: 1.2;
+}
+
+.modus-kort .navn {
+  display: block;
+  font-size: var(--size-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.modus-kort .handling {
+  display: block;
+  margin: var(--space-1) 0 var(--space-2);
+  font-size: var(--size-button-hero-mobile);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.modus-kort .forklaring {
+  display: block;
+  font-size: var(--size-label);
+  color: var(--text-muted);
+}
+
+/* Knapperaden under innholdet: «Tilbake» til venstre */
+.knapperad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 var(--space-7);
+}
+
 /* Skjema (innlogging og registrering): et hvitt kort, høyst 360 px bredt */
 
 .skjema {
@@ -294,6 +425,9 @@ svg {
 
 /* Sekundærknapp: hvit med ramme og tekst i primary. Samme hover, trykk og låst som hovedknappen */
 .sekundaerknapp {
+  /* Kan også være en lenke, for eksempel «Tilbake» */
+  display: inline-block;
+  text-decoration: none;
   padding: var(--space-3) var(--space-5);
   font: inherit;
   font-weight: 600;
@@ -373,7 +507,11 @@ svg {
   .hovedknapp:hover,
   .hovedknapp:active,
   .sekundaerknapp:hover,
-  .sekundaerknapp:active {
+  .sekundaerknapp:active,
+  .stor-knapp:hover,
+  .stor-knapp:active,
+  .modus-kort:hover,
+  .modus-kort:active {
     transform: none;
   }
 }

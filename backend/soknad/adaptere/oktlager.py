@@ -3,14 +3,16 @@
 import secrets
 import threading
 
-from soknad.kjerne.okt import Innlogging
+from soknad.kjerne.okt import Innlogging, Soknad
 
 
 class Oktlager:
-    """Innlogginger i minnet. Etter en omstart er lageret tomt, og alle er logget ut."""
+    """Innlogginger og søknader i minnet. Etter en omstart er lageret tomt, og alle er
+    logget ut."""
 
     def __init__(self):
         self._innlogginger: dict[str, Innlogging] = {}
+        self._soknader: dict[str, Soknad] = {}
         self._las = threading.Lock()
 
     def ny(self, innlogging: Innlogging) -> str:
@@ -26,6 +28,21 @@ class Oktlager:
         with self._las:
             return self._innlogginger.get(okt_id)
 
+    def hent_soknad(self, okt_id: str | None) -> Soknad | None:
+        if okt_id is None:
+            return None
+        with self._las:
+            return self._soknader.get(okt_id)
+
+    def lagre_soknad(self, okt_id: str | None, soknad: Soknad) -> None:
+        """Lagrer søknaden, men bare når økten finnes. Ellers kunne en søknad bli liggende
+        igjen i minnet etter utlogging."""
+        with self._las:
+            if okt_id in self._innlogginger:
+                self._soknader[okt_id] = soknad
+
     def slett(self, okt_id: str | None) -> None:
+        """Sletter både innloggingen og søknaden."""
         with self._las:
             self._innlogginger.pop(okt_id, None)
+            self._soknader.pop(okt_id, None)

@@ -49,3 +49,13 @@ def okt_id(client):
     """Økt-id-en i cookien, eller None."""
     with client.session_transaction() as okt:
         return okt.get(OKT_ID)
+
+
+def soknaden(app, client):
+    """Søknaden i øktlageret for denne klienten, eller None."""
+    return app.extensions["oktlager"].hent_soknad(okt_id(client))
+
+
+def sett_soknad(app, client, soknad):
+    """Legger en søknad rett i øktlageret, for å teste et bestemt steg."""
+    app.extensions["oktlager"].lagre_soknad(okt_id(client), soknad)

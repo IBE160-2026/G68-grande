@@ -1,8 +1,52 @@
-"""Tester for øktlageret i minnet (FR-3, FR-7)."""
+"""Tester for øktlageret i minnet (FR-3, FR-5, FR-6, FR-7)."""
 
 from soknad import create_app
 from soknad.adaptere.oktlager import Oktlager
-from soknad.kjerne.okt import Innlogging
+from soknad.kjerne.okt import Innlogging, Soknad
+from soknad.kjerne.steg import Steg
+
+
+def test_fr5_soknaden_lagres_ved_siden_av_innloggingen():
+    """FR-5/AD-7: søknaden lagres under økt-id-en og kan hentes igjen. Innloggingen er uendret."""
+    lager = Oktlager()
+    okt_id = lager.ny(Innlogging(1, testmodus=True))
+    assert lager.hent_soknad(okt_id) is None
+    soknad = Soknad(steg=Steg.MODUS)
+    lager.lagre_soknad(okt_id, soknad)
+    assert lager.hent_soknad(okt_id) == soknad
+    assert lager.hent(okt_id) == Innlogging(1, testmodus=True)
+    assert lager.hent_soknad(None) is None
+    assert lager.hent_soknad("finnes-ikke") is None
+
+
+def test_fr5_hver_okt_har_sin_egen_soknad():
+    """FR-5/AD-7: to økter har hver sin søknad."""
+    lager = Oktlager()
+    en = lager.ny(Innlogging(1, testmodus=True))
+    to = lager.ny(Innlogging(2, testmodus=True))
+    lager.lagre_soknad(en, Soknad(steg=Steg.MODUS))
+    assert lager.hent_soknad(to) is None
+
+
+def test_fr6_soknad_lagres_ikke_uten_okt():
+    """FR-6/AD-7: uten innlogging lagres ingen søknad, så ingenting blir liggende i minnet."""
+    lager = Oktlager()
+    lager.lagre_soknad("finnes-ikke", Soknad())
+    lager.lagre_soknad(None, Soknad())
+    assert lager.hent_soknad("finnes-ikke") is None
+    assert lager._soknader == {}
+
+
+def test_fr6_slett_sletter_ogsaa_soknaden():
+    """FR-6/AD-7: utlogging (slett) fjerner både innloggingen og søknaden."""
+    lager = Oktlager()
+    okt_id = lager.ny(Innlogging(1, testmodus=True))
+    lager.lagre_soknad(okt_id, Soknad())
+    lager.slett(okt_id)
+    assert lager.hent(okt_id) is None
+    assert lager.hent_soknad(okt_id) is None
+    lager.lagre_soknad(okt_id, Soknad())
+    assert lager.hent_soknad(okt_id) is None
 
 
 def test_fr3_ny_okt_kan_hentes_med_okt_id():

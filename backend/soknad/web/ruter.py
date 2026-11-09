@@ -5,7 +5,10 @@ from flask import current_app, redirect, render_template, request, url_for
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.inndata import sjekk_innlogging, sjekk_registrering
+from soknad.kjerne.okt import Modus, Soknad, begynn, velg_modus
+from soknad.kjerne.steg import Steg
 from soknad.web import tekster, web
+from soknad.web.flyt import gjeldende_soknad, krever_steg, lagre_soknad
 from soknad.web.innlogging import (
     gjeldende_innlogging,
     logg_inn_bruker,
@@ -21,10 +24,40 @@ def felles_tekster():
     return {"tekster": tekster, "innlogget": gjeldende_innlogging() is not None}
 
 
-@web.route("/")
+@web.route("/", methods=["GET", "POST"])
 @login_required
 def start():
+    """GET lager alltid en ny søknad (testmodus i Innlogging beholdes). POST er «Begynn å lage
+    søknad» og sender til modusvalget."""
+    if request.method == "POST":
+        lagre_soknad(begynn(gjeldende_soknad()))
+        return redirect(url_for("web.modus"))
+    lagre_soknad(Soknad())
     return render_template("start.html")
+
+
+@web.route("/modus", methods=["GET", "POST"])
+@login_required
+@krever_steg(Steg.MODUS)
+def modus():
+    """Modusvalget. Et trykk på et kort lagrer modusen og sender til innleggingen."""
+    if request.method == "GET":
+        return render_template("modus.html")
+    try:
+        valgt = Modus(request.form.get("modus", ""))
+    except ValueError:
+        # Ukjent modus: samme side på nytt uten redirect, og søknaden er uendret.
+        return render_template("modus.html"), 400
+    lagre_soknad(velg_modus(gjeldende_soknad(), valgt))
+    return redirect(url_for("web.innlegging"))
+
+
+@web.route("/innlegging")
+@login_required
+@krever_steg(Steg.INNLEGGING)
+def innlegging():
+    """Innleggingen. Feltene kommer i story 2.5."""
+    return render_template("innlegging.html")
 
 
 @web.route("/logg-ut", methods=["POST"])
