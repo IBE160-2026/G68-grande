@@ -3,10 +3,19 @@
 from flask import current_app, redirect, render_template, request, url_for
 
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
-from soknad.kjerne.feil import FeilType, InndataFeil
+from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil
 from soknad.kjerne.inndata import sjekk_innlegging, sjekk_innlogging, sjekk_registrering
-from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, begynn, sett_inndata, velg_modus
+from soknad.kjerne.okt import (
+    Modus,
+    Soknad,
+    Tekstfelt,
+    begynn,
+    sett_analyse,
+    sett_inndata,
+    velg_modus,
+)
 from soknad.kjerne.steg import Steg
+from soknad.kjerne.telleregel import tell_treff
 from soknad.web import tekster, web
 from soknad.web.flyt import gjeldende_soknad, ki, krever_steg, lagre_soknad
 from soknad.web.innlogging import (
@@ -65,8 +74,9 @@ def modus():
 @krever_steg(Steg.INNLEGGING)
 def innlegging():
     """Innleggingen. POST lagrer alltid feltene med sett_inndata. «Tilbake» sender til
-    modusvalget uten å sjekke dem. «Sjekk CV-en min» sjekker alle feltene samtidig og viser
-    siden på nytt, uten redirect. Analysen og resultatsiden kommer i story 2.5.2."""
+    modusvalget uten å sjekke dem. «Sjekk CV-en min» sjekker alle feltene samtidig. Med feil
+    vises siden på nytt, uten redirect. Uten feil hentes analysen fra KI-en, og brukeren
+    sendes til resultatsiden. En KIFeil gir siden på nytt med feilteksten (FR-28)."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     handling = request.form.get("handling")
@@ -81,7 +91,33 @@ def innlegging():
         return redirect(url_for("web.modus"))
     innlogging = gjeldende_innlogging()
     caser = ki().caser if innlogging.testmodus else None
-    return _vis_innlegging(soknad, feil=sjekk_innlegging(cv, annonse, caser))
+    feil = sjekk_innlegging(cv, annonse, caser)
+    if feil:
+        return _vis_innlegging(soknad, feil=feil)
+    # Feltene er alt lagret med sett_inndata. Analysen lagres først når begge KI-kallene har
+    # lyktes. Ventetegnet og «opptatt» kommer i story 2.7.
+    try:
+        nokkelord = ki().nokkelord(annonse)
+        gap = ki().gap(cv, annonse)
+    except KIFeil as ki_feil:
+        return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
+    lagre_soknad(sett_analyse(soknad, nokkelord=nokkelord, gap=gap))
+    return redirect(url_for("web.resultat"))
+
+
+@web.route("/resultat")
+@login_required
+@krever_steg(Steg.RESULTAT)
+def resultat():
+    """Resultatsiden. Prosenten regnes med telleregelen fra den lagrede nøkkelordlisten og
+    CV-en hver gang siden vises, så samme søknad alltid gir samme prosent (FR-15, FR-17)."""
+    soknad = gjeldende_soknad()
+    treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
+    return render_template(
+        "resultat.html",
+        gap=soknad.gap,
+        nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
+    )
 
 
 @web.route("/logg-ut", methods=["POST"])
@@ -144,12 +180,13 @@ def registrer():
     return _vis_skjema("registrer.html", epost=epost, feil=feil)
 
 
-def _vis_innlegging(soknad, feil):
+def _vis_innlegging(soknad, feil, ki_feil=None):
     """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
-    feltene på siden, høyst én per felt."""
+    feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står alene i
+    feilboksen."""
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
     tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
-    return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil)
+    return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil, ki_feil=ki_feil)
 
 
 def _vis_skjema(mal, epost, feil, skjemafeil=None):

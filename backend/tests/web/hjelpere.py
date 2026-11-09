@@ -6,6 +6,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
+from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.okt import Innlogging
 from soknad.web.innlogging import OKT_ID
 
@@ -76,6 +77,31 @@ def soknaden(app, client):
 def sett_soknad(app, client, soknad):
     """Legger en søknad rett i øktlageret, for å teste et bestemt steg."""
     app.extensions["oktlager"].lagre_soknad(okt_id(client), soknad)
+
+
+class FeilendeKI:
+    """Samme testcaser og svar som TestKI, men oppgaven (nokkelord eller gap) gir
+    KIFeil(feiltype). oppgave=None gir ingen feil. Hver oppgave som kalles, skrives i kalt.
+    Settes inn med app.extensions["test_ki"]."""
+
+    def __init__(self, test_ki, oppgave="nokkelord", feiltype=KIFeilType.ANNET, kalt=None):
+        self.test_ki = test_ki
+        self.caser = test_ki.caser
+        self.oppgave = oppgave
+        self.feiltype = feiltype
+        self.kalt = [] if kalt is None else kalt
+
+    def _kall(self, oppgave, *args):
+        self.kalt.append(oppgave)
+        if oppgave == self.oppgave:
+            raise KIFeil(self.feiltype)
+        return getattr(self.test_ki, oppgave)(*args)
+
+    def nokkelord(self, annonse):
+        return self._kall("nokkelord", annonse)
+
+    def gap(self, cv, annonse):
+        return self._kall("gap", cv, annonse)
 
 
 def sett_testmodus(app, client, testmodus):

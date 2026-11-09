@@ -4,8 +4,17 @@ import dataclasses
 
 import pytest
 
-from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, begynn, sett_inndata, velg_modus
+from soknad.kjerne.okt import (
+    Modus,
+    Soknad,
+    Tekstfelt,
+    begynn,
+    sett_analyse,
+    sett_inndata,
+    velg_modus,
+)
 from soknad.kjerne.steg import Steg
+from soknad.kjerne.testdata_match import vask
 
 
 def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
@@ -155,3 +164,52 @@ def test_fr13_sett_inndata_kan_tomme_feltene():
     ny = sett_inndata(_med_resultater(), cv=Tekstfelt(""), annonse=Tekstfelt(""))
     assert ny.cv == Tekstfelt("")
     assert ny.annonse == Tekstfelt("")
+
+
+# --- sett_analyse (story 2.5.2) ---
+
+NOKKELORD_SVAR = {"nokkelord": ["Python", "SQL"], "arbeidsgiver": "Firma AS"}
+GAP_SVAR = {"dekker": ["Kan Python"], "mangler": ["Kan SQL"]}
+
+
+def _klar_for_analyse(steg=Steg.INNLEGGING):
+    return Soknad(
+        steg=steg,
+        modus=Modus.FULL_GENERERING,
+        cv=Tekstfelt("min cv"),
+        annonse=Tekstfelt("Vi søker en  UTVIKLER!\n"),
+    )
+
+
+def test_fr15_sett_analyse_lagrer_listen_annonsen_arbeidsgiveren_og_gap():
+    """FR-15/FR-21/AD-7: nøkkelordlisten lagres som tuple, med den vaskede annonseteksten den
+    ble laget fra, arbeidsgiveren og gap-analysen. Steget blir resultat."""
+    soknad = _klar_for_analyse()
+    ny = sett_analyse(soknad, nokkelord=NOKKELORD_SVAR, gap=GAP_SVAR)
+    assert ny == dataclasses.replace(
+        soknad,
+        nokkelord=("Python", "SQL"),
+        nokkelord_annonse=vask("Vi søker en  UTVIKLER!\n"),
+        arbeidsgiver="Firma AS",
+        gap=GAP_SVAR,
+        steg=Steg.RESULTAT,
+    )
+    assert ny.nokkelord_annonse == "visøkerenutvikler"
+    # Den gamle søknaden er uendret.
+    assert soknad.nokkelord is None
+
+
+def test_fr21_sett_analyse_uten_arbeidsgiver():
+    """FR-21/AD-4: arbeidsgiver kan være null i KI-svaret."""
+    svar = {"nokkelord": ["Python"], "arbeidsgiver": None}
+    assert sett_analyse(_klar_for_analyse(), nokkelord=svar, gap=GAP_SVAR).arbeidsgiver is None
+
+
+@pytest.mark.parametrize(
+    ("steg", "forventet"),
+    [(Steg.INNLEGGING, Steg.RESULTAT), (Steg.RESULTAT, Steg.RESULTAT), (Steg.BREV, Steg.BREV)],
+)
+def test_fr20_sett_analyse_gir_minst_steg_resultat(steg, forventet):
+    """FR-20/AD-8: steget blir minst resultat, og et steg lenger fram beholdes."""
+    ny = sett_analyse(_klar_for_analyse(steg), nokkelord=NOKKELORD_SVAR, gap=GAP_SVAR)
+    assert ny.steg == forventet

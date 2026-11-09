@@ -6,6 +6,7 @@ from dataclasses import dataclass, field, replace
 from enum import StrEnum
 
 from soknad.kjerne.steg import Steg
+from soknad.kjerne.testdata_match import vask
 
 
 @dataclass(frozen=True)
@@ -78,4 +79,18 @@ def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad
         arbeidsgiver=None,
         gap=None,
         steg=min(soknad.steg, Steg.INNLEGGING),
+    )
+
+
+def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
+    """Lagrer analysen når begge KI-kallene har lyktes («Sjekk CV-en min»). nokkelord og gap
+    har formen fra AD-4. Annonseteksten listen ble laget fra, lagres vasket (samme vask som
+    AD-10), så Epic 7 kan se om annonsen er endret. Steget blir minst resultat (AD-8)."""
+    return replace(
+        soknad,
+        nokkelord=tuple(nokkelord["nokkelord"]),
+        nokkelord_annonse=vask(soknad.annonse.tekst),
+        arbeidsgiver=nokkelord["arbeidsgiver"],
+        gap=gap,
+        steg=max(soknad.steg, Steg.RESULTAT),
     )

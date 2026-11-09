@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block tittel %}{{ tekster.RESULTAT_TITTEL }}{% endblock %}
+{% block innhold %}
+<h1 class="side-overskrift">{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
+{#- Første utgave av resultatsiden (story 2.5.2). «i»-ikonene, «Laget av KI», fargene,
+    nøkkelordlistene, ATS-forklaringen og «Tilbake» kommer i story 2.6. #}
+<section aria-labelledby="gap-overskrift">
+  <h2 id="gap-overskrift">{{ tekster.GAP_OVERSKRIFT }}</h2>
+  <h3>{{ tekster.GAP_DEKKER }}</h3>
+  <ul id="gap-dekker">
+    {%- for krav in gap.dekker %}
+    <li>{{ krav }}</li>
+    {%- endfor %}
+  </ul>
+  <h3>{{ tekster.GAP_MANGLER }}</h3>
+  <ul id="gap-mangler">
+    {%- for krav in gap.mangler %}
+    <li>{{ krav }}</li>
+    {%- endfor %}
+  </ul>
+</section>
+<section aria-labelledby="nokkelord-overskrift">
+  <h2 id="nokkelord-overskrift">{{ tekster.NOKKELORD_OVERSKRIFT }}</h2>
+  <p id="nokkelordtreff">{{ nokkelordtreff }}</p>
+</section>
+{% endblock %}

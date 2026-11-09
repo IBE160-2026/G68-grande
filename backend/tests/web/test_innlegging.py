@@ -1,20 +1,25 @@
 """Tester for innleggingssiden: feltene, sjekken av det som er lagt inn, feilboksen og
 «Tilbake» (FR-8, FR-9, FR-13, FR-19, FR-34, NFR-4, NFR-6, NFR-7, AD-1, AD-8, AD-9,
-UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1."""
+UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1. Analysen og KI-feilen (FR-15, FR-21,
+FR-28) kom i story 2.5.2."""
 
+import html as html_modul
+import json
 import re
 
 import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne import inndata
-from soknad.kjerne.feil import FeilType, InndataFeil
+from soknad.kjerne.feil import FeilType, InndataFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
+from soknad.kjerne.testdata_match import vask
 from soknad.web import tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
     STIL,
+    FeilendeKI,
     css_blokk,
     main,
     sett_soknad,
@@ -33,6 +38,10 @@ IKKE_TESTDATA_CV = "CV: I testmodus fungerer bare testdataene fra mappen testdat
 IKKE_TESTDATA_ANNONSE = (
     "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen testdata/."
 )
+
+
+NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
+GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
 
 
 def til_innlegging(app, client):
@@ -109,16 +118,81 @@ def test_fr9_fr34_tom_cv_og_egen_annonse(paa_innlegging):
     ]
 
 
-def test_fr8_testdata_gir_samme_side_uten_feilboks(app, paa_innlegging):
-    """FR-8/FR-34: cv.txt og annonse.txt fra case 1 gir ingen feil. Siden vises på nytt uten
-    redirect til story 2.5.2, og tekstene er lagret i søknaden."""
+def test_fr15_testdata_gir_analysen_og_resultatsiden(app, paa_innlegging):
+    """FR-15/FR-21/FR-34: cv.txt og annonse.txt fra case 1 gir ingen feil. Nøkkelordlisten,
+    den vaskede annonsen, arbeidsgiveren og gap-analysen lagres, steget blir resultat, og
+    brukeren sendes til resultatsiden (story 2.5.2)."""
     svar = send(paa_innlegging, CV, ANNONSE)
-    assert svar.status_code == 200
-    assert 'class="feilboks"' not in html_av(svar)
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
     soknad = soknaden(app, paa_innlegging)
     assert soknad.cv == Tekstfelt(CV)
     assert soknad.annonse == Tekstfelt(ANNONSE)
+    assert soknad.nokkelord == tuple(NOKKELORD_SVAR["nokkelord"])
+    assert soknad.nokkelord_annonse == vask(ANNONSE)
+    assert soknad.arbeidsgiver == NOKKELORD_SVAR["arbeidsgiver"]
+    assert soknad.gap == GAP_SVAR
+    assert soknad.steg == Steg.RESULTAT
+
+
+def test_fr15_forst_nokkelord_saa_gap(app, paa_innlegging):
+    """FR-15/AD-8: KI-en kalles med nøkkelord først og gap etterpå. Feiler nøkkelordene,
+    kalles ikke gap."""
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    send(paa_innlegging, CV, ANNONSE)
+    assert kalt == ["nokkelord", "gap"]
+    kalt.clear()
+    til_innlegging(app, paa_innlegging)
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"].test_ki, kalt=kalt)
+    send(paa_innlegging, CV, ANNONSE)
+    assert kalt == ["nokkelord"]
+
+
+def test_fr9_inndatafeil_gir_ingen_ki_kall(app, paa_innlegging):
+    """FR-9/AD-9: med feil i feltene kalles ikke KI-en, og steget flyttes ikke."""
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], kalt=kalt)
+    svar = send(paa_innlegging, "", ANNONSE)
+    assert svar.status_code == 200
+    assert kalt == []
+    assert soknaden(app, paa_innlegging).steg == Steg.INNLEGGING
+
+
+@pytest.mark.parametrize("oppgave", ["nokkelord", "gap"])
+@pytest.mark.parametrize(
+    ("feiltype", "tekst"),
+    [
+        (KIFeilType.NETTVERK, "Nettverksfeil, sjekk nettverkstilgangen."),
+        (KIFeilType.ANNET, "Noe gikk galt hos KI-tjenesten. Prøv på nytt."),
+        (KIFeilType.UBRUKELIG_SVAR, "Noe gikk galt hos KI-tjenesten. Prøv på nytt."),
+    ],
+)
+def test_fr28_ki_feil_gir_innleggingen_med_feilteksten(
+    app, paa_innlegging, oppgave, feiltype, tekst
+):
+    """FR-28/AD-9: en KIFeil gir innleggingen på nytt (200, ingen redirect) med feilteksten
+    alene i feilboksen, feltene fylt ut og steget uendret. Ingenting fra analysen lagres."""
+    app.extensions["test_ki"] = FeilendeKI(
+        app.extensions["test_ki"], oppgave=oppgave, feiltype=feiltype
+    )
+    svar = send(paa_innlegging, CV, ANNONSE)
+    assert svar.status_code == 200
+    html = html_av(svar)
+    boks = re.search(r'<div class="feilboks"[^>]*>(.*?)</div>', html, re.S).group(1)
+    assert tekst in boks
+    assert "<a " not in boks
+    assert tekster.FEILBOKS_OVERSKRIFT not in html
+    assert element(html, "feilboks")["tabindex"] == "-1"
+    assert "autofocus" in element(html, "feilboks")
+    assert html_modul.unescape(tekstboks(html, "cv")) == CV
+    assert html_modul.unescape(tekstboks(html, "annonse")) == ANNONSE
+    soknad = soknaden(app, paa_innlegging)
     assert soknad.steg == Steg.INNLEGGING
+    assert (soknad.nokkelord, soknad.nokkelord_annonse, soknad.arbeidsgiver, soknad.gap) == (
+        (None,) * 4
+    )
+    assert soknad.cv == Tekstfelt(CV)
 
 
 def test_fr19_tilbake_lagrer_uten_feil_og_sender_til_modusvalget(app, paa_innlegging):
