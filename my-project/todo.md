@@ -113,7 +113,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 2.5 «Lime inn CV og stillingsannonse» med egen branch og PR (`bmad-build`). Delt i to 9. november (ferdig 9. november):
   - [x] Story 2.5.1 «Innleggingssiden» (ferdig 9. november: PR #12 flettet, CI grønn på Linux og Windows, 333 tester)
   - [x] Story 2.5.2 «Analysen og første resultatside» (ferdig 9. november: PR #13 flettet, CI grønn på Linux og Windows, 361 tester)
-- [ ] Neste steg: story 2.6 «Hele resultatsiden med forklaringer og «Tilbake»» med egen branch og PR (`bmad-build`): kodet, gjennomgått og prøvd i nettleseren, 389 tester. Gjenstår: PR og flette
+- [x] Story 2.6 «Hele resultatsiden med forklaringer og «Tilbake»» med egen branch og PR (`bmad-build`) (ferdig 10. november: PR #14 flettet, CI grønn på Linux og Windows, 389 tester)
+- [ ] Neste steg: story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7)
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
 - [ ] Story 8.2: ingen automatisk test kjører `innlegging.js` eller `info.js` («i»-boksen) i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1 og 2.6)
