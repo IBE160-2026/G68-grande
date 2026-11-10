@@ -29,7 +29,8 @@
 {%- endmacro %}
 
 {% block innhold %}
-<h1 class="side-overskrift">{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
+{#- Overskriften får fokus når siden åpnes, også etter ventetegnet på innleggingen (UX-DR14). #}
+<h1 class="side-overskrift" tabindex="-1" autofocus>{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
 {#- Rekkefølgen er fast: gap-analysen, linjen om at de kan si forskjellig, nøkkelordtreffet
     og ATS-forklaringen (FR-14–FR-18). #}
 <section class="resultatboks" aria-labelledby="gap-overskrift">

@@ -11,6 +11,7 @@ from soknad.kjerne.okt import (
     begynn,
     sett_analyse,
     sett_inndata,
+    sett_opptatt,
     velg_modus,
 )
 from soknad.kjerne.steg import Steg
@@ -213,3 +214,16 @@ def test_fr20_sett_analyse_gir_minst_steg_resultat(steg, forventet):
     """FR-20/AD-8: steget blir minst resultat, og et steg lenger fram beholdes."""
     ny = sett_analyse(_klar_for_analyse(steg), nokkelord=NOKKELORD_SVAR, gap=GAP_SVAR)
     assert ny.steg == forventet
+
+
+# --- sett_opptatt (story 2.7.1) ---
+
+
+def test_fr27_sett_opptatt_endrer_bare_opptatt():
+    """FR-27/AD-8: sett_opptatt setter og fjerner opptatt, og resten av søknaden er uendret."""
+    soknad = _klar_for_analyse()
+    opptatt = sett_opptatt(soknad, True)
+    assert opptatt == dataclasses.replace(soknad, opptatt=True)
+    assert sett_opptatt(opptatt, False) == soknad
+    # Den gamle søknaden er uendret.
+    assert soknad.opptatt is False

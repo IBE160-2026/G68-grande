@@ -89,6 +89,10 @@ def er_tomt_skjermleser(felt: str) -> str:
     return f"{tomt[0].upper()}{tomt[1:]} er tømt"
 
 
+# Ventetegnet (FR-27). Overskriften er lik for alle handlinger, ventesetningen per handling.
+VENTE_OVERSKRIFT = "På vei mot ny jobb"
+VENTE_SJEKKER = "Vi sjekker CV-en din – det tar noen sekunder."
+
 RESULTAT_TITTEL = "Resultat"
 RESULTAT_OVERSKRIFT = "Slik passer CV-en din til stillingen"
 

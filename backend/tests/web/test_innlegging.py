@@ -323,7 +323,7 @@ def test_fr8_feltnavn_ikoner_og_knapper(paa_innlegging):
     ]
     assert knapper == [("tilbake", "submit"), ("sjekk", "submit")]
     assert re.search(r'value="tilbake">\s*Tilbake\s*</button>', html)
-    assert re.search(r'value="sjekk">\s*Sjekk CV-en min\s*</button>', html)
+    assert re.search(r'value="sjekk"[^>]*>\s*Sjekk CV-en min\s*</button>', html)
 
 
 def test_fr34_hjelpeteksten_om_testdata_bare_i_testmodus(app, paa_innlegging):

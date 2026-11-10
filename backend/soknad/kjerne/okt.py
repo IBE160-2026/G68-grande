@@ -82,6 +82,12 @@ def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad
     )
 
 
+def sett_opptatt(soknad: Soknad, opptatt: bool) -> Soknad:
+    """Settes rundt et KI-kall. Mens opptatt er sann, startes ikke et nytt kall (AD-8, FR-27).
+    Resten av søknaden er uendret."""
+    return replace(soknad, opptatt=opptatt)
+
+
 def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
     """Lagrer analysen når begge KI-kallene har lyktes («Sjekk CV-en min»). nokkelord og gap
     har formen fra AD-4. Annonseteksten listen ble laget fra, lagres vasket (samme vask som

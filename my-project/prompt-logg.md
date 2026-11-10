@@ -507,3 +507,15 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 287 | «åpne nettsiden» / «… det eneste jeg la merke til var at denne prosentlinjen var veldig stor» | KI-en startet nettsiden. Jeg prøvde alt, og alt så fint ut bortsett fra prosentlinjen. **KI-feil:** den var ca. 120 px høy i stedet for 12 px, fordi en felles regel i CSS-en (`svg { height: auto }`) overstyrte høyden. Alle testene og de tre hjelpeagentene gikk glipp av det, fordi ingen av dem tegner siden. KI-en rettet det og la til en test. 389 tester |
 | 288 | «lagre feilen til refleksjonsrapport …» / «nå så det veldig bra ut! du kan stoppe nettsiden og pushe alt» | KI-en skrev feilen inn i `notater.md` for refleksjonsrapporten og startet nettsiden på nytt. Jeg så at prosentlinjen var riktig. KI-en stoppet nettsiden, pushet branchen og laget PR-en med merknad om KI-feilene |
 | 289 | «da er den flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #14. KI-en satte story 2.6 til ferdig i sprint-statusen, oversikten og TO DO. Neste steg er story 2.7 (ventetegnet og feil fra KI-en) |
+
+## 2026-11-10 – Story 2.7.1: Ventetegn og «opptatt»
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-7-1-ventetegn-og-opptatt.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 290 | `/bmad-build` «2.7» | KI-en skrev planen (spec) for hele story 2.7. Den hadde ingen åpne spørsmål, men var på ca. 2300 tokens, over grensen på 1600, og KI-en spurte om den skulle deles |
+| 291 | «Del opp» / «Godkjenn og fortsett» | Storyen ble delt: 2.7.1 (ventetegnet og «opptatt» på serveren) nå, 2.7.2 (feilboksen med «Prøv på nytt») senere. KI-en laget en egen branch og skrev koden, og tre hjelpeagenter gikk gjennom den. **KI-feil:** når KI-kallet lyktes, ble søknaden lagret to ganger, og mellom lagringene var den verken låst eller ferdig. 15 funn: 3 rettet, 1 utsatt (ingen test kjører skriptet for ventetegnet) og 11 avvist med begrunnelse. 421 tester |
+| 292 | «åpne nettsiden» / «kan du åpne nettisden» | KI-en startet nettsiden. Første gang ble den stoppet av Claude Code fordi PC-en hadde for lite minne, så KI-en startet den på nytt |
+| 293 | «hvorfor skal overskriften få en blå ring?» / «jeg vil fjerne den blå ringen» | KI-en forklarte at overskriften på resultatsiden får fokus for skjermlesere og tastatur, og at nettleseren da kan tegne fokusringen. Jeg bestemte at ringen skulle bort. KI-en fjernet den og la til en test. 422 tester |
+| 294 | «du kan stoppe den nå, sjekket og det funket» | Jeg prøvde ventetegnet og resultatsiden i nettleseren, og alt virket. KI-en stoppet nettsiden og laget kopien av spec-en, oversikten, TO DO og prompt-loggen |
