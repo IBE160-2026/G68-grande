@@ -2,6 +2,10 @@
 {% block tittel %}{{ tekster.INNLEGGING_TITTEL }}{% endblock %}
 {% block skript %}
   <script src="{{ url_for('static', filename='js/innlegging.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/vente.js') }}" defer></script>
+{%- endblock %}
+{% block ventetegn %}
+{% include "ventetegn.html" %}
 {%- endblock %}
 {% block innhold %}
 <h1 class="side-overskrift">{{ tekster.INNLEGGING_OVERSKRIFT }}</h1>
@@ -64,7 +68,9 @@
   <p class="skjult" id="innlegging-status" role="status"></p>
   <div class="knapperad mellomrom">
     <button class="sekundaerknapp" type="submit" name="handling" value="tilbake">{{ tekster.TILBAKE_KNAPP }}</button>
-    <button class="hovedknapp" type="submit" name="handling" value="sjekk">{{ tekster.SJEKK_KNAPP }}</button>
+    {#- data-vente: knappen starter et KI-kall og viser ventetegnet med denne teksten (FR-27). #}
+    <button class="hovedknapp" type="submit" name="handling" value="sjekk"
+      data-vente="{{ tekster.VENTE_SJEKKER }}">{{ tekster.SJEKK_KNAPP }}</button>
   </div>
 </form>
 {% endblock %}

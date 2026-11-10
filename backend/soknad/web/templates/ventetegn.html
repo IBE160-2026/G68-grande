@@ -1,0 +1,11 @@
+{#- Ventetegnet (FR-27, UX-DR14), for sider med KI-kall. vente.js viser det når en knapp med
+    data-vente sender skjemaet, og gjør resten av siden inert, men aldri denne beholderen.
+    Statusområdet finnes hele tiden, og vente.js skriver ventesetningen i det. #}
+<div class="vente" id="vente">
+  <p class="skjult" id="vente-status" role="status"></p>
+  <div class="ventetegn" id="ventetegn" hidden>
+    <div class="prikker" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p class="vente-overskrift">{{ tekster.VENTE_OVERSKRIFT }}</p>
+    <p class="vente-tekst" id="vente-tekst"></p>
+  </div>
+</div>

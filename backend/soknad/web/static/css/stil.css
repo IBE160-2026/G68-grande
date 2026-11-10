@@ -535,6 +535,14 @@ svg {
   box-shadow: none;
 }
 
+/* Låst mens KI-en jobber: aria-disabled i stedet for disabled, så knappen beholder fokus */
+.hovedknapp[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Sekundærknapp: hvit med ramme og tekst i primary. Samme hover, trykk og låst som hovedknappen */
 .sekundaerknapp {
   /* Kan også være en lenke, for eksempel «Tilbake» */
@@ -629,6 +637,73 @@ svg {
   color: var(--error);
   font-weight: 600;
   text-decoration: underline;
+}
+
+/* Ventetegnet (wait-overlay, FR-27): dekker hele skjermen, også hjørneraden, med bakgrunnen
+ * med 94 % styrke. Tre prikker hopper 14 px, 1 s per hopp, 0,15 s etter hverandre. */
+.ventetegn {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--page-side-mobile);
+  text-align: center;
+  overflow-wrap: anywhere;
+  background: var(--wait-cover);
+}
+
+.prikker {
+  display: flex;
+  gap: 10px;
+  /* Plass over prikkene til hoppet */
+  padding-top: 14px;
+}
+
+.prikker span {
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: var(--rounded-full);
+  background: var(--primary);
+  animation: hopp 1s ease-in-out infinite;
+}
+
+.prikker span:nth-child(2) {
+  background: var(--dot-middle);
+  animation-delay: 0.15s;
+}
+
+.prikker span:nth-child(3) {
+  background: var(--accent);
+  animation-delay: 0.3s;
+}
+
+@keyframes hopp {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-14px);
+  }
+}
+
+.vente-overskrift {
+  margin: 0;
+  font-family: var(--font-logo);
+  font-weight: 800;
+  font-size: var(--size-wait-title);
+  line-height: var(--line-height-logo);
+  color: var(--primary);
+}
+
+.vente-tekst {
+  margin: 0;
+  color: var(--text-muted);
 }
 
 /* Feltene står under hverandre, og side om side først fra 1000 px */
@@ -1028,6 +1103,13 @@ svg {
   /* Gap-listene skilles med fargen på bakgrunnen, som forsvinner. De får en ramme i stedet */
   .gap-liste {
     border: 1px solid CanvasText;
+  }
+
+  /* Prikkene i ventetegnet har bare bakgrunnsfarge, som ellers forsvinner. :nth-child(n)
+   * gjør velgeren like sterk som fargene for prikk 2 og 3 over. */
+  .prikker span:nth-child(n) {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 }
 

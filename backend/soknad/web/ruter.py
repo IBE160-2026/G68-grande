@@ -12,12 +12,13 @@ from soknad.kjerne.okt import (
     begynn,
     sett_analyse,
     sett_inndata,
+    sett_opptatt,
     velg_modus,
 )
 from soknad.kjerne.steg import Steg
 from soknad.kjerne.telleregel import tell_treff
 from soknad.web import tekster, web
-from soknad.web.flyt import gjeldende_soknad, ki, krever_steg, lagre_soknad
+from soknad.web.flyt import SIDE_FOR_STEG, gjeldende_soknad, ki, krever_steg, lagre_soknad
 from soknad.web.innlogging import (
     gjeldende_innlogging,
     logg_inn_bruker,
@@ -76,16 +77,22 @@ def innlegging():
     """Innleggingen. POST lagrer alltid feltene med sett_inndata. «Tilbake» sender til
     modusvalget uten å sjekke dem. «Sjekk CV-en min» sjekker alle feltene samtidig. Med feil
     vises siden på nytt, uten redirect. Uten feil hentes analysen fra KI-en, og brukeren
-    sendes til resultatsiden. En KIFeil gir siden på nytt med feilteksten (FR-28)."""
+    sendes til resultatsiden. En KIFeil gir siden på nytt med feilteksten (FR-28).
+
+    Mens KI-en jobber, er søknaden opptatt. En ny POST da sendes til siden for steget, uten at
+    noe lagres eller KI-en kalles (AD-8, FR-27)."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
+    lagret = gjeldende_soknad()
+    if lagret.opptatt:
+        return redirect(url_for(SIDE_FOR_STEG[lagret.steg]))
     handling = request.form.get("handling")
     if handling not in ("tilbake", "sjekk"):
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
-        return _vis_innlegging(gjeldende_soknad(), feil=[]), 400
+        return _vis_innlegging(lagret, feil=[]), 400
     cv = request.form.get("cv", "")
     annonse = request.form.get("annonse", "")
-    soknad = sett_inndata(gjeldende_soknad(), cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
+    soknad = sett_inndata(lagret, cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
     lagre_soknad(soknad)
     if handling == "tilbake":
         return redirect(url_for("web.modus"))
@@ -95,13 +102,18 @@ def innlegging():
     if feil:
         return _vis_innlegging(soknad, feil=feil)
     # Feltene er alt lagret med sett_inndata. Analysen lagres først når begge KI-kallene har
-    # lyktes. Ventetegnet og «opptatt» kommer i story 2.7.
+    # lyktes. finally lagrer én gang uten opptatt: med analysen når kallene lyktes, ellers
+    # søknaden fra før, også ved et uventet unntak, så søknaden ikke blir stående opptatt.
+    lagre_soknad(sett_opptatt(soknad, True))
+    ferdig = soknad
     try:
         nokkelord = ki().nokkelord(annonse)
         gap = ki().gap(cv, annonse)
+        ferdig = sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
     except KIFeil as ki_feil:
         return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
-    lagre_soknad(sett_analyse(soknad, nokkelord=nokkelord, gap=gap))
+    finally:
+        lagre_soknad(ferdig)
     return redirect(url_for("web.resultat"))
 
 
