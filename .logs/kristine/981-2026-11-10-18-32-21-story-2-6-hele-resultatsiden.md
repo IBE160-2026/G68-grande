@@ -21,7 +21,9 @@ Kristine startet `bmad-build` for story 2.6. Resultatsiden skal bli ferdig: fork
 - Commit `8c114dc` på branchen (lokalt, ikke pushet). Sprint-status: story 2.6 står på `review`.
 - Kristine prøvde siden i nettleseren. Alt så fint ut, men prosentlinjen var veldig stor: den felles regelen `svg { height: auto }` gjorde den 12 % av bredden (ca. 120 px). Rettet med `min-height`/`max-height: 12px` og en ny test, 389 tester grønne. Commit `3f2b7f5`. Testene så ikke feilen fordi de ikke tegner siden.
 
+- Kristine prøvde siden på nytt, og prosentlinjen var riktig. Feilen er skrevet inn i `my-project/8-refleksjonsrapport/notater.md` (4.2, med Kristines ord: oppdaget ved å faktisk se gjennom det KI-en gjør). Commit med spec-kopi, oversikten, TO DO og prompt-logg 283–288. Branchen er pushet, og [PR #14](https://github.com/IBE160-2026/G68-grande/pull/14) er laget med merknad om KI-feilene.
+
 ### Åpne punkter
-- Story 2.6: siden er prøvd i nettleseren (løst). Gjenstår: PR med AI-feil-notat (prosentlinjen som ble 120 px), spec-kopi, oversikten, TO DO og prompt-logg.
+- Story 2.6: [PR #14](https://github.com/IBE160-2026/G68-grande/pull/14) er laget. Gjenstår: grønn CI, flette, og så sette story 2.6 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
 - Ingen automatisk test kjører `info.js` (samme som for `innlegging.js`). Vurdere nettlesertester i story 8.2.
 - Epic 4: punkter med bare mellomrom i gap-listene vises som tomme punkter (samme årsak som før: `ki_svar.kontroller`).
