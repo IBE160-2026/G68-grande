@@ -103,7 +103,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 1.4 «Logge ut, og bare innloggede kommer inn» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #5 flettet, CI grønn på Linux og Windows. Epic 1 er ferdig)
 - [x] Etter retrospektiven for epic 1: rette fire småting i en egen PR før story 2.1 (oppryddingen av økten ett sted, innlogget bruker sendes til startsiden fra innloggingen og registreringen, testhjelperne i én fil, og to strengere tester). Se [`9-koding/epic-1-retro-2026-11-08.md`](9-koding/epic-1-retro-2026-11-08.md) (ferdig 8. november: PR #6 flettet, CI grønn på Linux og Windows, 152 tester)
 - [x] Prøve innloggingen, registreringen og startsiden med «Logg ut» ved 320 px, 768 px og 200 % zoom (fra retrospektiven for epic 1) (gjort 8. november: alt ser riktig ut)
-- [ ] Fra retrospektiven: når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde), skal planen si nøyaktig hva jeg prøver i nettleseren før push. Avvises samme funn i to stories, skal jeg få det som en beslutning
+- [x] Fra retrospektiven: når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde), skal planen si nøyaktig hva jeg prøver i nettleseren før push. Avvises samme funn i to stories, skal jeg få det som en beslutning (gjort i hele epic 2, bekreftet i retrospektiven 10. november)
 - [x] Story 2.1 «Telleregelen for nøkkelordtreff» med egen branch og PR (`bmad-build`) (ferdig 8. november: PR #7 flettet, CI grønn på Linux og Windows, 175 tester)
 - [x] Story 2.2 «Fiktive testdata og fasit for første testcase» med egen branch og PR (`bmad-build`). Claude lager utkastet, jeg godkjenner innholdet (ferdig 8. november: PR #8 flettet, CI grønn på Linux og Windows, 182 tester)
 - [x] Story 2.3 «Testmodus kjenner igjen testdataene» med egen branch og PR (`bmad-build`) (ferdig 9. november: PR #9 flettet, CI grønn på Linux og Windows, 231 tester)
@@ -117,6 +117,13 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7). Delt i to 10. november:
   - [x] Story 2.7.1 «Ventetegn og «opptatt»» (ferdig 10. november: PR #15 flettet, CI grønn på Linux og Windows, 422 tester)
   - [x] Story 2.7.2 «KI-feilboksen med «Prøv på nytt»» (ferdig 10. november: PR #17 flettet, CI grønn på Linux og Windows, 429 tester)
+- [ ] Etter retrospektiven for epic 2: rette fire ting i en egen PR før story 3.1. Se [`9-koding/epic-2-retro-2026-11-10.md`](9-koding/epic-2-retro-2026-11-10.md):
+  - [ ] Startsiden i en annen fane mens KI-en jobber: den nye søknaden vinner (bestemt 10. november)
+  - [ ] Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden
+  - [ ] Utlogging i en annen fane midt i «Sjekk CV-en min» gir innloggingen, ikke en feilside (bestemt 10. november)
+  - [ ] Hjelpeteksten sier `backend/testdata/` i koden, UX, epics og README (bestemt 10. november). Jeg ser på feilteksten «… fra mappen testdata/» i PR-en
+- [ ] Prøve resultatsiden og ventetegnet ved 768 og 1280 px (fra retrospektiven for epic 2)
+- [ ] Fra retrospektiven for epic 2: punkter som skal inn i senere stories (4.5 flere testcaser, epic 4 valg av KI og tidsgrense, 3.1, 6.1 og 7.3). Står i retro-dokumentet
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
 - [ ] Story 8.2: ingen automatisk test kjører `innlegging.js`, `info.js` («i»-boksen) eller `vente.js` (ventetegnet og «Prøv på nytt») i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1, 2.6, 2.7.1 og 2.7.2). Står som [issue #16](https://github.com/IBE160-2026/G68-grande/issues/16): skriv «Closes #16» i PR-en for story 8.2

@@ -550,3 +550,13 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 309 | «push» | Branchen ble pushet, og KI-en laget [PR #17](https://github.com/IBE160-2026/G68-grande/pull/17) med merknad om KI-feil og en kommentar om nettlesertesten |
 | 310 | «her kan du legge ved en kommentar om at AI gikk rett på kodingen denne gangen, fordi du ikke lurte på noe» / «det går fint å bruke KI» | PR #17 fikk en kommentar om at KI-en gikk rett på kodingen og at jeg derfor ikke godkjente planen først |
 | 311 | «er alt klart til å pushes» / «den er flettet og slettet, du kan pushe resterende nå» | CI var grønn på Linux og Windows, og jeg flettet PR #17. KI-en satte story 2.7 til ferdig i sprint-statusen, oversikten og TO DO, og pushet loggene |
+
+## 2026-11-10 – Retrospektiv for epic 2
+
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-2-retro-2026-11-10.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 312 | «/bmad-retrospective for epic 2» | KI-en samlet commitene, PR-ene, spec-ene og sesjonsloggene for epic 2, prøvde hele flyten og KI-feilboksen med en ekte server, og lot tre hjelpere gå gjennom all koden i epicen samlet. Alt virker, men det viktigste funnet er at startsiden i en annen fane kan bli skrevet over av et KI-svar som kommer etterpå. To småting til, og bredden 768/1280 px på resultatsiden er ikke prøvd |
+| 313 | Svar på fire spørsmål: «godkjenn begge», «den nye søknaden vinner», «rette det nå», «ja, til backend/testdata/» | Epic 2 er godkjent med 11 åpne punkter i sprint-statusen, og de to prosesspunktene fra epic 1 er ferdige. Fire ting rettes i en egen PR før story 3.1 |
+| 314 | «vi må også endre readme slik at den stemmer overens med det vi nå skrev om hvor vi finner testdataene» | README tas med i samme PR: den sier alt `backend/testdata/` to steder, og «Kjente begrensninger» får det også |

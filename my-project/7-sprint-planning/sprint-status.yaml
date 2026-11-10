@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-10-2026 22:30
+last_updated: 11-10-2026 22:43
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -42,7 +42,7 @@ development_status:
   1-4-logge-ut-og-bare-innloggede-kommer-inn: done
   epic-1-retrospective: done
 
-  epic-2: in-progress
+  epic-2: done
   2-1-telleregelen-for-nøkkelordtreff: done
   2-2-fiktive-testdata-og-fasit-for-første-testcase: done
   2-3-testmodus-kjenner-igjen-testdataene: done
@@ -50,7 +50,7 @@ development_status:
   2-5-lime-inn-cv-og-stillingsannonse: done
   2-6-hele-resultatsiden-med-forklaringer-og-tilbake: done
   2-7-ventetegn-og-feil-fra-ki-en: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: done
 
   epic-3: backlog
   3-1-se-søknadsbrevet: backlog
@@ -130,12 +130,87 @@ action_items:
     action: "Prosess: spec-ens Manual checks sier nøyaktig hva som prøves i nettleseren
       når en story lover noe om nettleseren (tilbakeknapp, fokus, bredde)"
     owner: "KI (Claude) skriver, Kristine prøver"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
   - id: "epic-1-retro-item-7-prosess-avvises-samme-funn-i-to-stories"
     epic: 1
     action: "Prosess: avvises samme funn i to stories, tas det opp med Kristine som
       en beslutning"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-1-retro-2026-11-08.md"
+  - id: "epic-2-retro-item-8-startsiden-og-modusvalget-skrives-ikke-o"
+    epic: 2
+    action: "Startsiden og modusvalget skrives ikke over av et KI-kall som pågår:
+      den nye søknaden vinner (finally lagrer bare når søknaden fortsatt er den som
+      ble satt opptatt), med test"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-9-test-som-sjekker-at-ki-en-kalles-på-nytt"
+    epic: 2
+    action: "Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-10-utlogging-i-en-annen-fane-midt-i-sjekk-c"
+    epic: 2
+    action: "Utlogging i en annen fane midt i «Sjekk CV-en min» sender til innloggingen,
+      ikke til en feilside, med test"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-11-hjelpeteksten-sier-backend-testdata-i-ko"
+    epic: 2
+    action: "Hjelpeteksten sier backend/testdata/ i koden, UX, epics og README (Kristine
+      ser på feilteksten i PR-en)"
+    owner: "KI (Claude), Kristine godkjenner teksten"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-12-prøve-resultatsiden-og-ventetegnet-ved-7"
+    epic: 2
+    action: "Prøve resultatsiden og ventetegnet ved 768 og 1280 px"
+    owner: "Kristine"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-13-story-4-5-unike-cv-er-og-annonser-på-tve"
+    epic: 2
+    action: "Story 4.5: unike CV-er og annonser på tvers av caser, nokkelord og gap
+      fra samme case, testene for alle caser, tydelig feil når testdata mangler"
+    owner: "KI (Claude) skriver det inn i storyen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-14-epic-4-ki-velger-ut-fra-testmodus-med-gr"
+    epic: 2
+    action: "Epic 4: ki() velger ut fra testmodus med grensesnittet som type, tidsgrense
+      på KI-kallet, tom arbeidsgiver gir None"
+    owner: "KI (Claude) skriver det inn i storiene"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-15-story-3-1-6-1-og-7-3-brevsteget-i-side_f"
+    epic: 2
+    action: "Story 3.1, 6.1 og 7.3: brevsteget i SIDE_FOR_STEG, PDF-navnet gjør ikke
+      feltet endret, avstemme vasken for endret annonse mot arkitekturen"
+    owner: "KI (Claude) skriver det inn i storiene"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-16-prosess-en-beslutning-om-samtidighet-ell"
+    epic: 2
+    action: "Prosess: en beslutning om samtidighet eller to faner nevner alle ruter
+      som lagrer søknaden"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-17-prosess-kopi-før-en-fil-endres-med-vilje"
+    epic: 2
+    action: "Prosess: kopi før en fil endres med vilje for å prøve en test, aldri
+      git checkout på filer som ikke er i Git"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-2-retro-item-18-prosess-readme-og-branches-sjekkes-mot-k"
+    epic: 2
+    action: "Prosess: README og branches sjekkes mot koden når en epic er ferdig"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
