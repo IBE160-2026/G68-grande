@@ -195,8 +195,8 @@ def registrer():
 
 def _vis_innlegging(soknad, feil, ki_feil=None):
     """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
-    feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står alene i
-    feilboksen."""
+    feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står øverst i
+    feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt»."""
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
     tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
     return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil, ki_feil=ki_feil)

@@ -535,3 +535,11 @@ Verktøy: Claude Code. Ingen BMAD-skill, bare samtale og GitHub. Sjekken og det 
 | 301 | «Ja planen med PR-ene er bra! og ja readme er bare å commite» / «vi gjennomfører jo en PR først, så merger jeg, sletter branchen, deretter pusher vi loggene» | README ble pushet. Sju PR-er (#5, #7, #11–#15) fikk en kommentar om det som skjedde etter at de ble laget. Fremover får hver PR en kort kommentar etter at jeg har prøvd siden |
 | 302 | «Videre så lurer jeg på hv disse innlegging.js osv er?» | KI-en forklarte forskjellen på HTML, CSS og JavaScript, og hva hver av de fire JavaScript-filene gjør |
 | 303 | «nå skal jeg ha slettet den også» / «alt av sesjonslogg også?» | KI-en sjekket at bare `main` er igjen på GitHub, og la radene fra i dag inn i prompt-loggen |
+
+## 2026-11-10 – Story 2.7.2: KI-feilboksen med «Prøv på nytt»
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 304 | `/bmad-build` «2.7.2» | Storyen var liten og hadde ingen åpne spørsmål, så KI-en tok den korte veien (oneshot): rett til koding, uten egen godkjenning av planen, og én hjelpeagent i stedet for tre i gjennomgangen. Feilboksen fikk «Det du har lagt inn, er ikke borte.» og knappen «Prøv på nytt», som sender skjemaet på nytt og viser ventetegnet. **KI-feil:** testen som skulle vise at «Prøv på nytt» virker, sendte samme forespørsel som «Sjekk CV-en min» og ville vært grønn selv om knappen var feil. 10 funn: 5 rettet, 1 utsatt (ingen nettlesertest) og 4 avvist med begrunnelse. 429 tester |

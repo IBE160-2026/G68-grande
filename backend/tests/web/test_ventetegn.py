@@ -170,7 +170,8 @@ def test_ux_dr14_overskriften_og_prikkene(paa_innlegging):
 
 
 def test_fr27_bare_sjekk_knappen_har_ventetekst(paa_innlegging):
-    """FR-27: «Sjekk CV-en min» starter KI-kallet og har ventesetningen. «Tilbake» har ingen."""
+    """FR-27: på siden uten feil starter «Sjekk CV-en min» KI-kallet og har ventesetningen.
+    «Tilbake» har ingen. Etter en KI-feil har også «Prøv på nytt» den (test_innlegging.py)."""
     html = html_av(paa_innlegging.get("/innlegging"))
     vente = [(a.get("value"), a["data-vente"]) for t, a in tagger_i(html) if "data-vente" in a]
     assert vente == [("sjekk", "Vi sjekker CV-en din – det tar noen sekunder.")]
@@ -184,6 +185,10 @@ def test_fr27_tekstene_ligger_i_tekster_py():
         innhold = (WEB / "templates" / mal).read_text(encoding="utf-8")
         assert "På vei" not in innhold
         assert "Vi sjekker" not in innhold
+    # Feilboksen ved KI-feil (FR-28, story 2.7.2).
+    innhold = (WEB / "templates" / "innlegging.html").read_text(encoding="utf-8")
+    assert "er ikke borte" not in innhold
+    assert "Prøv på nytt" not in innhold
 
 
 @pytest.mark.parametrize("side", ["/", "/modus", "/resultat"])

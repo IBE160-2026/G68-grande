@@ -213,6 +213,10 @@ KI_FEILTEKSTER = {
     KIFeilType.ANNET: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
     KIFeilType.UBRUKELIG_SVAR: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
 }
+# Under feilteksten i feilboksen, per side (FR-28, UX-DR7). Resultatsiden får sin i Epic 3.
+KI_FEIL_BEHOLDT_INNLEGGING = "Det du har lagt inn, er ikke borte."
+# Knappen i feilboksen som prøver KI-kallet på nytt.
+PROV_PA_NYTT_KNAPP = "Prøv på nytt"
 
 
 def feiltekst(feil: InndataFeil) -> str:

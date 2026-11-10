@@ -645,6 +645,22 @@ svg {
   text-decoration: underline;
 }
 
+/* KI-feil (FR-28): «Det du har lagt inn, er ikke borte.» og «Prøv på nytt» under feilteksten.
+ * Knappen er bare så bred som teksten, som i skissen. */
+.feilboks-tekst {
+  margin: 0;
+}
+
+.feilboks-knapp {
+  margin: var(--space-3) 0 0;
+}
+
+.feilboks-knapp .hovedknapp {
+  display: inline-block;
+  width: auto;
+  margin-top: 0;
+}
+
 /* Ventetegnet (wait-overlay, FR-27): dekker hele skjermen, også hjørneraden, med bakgrunnen
  * med 94 % styrke. Tre prikker hopper 14 px, 1 s per hopp, 0,15 s etter hverandre. */
 .ventetegn {
