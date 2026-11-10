@@ -521,3 +521,17 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 294 | «du kan stoppe den nå, sjekket og det funket» | Jeg prøvde ventetegnet og resultatsiden i nettleseren, og alt virket. KI-en stoppet nettsiden og laget kopien av spec-en, oversikten, TO DO og prompt-loggen |
 | 295 | «hvilken dobbel lagring?» / «supert, ja lag og push» | KI-en forklarte KI-feilen: når KI-kallet lyktes, ble søknaden lagret to ganger, og i øyeblikket mellom var den verken låst eller ferdig. KI-en pushet branchen og laget PR #15 med merknad om feilen |
 | 296 | «den er flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #15. KI-en satte story 2.7.1 til ferdig i oversikten og TO DO. Story 2.7 står fortsatt som påbegynt i sprint-statusen til 2.7.2 er ferdig |
+
+## 2026-11-10 – Sjekk mot sensorveiledningen, README og GitHub
+
+Verktøy: Claude Code. Ingen BMAD-skill, bare samtale og GitHub. Sjekken og det som ble rettet, står i [sesjonsloggen](../.logs/kristine/979-2026-11-10-20-56-54-sjekk-mot-sensorveiledningen.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 297 | «læreren snakker om svg og impeccable når det kommer til design osv, brukte vi en annen skill eller gikk vi rett på bmad sin ux skill» / «tror ikke vi må bruke det […] Og jeg vil påstå at vi har fått det til veldig fint uten» | KI-en sjekket prompt-loggen: UX ble laget bare med `bmad-ux`, og SVG er bare brukt i prosentlinjen. Jeg bestemte at Impeccable ikke trengs |
+| 298 | «kan du gå igjennom å se om det er noe som fraviker fra sensorveiledningen nå?» | KI-en sjekket repoet mot de sju kriteriene. Testene, ruff, historikken, hemmeligheter og lenkene var i orden. To avvik: README var utdatert, og ferdige branches var ikke slettet |
+| 299 | «mtp readme så ønsker jeg at vi oppdaterer den nå, videre så sletter vi branchene på PC […] jeg trodde vi la ved en kommentar på hver PR. mtp github issues? hvordan kan jeg bruke det?» | Branchene ble slettet på PC-en, og README fikk ny status, mappestruktur og lenke til `9-koding/`. KI-en forklarte at merknaden om KI-feil står i beskrivelsen av PR-ene, ikke som kommentar, og at `todo.md` og `issues.md` teller som «tilsvarende» issues. **KI-feil:** KI-en sa at to gamle branches lå på GitHub, men den hadde lest en avkuttet liste, og de var alt slettet |
+| 300 | «nei vi lager ikke en issue for hver ting fremover, men vi kan teste ut konseptet!» / «under branches får jeg opp en default som det står main på, hva er dette?» | [Issue #16](https://github.com/IBE160-2026/G68-grande/issues/16) om nettlesertester for JavaScript-filene, som lukkes i story 8.2. KI-en forklarte at `main` er hovedbranchen, som ikke skal slettes |
+| 301 | «Ja planen med PR-ene er bra! og ja readme er bare å commite» / «vi gjennomfører jo en PR først, så merger jeg, sletter branchen, deretter pusher vi loggene» | README ble pushet. Sju PR-er (#5, #7, #11–#15) fikk en kommentar om det som skjedde etter at de ble laget. Fremover får hver PR en kort kommentar etter at jeg har prøvd siden |
+| 302 | «Videre så lurer jeg på hv disse innlegging.js osv er?» | KI-en forklarte forskjellen på HTML, CSS og JavaScript, og hva hver av de fire JavaScript-filene gjør |
+| 303 | «nå skal jeg ha slettet den også» / «alt av sesjonslogg også?» | KI-en sjekket at bare `main` er igjen på GitHub, og la radene fra i dag inn i prompt-loggen |
