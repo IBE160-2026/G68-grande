@@ -335,6 +335,12 @@ svg {
   text-align: center;
 }
 
+/* Overskriften som får fokus når siden åpnes (resultatsiden), kan ikke nås med Tab. Ringen
+ * fjernes, så den ikke ser ut som en knapp. Skjermlesere leser den fortsatt opp. */
+.side-overskrift[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* Modusvalget: kortene står under hverandre, og side om side fra 700 px. Et kort alene
  * står i midten. */
 

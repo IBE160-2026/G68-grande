@@ -225,6 +225,14 @@ def test_ux_dr14_resultatsiden_gir_fokus_til_overskriften(app, paa_innlegging):
     assert len([t for t, a in tagger_i(html) if "autofocus" in a]) == 1
 
 
+def test_ux_dr14_overskriften_med_fokus_har_ingen_ring():
+    """UX-DR14: overskriften som får fokus, kan ikke nås med Tab og viser ingen fokusring
+    (Kristine bestemte 2026-11-10). Vanlige elementer har fortsatt ringen."""
+    css = STIL.read_text(encoding="utf-8")
+    assert "outline: none" in css_blokk(css, '.side-overskrift[tabindex="-1"]:focus')
+    assert "outline: 3px solid var(--focus-ring)" in css_blokk(css, ":focus-visible")
+
+
 def test_ux_dr14_ki_feil_gir_fokus_til_feilboksen(app, paa_innlegging):
     """UX-DR14: ved KI-feil går fokus til feilboksen, ikke til noe annet."""
     app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"])
