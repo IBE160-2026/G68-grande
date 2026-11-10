@@ -91,15 +91,68 @@ def er_tomt_skjermleser(felt: str) -> str:
 
 RESULTAT_TITTEL = "Resultat"
 RESULTAT_OVERSKRIFT = "Slik passer CV-en din til stillingen"
+
+# «i»-knappen: ikonet er bare pynt, og knappen har en egen tekst for skjermlesere (UX-DR11).
+INFO_IKON = "i"
+
+# Pynteikonene foran punktene i listene, skjult for skjermlesere (UX-DR21).
+IKON_DEKKER = "✓"
+IKON_MANGLER = "→"
+IKON_TREFF = "✓"
+IKON_IKKE_TREFF = "○"
+
 GAP_OVERSKRIFT = "Gap-analyse"
+GAP_INFO_SKJERMLESER = "Hva er en gap-analyse?"
+GAP_INFO = (
+    "En KI-vurdering av hvilke krav i annonsen CV-en dekker, og hvilke du kan jobbe videre med."
+)
+LAGET_AV_KI = "Laget av KI"
+GAP_UNDERTEKST = "Kravene fra annonsen, sammenlignet med CV-en din."
 GAP_DEKKER = "Dette dekker CV-en din"
 GAP_MANGLER = "Dette kan du jobbe videre med"
+# Tomme gap-lister (UX-DR13). 🎉 står for seg, så den kan skjules for skjermlesere.
+GAP_DEKKER_TOM = "CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med."
+GAP_MANGLER_TOM = "Bra jobbet! CV-en din dekker alle kravene i annonsen."
+GAP_MANGLER_TOM_IKON = "🎉"
+
+# Mellom gap-analysen og nøkkelordtreffet (FR-18).
+KAN_SI_FORSKJELLIG = (
+    "Gap-analysen og nøkkelordtreffet kan si litt forskjellig. Gap-analysen er en vurdering "
+    "KI-en gjør, mens nøkkelordtreffet bare teller ord."
+)
+
 NOKKELORD_OVERSKRIFT = "Nøkkelordtreff"
+NOKKELORD_INFO_SKJERMLESER = "Hva er nøkkelordtreff?"
+NOKKELORD_INFO = (
+    "En ordtelling av hvor mange av annonsens nøkkelord som står i CV-en. Det er bare en "
+    "pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti."
+)
+NOKKELORDTREFF_FORKLARING = "av nøkkelordene står i CV-en din"
+NOKKELORD_TREFF_TOM = "Ingen av nøkkelordene står i CV-en ennå."
+NOKKELORD_IKKE_TREFF_TOM = "Alle nøkkelordene står i CV-en din!"
+
+ATS_OVERSKRIFT = "Hva er ATS og hva betyr det for deg?"
+ATS_AVSNITT = (
+    "Mange arbeidsgivere sender søknadene gjennom et ATS før et menneske leser dem. Et ATS er "
+    "et dataprogram som blant annet ser etter ord fra annonsen.",
+    "Står flere av nøkkelordene i CV-en din, er det større sjanse for at den blir lest. Men "
+    "prosenten over er bare en pekepinn, ikke en garanti.",
+)
 
 
 def nokkelordtreff(antall_treff: int, antall: int, prosent: int) -> str:
     """«7 av 11 = 64 %», med vanlig mellomrom før %."""
     return f"{antall_treff} av {antall} = {prosent} %"
+
+
+def nokkelord_treff_overskrift(antall: int) -> str:
+    """«Står i CV-en (7)»"""
+    return f"Står i CV-en ({antall})"
+
+
+def nokkelord_ikke_treff_overskrift(antall: int) -> str:
+    """«Står ikke i CV-en (4)»"""
+    return f"Står ikke i CV-en ({antall})"
 
 
 LOGG_INN_TITTEL = "Logg inn"

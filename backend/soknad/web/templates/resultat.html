@@ -1,26 +1,91 @@
 {% extends "base.html" %}
 {% block tittel %}{{ tekster.RESULTAT_TITTEL }}{% endblock %}
+{% block skript %}
+  <script src="{{ url_for('static', filename='js/info.js') }}" defer></script>
+{%- endblock %}
+
+{#- «i»-knappen med boksen rett etter seg i leserekkefølgen (UX-DR11). Boksen er skjult til
+    info.js åpner den. Bokstaven «i» er bare pynt, knappen har en tekst for skjermlesere. #}
+{%- macro info(navn, skjermleser, tekst) %}
+<div class="info">
+  <button class="info-knapp" type="button" aria-label="{{ skjermleser }}" aria-expanded="false"
+    aria-controls="info-{{ navn }}"><span aria-hidden="true">{{ tekster.INFO_IKON }}</span></button>
+  <p class="info-boks" id="info-{{ navn }}" hidden>{{ tekst }}</p>
+</div>
+{%- endmacro %}
+
+{#- En liste med et pynteikon foran hvert punkt. En tom liste viser teksten i stedet
+    (UX-DR13). tom_ikon står etter teksten og er bare pynt. #}
+{%- macro liste(id_, punkter, ikon, tom, tom_ikon=None) %}
+{%- if punkter %}
+<ul class="resultatliste" id="{{ id_ }}">
+  {%- for punkt in punkter %}
+  <li><span class="punktikon" aria-hidden="true">{{ ikon }}</span>{{ punkt }}</li>
+  {%- endfor %}
+</ul>
+{%- else %}
+<p class="tom-liste" id="{{ id_ }}">{{ tom }}{% if tom_ikon %} <span aria-hidden="true">{{ tom_ikon }}</span>{% endif %}</p>
+{%- endif %}
+{%- endmacro %}
+
 {% block innhold %}
 <h1 class="side-overskrift">{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
-{#- Første utgave av resultatsiden (story 2.5.2). «i»-ikonene, «Laget av KI», fargene,
-    nøkkelordlistene, ATS-forklaringen og «Tilbake» kommer i story 2.6. #}
-<section aria-labelledby="gap-overskrift">
-  <h2 id="gap-overskrift">{{ tekster.GAP_OVERSKRIFT }}</h2>
-  <h3>{{ tekster.GAP_DEKKER }}</h3>
-  <ul id="gap-dekker">
-    {%- for krav in gap.dekker %}
-    <li>{{ krav }}</li>
-    {%- endfor %}
-  </ul>
-  <h3>{{ tekster.GAP_MANGLER }}</h3>
-  <ul id="gap-mangler">
-    {%- for krav in gap.mangler %}
-    <li>{{ krav }}</li>
-    {%- endfor %}
-  </ul>
+{#- Rekkefølgen er fast: gap-analysen, linjen om at de kan si forskjellig, nøkkelordtreffet
+    og ATS-forklaringen (FR-14–FR-18). #}
+<section class="resultatboks" aria-labelledby="gap-overskrift">
+  <div class="boks-topp">
+    <h2 class="boks-overskrift" id="gap-overskrift">{{ tekster.GAP_OVERSKRIFT }}</h2>
+    {{- info("gap", tekster.GAP_INFO_SKJERMLESER, tekster.GAP_INFO) }}
+    <span class="merkelapp">{{ tekster.LAGET_AV_KI }}</span>
+  </div>
+  <p class="undertekst">{{ tekster.GAP_UNDERTEKST }}</p>
+  <div class="to-lister">
+    <div class="gap-liste dekker">
+      <h3>{{ tekster.GAP_DEKKER }}</h3>
+      {{- liste("gap-dekker", gap.dekker, tekster.IKON_DEKKER, tekster.GAP_DEKKER_TOM) }}
+    </div>
+    <div class="gap-liste mangler">
+      <h3>{{ tekster.GAP_MANGLER }}</h3>
+      {{- liste("gap-mangler", gap.mangler, tekster.IKON_MANGLER, tekster.GAP_MANGLER_TOM, tekster.GAP_MANGLER_TOM_IKON) }}
+    </div>
+  </div>
 </section>
-<section aria-labelledby="nokkelord-overskrift">
-  <h2 id="nokkelord-overskrift">{{ tekster.NOKKELORD_OVERSKRIFT }}</h2>
-  <p id="nokkelordtreff">{{ nokkelordtreff }}</p>
+<p class="kan-si-forskjellig" id="kan-si-forskjellig">{{ tekster.KAN_SI_FORSKJELLIG }}</p>
+<section class="resultatboks" aria-labelledby="nokkelord-overskrift">
+  <div class="boks-topp">
+    <h2 class="boks-overskrift" id="nokkelord-overskrift">{{ tekster.NOKKELORD_OVERSKRIFT }}</h2>
+    {{- info("nokkelord", tekster.NOKKELORD_INFO_SKJERMLESER, tekster.NOKKELORD_INFO) }}
+  </div>
+  <p class="poeng"><strong id="nokkelordtreff">{{ nokkelordtreff }}</strong> <span>{{ tekster.NOKKELORDTREFF_FORKLARING }}</span></p>
+  {#- Prosentlinjen er bare pynt, tallet står som tekst over (FR-17). Den fylles uten
+      animasjon. Animasjonen kommer i Epic 7. En SVG, så bredden kan stå som attributt uten
+      style-attributt og uten JavaScript. Høyden er 12 px (score-meter). #}
+  <svg class="prosentlinje" viewBox="0 0 100 12" preserveAspectRatio="none" height="12"
+    aria-hidden="true" focusable="false">
+    <rect class="spor" width="100" height="12"></rect>
+    <rect class="fyll" width="{{ treff.prosent }}" height="12"></rect>
+  </svg>
+  {#- Listene kan ikke endres (FR-16). #}
+  <div class="to-lister">
+    <div class="nokkelord-liste treff">
+      <h3>{{ tekster.nokkelord_treff_overskrift(treff.treff | length) }}</h3>
+      {{- liste("nokkelord-treff", treff.treff, tekster.IKON_TREFF, tekster.NOKKELORD_TREFF_TOM) }}
+    </div>
+    <div class="nokkelord-liste ikke-treff">
+      <h3>{{ tekster.nokkelord_ikke_treff_overskrift(treff.ikke_treff | length) }}</h3>
+      {{- liste("nokkelord-ikke-treff", treff.ikke_treff, tekster.IKON_IKKE_TREFF, tekster.NOKKELORD_IKKE_TREFF_TOM) }}
+    </div>
+  </div>
 </section>
+{#- Foldes ut og inn med trykk, Enter og mellomrom, og er lukket når siden åpnes (FR-18). #}
+<details class="ats" id="ats">
+  <summary>{{ tekster.ATS_OVERSKRIFT }}</summary>
+  {%- for avsnitt in tekster.ATS_AVSNITT %}
+  <p>{{ avsnitt }}</p>
+  {%- endfor %}
+</details>
+{#- «Lag søknadsbrevet mitt» kommer til høyre i story 3.1. #}
+<div class="knapperad">
+  <a class="sekundaerknapp" href="{{ url_for('web.innlegging') }}">{{ tekster.TILBAKE_KNAPP }}</a>
+</div>
 {% endblock %}
