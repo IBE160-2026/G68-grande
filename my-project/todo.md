@@ -114,10 +114,12 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Story 2.5.1 «Innleggingssiden» (ferdig 9. november: PR #12 flettet, CI grønn på Linux og Windows, 333 tester)
   - [x] Story 2.5.2 «Analysen og første resultatside» (ferdig 9. november: PR #13 flettet, CI grønn på Linux og Windows, 361 tester)
 - [x] Story 2.6 «Hele resultatsiden med forklaringer og «Tilbake»» med egen branch og PR (`bmad-build`) (ferdig 10. november: PR #14 flettet, CI grønn på Linux og Windows, 389 tester)
-- [ ] Neste steg: story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7)
+- [ ] Neste steg: story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7). Delt i to 10. november:
+  - [ ] Story 2.7.1 «Ventetegn og «opptatt»»: kodet, gjennomgått og prøvd i nettleseren, 422 tester. Gjenstår: PR og flette
+  - [ ] Story 2.7.2 «KI-feilboksen med «Prøv på nytt»», etter at 2.7.1 er flettet
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
-- [ ] Story 8.2: ingen automatisk test kjører `innlegging.js` eller `info.js` («i»-boksen) i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1 og 2.6)
+- [ ] Story 8.2: ingen automatisk test kjører `innlegging.js`, `info.js` («i»-boksen) eller `vente.js` (ventetegnet) i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1, 2.6 og 2.7.1)
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
