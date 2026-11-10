@@ -19,8 +19,9 @@ Kristine startet `bmad-build` for story 2.6. Resultatsiden skal bli ferdig: fork
 - Tester: 27 nye, 388 i alt, alle grønne. `ruff` uten feil. Blant dem: samme tekst kjørt to ganger med «Tilbake» imellom gir samme treff (kriterium 8).
 - Gjennomgang: 15 funn. 7 er rettet (lange ord på mobil, trykk utenfor lukker «i»-boksen, ATS-pila, høykontrast, ikonene i `tekster.py`, to tester), 2 er utsatt i `deferred-work.md` og 6 er avvist.
 - Commit `8c114dc` på branchen (lokalt, ikke pushet). Sprint-status: story 2.6 står på `review`.
+- Kristine prøvde siden i nettleseren. Alt så fint ut, men prosentlinjen var veldig stor: den felles regelen `svg { height: auto }` gjorde den 12 % av bredden (ca. 120 px). Rettet med `min-height`/`max-height: 12px` og en ny test, 389 tester grønne. Commit `3f2b7f5`. Testene så ikke feilen fordi de ikke tegner siden.
 
 ### Åpne punkter
-- Story 2.6: prøve resultatsiden i nettleseren (rekkefølge, farger, «i» med mus, trykk, Enter, mellomrom og Esc, ATS-forklaringen, «Tilbake» og «Sjekk» igjen, 320/375 px og 200 % zoom), så PR med AI-feil-notat, spec-kopi, oversikten, TO DO og prompt-logg.
+- Story 2.6: siden er prøvd i nettleseren (løst). Gjenstår: PR med AI-feil-notat (prosentlinjen som ble 120 px), spec-kopi, oversikten, TO DO og prompt-logg.
 - Ingen automatisk test kjører `info.js` (samme som for `innlegging.js`). Vurdere nettlesertester i story 8.2.
 - Epic 4: punkter med bare mellomrom i gap-listene vises som tomme punkter (samme årsak som før: `ki_svar.kontroller`).
