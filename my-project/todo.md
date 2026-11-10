@@ -115,7 +115,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Story 2.5.2 «Analysen og første resultatside» (ferdig 9. november: PR #13 flettet, CI grønn på Linux og Windows, 361 tester)
 - [x] Story 2.6 «Hele resultatsiden med forklaringer og «Tilbake»» med egen branch og PR (`bmad-build`) (ferdig 10. november: PR #14 flettet, CI grønn på Linux og Windows, 389 tester)
 - [ ] Neste steg: story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7). Delt i to 10. november:
-  - [ ] Story 2.7.1 «Ventetegn og «opptatt»»: kodet, gjennomgått og prøvd i nettleseren, 422 tester. Gjenstår: PR og flette
+  - [x] Story 2.7.1 «Ventetegn og «opptatt»» (ferdig 10. november: PR #15 flettet, CI grønn på Linux og Windows, 422 tester)
   - [ ] Story 2.7.2 «KI-feilboksen med «Prøv på nytt»», etter at 2.7.1 er flettet
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
