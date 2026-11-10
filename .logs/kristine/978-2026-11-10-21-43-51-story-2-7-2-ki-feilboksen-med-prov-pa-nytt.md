@@ -15,8 +15,8 @@
 - Tester: 7 nye, 429 i alt, `ruff` grønn.
 - Gjennomgang (blind-laget): 10 funn, 5 rettet (blant annet at testen for «Prøv på nytt» ikke brukte knappen, **KI-feil**), 1 utsatt (ingen nettlesertest, i `deferred-work.md`) og 4 avvist.
 - `b3453dc` (prosjektmappa): spec-kopi, rad i oversikten, TO DO, prompt-logg 304, notat i `notater.md` og sprint-status (story 2.7 på «review»).
-- Kristine prøvde siden i nettleseren (KI-feil med tomt `gap.json`, som ble satt tilbake med `git checkout`, «Prøv på nytt», smal skjerm og zoom): «det fungerte», «det ser bra ut». Branchen er pushet, [PR #17](https://github.com/IBE160-2026/G68-grande/pull/17) er laget med merknad om KI-feil, og PR-en har fått en kommentar om nettlesertesten.
+- Kristine prøvde siden i nettleseren (KI-feil med tomt `gap.json`, som ble satt tilbake med `git checkout`, «Prøv på nytt», smal skjerm og zoom): «det fungerte», «det ser bra ut». Branchen er pushet, [PR #17](https://github.com/IBE160-2026/G68-grande/pull/17) er laget med merknad om KI-feil, og PR-en har fått en kommentar om nettlesertesten og en om at KI-en gikk rett på kodingen fordi den ikke lurte på noe.
+- PR #17 er flettet av Kristine (CI grønn på Linux og Windows), og branchen er slettet. Story 2.7 er satt til ferdig i sprint-statusen (begge kopiene), oversikten og TO DO, og prompt-logg 305–311 er lagt inn. Alt er pushet til `main`.
 
 ### Åpne punkter
-- Story 2.7.2: [PR #17](https://github.com/IBE160-2026/G68-grande/pull/17) er laget. Gjenstår: grønn CI, flette, og sette story 2.7 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
 - Ingen automatisk test sjekker «Prøv på nytt» i en nettleser (sammen med `vente.js`, story 8.2 / issue #16).
