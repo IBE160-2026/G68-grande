@@ -10,7 +10,7 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen begynner nå, én story om gangen. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet og resultatsiden med gap-analyse og nøkkelordtreff. Søknadsbrevet, nedlastingen, Korrektur, PDF-opplasting og ekte KI kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
@@ -69,7 +69,7 @@ uv run ruff format --check
 
 `uv run pytest` kjører alle testene. `uv run ruff check` sjekker koden, blant annet at alle filer åpnes med en oppgitt `encoding` (vi bruker alltid utf-8), og `uv run ruff format --check` sjekker formateringen. De samme sjekkene kjører automatisk på GitHub (fanen «Actions») på både Linux og Windows ved hver PR.
 
-**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn i testmodus når innleggingssiden er ferdig (story 2.5), og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har håndlagde KI-svar, slik at nettsiden kan kjøres i testmodus uten API-nøkkel. De byttes senere ut med ekte KI-svar. Fasiten viser hvilke krav CV-en dekker og mangler, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
+**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har håndlagde KI-svar, slik at nettsiden kan kjøres i testmodus uten API-nøkkel. De byttes senere ut med ekte KI-svar. Fasiten viser hvilke krav CV-en dekker og mangler, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
 
 ## Skjermbilder
 
@@ -89,7 +89,22 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 
 ## Mappestruktur
 
-*Kommer når koden er på plass.* Foreløpig ligger alle plan- og prosessdokumentene i [`my-project/`](my-project/README.md).
+```text
+backend/                 Nettsiden (Python og Flask)
+  soknad/
+    web/                 Sidene: ruter, HTML-maler, tekstene på siden, CSS og JavaScript
+    kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
+    adaptere/            Det som snakker med omverdenen: database, øktlager og KI
+  tests/                 De automatiske testene, delt på samme måte som soknad/
+  testdata/              Fiktive CV-er og annonser med fasit og håndlagde KI-svar
+  .env.example           Eksempel på innstillinger, uten ekte nøkler
+my-project/              Alle plan- og prosessdokumentene (se oversikten der)
+.logs/kristine/          Sesjonslogger og åpne punkter
+.github/workflows/       Automatiske sjekker (tester og ruff) på GitHub
+_bmad/, .claude/         BMAD-oppsettet og skillene som KI-en bruker
+```
+
+Lagene er beskrevet i [arkitekturen](my-project/5-arkitektur/arkitektur.md): `web/` bruker `kjerne/` og `adaptere/`, og `kjerne/` bruker verken Flask, database eller filer.
 
 ## Plandokumenter
 
@@ -112,5 +127,6 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
 - [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant
 - [Mine valg og KI-feil i epics og stories](my-project/6-epics-og-stories/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil sjekkene fant
+- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og [retrospektiven for epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
 - [Sesjonslogger](.logs/kristine/README.md): hva som ble gjort i hver arbeidsøkt, med [åpne punkter](.logs/kristine/issues.md)
 - [TO DO-liste](my-project/todo.md): hva som er gjort, og hva som gjenstår

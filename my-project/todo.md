@@ -119,7 +119,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] Story 2.7.2 «KI-feilboksen med «Prøv på nytt»», etter at 2.7.1 er flettet
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
-- [ ] Story 8.2: ingen automatisk test kjører `innlegging.js`, `info.js` («i»-boksen) eller `vente.js` (ventetegnet) i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1, 2.6 og 2.7.1)
+- [ ] Story 8.2: ingen automatisk test kjører `innlegging.js`, `info.js` («i»-boksen) eller `vente.js` (ventetegnet) i en nettleser. Vurdere nettlesertester, ellers prøves de for hånd i hver PR (fra kodegjennomgangen av story 2.5.1, 2.6 og 2.7.1). Står som [issue #16](https://github.com/IBE160-2026/G68-grande/issues/16): skriv «Closes #16» i PR-en for story 8.2
 - [ ] Story 6.1: sjekke om tekst fra PDF har æøå som to tegn, myke bindestreker eller usynlige mellomrom, som gjør at telleregelen ikke gir treff (fra kodegjennomgangen av story 2.1)
 - [ ] README, kjente begrensninger: bestemme om «korte nøkkelord gir ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL»» skal inn (fra kodegjennomgangen av story 2.1, story 8.1)
 - [ ] README, kjente begrensninger: nettsiden har ingen CSRF-beskyttelse, og den må legges til før nettsiden legges på nett (fra kodegjennomgangen av story 1.4, story 8.1)
