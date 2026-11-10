@@ -20,9 +20,12 @@ Kristine startet `/bmad-build 2.7` for story 2.7 «Ventetegn og feil fra KI-en»
   - Tester: ny `tests/web/test_ventetegn.py` og en test i `test_okt.py`. 32 nye, 421 i alt, alle grønne. `ruff check` og `ruff format --check` grønne.
 - Gjennomgang: 15 funn. 3 rettet (én lagring i `finally`, smalere `location`-sjekk, docstring), 1 utsatt (ingen test kjører `vente.js`), 11 avvist med begrunnelse i spec-en. «To POST-er samtidig» ble avvist i tråd med Kristines beslutning fra 2026-11-09 (låsingen av knappen løser det).
 - Sprint-status: 2.7 står på «in-progress» til 2.7.2 er ferdig, som for 2.5.
-- Ikke gjort ennå: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-loggen.
+- Kristine spurte hvorfor overskriften på resultatsiden kunne få en blå ring, og bestemte at den skulle bort: commit `aaa4549`, ny test, 422 i alt.
+- Kristine prøvde i nettleseren med Slow 4G, og alt virket.
+- Commit `67d4977`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 290–294. Notat i `8-refleksjonsrapport/notater.md` (ikke i Git, mappen er ignorert).
+- Branchen er pushet, og [PR #15](https://github.com/IBE160-2026/G68-grande/pull/15) er laget med merknad om KI-feilen (den doble lagringen).
 
 ### Åpne punkter
-- Story 2.7.1: Kristine prøver i nettleseren (ventetegnet med «Slow 4G» i F12, Tab blir på knappen, «Logg ut» kan ikke trykkes, fokus på overskriften etterpå, redusert bevegelse, 320 px og 200 % zoom, og om overskriften får en fokusring). Deretter spec-kopi, push, PR med merknad om KI-feil, grønn CI og flette.
+- Story 2.7.1: [PR #15](https://github.com/IBE160-2026/G68-grande/pull/15) er laget. Gjenstår: grønn CI, flette, og sette 2.7.1 til ferdig i TO DO og oversikten.
 - Story 2.7.2 «KI-feilboksen med «Prøv på nytt»» med egen branch og PR (`bmad-build`), etter at 2.7.1 er flettet.
 - Ingen automatisk test kjører `vente.js`. Vurdere nettlesertester i story 8.2, sammen med `innlegging.js` og `info.js`.
