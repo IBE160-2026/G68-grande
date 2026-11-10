@@ -130,7 +130,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 - Knapper i hvert felt: «Last opp PDF», «Lim inn tekst». Over tekstboksen: «Lim inn teksten her».
 - Hjelpetekst over feltene, i begge modusene: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» (prøve med pypdf 7. november 2026: fra Canva kom all teksten med, men overskriftene havnet på feil sted)
 - Knapper nederst: «Tilbake», «Sjekk CV-en min».
-- Bare i testmodus: «Testmodus: bruk filene i mappen testdata/ i prosjektet.»
+- Bare i testmodus: «Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.»
 - Feilboks, overskrift: «Noe må fikses før du kan gå videre:». Én linje per feil, med feltnavnet først (fra skissen):
 
 | Feil | Tekst | Krav |
@@ -139,7 +139,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 | Feil filtype | «CV: Feil filtype, prøv PDF.» | FR-10 |
 | Uleselig PDF | «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» | FR-11 |
 | For stor fil | «CV: Filen er for stor. Den kan være på høyst 5 MB.» (tallet er bestemt i arkitekturen) | FR-12 |
-| Ikke testdata i testmodus | «CV: I testmodus fungerer bare testdataene fra mappen testdata/.» | FR-34 |
+| Ikke testdata i testmodus | «CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» | FR-34 |
 
 Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den samme teksten står også med rødt under feltnavnet i feltet med feil.
 
@@ -392,7 +392,7 @@ Henrik er sensor i faget. Han har 10–15 minutter og har trolig sett slike pros
 2. **Innlogging:** Han logger inn med testbrukeren fra README.
 3. **Startsiden:** Testmodus-bryteren er slått på og låst, og under den står «Mangler API-nøkkel, se README». Samtykket er skjult. Han trykker «Begynn å lage søknad».
 4. **Modusvalg:** Han velger «Full generering».
-5. **Innlegging og feilmeldinger:** Han ser hjelpeteksten om `testdata/`. Først prøver han feilene med vilje: den skannede PDF-en, filen av feil type og en egen tekst, som gir «CV: I testmodus fungerer bare testdataene fra mappen testdata/.» (FR-34). Feilboksen øverst sier hvilket felt det gjelder. Så laster han opp de riktige testfilene og trykker «Sjekk CV-en min».
+5. **Innlegging og feilmeldinger:** Han ser hjelpeteksten om `testdata/`. Først prøver han feilene med vilje: den skannede PDF-en, filen av feil type og en egen tekst, som gir «CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» (FR-34). Feilboksen øverst sier hvilket felt det gjelder. Så laster han opp de riktige testfilene og trykker «Sjekk CV-en min».
 6. **Resultatsiden:** Han trykker «Lag søknadsbrevet mitt».
 7. **Brevet:** Fyrverkeri. Han laster ned og velger «Lag ny søknad» i vinduet.
 8. **Korrektur:** Han går gjennom med testbrevet og trykker på noen grønne setninger.

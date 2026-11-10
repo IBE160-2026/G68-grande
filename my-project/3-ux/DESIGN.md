@@ -428,7 +428,7 @@ Atferd (hva som skjer når man trykker) står i `EXPERIENCE.md` under Component 
 - **Tekstboks** — ca. 160 px høy på PC og 200 px på mobil, kan dras større. Søppelbøtta står over den, til høyre for «Lim inn teksten her».
 - **Filnavn (`file-chip`)** — grønn stripe med ✓, filnavnet (kuttes med «…» hvis det er langt) og søppelbøtte-ikonet 🗑️ til høyre.
 - **Søppelbøtte (`trash-button`)** — 🗑️ uten ramme eller bakgrunn. Trykkflaten er minst 24 × 24 px (WCAG 2.5.8), og den har fokusring.
-- **Hjelpetekst for testdata** — hvit boks med stiplet bringebærfarget ramme: «Testmodus: bruk filene i mappen `testdata/` i prosjektet.»
+- **Hjelpetekst for testdata** — hvit boks med stiplet bringebærfarget ramme: «Testmodus: bruk filene i mappen `backend/testdata/` i prosjektet.»
 
 ### Feil
 

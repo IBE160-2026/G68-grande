@@ -50,7 +50,7 @@ MODUS_KORT = {
 INNLEGGING_TITTEL = "Legg inn CV og annonse"
 INNLEGGING_OVERSKRIFT = "Legg inn CV-en din og stillingsannonsen"
 # Over feltene, bare i testmodus (FR-34).
-TESTDATA_HJELP = "Testmodus: bruk filene i mappen testdata/ i prosjektet."
+TESTDATA_HJELP = "Testmodus: bruk filene i mappen backend/testdata/ i prosjektet."
 LIM_INN_KNAPP = "Lim inn tekst"
 LIM_INN_ETIKETT = "Lim inn teksten her"
 SJEKK_KNAPP = "Sjekk CV-en min"
@@ -200,10 +200,10 @@ FEILTEKSTER = {
         "Stillingsannonse: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
     ),
     ("cv", FeilType.IKKE_TESTDATA): (
-        "CV: I testmodus fungerer bare testdataene fra mappen testdata/."
+        "CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
     ("annonse", FeilType.IKKE_TESTDATA): (
-        "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen testdata/."
+        "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
 }
 

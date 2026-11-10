@@ -41,6 +41,17 @@ class Oktlager:
             if okt_id in self._innlogginger:
                 self._soknader[okt_id] = soknad
 
+    def erstatt_soknad(self, okt_id: str | None, forventet: Soknad, soknad: Soknad) -> bool:
+        """Lagrer søknaden bare når den lagrede fortsatt er samme objekt som forventet, og
+        økten finnes. Ellers er den byttet ut i mellomtiden (en ny søknad fra startsiden i en
+        annen fane), og den nye blir stående. Sjekken er på identitet (is), og det virker
+        fordi lageret har det samme objektet i minnet. Gir True når søknaden ble lagret."""
+        with self._las:
+            if okt_id in self._innlogginger and self._soknader.get(okt_id) is forventet:
+                self._soknader[okt_id] = soknad
+                return True
+            return False
+
     def slett(self, okt_id: str | None) -> None:
         """Sletter både innloggingen og søknaden."""
         with self._las:

@@ -3,6 +3,7 @@
 from functools import wraps
 
 from flask import current_app, redirect, session, url_for
+from werkzeug.wrappers import Response
 
 from soknad.adaptere.ki import TestKI
 from soknad.kjerne.okt import Soknad
@@ -31,6 +32,20 @@ def gjeldende_soknad() -> Soknad:
 
 def lagre_soknad(soknad: Soknad) -> None:
     oktlager().lagre_soknad(session.get(OKT_ID), soknad)
+
+
+def erstatt_soknad(forventet: Soknad, soknad: Soknad) -> None:
+    """Lagrer søknaden bare når den lagrede fortsatt er forventet. Brukes etter KI-kallet: er
+    søknaden byttet ut med en ny fra startsiden i mellomtiden, vinner den nye."""
+    oktlager().erstatt_soknad(session.get(OKT_ID), forventet, soknad)
+
+
+def til_steget_hvis_opptatt(soknad: Soknad) -> Response | None:
+    """Er søknaden opptatt (et KI-kall pågår), gir den en redirect til siden for steget, og
+    ingenting skal lagres (AD-8, FR-27). Ellers None."""
+    if soknad.opptatt:
+        return redirect(url_for(SIDE_FOR_STEG[soknad.steg]))
+    return None
 
 
 def krever_steg(side: Steg):

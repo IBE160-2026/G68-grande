@@ -3,6 +3,7 @@
 from functools import wraps
 
 from flask import current_app, make_response, redirect, session, url_for
+from werkzeug.wrappers import Response
 
 from soknad.adaptere.oktlager import Oktlager
 from soknad.kjerne.okt import Innlogging
@@ -20,6 +21,13 @@ def gjeldende_innlogging() -> Innlogging | None:
     return oktlager().hent(session.get(OKT_ID))
 
 
+def til_innloggingen() -> Response:
+    """Ingen, gammel eller ukjent økt-id: cookien tømmes, og brukeren sendes til innloggingen
+    med «Du må logge inn først»."""
+    session.clear()
+    return redirect(url_for("web.logg_inn", ikke_innlogget=1))
+
+
 def login_required(visning):
     """Slipper bare inn innloggede. Andre sendes til innloggingen med «Du må logge inn først».
     Meldingen går i adressen (ikke_innlogget=1), for cookien har bare økt-id-en."""
@@ -27,9 +35,7 @@ def login_required(visning):
     @wraps(visning)
     def innpakket(*args, **kwargs):
         if gjeldende_innlogging() is None:
-            # Ingen, gammel eller ukjent økt-id: cookien tømmes, og brukeren er utlogget.
-            session.clear()
-            return redirect(url_for("web.logg_inn", ikke_innlogget=1))
+            return til_innloggingen()
         svar = make_response(visning(*args, **kwargs))
         # Ingen lagring i nettleseren, så tilbakeknappen etter utlogging ikke viser siden.
         svar.headers["Cache-Control"] = "no-store"

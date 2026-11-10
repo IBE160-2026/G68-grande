@@ -18,12 +18,20 @@ from soknad.kjerne.okt import (
 from soknad.kjerne.steg import Steg
 from soknad.kjerne.telleregel import tell_treff
 from soknad.web import tekster, web
-from soknad.web.flyt import SIDE_FOR_STEG, gjeldende_soknad, ki, krever_steg, lagre_soknad
+from soknad.web.flyt import (
+    erstatt_soknad,
+    gjeldende_soknad,
+    ki,
+    krever_steg,
+    lagre_soknad,
+    til_steget_hvis_opptatt,
+)
 from soknad.web.innlogging import (
     gjeldende_innlogging,
     logg_inn_bruker,
     logg_ut_bruker,
     login_required,
+    til_innloggingen,
 )
 
 
@@ -43,10 +51,15 @@ def felles_tekster():
 @web.route("/", methods=["GET", "POST"])
 @login_required
 def start():
-    """GET lager alltid en ny søknad (testmodus i Innlogging beholdes). POST er «Begynn å lage
-    søknad» og sender til modusvalget."""
+    """GET lager alltid en ny søknad (testmodus i Innlogging beholdes), også mens en annen er
+    opptatt. POST er «Begynn å lage søknad» og sender til modusvalget. Mens søknaden er opptatt,
+    sendes POST til siden for steget uten at noe lagres (AD-8)."""
     if request.method == "POST":
-        lagre_soknad(begynn(gjeldende_soknad()))
+        lagret = gjeldende_soknad()
+        opptatt = til_steget_hvis_opptatt(lagret)
+        if opptatt is not None:
+            return opptatt
+        lagre_soknad(begynn(lagret))
         return redirect(url_for("web.modus"))
     lagre_soknad(Soknad())
     # Bryteren er låst på fram til Epic 4. Uten nøkkel står «Mangler API-nøkkel, se README».
@@ -58,15 +71,20 @@ def start():
 @login_required
 @krever_steg(Steg.MODUS)
 def modus():
-    """Modusvalget. Et trykk på et kort lagrer modusen og sender til innleggingen."""
+    """Modusvalget. Et trykk på et kort lagrer modusen og sender til innleggingen. Mens
+    søknaden er opptatt, sendes POST til siden for steget uten at noe lagres (AD-8)."""
     if request.method == "GET":
         return render_template("modus.html")
+    lagret = gjeldende_soknad()
+    opptatt = til_steget_hvis_opptatt(lagret)
+    if opptatt is not None:
+        return opptatt
     try:
         valgt = Modus(request.form.get("modus", ""))
     except ValueError:
         # Ukjent modus: samme side på nytt uten redirect, og søknaden er uendret.
         return render_template("modus.html"), 400
-    lagre_soknad(velg_modus(gjeldende_soknad(), valgt))
+    lagre_soknad(velg_modus(lagret, valgt))
     return redirect(url_for("web.innlegging"))
 
 
@@ -80,12 +98,14 @@ def innlegging():
     sendes til resultatsiden. En KIFeil gir siden på nytt med feilteksten (FR-28).
 
     Mens KI-en jobber, er søknaden opptatt. En ny POST da sendes til siden for steget, uten at
-    noe lagres eller KI-en kalles (AD-8, FR-27)."""
+    noe lagres eller KI-en kalles (AD-8, FR-27). Er søknaden byttet ut med en ny fra startsiden
+    mens KI-en jobbet, blir den nye stående, og analysen kastes."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
-    if lagret.opptatt:
-        return redirect(url_for(SIDE_FOR_STEG[lagret.steg]))
+    opptatt = til_steget_hvis_opptatt(lagret)
+    if opptatt is not None:
+        return opptatt
     handling = request.form.get("handling")
     if handling not in ("tilbake", "sjekk"):
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
@@ -97,14 +117,19 @@ def innlegging():
     if handling == "tilbake":
         return redirect(url_for("web.modus"))
     innlogging = gjeldende_innlogging()
+    if innlogging is None:
+        # Logget ut i en annen fane etter login_required: til innloggingen, ingen feilside.
+        return til_innloggingen()
     caser = ki().caser if innlogging.testmodus else None
     feil = sjekk_innlegging(cv, annonse, caser)
     if feil:
         return _vis_innlegging(soknad, feil=feil)
-    # Feltene er alt lagret med sett_inndata. Analysen lagres først når begge KI-kallene har
-    # lyktes. finally lagrer én gang uten opptatt: med analysen når kallene lyktes, ellers
-    # søknaden fra før, også ved et uventet unntak, så søknaden ikke blir stående opptatt.
-    lagre_soknad(sett_opptatt(soknad, True))
+    # Feltene er alt lagret med sett_inndata. Nå lagres søknaden som opptatt. Etter KI-kallene
+    # lagrer finally resultatet uten opptatt: analysen når kallene lyktes, ellers søknaden fra
+    # før, også ved et uventet unntak. Det lagres bare når søknaden i øktlageret fortsatt er den
+    # som ble satt opptatt, så en ny søknad fra startsiden i en annen fane blir stående.
+    opptatt_soknad = sett_opptatt(soknad, True)
+    lagre_soknad(opptatt_soknad)
     ferdig = soknad
     try:
         nokkelord = ki().nokkelord(annonse)
@@ -113,7 +138,7 @@ def innlegging():
     except KIFeil as ki_feil:
         return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
     finally:
-        lagre_soknad(ferdig)
+        erstatt_soknad(opptatt_soknad, ferdig)
     return redirect(url_for("web.resultat"))
 
 
