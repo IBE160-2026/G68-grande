@@ -25,10 +25,9 @@ Sjekke om noe i prosjektet nå avviker fra `Sensorveiledning.pdf` (del 1, sju kr
 - Allerede planlagt og ikke avvik nå: skjermbilder og bevis for ekte KI (story 8.1 og epic 4), nettlesertester for JavaScript (story 8.2).
 - **Rettet etterpå:**
   - README oppdatert (`9e467b7`, pushet): statuslinjen sier hva som virker i testmodus nå, testdata-avsnittet, mappestrukturen med `backend/soknad/web`, `kjerne` og `adaptere`, og ny lenke til `my-project/9-koding/` og PR-ene under «Prosess og KI-bruk».
-  - De 5 flettede story-branchene er slettet på PC-en. På GitHub var 2.4.1 og 2.4.2 alt borte (KI-en hadde lest en avkuttet liste). Bare `story/2-6-…` er igjen, alt i den er flettet, og Kristine sletter den selv.
+  - De 5 flettede story-branchene er slettet på PC-en. På GitHub var 2.4.1 og 2.4.2 alt borte (KI-en hadde lest en avkuttet liste). Bare `story/2-6-…` var igjen, og Kristine slettet den selv. Nå er bare `main` igjen på GitHub.
   - **GitHub-issues prøvd én gang:** [issue #16](https://github.com/IBE160-2026/G68-grande/issues/16) «Nettlesertester for JavaScript-filene». Lukkes med «Closes #16» i PR-en for story 8.2, og det står i `todo.md`. Kristine bestemte at det ikke lages issue for hver ting fremover.
   - **PR-kommentarer:** kommentarer på PR #5, #7, #11, #12, #13, #14 og #15 om det som skjedde etter at PR-en ble laget (retroen, branchen som ikke kunne slettes, CI på `main`, «to trykk samtidig» løst i #15, og issue #16). De andre 8 hadde ingenting å nevne. Fremover får hver PR en kort kommentar etter at Kristine har prøvd siden, når det er noe å nevne.
 
 ### Åpne punkter
-- Slette `story/2-6-hele-resultatsiden-med-forklaringer-og-tilbake` på GitHub (Kristine gjør det selv).
 - Story 8.2: skrive «Closes #16» i PR-en.
