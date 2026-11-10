@@ -533,6 +533,16 @@ def test_ux_dr13_jobbe_videre_med_er_aldri_rod():
     assert "--error" not in css_blokk(css, ".gap-liste.mangler")
 
 
+def test_ux_dr13_prosentlinjen_er_12_px_hoy():
+    """UX-DR13: prosentlinjen er 12 px høy på alle bredder. Den felles regelen
+    «svg { height: auto }» gjorde den 12 % av bredden (ca. 120 px på PC), så CSS-en må
+    holde høyden fast."""
+    css = STIL.read_text(encoding="utf-8")
+    blokk = css_blokk(css, ".prosentlinje")
+    assert "min-height: 12px" in blokk
+    assert "max-height: 12px" in blokk
+
+
 def test_nfr7_lange_ord_brytes_i_listene():
     """NFR-7: et langt ord i en liste brytes i stedet for å gjøre siden bredere på mobil."""
     css = STIL.read_text(encoding="utf-8")

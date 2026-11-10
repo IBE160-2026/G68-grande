@@ -904,11 +904,14 @@ svg {
   color: var(--primary);
 }
 
-/* Prosentlinjen: en SVG som er 12 px høy (height-attributtet), bare pynt. Fylles uten
- * animasjon (animasjonen kommer i Epic 7). */
+/* Prosentlinjen: en SVG som er 12 px høy, bare pynt. Fylles uten animasjon (animasjonen
+ * kommer i Epic 7). «svg { height: auto }» over gjør høyden til 12 % av bredden, så
+ * min-height og max-height holder den på 12 px. */
 .prosentlinje {
   display: block;
   width: 100%;
+  min-height: 12px;
+  max-height: 12px;
   margin: 0 0 var(--space-4);
   overflow: hidden;
   border-radius: var(--rounded-xs);
