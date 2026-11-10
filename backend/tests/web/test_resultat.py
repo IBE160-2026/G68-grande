@@ -13,7 +13,15 @@ from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from soknad.web.innlogging import OKT_ID
-from tests.web.hjelpere import STIL, css_blokk, main, sett_soknad, soknaden, tagger_i
+from tests.web.hjelpere import (
+    STIL,
+    FeilendeKI,
+    css_blokk,
+    main,
+    sett_soknad,
+    soknaden,
+    tagger_i,
+)
 
 CASE = TESTDATA_MAPPE / "case-1-utvikler"
 CV = (CASE / "cv.txt").read_text(encoding="utf-8")
@@ -459,13 +467,17 @@ def test_fr19_tilbake_gir_feltene_fylt_ut(paa_resultat):
 
 def test_fr15_kriterium_8_samme_treff_etter_tilbake(app, paa_resultat):
     """FR-15, suksesskriterium 8: samme CV og annonse kjørt to ganger i samme søknad, med
-    «Tilbake» imellom, gir samme nøkkelordtreff. Analysen kjøres på nytt."""
+    «Tilbake» imellom, gir samme nøkkelordtreff. Analysen kjøres på nytt: KI-en kalles igjen
+    for både nøkkelordene og gap-analysen (AD-8)."""
     forste = nokkelordtreff(html_av(paa_resultat.get("/resultat")))
     assert paa_resultat.get("/innlegging").status_code == 200
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
     svar = paa_resultat.post(
         "/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"}
     )
     assert svar.location == "/resultat"
+    assert kalt == ["nokkelord", "gap"]
     assert nokkelordtreff(html_av(paa_resultat.get("/resultat"))) == forste
     assert soknaden(app, paa_resultat).steg == Steg.RESULTAT
 

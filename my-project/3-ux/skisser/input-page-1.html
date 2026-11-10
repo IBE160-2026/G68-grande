@@ -151,7 +151,7 @@
         <div style="margin-top:10px"><button class="btn btn-primary" id="retry">Prøv på nytt</button></div>
       </div>
 
-      <p class="testhint" id="testhint" hidden>Testmodus: bruk filene i mappen <code>testdata/</code> i prosjektet.</p>
+      <p class="testhint" id="testhint" hidden>Testmodus: bruk filene i mappen <code>backend/testdata/</code> i prosjektet.</p>
       <p class="pdftip">Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.</p>
 
       <div class="fields" id="fields"></div>
@@ -233,7 +233,7 @@
       else if (s.type === 'file' && !/\.pdf$/i.test(s.name)) msg = `${n}: Feil filtype, prøv PDF.`;
       else if (s.type === 'file' && /stor/i.test(s.name)) msg = `${n}: Filen er for stor. Den kan være på høyst [grensen bestemmes i arkitekturen] MB.`;
       else if (s.type === 'file' && /skannet/i.test(s.name)) msg = `${n}: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.`;
-      else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen testdata/.`;
+      else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen backend/testdata/.`;
       const field = document.getElementById('f-' + id), ferr = document.getElementById('err-' + id);
       field.classList.toggle('bad', !!msg);
       ferr.hidden = !msg; ferr.textContent = msg.replace(n + ': ', '');

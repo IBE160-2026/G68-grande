@@ -6,7 +6,7 @@ import re
 import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE
-from soknad.kjerne.feil import KIFeilType
+from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
@@ -17,6 +17,7 @@ from tests.web.hjelpere import (
     css_blokk,
     main,
     med_autofocus,
+    okt_id,
     sett_soknad,
     soknaden,
     tagger_i,
@@ -30,18 +31,24 @@ VENTE_JS = WEB / "static" / "js" / "vente.js"
 
 class SpionKI:
     """Samme svar som TestKI, men ser om søknaden er opptatt under hvert kall. Er unntak satt,
-    kastes det fra hvert kall i stedet for svaret (da stopper det første kallet POST-en)."""
+    kastes det fra hvert kall i stedet for svaret (da stopper det første kallet POST-en). Er
+    under satt, kalles den i det første kallet (for eksempel startsiden i en annen fane)."""
 
-    def __init__(self, test_ki, app, client, unntak=None):
+    def __init__(self, test_ki, app, client, unntak=None, under=None):
         self.test_ki = test_ki
         self.caser = test_ki.caser
         self.app = app
         self.client = client
         self.unntak = unntak
+        self.under = under
         self.opptatt_under = []
 
     def _se(self):
-        self.opptatt_under.append(soknaden(self.app, self.client).opptatt)
+        if self.under is not None:
+            under, self.under = self.under, None
+            under()
+        # Etter utlogging finnes ingen søknad, og da skrives None.
+        self.opptatt_under.append(getattr(soknaden(self.app, self.client), "opptatt", None))
         if self.unntak is not None:
             raise self.unntak
 
@@ -110,6 +117,82 @@ def test_fr27_ny_post_mens_opptatt_sender_til_steget(app, innlogget_client, steg
     assert svar.location == side
     assert kalt == []
     assert soknaden(app, innlogget_client) == soknad
+
+
+@pytest.mark.parametrize(
+    ("steg", "side"), [(Steg.INNLEGGING, "/innlegging"), (Steg.RESULTAT, "/resultat")]
+)
+@pytest.mark.parametrize(
+    ("sti", "data"), [("/", {}), ("/modus", {"modus": "full_generering"}), ("/modus", {})]
+)
+def test_ad8_begynn_og_kortet_mens_opptatt_sender_til_steget(
+    app, innlogget_client, steg, side, sti, data
+):
+    """AD-8/FR-27: «Begynn å lage søknad» (POST /) og modus-kortet (POST /modus) mens
+    søknaden er opptatt sender til siden for steget, og søknaden er uendret."""
+    soknad = Soknad(steg=steg, modus=Modus.FULL_GENERERING, cv=Tekstfelt("gammel"), opptatt=True)
+    sett_soknad(app, innlogget_client, soknad)
+    svar = innlogget_client.post(sti, data=data)
+    assert svar.status_code == 302
+    assert svar.location == side
+    assert soknaden(app, innlogget_client) is soknad
+
+
+def test_ad8_startsiden_midt_i_kallet_vinner(app, paa_innlegging):
+    """AD-8/FR-27, story 2.4: åpnes startsiden i en annen fane mens KI-en jobber, lager den en
+    ny søknad, og den blir stående. Analysen som kommer etterpå, kastes."""
+    startsiden = []
+    app.extensions["test_ki"] = SpionKI(
+        app.extensions["test_ki"],
+        app,
+        paa_innlegging,
+        under=lambda: startsiden.append(paa_innlegging.get("/").status_code),
+    )
+    svar = send(paa_innlegging)
+    assert startsiden == [200]
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
+    assert soknaden(app, paa_innlegging) == Soknad()
+    assert paa_innlegging.get("/resultat").location == "/"
+
+
+def test_ad8_startsiden_midt_i_kallet_vinner_ved_ki_feil(app, paa_innlegging):
+    """AD-8/FR-28, story 2.4: også når KI-kallet gir KIFeil, blir den nye søknaden fra
+    startsiden stående. Den første POST-en viser siden med KI-feilen."""
+    startsiden = []
+    app.extensions["test_ki"] = SpionKI(
+        app.extensions["test_ki"],
+        app,
+        paa_innlegging,
+        unntak=KIFeil(KIFeilType.ANNET),
+        under=lambda: startsiden.append(paa_innlegging.get("/").status_code),
+    )
+    svar = send(paa_innlegging)
+    assert startsiden == [200]
+    assert svar.status_code == 200
+    assert 'id="feilboks"' in html_av(svar)
+    assert soknaden(app, paa_innlegging) == Soknad()
+
+
+def test_fr7_utlogget_midt_i_kallet_gir_innloggingen(app, paa_innlegging):
+    """FR-7/AD-8: logges brukeren ut i en annen fane mens KI-en jobber, gir POST-en ingen
+    feilside. Neste side sender til innloggingen med «Du må logge inn først», og ingen søknad
+    blir liggende igjen for den gamle økt-id-en."""
+    gammel_id = okt_id(paa_innlegging)
+    utlogging = []
+    app.extensions["test_ki"] = SpionKI(
+        app.extensions["test_ki"],
+        app,
+        paa_innlegging,
+        under=lambda: utlogging.append(paa_innlegging.post("/logg-ut").status_code),
+    )
+    svar = send(paa_innlegging)
+    assert utlogging == [302]
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
+    neste = paa_innlegging.get(svar.location)
+    assert neste.location == "/logg-inn?ikke_innlogget=1"
+    assert app.extensions["oktlager"].hent_soknad(gammel_id) is None
 
 
 @pytest.mark.parametrize("oppgave", ["nokkelord", "gap"])
