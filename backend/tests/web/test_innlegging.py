@@ -15,13 +15,14 @@ from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.kjerne.testdata_match import vask
-from soknad.web import tekster
+from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
     STIL,
     FeilendeKI,
     css_blokk,
     main,
+    okt_id,
     sett_soknad,
     sett_testmodus,
     soknaden,
@@ -397,16 +398,41 @@ def test_fr8_feltnavn_ikoner_og_knapper(paa_innlegging):
 
 
 def test_fr34_hjelpeteksten_om_testdata_bare_i_testmodus(app, paa_innlegging):
-    """FR-34/UX-DR9: «Testmodus: bruk filene i mappen testdata/ i prosjektet.» står over
-    feltene i testmodus, og ikke ellers."""
+    """FR-34/UX-DR9: «Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.» står
+    over feltene i testmodus, og ikke ellers."""
     html = html_av(paa_innlegging.get("/innlegging"))
-    hjelp = '<p class="testhjelp">Testmodus: bruk filene i mappen testdata/ i prosjektet.</p>'
+    hjelp = (
+        '<p class="testhjelp">Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.</p>'
+    )
     assert hjelp in html
     assert html.index(hjelp) < html.index('id="cv-felt"')
     uten_testmodus(app, paa_innlegging)
     svar = paa_innlegging.get("/innlegging")
     assert svar.status_code == 200
     assert "testhjelp" not in html_av(svar)
+
+
+def test_fr7_utlogget_for_testmodus_sjekken_gir_innloggingen(app, paa_innlegging, monkeypatch):
+    """FR-7/AD-8: logges brukeren ut i en annen fane etter login_required, men før
+    innleggingen sjekker testmodus, sendes hen til innloggingen med «Du må logge inn først».
+    Ingen feilside, cookien tømmes, og KI-en kalles ikke."""
+    lager = app.extensions["oktlager"]
+    id_ = okt_id(paa_innlegging)
+    ekte_lagre = ruter.lagre_soknad
+
+    def lagre_og_logg_ut(soknad):
+        ekte_lagre(soknad)
+        lager.slett(id_)
+
+    monkeypatch.setattr(ruter, "lagre_soknad", lagre_og_logg_ut)
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    svar = send(paa_innlegging, CV, ANNONSE)
+    assert svar.status_code == 302
+    assert svar.location == "/logg-inn?ikke_innlogget=1"
+    assert okt_id(paa_innlegging) is None
+    assert kalt == []
+    assert lager.hent_soknad(id_) is None
 
 
 def test_fr34_uten_testmodus_godtas_egen_tekst(app, paa_innlegging):

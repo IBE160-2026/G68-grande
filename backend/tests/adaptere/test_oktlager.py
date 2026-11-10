@@ -49,6 +49,38 @@ def test_fr6_slett_sletter_ogsaa_soknaden():
     assert lager.hent_soknad(okt_id) is None
 
 
+def test_ad8_erstatt_soknad_bare_naar_den_er_den_forventede():
+    """AD-8: erstatt_soknad lagrer bare når søknaden i lageret er samme objekt som forventet.
+    En lik, men ny søknad (startsiden i en annen fane) blir stående."""
+    lager = Oktlager()
+    okt_id = lager.ny(Innlogging(1, testmodus=True))
+    opptatt = Soknad(steg=Steg.INNLEGGING, opptatt=True)
+    lager.lagre_soknad(okt_id, opptatt)
+    ferdig = Soknad(steg=Steg.RESULTAT)
+    assert lager.erstatt_soknad(okt_id, opptatt, ferdig) is True
+    assert lager.hent_soknad(okt_id) is ferdig
+    # Byttet ut med en ny søknad: lik verdi er ikke nok, det må være samme objekt.
+    ny = Soknad()
+    lager.lagre_soknad(okt_id, ny)
+    assert lager.erstatt_soknad(okt_id, Soknad(), ferdig) is False
+    assert lager.erstatt_soknad(okt_id, opptatt, ferdig) is False
+    assert lager.hent_soknad(okt_id) is ny
+
+
+def test_ad8_erstatt_soknad_lagrer_ikke_uten_okt():
+    """AD-8/FR-6: uten økt lagres ingenting, heller ikke etter at økten er slettet."""
+    lager = Oktlager()
+    assert lager.erstatt_soknad("finnes-ikke", Soknad(), Soknad()) is False
+    assert lager.erstatt_soknad(None, Soknad(), Soknad()) is False
+    assert lager.hent_soknad("finnes-ikke") is None
+    okt_id = lager.ny(Innlogging(1, testmodus=True))
+    soknad = Soknad()
+    lager.lagre_soknad(okt_id, soknad)
+    lager.slett(okt_id)
+    assert lager.erstatt_soknad(okt_id, soknad, Soknad()) is False
+    assert lager.hent_soknad(okt_id) is None
+
+
 def test_fr3_ny_okt_kan_hentes_med_okt_id():
     """FR-3: en ny økt lagres under en tilfeldig økt-id og kan hentes igjen."""
     lager = Oktlager()

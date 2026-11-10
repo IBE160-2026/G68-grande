@@ -499,7 +499,7 @@ slik at nettsiden kan sammenligne dem.
 
 **Gitt** innleggingen for Full generering med overskriften «Legg inn CV-en din og stillingsannonsen»
 **Så** finnes feltene «📄 CV» og «📢 Stillingsannonse», hver med «Lim inn tekst». «Last opp PDF» kommer i Epic 6 (FR-8, UX-DR8)
-**Og** i testmodus står «Testmodus: bruk filene i mappen testdata/ i prosjektet.» over feltene (UX-DR9)
+**Og** i testmodus står «Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.» over feltene (UX-DR9)
 **Og** fra 1000 px står feltene side om side, ellers under hverandre (UX-DR19)
 
 **Når** jeg trykker «Lim inn tekst»

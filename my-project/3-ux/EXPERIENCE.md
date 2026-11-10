@@ -130,7 +130,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 - Knapper i hvert felt: «Last opp PDF», «Lim inn tekst». Over tekstboksen: «Lim inn teksten her».
 - Hjelpetekst over feltene, i begge modusene: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» (prøve med pypdf 7. november 2026: fra Canva kom all teksten med, men overskriftene havnet på feil sted)
 - Knapper nederst: «Tilbake», «Sjekk CV-en min».
-- Bare i testmodus: «Testmodus: bruk filene i mappen testdata/ i prosjektet.»
+- Bare i testmodus: «Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.»
 - Feilboks, overskrift: «Noe må fikses før du kan gå videre:». Én linje per feil, med feltnavnet først (fra skissen):
 
 | Feil | Tekst | Krav |
