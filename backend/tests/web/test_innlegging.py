@@ -35,9 +35,9 @@ ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
 
 TOM_CV = "CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
 TOM_ANNONSE = "Stillingsannonse: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
-IKKE_TESTDATA_CV = "CV: I testmodus fungerer bare testdataene fra mappen testdata/."
+IKKE_TESTDATA_CV = "CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
 IKKE_TESTDATA_ANNONSE = (
-    "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen testdata/."
+    "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
 )
 
 

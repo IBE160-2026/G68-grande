@@ -28,7 +28,7 @@ context:
 - Hver test nevner FR-, NFR- eller AD-nummeret, som før.
 
 **Never:**
-- Feilteksten «… fra mappen testdata/.» endres ikke (Kristine ser på den i PR-en). Ingen andre tekster endres.
+- Ingen andre tekster endres enn hjelpeteksten og feilteksten. Feilteksten ble først holdt utenfor, men Kristine bestemte 2026-11-10 etter prøvingen i nettleseren at den også skal si `backend/testdata/` (se Spec Change Log).
 - Ingen endring i `vente.js`, malene eller utseendet. Ingen nye avhengigheter.
 - Historiske dokumenter endres ikke: ferdige spec-er, `epic-2-context.md`, `.memlog.md`/`ux-memlog.md`, sesjonslogger og prompt-loggen.
 
@@ -80,6 +80,8 @@ context:
 - Tester: 12 nye (én etter gjennomgangen), 441 i alt, alle grønne. `ruff` uten feil.
 
 ## Spec Change Log
+
+- 2026-11-10, etter prøvingen i nettleseren: Kristine bestemte at feilteksten skal si det samme som hjelpeteksten: «… I testmodus fungerer bare testdataene fra mappen backend/testdata/.» Endret i `tekster.py`, testene (`test_innlegging.py`, `test_tekster.py`), `EXPERIENCE.md`, skissen og `epics.md` (også teksten for brevet i story 5.1), og kopiene i `my-project/`. Gjennomgangsrapportene i `3-ux/gjennomganger/` er historiske og er ikke endret. KEEP: alt annet i PR-en er uendret.
 
 ## Review Triage Log
 

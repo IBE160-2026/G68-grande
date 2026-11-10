@@ -11,7 +11,7 @@ from soknad.web import tekster
 def test_fr34_ikke_testdata_har_tekst_for_feltet(felt):
     """FR-34: ikke_testdata har en tekst på både CV- og annonsefeltet."""
     tekst = tekster.feiltekst(InndataFeil(felt, FeilType.IKKE_TESTDATA))
-    assert tekst.endswith("I testmodus fungerer bare testdataene fra mappen testdata/.")
+    assert tekst.endswith("I testmodus fungerer bare testdataene fra mappen backend/testdata/.")
 
 
 def test_fr34_feltnavnet_star_forst_i_teksten():

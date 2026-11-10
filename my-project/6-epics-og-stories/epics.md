@@ -509,7 +509,7 @@ slik at nettsiden kan sammenligne dem.
 **Så** tømmes feltet uten bekreftelse, fokus går til «Lim inn tekst» i samme felt (til «Last opp PDF» fra Epic 6), og skjermlesere hører for eksempel «CV-feltet er tømt». Søppelbøtta er minst 24 × 24 px og har teksten «Tøm CV-feltet» for skjermlesere (FR-13, UX-DR8, UX-DR21)
 
 **Når** jeg trykker «Sjekk CV-en min»
-**Så** sjekkes alle feltene samtidig med `sett_inndata`. Tomme felt gir «CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst.», og tekst som ikke er testdata, gir «CV: I testmodus fungerer bare testdataene fra mappen testdata/.» (FR-9, FR-34, AD-9)
+**Så** sjekkes alle feltene samtidig med `sett_inndata`. Tomme felt gir «CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst.», og tekst som ikke er testdata, gir «CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» (FR-9, FR-34, AD-9)
 **Og** feilene vises i feilboksen øverst med overskriften «Noe må fikses før du kan gå videre:», én lenke per feil til feltet, og fokus til boksen (UX-DR7). Feltet med feil får rød ramme, og teksten står også under feltnavnet, koblet med `aria-describedby` (UX-DR8)
 **Og** det som er riktig, beholdes (AD-9)
 
@@ -804,7 +804,7 @@ slik at jeg kan få det forbedret i stedet for å få et helt nytt.
 
 **Gitt** innleggingen i Korrektur med overskriften «Legg inn CV-en din, brevet ditt og stillingsannonsen»
 **Så** finnes feltene «📄 CV», «✉️ Ditt søknadsbrev» og «📢 Stillingsannonse», med de samme tilstandene, tekstene og feilene som i story 2.5 (FR-8, FR-9, FR-13, UX-DR8)
-**Og** et brev som ikke hører til samme testcase som CV-en, gir «Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen testdata/.» (FR-34, AD-10)
+**Og** et brev som ikke hører til samme testcase som CV-en, gir «Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» (FR-34, AD-10)
 **Og** «Tilbake» til modusvalget beholder CV og annonse. Feltet for eget brev finnes bare i Korrektur (EXPERIENCE)
 
 **Gitt** `testdata/case-1-<navn>/`

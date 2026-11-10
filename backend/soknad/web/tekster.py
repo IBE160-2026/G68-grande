@@ -200,10 +200,10 @@ FEILTEKSTER = {
         "Stillingsannonse: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
     ),
     ("cv", FeilType.IKKE_TESTDATA): (
-        "CV: I testmodus fungerer bare testdataene fra mappen testdata/."
+        "CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
     ("annonse", FeilType.IKKE_TESTDATA): (
-        "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen testdata/."
+        "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
 }
 

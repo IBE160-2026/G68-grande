@@ -233,7 +233,7 @@
       else if (s.type === 'file' && !/\.pdf$/i.test(s.name)) msg = `${n}: Feil filtype, prøv PDF.`;
       else if (s.type === 'file' && /stor/i.test(s.name)) msg = `${n}: Filen er for stor. Den kan være på høyst [grensen bestemmes i arkitekturen] MB.`;
       else if (s.type === 'file' && /skannet/i.test(s.name)) msg = `${n}: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.`;
-      else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen testdata/.`;
+      else if (test && (s.type === 'text' || !/^test/i.test(s.name))) msg = `${n}: I testmodus fungerer bare testdataene fra mappen backend/testdata/.`;
       const field = document.getElementById('f-' + id), ferr = document.getElementById('err-' + id);
       field.classList.toggle('bad', !!msg);
       ferr.hidden = !msg; ferr.textContent = msg.replace(n + ': ', '');
