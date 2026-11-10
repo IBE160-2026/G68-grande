@@ -116,6 +116,7 @@ def resultat():
     return render_template(
         "resultat.html",
         gap=soknad.gap,
+        treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
     )
 

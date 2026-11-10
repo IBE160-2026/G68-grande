@@ -745,6 +745,226 @@ svg {
   margin-top: 0;
 }
 
+/* Resultatsiden (UX-DR13) */
+
+/* Boksene «Gap-analyse» og «Nøkkelordtreff»: hvite kort som innleggingsfeltene */
+.resultatboks {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow);
+}
+
+/* Overskriften med «i»-knappen og merket «Laget av KI» ved siden av, ikke inne i den.
+ * «i»-boksen legges under raden, fra venstre kant, så den aldri går utenfor siden. */
+.boks-topp {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+}
+
+.boks-overskrift {
+  margin: 0;
+  font-size: var(--size-heading-box);
+}
+
+/* «i»-ikon (info-icon): liten sirkel med «i», minst 24 × 24 px */
+.info-knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  font: inherit;
+  font-size: var(--size-small);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary);
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--rounded-full);
+  cursor: pointer;
+}
+
+/* «i»-boks (info-tip): mørk med hvit tekst */
+.info-boks {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  z-index: 2;
+  width: min(300px, 100%);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--size-small);
+  color: var(--primary-contrast);
+  background: var(--text);
+  border-radius: var(--rounded-sm);
+  box-shadow: var(--shadow);
+}
+
+.undertekst {
+  margin: 0 0 var(--space-4);
+  font-size: var(--size-small);
+  color: var(--text-muted);
+}
+
+/* Gap-listene og nøkkelordlistene: under hverandre, side om side fra 700 px */
+.to-lister {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 700px) {
+  .to-lister {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.to-lister h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--size-body);
+}
+
+/* Gap-lister (gap-covers, gap-work-on): grønn med ✓ og varm fersken med →, aldri rød */
+.gap-liste {
+  padding: var(--space-4);
+  border-radius: var(--rounded-md);
+}
+
+.gap-liste.dekker {
+  background: var(--success-tint);
+}
+
+.gap-liste.dekker h3,
+.gap-liste.dekker .punktikon,
+.nokkelord-liste.treff .punktikon {
+  color: var(--success);
+}
+
+.gap-liste.mangler {
+  background: var(--work-on-tint);
+}
+
+.gap-liste.mangler h3,
+.gap-liste.mangler .punktikon {
+  color: var(--work-on);
+}
+
+.nokkelord-liste.ikke-treff .punktikon {
+  color: var(--text-muted);
+}
+
+.resultatliste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* overflow-wrap: anywhere, så et langt ord uten bindestrek brytes i stedet for å gjøre
+ * siden bredere på mobil (NFR-7) */
+.resultatliste li {
+  display: flex;
+  gap: var(--space-2);
+  overflow-wrap: anywhere;
+}
+
+.punktikon {
+  flex: none;
+  font-weight: 700;
+}
+
+.tom-liste {
+  margin: 0;
+}
+
+/* Linjen mellom gap-analysen og nøkkelordtreffet (FR-18) */
+.kan-si-forskjellig {
+  margin: 0 0 var(--space-5);
+  font-size: var(--size-small);
+  color: var(--text-muted);
+}
+
+/* Nøkkelordtreff (score-meter): tallet stort, forklaringen ved siden av */
+.poeng {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0;
+}
+
+.poeng strong {
+  font-size: var(--size-score);
+  color: var(--primary);
+}
+
+/* Prosentlinjen: en SVG som er 12 px høy, bare pynt. Fylles uten animasjon (animasjonen
+ * kommer i Epic 7). «svg { height: auto }» over gjør høyden til 12 % av bredden, så
+ * min-height og max-height holder den på 12 px. */
+.prosentlinje {
+  display: block;
+  width: 100%;
+  min-height: 12px;
+  max-height: 12px;
+  margin: 0 0 var(--space-4);
+  overflow: hidden;
+  border-radius: var(--rounded-xs);
+}
+
+.prosentlinje .spor {
+  fill: var(--border);
+}
+
+.prosentlinje .fyll {
+  fill: var(--primary);
+}
+
+/* ATS-forklaringen: foldes ut og inn, lukket når siden åpnes */
+.ats {
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--rounded-md);
+}
+
+/* Overskriften i bringebær med ▾ til høyre, som snur seg når forklaringen er åpen. Pila er
+ * bare pynt og skjules for skjermlesere (tom alternativ tekst etter /). */
+.ats summary {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-weight: 600;
+  color: var(--primary);
+  list-style: none;
+  cursor: pointer;
+}
+
+.ats summary::-webkit-details-marker {
+  display: none;
+}
+
+.ats summary::after {
+  content: "▾";
+  content: "▾" / "";
+  flex: none;
+  transition: transform 0.2s ease;
+}
+
+.ats[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.ats p {
+  margin: var(--space-3) 0 0;
+}
+
 /* Hjørneraden (corner-row): festet nederst på skjermen på alle sider etter innlogging.
  * «Logg ut» til høyre, plass til KI-merknaden til venstre (Epic 4). */
 .hjornerad {
@@ -785,6 +1005,29 @@ svg {
 
   .bryter .spor::after {
     background: CanvasText;
+  }
+
+  /* Prosentlinjen: SVG-farger tvinges ikke om, så sporet og fyllet får systemfarger */
+  .prosentlinje {
+    border: 1px solid CanvasText;
+  }
+
+  .prosentlinje .spor {
+    fill: Canvas;
+  }
+
+  .prosentlinje .fyll {
+    fill: CanvasText;
+  }
+
+  /* «i»-boksen mister den mørke bakgrunnen og får en ramme */
+  .info-boks {
+    border: 1px solid CanvasText;
+  }
+
+  /* Gap-listene skilles med fargen på bakgrunnen, som forsvinner. De får en ramme i stedet */
+  .gap-liste {
+    border: 1px solid CanvasText;
   }
 }
 
