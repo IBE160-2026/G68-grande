@@ -22,7 +22,7 @@ Kristine startet `/bmad-build 2.7` for story 2.7 «Ventetegn og feil fra KI-en»
 - Sprint-status: 2.7 står på «in-progress» til 2.7.2 er ferdig, som for 2.5.
 - Kristine spurte hvorfor overskriften på resultatsiden kunne få en blå ring, og bestemte at den skulle bort: commit `aaa4549`, ny test, 422 i alt.
 - Kristine prøvde i nettleseren med Slow 4G, og alt virket.
-- Commit `67d4977`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 290–294. Notat i `8-refleksjonsrapport/notater.md` (ikke i Git, mappen er ignorert).
+- Commit `5864d8f`: spec-kopi i `my-project/9-koding/`, oversikten, TO DO og prompt-logg 290–294. Notat i `8-refleksjonsrapport/notater.md` (ikke i Git, mappen er ignorert).
 - Branchen er pushet, og [PR #15](https://github.com/IBE160-2026/G68-grande/pull/15) er laget med merknad om KI-feilen (den doble lagringen).
 
 ### Åpne punkter
