@@ -11,7 +11,7 @@ import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne import inndata
-from soknad.kjerne.feil import FeilType, InndataFeil, KIFeilType
+from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.kjerne.testdata_match import vask
@@ -171,8 +171,9 @@ def test_fr9_inndatafeil_gir_ingen_ki_kall(app, paa_innlegging):
 def test_fr28_ki_feil_gir_innleggingen_med_feilteksten(
     app, paa_innlegging, oppgave, feiltype, tekst
 ):
-    """FR-28/AD-9: en KIFeil gir innleggingen på nytt (200, ingen redirect) med feilteksten
-    alene i feilboksen, feltene fylt ut og steget uendret. Ingenting fra analysen lagres."""
+    """FR-28/AD-9/UX-DR7: en KIFeil gir innleggingen på nytt (200, ingen redirect) med
+    feilteksten øverst i feilboksen, uten lenker, feltene fylt ut og steget uendret. Ingenting
+    fra analysen lagres."""
     app.extensions["test_ki"] = FeilendeKI(
         app.extensions["test_ki"], oppgave=oppgave, feiltype=feiltype
     )
@@ -180,7 +181,7 @@ def test_fr28_ki_feil_gir_innleggingen_med_feilteksten(
     assert svar.status_code == 200
     html = html_av(svar)
     boks = re.search(r'<div class="feilboks"[^>]*>(.*?)</div>', html, re.S).group(1)
-    assert tekst in boks
+    assert re.match(rf'\s*<p class="feilboks-overskrift">{re.escape(tekst)}</p>', boks)
     assert "<a " not in boks
     assert tekster.FEILBOKS_OVERSKRIFT not in html
     assert element(html, "feilboks")["tabindex"] == "-1"
@@ -193,6 +194,75 @@ def test_fr28_ki_feil_gir_innleggingen_med_feilteksten(
         (None,) * 4
     )
     assert soknad.cv == Tekstfelt(CV)
+
+
+def ki_feil_boks(app, client, feiltype=KIFeilType.ANNET):
+    """Sender case 1 med en KI som feiler, og gir HTML-en og innholdet i feilboksen."""
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], feiltype=feiltype)
+    html = html_av(send(client, CV, ANNONSE))
+    return html, re.search(r'<div class="feilboks"[^>]*>(.*?)</div>', html, re.S).group(1)
+
+
+@pytest.mark.parametrize("feiltype", list(KIFeilType))
+def test_fr28_ki_feil_sier_at_ingenting_er_borte_og_har_prov_paa_nytt(
+    app, paa_innlegging, feiltype
+):
+    """FR-28/UX-DR7: under feilteksten står «Det du har lagt inn, er ikke borte.» og hovedknappen
+    «Prøv på nytt», for hver type KIFeil. Boksen har ingen role="alert"."""
+    html, boks = ki_feil_boks(app, paa_innlegging, feiltype)
+    tekst = tekster.ki_feiltekst(KIFeil(feiltype))
+    assert re.search(
+        rf"{re.escape(tekst)}</p>"
+        r'\s*<p class="feilboks-tekst">Det du har lagt inn, er ikke borte\.</p>'
+        r'\s*<p class="feilboks-knapp">\s*<button class="hovedknapp"[^>]*>Prøv på nytt</button>',
+        boks,
+    )
+    assert "role=" not in boks
+    assert 'role="alert"' not in html
+
+
+def test_fr28_prov_paa_nytt_sender_skjemaet_som_sjekk(app, paa_innlegging):
+    """FR-27/FR-28: «Prøv på nytt» står utenfor skjemaet, men sender det med form= som
+    «Sjekk CV-en min», og viser ventetegnet med samme ventesetning."""
+    html, _ = ki_feil_boks(app, paa_innlegging)
+    knapp = next(a for t, a in tagger_i(html) if t == "button" and a.get("form"))
+    assert knapp == {
+        "class": "hovedknapp",
+        "type": "submit",
+        "form": "innlegging-skjema",
+        "name": "handling",
+        "value": "sjekk",
+        "data-vente": tekster.VENTE_SJEKKER,
+    }
+    skjema = next(a for t, a in tagger_i(html) if t == "form")
+    assert skjema["id"] == "innlegging-skjema"
+    vente = [a["data-vente"] for t, a in tagger_i(html) if "data-vente" in a]
+    assert vente == [tekster.VENTE_SJEKKER] * 2
+
+
+def test_fr28_prov_paa_nytt_med_ki_som_virker_gir_resultatsiden(app, paa_innlegging):
+    """FR-28/AD-8: virker KI-en igjen, gir «Prøv på nytt» resultatsiden, og analysen lagres.
+    POST-en bygges fra feilsiden: knappens name/value og teksten i tekstboksene."""
+    ekte = app.extensions["test_ki"]
+    html, _ = ki_feil_boks(app, paa_innlegging)
+    assert soknaden(app, paa_innlegging).steg == Steg.INNLEGGING
+    app.extensions["test_ki"] = ekte
+    knapp = next(a for t, a in tagger_i(html) if t == "button" and a.get("form"))
+    data = {navn: html_modul.unescape(tekstboks(html, navn)) for navn in ("cv", "annonse")}
+    data[knapp["name"]] = knapp["value"]
+    svar = paa_innlegging.post("/innlegging", data=data)
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
+    soknad = soknaden(app, paa_innlegging)
+    assert soknad.steg == Steg.RESULTAT
+    assert soknad.gap == GAP_SVAR
+
+
+def test_ux_dr7_prov_paa_nytt_er_ikke_hele_bredden():
+    """UX-DR7: knappen i feilboksen er bare så bred som teksten, som i skissen."""
+    blokk = css_blokk(STIL.read_text(encoding="utf-8"), ".feilboks-knapp .hovedknapp")
+    assert "display: inline-block;" in blokk
+    assert "width: auto;" in blokk
 
 
 def test_fr19_tilbake_lagrer_uten_feil_og_sender_til_modusvalget(app, paa_innlegging):

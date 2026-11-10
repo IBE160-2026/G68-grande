@@ -36,3 +36,10 @@ def test_fr28_ki_feiltekstene_fra_ux():
     andre = "Noe gikk galt hos KI-tjenesten. Prøv på nytt."
     assert tekster.ki_feiltekst(KIFeil(KIFeilType.ANNET)) == andre
     assert tekster.ki_feiltekst(KIFeil(KIFeilType.UBRUKELIG_SVAR)) == andre
+
+
+def test_fr28_tekstene_i_feilboksen_fra_ux():
+    """FR-28/UX-DR7: setningen under feilteksten på innleggingen og knappen, ordrett fra
+    EXPERIENCE."""
+    assert tekster.KI_FEIL_BEHOLDT_INNLEGGING == "Det du har lagt inn, er ikke borte."
+    assert tekster.PROV_PA_NYTT_KNAPP == "Prøv på nytt"
