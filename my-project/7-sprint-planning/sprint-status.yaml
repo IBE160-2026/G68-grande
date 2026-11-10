@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-10-2026 22:43
+last_updated: 11-10-2026 23:13
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -145,27 +145,27 @@ action_items:
       den nye søknaden vinner (finally lagrer bare når søknaden fortsatt er den som
       ble satt opptatt), med test"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-9-test-som-sjekker-at-ki-en-kalles-på-nytt"
     epic: 2
     action: "Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-10-utlogging-i-en-annen-fane-midt-i-sjekk-c"
     epic: 2
     action: "Utlogging i en annen fane midt i «Sjekk CV-en min» sender til innloggingen,
       ikke til en feilside, med test"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-11-hjelpeteksten-sier-backend-testdata-i-ko"
     epic: 2
     action: "Hjelpeteksten sier backend/testdata/ i koden, UX, epics og README (Kristine
       ser på feilteksten i PR-en)"
     owner: "KI (Claude), Kristine godkjenner teksten"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-12-prøve-resultatsiden-og-ventetegnet-ved-7"
     epic: 2

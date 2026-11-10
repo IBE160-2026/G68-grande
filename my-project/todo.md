@@ -117,11 +117,11 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 2.7 «Ventetegn og feil fra KI-en» med egen branch og PR (`bmad-build`). Den løser også «to trykk samtidig» (retro-punkt 7). Delt i to 10. november:
   - [x] Story 2.7.1 «Ventetegn og «opptatt»» (ferdig 10. november: PR #15 flettet, CI grønn på Linux og Windows, 422 tester)
   - [x] Story 2.7.2 «KI-feilboksen med «Prøv på nytt»» (ferdig 10. november: PR #17 flettet, CI grønn på Linux og Windows, 429 tester)
-- [ ] Etter retrospektiven for epic 2: rette fire ting i en egen PR før story 3.1. Se [`9-koding/epic-2-retro-2026-11-10.md`](9-koding/epic-2-retro-2026-11-10.md):
-  - [ ] Startsiden i en annen fane mens KI-en jobber: den nye søknaden vinner (bestemt 10. november)
-  - [ ] Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden
-  - [ ] Utlogging i en annen fane midt i «Sjekk CV-en min» gir innloggingen, ikke en feilside (bestemt 10. november)
-  - [ ] Hjelpeteksten sier `backend/testdata/` i koden, UX, epics og README (bestemt 10. november). Jeg ser på feilteksten «… fra mappen testdata/» i PR-en
+- [x] Etter retrospektiven for epic 2: rette fire ting i en egen PR før story 3.1. Se [`9-koding/epic-2-retro-2026-11-10.md`](9-koding/epic-2-retro-2026-11-10.md): (ferdig 10. november: PR #18 flettet, CI grønn på Linux og Windows, 441 tester)
+  - [x] Startsiden i en annen fane mens KI-en jobber: den nye søknaden vinner (bestemt 10. november)
+  - [x] Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden
+  - [x] Utlogging i en annen fane midt i «Sjekk CV-en min» gir innloggingen, ikke en feilside (bestemt 10. november)
+  - [x] Hjelpeteksten sier `backend/testdata/` i koden, UX, epics og README (bestemt 10. november). Jeg ser på feilteksten «… fra mappen testdata/» i PR-en (bestemt etter prøvingen: feilteksten sier også `backend/testdata/`)
 - [ ] Prøve resultatsiden og ventetegnet ved 768 og 1280 px (fra retrospektiven for epic 2)
 - [ ] Fra retrospektiven for epic 2: punkter som skal inn i senere stories (4.5 flere testcaser, epic 4 valg av KI og tidsgrense, 3.1, 6.1 og 7.3). Står i retro-dokumentet
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
