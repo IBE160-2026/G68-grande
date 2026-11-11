@@ -60,6 +60,16 @@ def test_fr28_gyldig_gapsvar_med_en_tom_liste():
         ("gap", '{"dekker": "Python", "mangler": []}'),
         ("gap", '{"dekker": ["Python"], "mangler": [null]}'),
         ("gap", "null"),
+        # Brev uten tekst (story 3.1)
+        ("brev", '{"avsnitt": []}'),
+        ("brev", '{"avsnitt": ["  "]}'),
+        ("brev", '{"avsnitt": ["", " \\n"]}'),
+        # Brev med feil form
+        ("brev", '{"avsnitt": "Hei"}'),
+        ("brev", '{"avsnitt": ["Hei", 3]}'),
+        ("brev", '{"avsnitt": ["Hei"], "forslag": 1}'),
+        ("brev", '{"tekst": "Hei"}'),
+        ("brev", '["Hei"]'),
     ],
 )
 def test_fr28_ubrukelig_svar_gir_kifeil(oppgave, tekst):
@@ -78,6 +88,19 @@ def test_fr28_kifeil_beholder_typen_ved_kopi():
 
 
 def test_fr28_ukjent_oppgave_er_en_programfeil():
-    """FR-28: brev og korrektur kommer senere. En ukjent oppgave er en feil i koden."""
+    """FR-28: korrektur kommer i Epic 5. En ukjent oppgave er en feil i koden."""
     with pytest.raises(ValueError):
-        kontroller("brev", '{"avsnitt": ["Hei"]}')
+        kontroller("korrektur", '{"avsnitt": ["Hei"]}')
+
+
+def test_fr22_gyldig_brev_gis_tilbake():
+    """FR-22/FR-28: et brev med minst ett avsnitt med tekst gis tilbake i formen fra AD-4."""
+    tekst = '{"avsnitt": ["Jeg søker stillingen.", "Med vennlig hilsen", "Sara"]}'
+    assert kontroller("brev", tekst) == {
+        "avsnitt": ["Jeg søker stillingen.", "Med vennlig hilsen", "Sara"]
+    }
+
+
+def test_fr22_tomme_avsnitt_i_brevet_fjernes():
+    """FR-22/FR-28: avsnitt som er tomme eller bare har mellomrom, fjernes fra brevet."""
+    assert kontroller("brev", '{"avsnitt": ["Hei", "", "  "]}') == {"avsnitt": ["Hei"]}

@@ -13,11 +13,13 @@ TESTDATA_MAPPE = Path(__file__).resolve().parents[2] / "testdata"
 
 
 class KI(Protocol):
-    """Faste signaturer. brev og korrektur kommer i Epic 3 og 5."""
+    """Faste signaturer. korrektur kommer i Epic 5."""
 
     def nokkelord(self, annonse: str) -> dict: ...
 
     def gap(self, cv: str, annonse: str) -> dict: ...
+
+    def brev(self, cv: str, annonse: str, forslag: int) -> dict: ...
 
 
 def les_testcaser(mappe: Path = TESTDATA_MAPPE) -> list[Testcase]:
@@ -52,12 +54,22 @@ class TestKI:
         case, _ = finn_case(cv, annonse, self.caser)
         return self._svar(case, "gap")
 
-    def _svar(self, case: str | None, oppgave: str) -> dict:
+    def brev(self, cv: str, annonse: str, forslag: int) -> dict:
+        """Caset finnes som i gap. Oddetall for forslag gir brev-1.json, partall brev-2.json
+        (brukes først i Epic 7). I Epic 3 er forslag alltid 1."""
+        case, _ = finn_case(cv, annonse, self.caser)
+        return self._svar(case, "brev", f"brev-{1 if forslag % 2 else 2}")
+
+    def _svar(self, case: str | None, oppgave: str, filnavn: str | None = None) -> dict:
+        """Leser ki-svar/<filnavn>.json i caset. Uten filnavn heter fila det samme som
+        oppgaven."""
         # Inndataene sjekkes før KI-en kalles (story 2.5). Dette er bare en sikring.
         if case is None:
             raise KIFeil(KIFeilType.ANNET)
         try:
-            tekst = (self.mappe / case / "ki-svar" / f"{oppgave}.json").read_text(encoding="utf-8")
+            tekst = (self.mappe / case / "ki-svar" / f"{filnavn or oppgave}.json").read_text(
+                encoding="utf-8"
+            )
         except OSError as feil:
             raise KIFeil(KIFeilType.ANNET) from feil
         except UnicodeDecodeError as feil:

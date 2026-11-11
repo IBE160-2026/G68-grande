@@ -274,20 +274,22 @@ def test_fr27_tekstene_ligger_i_tekster_py():
     assert "Prøv på nytt" not in innhold
 
 
-@pytest.mark.parametrize("side", ["/", "/modus", "/resultat"])
+@pytest.mark.parametrize("side", ["/", "/modus", "/brev"])
 def test_ad1_ventetegnet_bare_pa_sider_med_ki_kall(app, innlogget_client, side):
-    """AD-1: vente.js og ventetegnet finnes på innleggingen, ikke på sider uten KI-kall."""
+    """AD-1: vente.js og ventetegnet finnes på innleggingen og resultatsiden (story 3.1), ikke
+    på sider uten KI-kall."""
     sett_soknad(
         app,
         innlogget_client,
         Soknad(
-            steg=Steg.RESULTAT,
+            steg=Steg.BREV,
             modus=Modus.FULL_GENERERING,
             cv=Tekstfelt(CV),
             annonse=Tekstfelt(ANNONSE),
             nokkelord=("Python",),
             nokkelord_annonse="annonse",
             gap={"dekker": ["Python"], "mangler": []},
+            brev={"avsnitt": ["Hei"]},
         ),
     )
     svar = innlogget_client.get(side)

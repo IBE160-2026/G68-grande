@@ -9,6 +9,7 @@ from soknad.kjerne.feil import KIFeil, KIFeilType
 FELT = {
     "nokkelord": {"nokkelord", "arbeidsgiver"},
     "gap": {"dekker", "mangler"},
+    "brev": {"avsnitt"},
 }
 
 
@@ -24,6 +25,8 @@ def _riktig_form(oppgave: str, svar) -> bool:
         return _er_tekstliste(svar["nokkelord"]) and (
             arbeidsgiver is None or isinstance(arbeidsgiver, str)
         )
+    if oppgave == "brev":
+        return _er_tekstliste(svar["avsnitt"])
     return _er_tekstliste(svar["dekker"]) and _er_tekstliste(svar["mangler"])
 
 
@@ -35,13 +38,16 @@ def _bare_tomme(liste: list[str]) -> bool:
 def _tomt(oppgave: str, svar: dict) -> bool:
     if oppgave == "nokkelord":
         return _bare_tomme(svar["nokkelord"])
+    if oppgave == "brev":
+        return _bare_tomme(svar["avsnitt"])
     return _bare_tomme(svar["dekker"] + svar["mangler"])
 
 
 def kontroller(oppgave: str, tekst: str) -> dict:
-    """Gir svaret i formen fra AD-4. Ugyldig JSON, feil form, tom nøkkelordliste eller både
-    dekker og mangler tomme gir KIFeil(ubrukelig_svar). En liste med bare tomme tekster
-    regnes som tom. Oppgavene er nokkelord og gap."""
+    """Gir svaret i formen fra AD-4. Ugyldig JSON, feil form, tom nøkkelordliste, både
+    dekker og mangler tomme eller et brev uten tekst gir KIFeil(ubrukelig_svar). En liste med
+    bare tomme tekster regnes som tom. Oppgavene er nokkelord, gap og brev. I et brev fjernes
+    avsnitt som er tomme eller bare har mellomrom, så brevsiden ikke får tomme avsnitt."""
     if oppgave not in FELT:
         raise ValueError(f"Ukjent KI-oppgave: {oppgave}")
     try:
@@ -50,4 +56,6 @@ def kontroller(oppgave: str, tekst: str) -> dict:
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR) from feil
     if not _riktig_form(oppgave, svar) or _tomt(oppgave, svar):
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
+    if oppgave == "brev":
+        return {"avsnitt": [avsnitt for avsnitt in svar["avsnitt"] if avsnitt.strip()]}
     return svar

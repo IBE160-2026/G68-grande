@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block tittel %}{{ tekster.BREV_TITTEL }}{% endblock %}
+{% block innhold %}
+{#- Overskriften får fokus når siden åpnes, også etter ventetegnet på resultatsiden (UX-DR14).
+    Brevsiden har ingen «Tilbake». Fyrverkeri, PDF og «Nytt forslag» kommer i Epic 7. #}
+<h1 class="brev-overskrift" tabindex="-1" autofocus>{{ tekster.BREV_OVERSKRIFT }}</h1>
+{#- Brevet som et hvitt ark (letter-card), ett avsnitt per element. Det kan bare leses, ikke
+    redigeres (FR-26). #}
+<article class="brevark">
+  {%- for tekst in avsnitt %}
+  <p>{{ tekst }}</p>
+  {%- endfor %}
+</article>
+{% endblock %}

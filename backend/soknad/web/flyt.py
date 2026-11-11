@@ -10,12 +10,13 @@ from soknad.kjerne.okt import Soknad
 from soknad.kjerne.steg import Steg, kan_vises
 from soknad.web.innlogging import OKT_ID, oktlager
 
-# Siden for hvert steg. Brevsiden (Epic 3) legges til her.
+# Siden for hvert steg.
 SIDE_FOR_STEG = {
     Steg.START: "web.start",
     Steg.MODUS: "web.modus",
     Steg.INNLEGGING: "web.innlegging",
     Steg.RESULTAT: "web.resultat",
+    Steg.BREV: "web.brev",
 }
 
 

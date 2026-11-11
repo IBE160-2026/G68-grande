@@ -10,6 +10,7 @@ from soknad.kjerne.okt import (
     Tekstfelt,
     begynn,
     sett_analyse,
+    sett_brev,
     sett_inndata,
     sett_opptatt,
     velg_modus,
@@ -30,6 +31,7 @@ def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
     assert soknad.nokkelord_annonse is None
     assert soknad.arbeidsgiver is None
     assert soknad.gap is None
+    assert soknad.brev is None
     assert soknad.opptatt is False
 
 
@@ -50,6 +52,7 @@ def test_fr5_soknaden_har_faste_felt_og_kan_ikke_endres_direkte():
         "nokkelord_annonse",
         "arbeidsgiver",
         "gap",
+        "brev",
         "opptatt",
     ]
 
@@ -147,6 +150,7 @@ def test_fr19_sett_inndata_med_endret_tekst_nullstiller_resultatene(cv, annonse)
         nokkelord_annonse=None,
         arbeidsgiver=None,
         gap=None,
+        brev=None,
         steg=Steg.INNLEGGING,
     )
     # Den gamle søknaden er uendret.
@@ -227,3 +231,41 @@ def test_fr27_sett_opptatt_endrer_bare_opptatt():
     assert sett_opptatt(opptatt, False) == soknad
     # Den gamle søknaden er uendret.
     assert soknad.opptatt is False
+
+
+# --- sett_brev (story 3.1) ---
+
+BREV_SVAR = {"avsnitt": ["Første avsnitt.", "Med vennlig hilsen"]}
+
+
+@pytest.mark.parametrize(
+    ("steg", "forventet"), [(Steg.RESULTAT, Steg.BREV), (Steg.BREV, Steg.BREV)]
+)
+def test_fr22_sett_brev_lagrer_brevet_og_gir_steg_brev(steg, forventet):
+    """FR-22/AD-8: brevet lagres, og steget blir minst brev. Resten er uendret."""
+    soknad = _med_resultater(steg)
+    ny = sett_brev(soknad, BREV_SVAR)
+    assert ny == dataclasses.replace(soknad, brev=BREV_SVAR, steg=forventet)
+    # Den gamle søknaden er uendret.
+    assert soknad.brev is None
+
+
+def test_fr22_velg_modus_nullstiller_brevet():
+    """FR-22/AD-8: velges modus på nytt, er det gamle brevet borte, og steget er innlegging."""
+    ny = velg_modus(sett_brev(_med_resultater(), BREV_SVAR), Modus.FULL_GENERERING)
+    assert ny.brev is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr22_sett_inndata_med_endret_tekst_nullstiller_brevet():
+    """FR-19/FR-22/AD-8: endres CV-en, er det gamle brevet borte, og steget er innlegging."""
+    soknad = sett_brev(_med_resultater(), BREV_SVAR)
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
+    assert ny.brev is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr22_sett_inndata_med_like_tekster_beholder_brevet():
+    """FR-19/FR-22: er tekstene like som før, er søknaden uendret, også brevet."""
+    soknad = sett_brev(_med_resultater(), BREV_SVAR)
+    assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad

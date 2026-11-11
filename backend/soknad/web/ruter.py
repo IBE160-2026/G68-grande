@@ -11,6 +11,7 @@ from soknad.kjerne.okt import (
     Tekstfelt,
     begynn,
     sett_analyse,
+    sett_brev,
     sett_inndata,
     sett_opptatt,
     velg_modus,
@@ -142,20 +143,53 @@ def innlegging():
     return redirect(url_for("web.resultat"))
 
 
-@web.route("/resultat")
+@web.route("/resultat", methods=["GET", "POST"])
 @login_required
 @krever_steg(Steg.RESULTAT)
 def resultat():
-    """Resultatsiden. Prosenten regnes med telleregelen fra den lagrede nøkkelordlisten og
-    CV-en hver gang siden vises, så samme søknad alltid gir samme prosent (FR-15, FR-17)."""
+    """Resultatsiden. Mangler analysen, sendes brukeren til innleggingen, også ved POST.
+
+    POST er «Lag søknadsbrevet mitt» (FR-21, FR-22). Brevet hentes fra KI-en, lagres, og
+    brukeren sendes til brevsiden. En KIFeil gir resultatsiden på nytt med feilteksten, uten
+    redirect, og søknaden er uendret (FR-28). Mens KI-en jobber, er søknaden opptatt, og en ny
+    POST sendes til siden for steget uten at KI-en kalles (AD-8, FR-27). Er søknaden byttet ut
+    med en ny fra startsiden mens KI-en jobbet, blir den nye stående, og brevet kastes."""
+    lagret = gjeldende_soknad()
+    if lagret.nokkelord is None or lagret.gap is None:
+        return redirect(url_for("web.innlegging"))
+    if request.method == "GET":
+        return _vis_resultat(lagret)
+    opptatt = til_steget_hvis_opptatt(lagret)
+    if opptatt is not None:
+        return opptatt
+    if request.form.get("handling") != "brev":
+        # Ukjent knapp: samme side på nytt, og søknaden er uendret.
+        return _vis_resultat(lagret), 400
+    # Som på innleggingen: finally lagrer brevet når kallet lyktes, ellers søknaden fra før,
+    # men bare når søknaden i øktlageret fortsatt er den som ble satt opptatt.
+    opptatt_soknad = sett_opptatt(lagret, True)
+    lagre_soknad(opptatt_soknad)
+    ferdig = lagret
+    try:
+        svar = ki().brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
+        ferdig = sett_brev(lagret, svar)
+    except KIFeil as ki_feil:
+        return _vis_resultat(lagret, ki_feil=tekster.ki_feiltekst(ki_feil))
+    finally:
+        erstatt_soknad(opptatt_soknad, ferdig)
+    return redirect(url_for("web.brev"))
+
+
+@web.route("/brev")
+@login_required
+@krever_steg(Steg.BREV)
+def brev():
+    """Brevsiden (FR-22, FR-26). Brevet vises bare og kan ikke redigeres. Uten brev sendes
+    brukeren til resultatsiden."""
     soknad = gjeldende_soknad()
-    treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
-    return render_template(
-        "resultat.html",
-        gap=soknad.gap,
-        treff=treff,
-        nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
-    )
+    if soknad.brev is None:
+        return redirect(url_for("web.resultat"))
+    return render_template("brev.html", avsnitt=soknad.brev["avsnitt"])
 
 
 @web.route("/logg-ut", methods=["POST"])
@@ -225,6 +259,21 @@ def _vis_innlegging(soknad, feil, ki_feil=None):
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
     tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
     return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil, ki_feil=ki_feil)
+
+
+def _vis_resultat(soknad, ki_feil=None):
+    """Viser resultatsiden. Prosenten regnes med telleregelen fra den lagrede nøkkelordlisten
+    og CV-en hver gang siden vises, så samme søknad alltid gir samme prosent (FR-15, FR-17).
+    ki_feil er teksten til en KI-feil fra «Lag søknadsbrevet mitt», som står øverst i
+    feilboksen over «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt»."""
+    treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
+    return render_template(
+        "resultat.html",
+        gap=soknad.gap,
+        treff=treff,
+        nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
+        ki_feil=ki_feil,
+    )
 
 
 def _vis_skjema(mal, epost, feil, skjemafeil=None):

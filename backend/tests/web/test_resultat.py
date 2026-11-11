@@ -453,7 +453,8 @@ def test_ux_dr21_pynteikonene_er_skjult_for_skjermlesere(app, innlogget_client):
 def test_fr19_tilbake_er_en_lenke_til_innleggingen(paa_resultat):
     """FR-19/UX-DR4: «Tilbake» er en sekundærknapp nederst, en lenke til innleggingen."""
     innhold = main(html_av(paa_resultat.get("/resultat")))
-    knapperad = re.search(r'<div class="knapperad">(.*?)</div>', innhold, re.S).group(1)
+    knapperad = re.search(r'<div class="knapperad mellomrom">(.*?)</div>', innhold, re.S)
+    knapperad = knapperad.group(1)
     assert '<a class="sekundaerknapp" href="/innlegging">Tilbake</a>' in knapperad
 
 
