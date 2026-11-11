@@ -21,7 +21,9 @@ Kristine startet `/bmad-build 3.1`: første story i epic 3. Resultatsiden skal f
 - Kodegjennomgangen: 15 funn, 5 rettet (blant annet at tomme avsnitt i et brev fjernes, og en test for utlogging midt i brevkallet), 0 utsatt, 10 avvist med begrunnelse i spec-en.
 - 512 tester grønne, `ruff check` og `ruff format --check` grønne. Ikke prøvd i nettleseren ennå.
 - Sprint-status: epic 3 «in-progress», story 3.1 «review». `notater.md` har fått et punkt om testbrevet og FR-37 (lokal fil).
+- Etterpå: KI-en startet nettsiden og åpnet den. Kristine så brevsiden («ser veldig bra ut»). Testbrevet ble åpnet som tekst i Notisblokk. Kristine syntes det var litt enkelt, men godkjente det som plassholder, fordi det byttes ut med et ekte KI-svar i epic 4. TO DO og prompt-logg 323–324 er oppdatert.
 
 ### Åpne punkter
-- Kristine leser og godkjenner testbrevet til Sara (`brev-1.json`, teksten står også under «Design Notes» i spec-en).
-- Prøve story 3.1 i nettleseren etter de manuelle sjekkene i spec-en (ventetegnet, fokus, KI-feil med kopi av `brev-1.json`, tilbakeknappen, 320/768/1280 px og 200 % zoom). Se også om avstanden mellom «Med vennlig hilsen» og «Sara Eksempel» ser bra ut.
+- Prøve resten av de manuelle sjekkene i spec-en hvis de ikke er gjort: KI-feilen med kopi av `brev-1.json`, tilbakeknappen, 320/768/1280 px og 200 % zoom.
+- (Godkjenne testbrevet: løst 2026-11-11.)
+- Opprinnelig punkt: Prøve story 3.1 i nettleseren etter de manuelle sjekkene i spec-en (ventetegnet, fokus, KI-feil med kopi av `brev-1.json`, tilbakeknappen, 320/768/1280 px og 200 % zoom). Se også om avstanden mellom «Med vennlig hilsen» og «Sara Eksempel» ser bra ut.
