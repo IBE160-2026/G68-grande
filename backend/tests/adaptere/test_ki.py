@@ -45,6 +45,56 @@ def test_fr32_testki_gir_de_handlagde_svarene():
     assert ki.gap(cv, annonse) == json.loads(_les("ki-svar/gap.json"))
 
 
+def test_fr22_testki_gir_testbrevet():
+    """FR-22/FR-32: TestKI.brev gir brev-1.json for forslag 1, også med rotete tekst."""
+    ki = TestKI()
+    forventet = json.loads(_les("ki-svar/brev-1.json"))
+    assert ki.brev(_les("cv.txt"), _les("annonse.txt"), forslag=1) == forventet
+    assert ki.brev(_rotete(_les("cv.txt")), _rotete(_les("annonse.txt")), 1) == forventet
+
+
+def test_fr22_brev_oddetall_gir_brev_1_og_partall_brev_2(kopi):
+    """FR-22/FR-25: oddetall for forslag leser brev-1.json, partall brev-2.json."""
+    svar = kopi / "case-1-utvikler" / "ki-svar"
+    (svar / "brev-2.json").write_text('{"avsnitt": ["Forslag to"]}', encoding="utf-8")
+    ki = TestKI(kopi)
+    cv, annonse = _les("cv.txt"), _les("annonse.txt")
+    forste = json.loads(_les("ki-svar/brev-1.json"))
+    assert ki.brev(cv, annonse, forslag=1) == forste
+    assert ki.brev(cv, annonse, forslag=3) == forste
+    assert ki.brev(cv, annonse, forslag=2) == {"avsnitt": ["Forslag to"]}
+    assert ki.brev(cv, annonse, forslag=4) == {"avsnitt": ["Forslag to"]}
+
+
+def test_fr28_brevfil_som_mangler_gir_kifeil_annet(kopi):
+    """FR-28: mangler brevfila (brev-2.json finnes ikke ennå), gir det KIFeil(annet)."""
+    ki = TestKI(kopi)
+    with pytest.raises(KIFeil) as feil:
+        ki.brev(_les("cv.txt"), _les("annonse.txt"), forslag=2)
+    assert feil.value.type == KIFeilType.ANNET
+    (kopi / "case-1-utvikler" / "ki-svar" / "brev-1.json").unlink()
+    with pytest.raises(KIFeil) as feil:
+        ki.brev(_les("cv.txt"), _les("annonse.txt"), forslag=1)
+    assert feil.value.type == KIFeilType.ANNET
+
+
+@pytest.mark.parametrize("innhold", ['{"avsnitt": []}', '{"avsnitt": ["  "]}', "ikke json"])
+def test_fr28_tomt_brev_gir_ubrukelig_svar(kopi, innhold):
+    """FR-28: et tomt eller ødelagt brev går gjennom kontroller() og gir
+    KIFeil(ubrukelig_svar)."""
+    (kopi / "case-1-utvikler" / "ki-svar" / "brev-1.json").write_text(innhold, encoding="utf-8")
+    with pytest.raises(KIFeil) as feil:
+        TestKI(kopi).brev(_les("cv.txt"), _les("annonse.txt"), forslag=1)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def test_fr22_brev_uten_testdata_gir_kifeil_annet():
+    """FR-22/FR-34: tekst som ikke er testdata, gir KIFeil(annet), som i gap."""
+    with pytest.raises(KIFeil) as feil:
+        TestKI().brev(_les("cv.txt"), "Min egen annonse", forslag=1)
+    assert feil.value.type == KIFeilType.ANNET
+
+
 def test_fr34_testki_kjenner_igjen_rotete_tekst():
     """FR-34: samme tekst med ekstra mellomrom, linjeskift og store bokstaver gir samme svar."""
     ki = TestKI()

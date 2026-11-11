@@ -2,6 +2,10 @@
 {% block tittel %}{{ tekster.RESULTAT_TITTEL }}{% endblock %}
 {% block skript %}
   <script src="{{ url_for('static', filename='js/info.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/vente.js') }}" defer></script>
+{%- endblock %}
+{% block ventetegn %}
+{% include "ventetegn.html" %}
 {%- endblock %}
 
 {#- «i»-knappen med boksen rett etter seg i leserekkefølgen (UX-DR11). Boksen er skjult til
@@ -29,8 +33,22 @@
 {%- endmacro %}
 
 {% block innhold %}
-{#- Overskriften får fokus når siden åpnes, også etter ventetegnet på innleggingen (UX-DR14). #}
-<h1 class="side-overskrift" tabindex="-1" autofocus>{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
+{#- Overskriften får fokus når siden åpnes, også etter ventetegnet på innleggingen (UX-DR14).
+    Ved en KI-feil får feilboksen fokus i stedet. #}
+<h1 class="side-overskrift" tabindex="-1"{% if not ki_feil %} autofocus{% endif %}>{{ tekster.RESULTAT_OVERSKRIFT }}</h1>
+{%- if ki_feil %}
+{#- KI-feil fra «Lag søknadsbrevet mitt»: som på innleggingen. Boksen får fokus og har ikke
+    role="alert". «Prøv på nytt» står utenfor skjemaet, men sender det med form= som
+    «Lag søknadsbrevet mitt» og viser ventetegnet (FR-27, FR-28, UX-DR7). #}
+<div class="feilboks" id="feilboks" tabindex="-1" autofocus>
+  <p class="feilboks-overskrift">{{ ki_feil }}</p>
+  <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_RESULTAT }}</p>
+  <p class="feilboks-knapp">
+    <button class="hovedknapp" type="submit" form="resultat-skjema" name="handling"
+      value="brev" data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
+  </p>
+</div>
+{%- endif %}
 {#- Rekkefølgen er fast: gap-analysen, linjen om at de kan si forskjellig, nøkkelordtreffet
     og ATS-forklaringen (FR-14–FR-18). #}
 <section class="resultatboks" aria-labelledby="gap-overskrift">
@@ -85,8 +103,13 @@
   <p>{{ avsnitt }}</p>
   {%- endfor %}
 </details>
-{#- «Lag søknadsbrevet mitt» kommer til høyre i story 3.1. #}
-<div class="knapperad">
-  <a class="sekundaerknapp" href="{{ url_for('web.innlegging') }}">{{ tekster.TILBAKE_KNAPP }}</a>
-</div>
+{#- «Tilbake» til venstre, «Lag søknadsbrevet mitt» til høyre. Trykket er bekreftelsen, uten
+    ekstra spørsmål (FR-21). data-vente: knappen starter et KI-kall og viser ventetegnet. #}
+<form method="post" action="{{ url_for('web.resultat') }}" id="resultat-skjema">
+  <div class="knapperad mellomrom">
+    <a class="sekundaerknapp" href="{{ url_for('web.innlegging') }}">{{ tekster.TILBAKE_KNAPP }}</a>
+    <button class="hovedknapp" type="submit" name="handling" value="brev"
+      data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.LAG_BREV_KNAPP }}</button>
+  </div>
+</form>
 {% endblock %}

@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 
+from soknad.kjerne.ki_svar import kontroller
 from soknad.kjerne.telleregel import tell_treff
 
 CASE = Path(__file__).parent.parent / "testdata" / "case-1-utvikler"
@@ -137,3 +138,48 @@ def test_nfr3_alle_epostene_er_fiktive():
         adresser = EPOST.findall(_les(navn))
         assert adresser
         assert all(adresse.endswith("@example.com") for adresse in adresser)
+
+
+# De typiske KI-frasene fra addendum til PRD-en (FR-24), skrevet med små bokstaver og uten
+# «…». Brevet skal ikke bruke noen av dem.
+KI_FRASER = (
+    "i dagens raskt skiftende arbeidsmarked",
+    "i en verden der",
+    "det er med stor glede og entusiasme at jeg søker",
+    "jeg skriver for å uttrykke min interesse for",
+    "jeg er lidenskapelig opptatt av",
+    "jeg er begeistret for muligheten til",
+    "drevet av en genuin interesse for",
+    "jeg er overbevist om at jeg vil være en verdifull ressurs",
+    "med min solide bakgrunn innen",
+    "en unik kombinasjon av ferdigheter",
+    "landskap",
+    "navigere",
+    "sømløst",
+    "i skjæringspunktet mellom",
+    "en spennende reise",
+    "jeg ser frem til muligheten til å bidra til deres videre suksess",
+    "takk for at du tok deg tid til å lese søknaden min",
+)
+
+
+def test_fr22_fr24_testbrevet_bestaar_kontrollen_uten_ki_fraser():
+    """FR-22/FR-24/FR-28: brev-1.json består kontroller(), og ingen avsnitt bruker frasene
+    fra addendum."""
+    brev = kontroller("brev", _les("ki-svar/brev-1.json"))
+    assert len(brev["avsnitt"]) >= 2
+    tekst = " ".join(" ".join(brev["avsnitt"]).split()).casefold()
+    assert [frase for frase in KI_FRASER if frase in tekst] == []
+
+
+# Ord fra «Sjekkliste for brevet» i fasit.md: det står ikke i CV-en, så brevet kan ikke
+# påstå det.
+SJEKKLISTE_ORD = ("sql", "database", "docker", "scrum", "smidig", "førerkort")
+
+
+def test_fr37_testbrevet_har_ingen_pastander_fra_sjekklisten():
+    """FR-37: brev-1.json nevner ingenting fra sjekklisten i fasit.md (SQL, databaser, Docker,
+    Scrum, smidig utvikling, førerkort)."""
+    brev = kontroller("brev", _les("ki-svar/brev-1.json"))
+    tekst = " ".join(brev["avsnitt"]).casefold()
+    assert [ord_ for ord_ in SJEKKLISTE_ORD if ord_ in tekst] == []

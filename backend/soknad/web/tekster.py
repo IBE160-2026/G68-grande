@@ -144,6 +144,14 @@ ATS_AVSNITT = (
 )
 
 
+# Hovedknappen nederst på resultatsiden, til høyre for «Tilbake» (FR-21).
+LAG_BREV_KNAPP = "Lag søknadsbrevet mitt"
+VENTE_BREV = "Vi lager brevet ditt – det kan ta en liten stund."
+
+BREV_TITTEL = "Søknadsbrev"
+BREV_OVERSKRIFT = "Din ferdigstilte søknad!"
+
+
 def nokkelordtreff(antall_treff: int, antall: int, prosent: int) -> str:
     """«7 av 11 = 64 %», med vanlig mellomrom før %."""
     return f"{antall_treff} av {antall} = {prosent} %"
@@ -213,8 +221,9 @@ KI_FEILTEKSTER = {
     KIFeilType.ANNET: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
     KIFeilType.UBRUKELIG_SVAR: "Noe gikk galt hos KI-tjenesten. Prøv på nytt.",
 }
-# Under feilteksten i feilboksen, per side (FR-28, UX-DR7). Resultatsiden får sin i Epic 3.
+# Under feilteksten i feilboksen, per side (FR-28, UX-DR7).
 KI_FEIL_BEHOLDT_INNLEGGING = "Det du har lagt inn, er ikke borte."
+KI_FEIL_BEHOLDT_RESULTAT = "Resultatet og det du har lagt inn, er ikke borte."
 # Knappen i feilboksen som prøver KI-kallet på nytt.
 PROV_PA_NYTT_KNAPP = "Prøv på nytt"
 

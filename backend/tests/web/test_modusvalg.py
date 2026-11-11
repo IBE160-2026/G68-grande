@@ -112,9 +112,10 @@ def test_fr20_hele_flyten_fra_startsiden(innlogget_client):
 
 
 def test_fr20_hvert_steg_som_kan_naas_har_en_side(app):
-    """AD-8: stegene som kan nås så langt, har en side, og sidene finnes. Resultatsiden kom
-    i story 2.5.2, brevsiden kommer i Epic 3."""
-    assert set(SIDE_FOR_STEG) == {Steg.START, Steg.MODUS, Steg.INNLEGGING, Steg.RESULTAT}
+    """AD-8/FR-22: alle stegene har en side, og sidene finnes. Resultatsiden kom i story
+    2.5.2, brevsiden i story 3.1."""
+    assert set(SIDE_FOR_STEG) == set(Steg)
+    assert SIDE_FOR_STEG[Steg.BREV] == "web.brev"
     endepunkter = {regel.endpoint for regel in app.url_map.iter_rules()}
     assert set(SIDE_FOR_STEG.values()) <= endepunkter
 

@@ -35,7 +35,7 @@ class Tekstfelt:
 class Soknad:
     """Varer én søknad. Å komme til startsiden lager alltid en ny.
 
-    brev, korrektur, forslag og lastet_ned legges til i Epic 3 og 5, med de navnene."""
+    lastet_ned, korrektur og forslag legges til i story 3.2, Epic 5 og Epic 7, med de navnene."""
 
     steg: Steg = Steg.START
     modus: Modus | None = None
@@ -48,6 +48,8 @@ class Soknad:
     nokkelord_annonse: str | None = None
     arbeidsgiver: str | None = None
     gap: dict | None = None
+    # Søknadsbrevet fra KI-en, i formen fra AD-4 ({avsnitt: [str]}). Bare i minnet.
+    brev: dict | None = None
     opptatt: bool = False
 
 
@@ -57,15 +59,16 @@ def begynn(soknad: Soknad) -> Soknad:
 
 
 def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
-    """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen gjelder ikke lenger,
-    fordi analysen kjøres på nytt før resultatsiden. CV, annonse og nøkkelordlisten beholdes."""
-    return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None)
+    """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen og brevet gjelder
+    ikke lenger, fordi analysen kjøres på nytt før resultatsiden. CV, annonse og
+    nøkkelordlisten beholdes."""
+    return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None, brev=None)
 
 
 def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad:
     """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). Er begge feltene
     like som før, er søknaden uendret. Ellers gjelder ikke resultatene lenger: nøkkelordlisten,
-    arbeidsgiveren og gap-analysen nullstilles, og steget blir høyst innlegging, så
+    arbeidsgiveren, gap-analysen og brevet nullstilles, og steget blir høyst innlegging, så
     resultatsiden ikke vises før analysen har lyktes igjen (AD-8). Gjenbruk av
     nøkkelordlisten når bare CV-en er endret, kommer i Epic 7."""
     if soknad.cv == cv and soknad.annonse == annonse:
@@ -78,6 +81,7 @@ def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad
         nokkelord_annonse=None,
         arbeidsgiver=None,
         gap=None,
+        brev=None,
         steg=min(soknad.steg, Steg.INNLEGGING),
     )
 
@@ -100,3 +104,9 @@ def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
         gap=gap,
         steg=max(soknad.steg, Steg.RESULTAT),
     )
+
+
+def sett_brev(soknad: Soknad, brev: dict) -> Soknad:
+    """Lagrer brevet når KI-kallet har lyktes («Lag søknadsbrevet mitt»). brev har formen fra
+    AD-4. Steget blir minst brev (AD-8)."""
+    return replace(soknad, brev=brev, steg=max(soknad.steg, Steg.BREV))

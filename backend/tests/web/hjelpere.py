@@ -80,7 +80,7 @@ def sett_soknad(app, client, soknad):
 
 
 class FeilendeKI:
-    """Samme testcaser og svar som TestKI, men oppgaven (nokkelord eller gap) gir
+    """Samme testcaser og svar som TestKI, men oppgaven (nokkelord, gap eller brev) gir
     KIFeil(feiltype). oppgave=None gir ingen feil. Hver oppgave som kalles, skrives i kalt.
     Settes inn med app.extensions["test_ki"]."""
 
@@ -102,6 +102,9 @@ class FeilendeKI:
 
     def gap(self, cv, annonse):
         return self._kall("gap", cv, annonse)
+
+    def brev(self, cv, annonse, forslag):
+        return self._kall("brev", cv, annonse, forslag)
 
 
 def sett_testmodus(app, client, testmodus):

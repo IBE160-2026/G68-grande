@@ -1062,6 +1062,53 @@ svg {
   margin: var(--space-3) 0 0;
 }
 
+/* Brevsiden (FR-22, FR-26) */
+
+/* Brevoverskriften: «Din ferdigstilte søknad!», sentrert, mindre på mobil */
+.brev-overskrift {
+  margin: var(--space-2) 0 var(--space-5);
+  font-size: var(--size-heading-letter);
+  line-height: var(--line-height-heading-page);
+  text-align: center;
+}
+
+/* Overskriften får fokus når siden åpnes, men kan ikke nås med Tab. Ringen fjernes, så den
+ * ikke ser ut som en knapp. Skjermlesere leser den fortsatt opp. */
+.brev-overskrift[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Brevet (letter-card): hvitt ark med skygge, høyst 720 px bredt, i midten. overflow-wrap:
+ * anywhere, så et langt ord brytes i stedet for å gjøre siden bredere på mobil (NFR-7). */
+.brevark {
+  max-width: var(--letter-max);
+  margin: 0 auto var(--space-7);
+  padding: var(--space-6) var(--space-7);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow);
+  overflow-wrap: anywhere;
+}
+
+.brevark p {
+  margin: 0 0 var(--space-4);
+}
+
+.brevark p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 699px) {
+  .brev-overskrift {
+    font-size: var(--size-heading-letter-mobile);
+  }
+
+  .brevark {
+    padding: var(--space-4);
+  }
+}
+
 /* Hjørneraden (corner-row): festet nederst på skjermen på alle sider etter innlogging.
  * «Logg ut» til høyre, plass til KI-merknaden til venstre (Epic 4). */
 .hjornerad {
