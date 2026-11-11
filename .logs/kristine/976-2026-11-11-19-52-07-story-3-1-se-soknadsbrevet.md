@@ -23,7 +23,8 @@ Kristine startet `/bmad-build 3.1`: første story i epic 3. Resultatsiden skal f
 - Sprint-status: epic 3 «in-progress», story 3.1 «review». `notater.md` har fått et punkt om testbrevet og FR-37 (lokal fil).
 - Etterpå: KI-en startet nettsiden og åpnet den. Kristine så brevsiden («ser veldig bra ut»). Testbrevet ble åpnet som tekst i Notisblokk. Kristine syntes det var litt enkelt, men godkjente det som plassholder, fordi det byttes ut med et ekte KI-svar i epic 4. TO DO og prompt-logg 323–324 er oppdatert.
 
+- KI-feilen i nettleseren: KI-en kopierte `brev-1.json` til scratchpad og gjorde det tomt. Kristine fikk feilboksen på resultatsiden, og KI-en satte fila tilbake fra kopien (`git status` ren). Breddene er fine. TO DO og prompt-logg 325–326 er oppdatert.
+
 ### Åpne punkter
-- Prøve resten av de manuelle sjekkene i spec-en hvis de ikke er gjort: KI-feilen med kopi av `brev-1.json`, tilbakeknappen, 320/768/1280 px og 200 % zoom.
-- (Godkjenne testbrevet: løst 2026-11-11.)
+- Ingen nye. Begge punktene fra denne økten er løst 2026-11-11: testbrevet er godkjent som plassholder, og brevsiden, KI-feilen og breddene er prøvd i nettleseren.
 - Opprinnelig punkt: Prøve story 3.1 i nettleseren etter de manuelle sjekkene i spec-en (ventetegnet, fokus, KI-feil med kopi av `brev-1.json`, tilbakeknappen, 320/768/1280 px og 200 % zoom). Se også om avstanden mellom «Med vennlig hilsen» og «Sara Eksempel» ser bra ut.
