@@ -35,7 +35,7 @@ class Tekstfelt:
 class Soknad:
     """Varer én søknad. Å komme til startsiden lager alltid en ny.
 
-    lastet_ned, korrektur og forslag legges til i story 3.2, Epic 5 og Epic 7, med de navnene."""
+    korrektur og forslag legges til i Epic 5 og Epic 7, med de navnene."""
 
     steg: Steg = Steg.START
     modus: Modus | None = None
@@ -50,6 +50,8 @@ class Soknad:
     gap: dict | None = None
     # Søknadsbrevet fra KI-en, i formen fra AD-4 ({avsnitt: [str]}). Bare i minnet.
     brev: dict | None = None
+    # Sann når brevet er lastet ned som Word (FR-29). Gjelder bare brevet som er der nå.
+    lastet_ned: bool = False
     opptatt: bool = False
 
 
@@ -59,17 +61,17 @@ def begynn(soknad: Soknad) -> Soknad:
 
 
 def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
-    """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen og brevet gjelder
-    ikke lenger, fordi analysen kjøres på nytt før resultatsiden. CV, annonse og
-    nøkkelordlisten beholdes."""
-    return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None, brev=None)
+    """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen og brevet (og om det
+    er lastet ned) gjelder ikke lenger, fordi analysen kjøres på nytt før resultatsiden. CV,
+    annonse og nøkkelordlisten beholdes."""
+    return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None, brev=None, lastet_ned=False)
 
 
 def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad:
     """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). Er begge feltene
     like som før, er søknaden uendret. Ellers gjelder ikke resultatene lenger: nøkkelordlisten,
-    arbeidsgiveren, gap-analysen og brevet nullstilles, og steget blir høyst innlegging, så
-    resultatsiden ikke vises før analysen har lyktes igjen (AD-8). Gjenbruk av
+    arbeidsgiveren, gap-analysen, brevet og lastet_ned nullstilles, og steget blir høyst
+    innlegging, så resultatsiden ikke vises før analysen har lyktes igjen (AD-8). Gjenbruk av
     nøkkelordlisten når bare CV-en er endret, kommer i Epic 7."""
     if soknad.cv == cv and soknad.annonse == annonse:
         return soknad
@@ -82,6 +84,7 @@ def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad
         arbeidsgiver=None,
         gap=None,
         brev=None,
+        lastet_ned=False,
         steg=min(soknad.steg, Steg.INNLEGGING),
     )
 
@@ -108,5 +111,10 @@ def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
 
 def sett_brev(soknad: Soknad, brev: dict) -> Soknad:
     """Lagrer brevet når KI-kallet har lyktes («Lag søknadsbrevet mitt»). brev har formen fra
-    AD-4. Steget blir minst brev (AD-8)."""
-    return replace(soknad, brev=brev, steg=max(soknad.steg, Steg.BREV))
+    AD-4. Steget blir minst brev (AD-8). Et nytt brev er ikke lastet ned ennå."""
+    return replace(soknad, brev=brev, lastet_ned=False, steg=max(soknad.steg, Steg.BREV))
+
+
+def sett_lastet_ned(soknad: Soknad) -> Soknad:
+    """Brevet er lastet ned (FR-29). Resten av søknaden er uendret."""
+    return replace(soknad, lastet_ned=True)

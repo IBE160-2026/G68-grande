@@ -581,3 +581,15 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 326 | «breddene er fine» | Brevsiden er prøvd ved 320, 768 og 1280 px |
 | 327 | «ja push, stopp nettsiden» | KI-en stoppet nettsiden, pushet branchen og laget [PR #19](https://github.com/IBE160-2026/G68-grande/pull/19) med merknad om KI-feil og hva jeg har prøvd i nettleseren |
 | 328 | «flettet og slettet bransch» | KI-en hentet `main`, satte story 3.1 til ferdig i sprint-statusen, krysset av i TO DO, la PR-lenken i oversikten og pushet loggene |
+
+## 2026-11-11 – Story 3.2: Laste ned brevet som Word
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-2-laste-ned-brevet-som-word.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 329 | `/bmad-build` «3.2» | KI-en leste konteksten for epic 3, planen for 3.1, arkitekturen, UX og skissen av brevsiden, og skrev planen for story 3.2: knappen «Last ned som Word», filnavnet `Soknad_<dato>.docx`, den grønne knappen og feilboksen når fila ikke kan lages |
+| 330 | «1 trenger ikke ha med "teksten din er ikke borte" 2 godkjenn og fortsett» | Feilboksen fikk bare feilteksten og «Prøv på nytt». KI-en kodet storyen på branchen `story/3-2-laste-ned-brevet-som-word` og la til python-docx. Tre hjelpere gikk gjennom koden og fant 17 ting: 2 rettet, 1 utsatt (skriptet testes bare ved å lese teksten, se issue #16) og 14 avvist med begrunnelse. **KI-feil:** Word-fila fikk amerikansk papirstørrelse (Letter) og engelsk språk fra malen i python-docx, så Word ville markert hele brevet som stavefeil. Nå er den A4 og norsk bokmål. 549 tester |
+| 331 | «åpne nettsiden» / «kan du åpne annonsen» / «det er ikke annonsen det er cv-en til sara» | KI-en startet nettsiden og åpnet annonsen i Notisblokk. Notisblokk viste CV-en fra et vindu som var åpent fra før. KI-en kopierte annonseteksten til utklippstavlen, og etter at jeg lukket det gamle vinduet, åpnet den annonsen på nytt |
+| 332 | «alt er testet og ser bra ut» | Jeg prøvde nedlastingen i nettleseren og åpnet fila i Word: knappen ble grønn med filnavnet, og fila var riktig. KI-en stoppet nettsiden |
+| 333 | «push» | KI-en pushet branchen og laget [PR #20](https://github.com/IBE160-2026/G68-grande/pull/20) med merknad om KI-feil (Letter-papir og engelsk språk i Word-fila) og en kommentar om hva jeg har prøvd i nettleseren |

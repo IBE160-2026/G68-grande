@@ -1,4 +1,4 @@
-"""Tester for søknaden i økten (FR-5, FR-20, AD-7, AD-8)."""
+"""Tester for søknaden i økten (FR-5, FR-20, FR-29, AD-7, AD-8)."""
 
 import dataclasses
 
@@ -12,6 +12,7 @@ from soknad.kjerne.okt import (
     sett_analyse,
     sett_brev,
     sett_inndata,
+    sett_lastet_ned,
     sett_opptatt,
     velg_modus,
 )
@@ -32,6 +33,7 @@ def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
     assert soknad.arbeidsgiver is None
     assert soknad.gap is None
     assert soknad.brev is None
+    assert soknad.lastet_ned is False
     assert soknad.opptatt is False
 
 
@@ -53,6 +55,7 @@ def test_fr5_soknaden_har_faste_felt_og_kan_ikke_endres_direkte():
         "arbeidsgiver",
         "gap",
         "brev",
+        "lastet_ned",
         "opptatt",
     ]
 
@@ -268,4 +271,42 @@ def test_fr22_sett_inndata_med_endret_tekst_nullstiller_brevet():
 def test_fr22_sett_inndata_med_like_tekster_beholder_brevet():
     """FR-19/FR-22: er tekstene like som før, er søknaden uendret, også brevet."""
     soknad = sett_brev(_med_resultater(), BREV_SVAR)
+    assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
+
+
+# --- lastet_ned (story 3.2) ---
+
+
+def _lastet_ned():
+    return sett_lastet_ned(sett_brev(_med_resultater(), BREV_SVAR))
+
+
+def test_fr29_sett_lastet_ned_endrer_bare_lastet_ned():
+    """FR-29: sett_lastet_ned gjør lastet_ned sann. Resten av søknaden er uendret."""
+    soknad = sett_brev(_med_resultater(), BREV_SVAR)
+    assert soknad.lastet_ned is False
+    ny = sett_lastet_ned(soknad)
+    assert ny == dataclasses.replace(soknad, lastet_ned=True)
+    assert soknad.lastet_ned is False
+
+
+def test_fr29_nytt_brev_er_ikke_lastet_ned():
+    """FR-29/AD-8: et nytt brev (sett_brev) er ikke lastet ned ennå."""
+    assert sett_brev(_lastet_ned(), BREV_SVAR).lastet_ned is False
+
+
+def test_fr29_velg_modus_nullstiller_lastet_ned():
+    """FR-29/AD-8: velges modus på nytt, er lastet_ned usann."""
+    assert velg_modus(_lastet_ned(), Modus.FULL_GENERERING).lastet_ned is False
+
+
+def test_fr29_sett_inndata_med_endret_tekst_nullstiller_lastet_ned():
+    """FR-19/FR-29/AD-8: endres CV-en, er lastet_ned usann."""
+    ny = sett_inndata(_lastet_ned(), cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
+    assert ny.lastet_ned is False
+
+
+def test_fr29_sett_inndata_med_like_tekster_beholder_lastet_ned():
+    """FR-19/FR-29: er tekstene like som før, er søknaden uendret, også lastet_ned."""
+    soknad = _lastet_ned()
     assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad

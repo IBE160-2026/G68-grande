@@ -72,6 +72,7 @@ def test_nfr9_fr7_alle_sider_krever_innlogging(app):
         "web.innlegging",
         "web.resultat",
         "web.brev",
+        "web.last_ned",
     } <= testet
 
 
