@@ -52,3 +52,19 @@ Prøve story 3.2 i nettleseren: åpne nettsiden og annonsen fra case 1.
 
 ### Åpne punkter
 - Story 3.2: grønn CI og flette PR #20. Deretter sette 3.2 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
+
+## 2026-11-11 kl. 22:06 — Kristine
+
+### Oppgave
+PR #20 er flettet og branchen slettet på GitHub. Avslutte story 3.2.
+
+### Plan
+- Hente `main`, slette branchen lokalt, sette 3.2 til ferdig og pushe oppdateringene.
+
+### Resultat
+- `main` hentet (`9ef7002`), og branchen er slettet lokalt. `7edce26`: story 3.2 ferdig i sprint-statusen (begge kopiene), TO DO, oversikten med PR-lenken og prompt-logg 334. Pushet til `main`.
+- PR-en ble flettet før CI hadde kjørt. Alle CI-kjøringene (to for PR-en, to for `main`) sto i kø uten jobber. Årsaken var en feil hos GitHub: «Actions is experiencing degraded availability» (githubstatus.com, fra kl. 21:48). Avbryting gikk ikke, fordi kjøringene aldri startet.
+- Lærdom: vent med å flette til PR-en har grønn hake for både Linux og Windows.
+
+### Åpne punkter
+- Sjekke at CI på `main` (`7edce26`) blir grønn når GitHub Actions virker igjen. Står kjøringene fortsatt i kø etter at feilen er rettet: «Re-run». Blir den rød: rett i en liten ny PR.
