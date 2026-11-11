@@ -21,3 +21,19 @@
 ### Åpne punkter
 - Prøve story 3.2 i nettleseren: laste ned, åpne fila i Word (A4, norsk, ingen topp- eller bunntekst), se at knappen blir grønn med filnavnet, og sjekke 320 px og 200 % zoom.
 - Story 3.2: push, PR med merknad om KI-feil og kommentar om prøvingen i nettleseren, grønn CI og flette.
+
+## 2026-11-11 kl. 21:25 — Kristine
+
+### Oppgave
+Prøve story 3.2 i nettleseren: åpne nettsiden og annonsen fra case 1.
+
+### Plan
+- Starte nettsiden, åpne annonsen og la Kristine gå gjennom de manuelle sjekkene i spec-en.
+
+### Resultat
+- Kristine prøvde alt: nedlastingen, fila i Word og den grønne knappen. «Alt er testet og ser bra ut.»
+- Notisblokk viste først CV-en fra et vindu som var åpent fra før. Annonseteksten ble kopiert til utklippstavlen og åpnet på nytt.
+- Nettsiden er stoppet. TO DO og prompt-logg 331–332 er oppdatert. Punktet om å prøve i nettleseren er lukket i `issues.md`.
+
+### Åpne punkter
+- Story 3.2: push, PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og flette (står fra før i `issues.md`).
