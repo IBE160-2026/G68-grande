@@ -151,6 +151,19 @@ VENTE_BREV = "Vi lager brevet ditt – det kan ta en liten stund."
 BREV_TITTEL = "Søknadsbrev"
 BREV_OVERSKRIFT = "Din ferdigstilte søknad!"
 
+# Nedlastingen under brevet (FR-29, UX-DR16). Etter nedlasting blir knappen grønn med ✓ foran
+# «Lastet ned som Word». ✓ er bare pynt og skjules for skjermlesere.
+LAST_NED_WORD = "Last ned som Word"
+LASTET_NED_WORD = "Lastet ned som Word"
+FERDIG_IKON = "✓"
+# Feilboksen øverst på brevsiden når filen ikke kan lages (FilFeil).
+FIL_FEIL = "Vi klarte ikke å lage filen. Prøv på nytt."
+
+
+def filnavn_linje(filnavn: str) -> str:
+    """Under knappen etter nedlasting: «Filnavn: Soknad_2026-11-11.docx»."""
+    return f"Filnavn: {filnavn}"
+
 
 def nokkelordtreff(antall_treff: int, antall: int, prosent: int) -> str:
     """«7 av 11 = 64 %», med vanlig mellomrom før %."""

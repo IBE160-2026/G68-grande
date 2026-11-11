@@ -39,3 +39,7 @@ class KIFeil(Exception):
         # type sendes videre (ikke type.value), så en kopi av feilen får samme type.
         super().__init__(type)
         self.type = type
+
+
+class FilFeil(Exception):
+    """Filen til nedlastingen kunne ikke lages (AD-9). Brevet er fortsatt i økten."""

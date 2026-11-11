@@ -1,9 +1,14 @@
 """Rutene på nettsiden."""
 
-from flask import current_app, redirect, render_template, request, url_for
+from datetime import date
+from io import BytesIO
 
+from flask import current_app, redirect, render_template, request, send_file, url_for
+
+from soknad.adaptere import fil_ut
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
-from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil
+from soknad.kjerne.feil import FeilType, FilFeil, InndataFeil, KIFeil
+from soknad.kjerne.filnavn import lag_filnavn
 from soknad.kjerne.inndata import sjekk_innlegging, sjekk_innlogging, sjekk_registrering
 from soknad.kjerne.okt import (
     Modus,
@@ -13,6 +18,7 @@ from soknad.kjerne.okt import (
     sett_analyse,
     sett_brev,
     sett_inndata,
+    sett_lastet_ned,
     sett_opptatt,
     velg_modus,
 )
@@ -189,7 +195,36 @@ def brev():
     soknad = gjeldende_soknad()
     if soknad.brev is None:
         return redirect(url_for("web.resultat"))
-    return render_template("brev.html", avsnitt=soknad.brev["avsnitt"])
+    return _vis_brev(soknad)
+
+
+@web.route("/last-ned/<any(docx):format>")
+@login_required
+@krever_steg(Steg.BREV)
+def last_ned(format):
+    """«Last ned som Word» (FR-29, FR-30, AD-8). Filen lages i minnet, lastet_ned settes, og
+    filen sendes som vedlegg, så brevsiden blir stående. PDF kommer i Epic 7.
+
+    Uten brev sendes brukeren til resultatsiden. Mens søknaden er opptatt, sendes brukeren til
+    siden for steget uten fil. Kan filen ikke lages (FilFeil), vises brevsiden med feilboksen,
+    og brevet er ikke borte. lastet_ned lagres bare når søknaden ikke er endret i mellomtiden."""
+    lagret = gjeldende_soknad()
+    if lagret.brev is None:
+        return redirect(url_for("web.resultat"))
+    opptatt = til_steget_hvis_opptatt(lagret)
+    if opptatt is not None:
+        return opptatt
+    try:
+        innhold = fil_ut.lag_docx(lagret.brev["avsnitt"])
+    except FilFeil:
+        return _vis_brev(lagret, fil_feil=True), 500
+    erstatt_soknad(lagret, sett_lastet_ned(lagret))
+    return send_file(
+        BytesIO(innhold),
+        mimetype=fil_ut.DOCX_MEDIETYPE,
+        as_attachment=True,
+        download_name=lag_filnavn(date.today(), format),
+    )
 
 
 @web.route("/logg-ut", methods=["POST"])
@@ -273,6 +308,18 @@ def _vis_resultat(soknad, ki_feil=None):
         treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
         ki_feil=ki_feil,
+    )
+
+
+def _vis_brev(soknad, fil_feil=False):
+    """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
+    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil)."""
+    return render_template(
+        "brev.html",
+        avsnitt=soknad.brev["avsnitt"],
+        lastet_ned=soknad.lastet_ned,
+        filnavn=lag_filnavn(date.today(), "docx"),
+        fil_feil=fil_feil,
     )
 
 

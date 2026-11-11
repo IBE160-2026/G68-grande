@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 {% block tittel %}{{ tekster.BREV_TITTEL }}{% endblock %}
+{% block skript %}
+  <script src="{{ url_for('static', filename='js/nedlasting.js') }}" defer></script>
+{%- endblock %}
 {% block innhold %}
 {#- Overskriften får fokus når siden åpnes, også etter ventetegnet på resultatsiden (UX-DR14).
-    Brevsiden har ingen «Tilbake». Fyrverkeri, PDF og «Nytt forslag» kommer i Epic 7. #}
-<h1 class="brev-overskrift" tabindex="-1" autofocus>{{ tekster.BREV_OVERSKRIFT }}</h1>
+    Ved «Filen kan ikke lages» får feilboksen fokus i stedet. Brevsiden har ingen «Tilbake».
+    Fyrverkeri, PDF og «Nytt forslag» kommer i Epic 7. #}
+<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil %} autofocus{% endif %}>{{ tekster.BREV_OVERSKRIFT }}</h1>
+{%- if fil_feil %}
+{#- Filen kunne ikke lages (FilFeil): som KI-feilboksen, men «Prøv på nytt» er en lenke som
+    laster ned på nytt. Brevet under er ikke borte. #}
+<div class="feilboks" id="feilboks" tabindex="-1" autofocus>
+  <p class="feilboks-overskrift">{{ tekster.FIL_FEIL }}</p>
+  <p class="feilboks-knapp">
+    <a class="hovedknapp" href="{{ url_for('web.last_ned', format='docx') }}" data-nedlasting="docx">{{ tekster.PROV_PA_NYTT_KNAPP }}</a>
+  </p>
+</div>
+{%- endif %}
 {#- Brevet som et hvitt ark (letter-card), ett avsnitt per element. Det kan bare leses, ikke
     redigeres (FR-26). #}
 <article class="brevark">
@@ -11,4 +25,16 @@
   <p>{{ tekst }}</p>
   {%- endfor %}
 </article>
+{#- «Last ned som Word» er en lenke, fordi nedlastingen er en GET (AD-8). Svaret er et vedlegg,
+    så siden blir stående. nedlasting.js gjør knappen grønn og viser filnavnet med en gang.
+    Etter nedlasting viser serveren det samme (lastet_ned), også når siden lastes på nytt
+    (FR-29, UX-DR16). Filnavnet leses ikke opp her, men i vinduet etter nedlasting (story 3.3). #}
+<div class="nedlasting">
+  <a class="hovedknapp{% if lastet_ned %} ferdig{% endif %}" id="last-ned-docx"
+    href="{{ url_for('web.last_ned', format='docx') }}" data-nedlasting="docx">
+    <span class="ikke-lastet-ned"{% if lastet_ned %} hidden{% endif %}>{{ tekster.LAST_NED_WORD }}</span>
+    <span class="lastet-ned"{% if not lastet_ned %} hidden{% endif %}><span aria-hidden="true">{{ tekster.FERDIG_IKON }}</span> {{ tekster.LASTET_NED_WORD }}</span>
+  </a>
+  <p class="filnavn-linje" id="filnavn-docx"{% if not lastet_ned %} hidden{% endif %}>{{ tekster.filnavn_linje(filnavn) }}</p>
+</div>
 {% endblock %}
