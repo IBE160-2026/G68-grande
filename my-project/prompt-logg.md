@@ -580,3 +580,4 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 325 | «hvordan gjør jeg ki feilen?» / «får bare at jeg må enten fylle inn …» / «nå kom den opp» | KI-en tok en kopi av testbrevet og gjorde det tomt. Feilboksen kom først etter at jeg hadde fylt inn feltene på nytt og trykket «Lag søknadsbrevet mitt». Feilboksen med «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt» kom, og KI-en satte brevet tilbake fra kopien |
 | 326 | «breddene er fine» | Brevsiden er prøvd ved 320, 768 og 1280 px |
 | 327 | «ja push, stopp nettsiden» | KI-en stoppet nettsiden, pushet branchen og laget [PR #19](https://github.com/IBE160-2026/G68-grande/pull/19) med merknad om KI-feil og hva jeg har prøvd i nettleseren |
+| 328 | «flettet og slettet bransch» | KI-en hentet `main`, satte story 3.1 til ferdig i sprint-statusen, krysset av i TO DO, la PR-lenken i oversikten og pushet loggene |
