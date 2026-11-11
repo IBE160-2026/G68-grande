@@ -37,3 +37,18 @@ Prøve story 3.2 i nettleseren: åpne nettsiden og annonsen fra case 1.
 
 ### Åpne punkter
 - Story 3.2: push, PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og flette (står fra før i `issues.md`).
+
+## 2026-11-11 kl. 21:17 — Kristine
+
+### Oppgave
+«push»: pushe branchen for story 3.2 og lage PR-en.
+
+### Plan
+- Pushe branchen, lage PR med merknad om KI-feil, kommentere prøvingen i nettleseren og føre PR-en inn i TO DO og prompt-loggen.
+
+### Resultat
+- Branchen `story/3-2-laste-ned-brevet-som-word` er pushet, og [PR #20](https://github.com/IBE160-2026/G68-grande/pull/20) er laget med merknad om KI-feilen (Letter-papir og engelsk språk i Word-fila) og en kommentar om prøvingen i nettleseren.
+- `314892f`: PR #20 i TO DO og prompt-logg 333.
+
+### Åpne punkter
+- Story 3.2: grønn CI og flette PR #20. Deretter sette 3.2 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
