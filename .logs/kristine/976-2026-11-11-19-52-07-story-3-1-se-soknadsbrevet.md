@@ -24,6 +24,7 @@ Kristine startet `/bmad-build 3.1`: første story i epic 3. Resultatsiden skal f
 - Etterpå: KI-en startet nettsiden og åpnet den. Kristine så brevsiden («ser veldig bra ut»). Testbrevet ble åpnet som tekst i Notisblokk. Kristine syntes det var litt enkelt, men godkjente det som plassholder, fordi det byttes ut med et ekte KI-svar i epic 4. TO DO og prompt-logg 323–324 er oppdatert.
 
 - KI-feilen i nettleseren: KI-en kopierte `brev-1.json` til scratchpad og gjorde det tomt. Kristine fikk feilboksen på resultatsiden, og KI-en satte fila tilbake fra kopien (`git status` ren). Breddene er fine. TO DO og prompt-logg 325–326 er oppdatert.
+- Nettsiden er stoppet. Branchen er pushet, og [PR #19](https://github.com/IBE160-2026/G68-grande/pull/19) er laget med merknad om KI-feil og prøvingen i nettleseren (står i PR-teksten, så det trengs ingen egen kommentar). TO DO og prompt-logg 327 er oppdatert. CI var i gang da loggen ble skrevet: «Frontend» og «Sjekk prosjektet» grønne, backend på Linux og Windows kjørte fortsatt.
 
 ### Åpne punkter
 - Ingen nye. Begge punktene fra denne økten er løst 2026-11-11: testbrevet er godkjent som plassholder, og brevsiden, KI-feilen og breddene er prøvd i nettleseren.
