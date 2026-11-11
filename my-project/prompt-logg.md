@@ -566,3 +566,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 | 318 | «ja ser ventetegnet i ett lite millisekund» / «1 ja, 2 si det samme» | KI-en forklarte at testsvarene kommer med en gang. Hjelpeteksten var riktig, og jeg bestemte at feilmeldingen også skal si `backend/testdata/`. KI-en endret den i koden, testene, UX, skissen og epics |
 | 319 | «det ser riktig ut, push» | Branchen ble pushet, og KI-en laget [PR #18](https://github.com/IBE160-2026/G68-grande/pull/18) med merknad om KI-feil og en kommentar om prøvingen i nettleseren. CI var grønn på Linux og Windows |
 | 320 | «vi sjekker det i morgen, flettet og slettet branch» | Jeg flettet PR #18. KI-en satte retro-punkt 1–4 til ferdig i sprint-statusen, krysset av i TO DO og la PR-lenken i oversikten. Bredden 768 og 1280 px sjekkes i morgen |
+
+## 2026-11-11 – Story 3.1: Se søknadsbrevet
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-1-se-soknadsbrevet.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 321 | `/bmad-build` «3.1» / «Ja, bruk dem» (hjelpeagenter) | En hjelper samlet planene for epic 3 i `epic-3-context.md`. KI-en leste koden, UX og testdataene og skrev planen for story 3.1, med et utkast til testbrevet til Sara uten påstander fra sjekklisten i `fasit.md` og uten KI-frasene fra listen min |
+| 322 | «Behold samlet» / «Godkjenn og fortsett» | En hjelper kodet storyen på branchen `story/3-1-se-soknadsbrevet`: knappen «Lag søknadsbrevet mitt», brevsiden «Din ferdigstilte søknad!» og KI-feilboksen på resultatsiden. Tre hjelpere gikk gjennom koden og fant 15 ting: 5 rettet, ingen utsatt og 10 avvist med begrunnelse. **KI-feil:** et brev med noen tomme avsnitt ville gitt tomme hull i brevet. Nå fjernes de. 512 tester |

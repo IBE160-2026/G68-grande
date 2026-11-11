@@ -59,6 +59,8 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md`](9-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md) | Planen for story 2.7.2 (andre halvdel av story 2.7) og kodegjennomgangen: alle 10 funn med vurdering, hva som ble rettet, hva som ble utsatt og hvorfor resten ble avvist ([PR #17](https://github.com/IBE160-2026/G68-grande/pull/17)) |
 | [`epic-2-retro-2026-11-10.md`](9-koding/epic-2-retro-2026-11-10.md) | Retrospektiven for epic 2: hva som virket, funn på tvers av storiene (blant annet to faner mens KI-en jobber), lærdommer om arbeidsmåten og 11 punkter som skal gjøres (godkjent med åpne punkter) |
 | [`spec-retro-2-rettinger.md`](9-koding/spec-retro-2-rettinger.md) | Planen for rettingene etter retrospektiven for epic 2, og kodegjennomgangen: alle 14 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist ([PR #18](https://github.com/IBE160-2026/G68-grande/pull/18)) |
+| [`epic-3-context.md`](9-koding/epic-3-context.md) | Sammendrag av planene for epic 3 (søknadsbrevet og nedlasting som Word i testmodus), som KI-en bruker når storiene i epicen kodes |
+| [`spec-3-1-se-soknadsbrevet.md`](9-koding/spec-3-1-se-soknadsbrevet.md) | Planen for story 3.1 med oppgaver og akseptansekriterier, testbrevet til Sara, og kodegjennomgangen: alle 15 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
