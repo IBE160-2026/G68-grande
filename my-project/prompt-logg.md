@@ -606,3 +606,16 @@ Verktøy: Claude Code. Tilbakemeldingen fra faglærer ligger i [`2-prd/tilbakeme
 | 337 | «ja du kan legge det inn i PRD, tenker du disse tallene er rasjonelle?» / «ja» | KI-en la kostnad i tokens, et overslag (omtrent 2 kr per søknad med Opus 5.5) og grensene (15 000 tegn per felt, 10 KI-kall per søknad) inn i NFR-11. Jeg valgte «per søknad» i stedet for «per økt», så en student kan lage flere søknader i samme innlogging. Grensene står i TO DO for epic 4 |
 | 338 | «supert, kan du se på de andre tilbakemeldingene?» / «alt, hva mener du med eier» | KI-en tok resten av tilbakemeldingen inn i PRD-en: nøkkelordlisten (8–20 nøkkelord, ubrukelig når den er tom eller over 30) i FR-15, nytt suksesskriterium 14, «C#», «C++» og «.NET» i FR-17, minstekrav for markeringene i FR-23, «Søknad», «Stillingsannonse» og «Søknadsbrev» i ordlisten, avklart filstørrelse og modell i §8 og en lenke til arkitekturen. Refleksjonsspørsmålene ligger i notatene til refleksjonsrapporten |
 | 339 | «bytt til jeg o push» | KI-en byttet «Kristine» til «jeg» i PRD-en (kolonnen «Eier» i §8) og i addendumet, og pushet alt |
+
+## 2026-11-12 – Story 3.3: Vinduet etter nedlasting
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-3-vinduet-etter-nedlasting.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 340 | `/bmad-build` «3.3» | KI-en leste konteksten for epic 3, planen for 3.2, UX og skissen av vinduet, og skrev planen for story 3.3: et vindu hver gang brevet lastes ned, med «Brevet er lastet ned!», filnavnet og knappene «Lag ny søknad», «Logg ut» og «Bli her» |
+| 341 | «Behold samlet», «Godkjenn og fortsett» og «Ja» til hjelpeagenter | En hjelpeagent kodet storyen på branchen `story/3-3-vinduet-etter-nedlasting`. Tre hjelpere gikk gjennom koden og fant 15 ting: 2 rettet i testene, 1 utsatt (skriptet testes bare ved å lese teksten, se issue #16) og 12 avvist med begrunnelse. 560 tester |
+| 342 | «kan du åpne nettsiden» / «kan du åpne en ny side av annonsen, jeg klarte å slette den» | KI-en startet nettsiden og åpnet testannonsen i Notisblokk. Fila var ikke slettet, bare teksten jeg hadde limt inn |
+| 343 | «det virker som at første gang jeg får opp vinduet er ikke fokus på bli her, neste gang … så blir fokus på bli her» | **KI-feil:** fokus sto på «Bli her», men nettleseren viser ikke fokusringen når vinduet åpnes med et museklikk. Samme feil som i story 2.5.1, og løsningen fra da («Lim inn tekst») lå alt i koden. KI-en brukte den samme løsningen og la til en test |
+| 344 | «nå funket det, og alt annet fungerte også, lagre til refleksjonsrapporten» | Story 3.3 er lagt inn i notatene til refleksjonsrapporten under 4.2 |
+| 345 | «ja gjør det» | KI-en stoppet nettsiden, kopierte planen hit, oppdaterte oversikten, TO DO og sprint-statusen, pushet branchen og laget [PR #21](https://github.com/IBE160-2026/G68-grande/pull/21) med merknad om KI-feil og en kommentar om hva jeg har prøvd i nettleseren |

@@ -38,3 +38,25 @@
   <p class="filnavn-linje" id="filnavn-docx"{% if not lastet_ned %} hidden{% endif %}>{{ tekster.filnavn_linje(filnavn) }}</p>
 </div>
 {% endblock %}
+{% block vinduer %}
+{#- Vinduet etter nedlasting (FR-31, UX-DR17). nedlasting.js åpner det med showModal() hver gang
+    en nedlastingslenke trykkes, så bare vinduet kan nås mens det er åpent. Det er aldri åpent
+    når siden lastes (ingen open, ingen autofocus). Filnavnet og spørsmålet leses opp via
+    aria-describedby. «Lag ny søknad» er startsiden, som alltid lager en ny søknad og beholder
+    testmodus (AD-7). «Logg ut» er utloggingen fra story 1.4. «Bli her» og Esc lukker vinduet,
+    og skriptet sender fokus tilbake til knappen under brevet. #}
+<dialog class="vindu" id="vindu-nedlastet" aria-labelledby="vindu-nedlastet-overskrift" aria-describedby="vindu-nedlastet-filnavn vindu-nedlastet-tekst">
+  <h2 id="vindu-nedlastet-overskrift">{{ tekster.VINDU_NEDLASTET_OVERSKRIFT }}</h2>
+  <p id="vindu-nedlastet-filnavn">{{ tekster.filnavn_linje(filnavn) }}</p>
+  <p id="vindu-nedlastet-tekst">{{ tekster.VINDU_NEDLASTET_TEKST }}</p>
+  <div class="vindu-knapper">
+    <a class="hovedknapp" href="{{ url_for('web.start') }}">{{ tekster.LAG_NY_SOKNAD_KNAPP }}</a>
+    <form method="post" action="{{ url_for('web.logg_ut') }}">
+      <button class="sekundaerknapp" type="submit">{{ tekster.LOGG_UT_KNAPP }}</button>
+    </form>
+    <form method="dialog">
+      <button class="lenkeknapp" id="bli-her">{{ tekster.BLI_HER_KNAPP }}</button>
+    </form>
+  </div>
+</dialog>
+{% endblock %}

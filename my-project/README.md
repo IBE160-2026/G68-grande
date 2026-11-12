@@ -62,6 +62,7 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`epic-3-context.md`](9-koding/epic-3-context.md) | Sammendrag av planene for epic 3 (søknadsbrevet og nedlasting som Word i testmodus), som KI-en bruker når storiene i epicen kodes |
 | [`spec-3-1-se-soknadsbrevet.md`](9-koding/spec-3-1-se-soknadsbrevet.md) | Planen for story 3.1 med oppgaver og akseptansekriterier, testbrevet til Sara, og kodegjennomgangen: alle 15 funn med vurdering, hva som ble rettet og hvorfor resten ble avvist ([PR #19](https://github.com/IBE160-2026/G68-grande/pull/19)) |
 | [`spec-3-2-laste-ned-brevet-som-word.md`](9-koding/spec-3-2-laste-ned-brevet-som-word.md) | Planen for story 3.2 med oppgaver og akseptansekriterier, og kodegjennomgangen: alle 17 funn med vurdering, hva som ble rettet, hva som ble utsatt og hvorfor resten ble avvist ([PR #20](https://github.com/IBE160-2026/G68-grande/pull/20)) |
+| [`spec-3-3-vinduet-etter-nedlasting.md`](9-koding/spec-3-3-vinduet-etter-nedlasting.md) | Planen for story 3.3 med oppgaver og akseptansekriterier, og kodegjennomgangen: alle 15 funn med vurdering, hva som ble rettet, hva som ble utsatt og hvorfor resten ble avvist ([PR #21](https://github.com/IBE160-2026/G68-grande/pull/21)) |
 | **Felles** | |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
