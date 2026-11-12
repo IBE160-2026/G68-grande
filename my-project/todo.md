@@ -126,7 +126,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] Fra retrospektiven for epic 2: punkter som skal inn i senere stories (4.5 flere testcaser, epic 4 valg av KI og tidsgrense, 3.1, 6.1 og 7.3). Står i retro-dokumentet
 - [x] Story 3.1 «Se søknadsbrevet» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #19 flettet, CI grønn på Linux og Windows, 512 tester. Testbrevet er godkjent som plassholder til epic 4)
 - [x] Story 3.2 «Laste ned brevet som Word» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #20 flettet, 549 tester. Prøvd i nettleseren og i Word. Feilboksen har ikke «Brevet er ikke borte.»)
-- [ ] Story 3.3 «Vinduet etter nedlasting» med egen branch og PR (`bmad-build`): kodet og gjennomgått, 560 tester. Prøvd i nettleseren 12. november: vinduet, fokus, «Lag ny søknad», «Logg ut» og smal skjerm virker etter at fokusringen på «Bli her» ble rettet. [PR #21](https://github.com/IBE160-2026/G68-grande/pull/21) er laget. Gjenstår: grønn CI og flette
+- [x] Story 3.3 «Vinduet etter nedlasting» med egen branch og PR (`bmad-build`) (ferdig 12. november: PR #21 flettet, CI grønn på Linux og Windows, 560 tester. Prøvd i nettleseren. Fokusringen på «Bli her» ble rettet etter prøvingen)
 - [x] Retro-punkt 7: «to trykk på «Sjekk CV-en min» samtidig, det siste vinner» er avvist i både 2.5.1 og 2.5.2. Bestemme om låsingen av knappen i story 2.7 skal løse det (forslaget), eller om noe gjøres nå (bestemt 9. november: story 2.7 løser det)
 - [ ] Epic 4: tomme punkter i KI-svar fjernes, og KI-feil logges (oppgaven og feiltypen, aldri CV eller annonse) (fra kodegjennomgangen av story 2.5.2 og 2.6)
 - [ ] Epic 4: grensene fra NFR-11 i PRD-en (tilbakemeldingen på PRD-en, 12. november). Høyst 15 000 tegn per innleggingsfelt, med egen feilmelding. Høyst 10 KI-kall per søknad, medregnet «Prøv på nytt» og «Nytt forslag», med en melding etterpå. Antallet tokens inn og ut logges for hvert KI-kall (aldri teksten), og testplanen viser tokens og kroner per fullført søknad (mål: under 3 kr)
@@ -139,8 +139,8 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [x] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag (delt i 2.5.1 og 2.5.2 9. november, fordi spec-en var for lang)
 - [ ] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2)
-- [ ] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6)
-- [ ] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten
+- [x] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6) (nådd alt 12. november: epic 1 og 2 er ferdige)
+- [x] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten (nådd alt 12. november: epic 1–3 er ferdige, ingenting kuttes)
 
 ## Før innlevering
 
