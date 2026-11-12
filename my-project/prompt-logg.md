@@ -620,3 +620,12 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 344 | «nå funket det, og alt annet fungerte også, lagre til refleksjonsrapporten» | Story 3.3 er lagt inn i notatene til refleksjonsrapporten under 4.2 |
 | 345 | «ja gjør det» | KI-en stoppet nettsiden, kopierte planen hit, oppdaterte oversikten, TO DO og sprint-statusen, pushet branchen og laget [PR #21](https://github.com/IBE160-2026/G68-grande/pull/21) med merknad om KI-feil og en kommentar om hva jeg har prøvd i nettleseren |
 | 346 | «alle sjekkene var grønne, så jeg gjennomførte pull request» | KI-en hentet `main`, satte story 3.3 og epic 3 til ferdig i sprint-statusen, krysset av i TO DO og pushet loggene. Hele flyten i testmodus (epic 1–3) er ferdig |
+
+## 2026-11-12 – Retrospektiv for epic 3
+
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-3-retro-2026-11-12.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 347 | `/bmad-retrospective` «3» / «kjør» | KI-en samlet commits, spec-er, sesjonslogger og retrospektiven for epic 2, kjørte hele flyten mot nettsiden og lot tre hjelpere gå gjennom koden for hele epicen. De fant blant annet at testen for «Logg ut» på brevsiden ble grønn uansett etter story 3.3, og at testhjelperne var spredt igjen. **KI-feil:** i story 3.3 avviste KI-en et funn med feil begrunnelse (et retro-punkt som alt var gjort), og fokusring-feilen fra story 2.5.1 kom igjen |
+| 348 | Svar på fem beslutninger og «Ja, oppdater» | Brevteksten renses i epic 4, filnavnet over midnatt og vinduet ved trykket godtas for godt, «Nytt forslag» spør også på resultatsiden i epic 7, og Word-fila får 2,5 cm marger. Retrospektiven ble godkjent med åpne punkter, 7 nye punkter står i sprint-statusen, og 4 punkter fra epic 2 fikk ny status |

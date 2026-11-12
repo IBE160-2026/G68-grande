@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 12-11-2026 20:41
+last_updated: 11-12-2026 20:58
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -56,7 +56,7 @@ development_status:
   3-1-se-søknadsbrevet: done
   3-2-laste-ned-brevet-som-word: done
   3-3-vinduet-etter-nedlasting: done
-  epic-3-retrospective: optional
+  epic-3-retrospective: done
 
   epic-4: backlog
   4-1-koble-til-claude-for-nøkkelord-og-gap-analyse: backlog
@@ -192,25 +192,74 @@ action_items:
     action: "Story 3.1, 6.1 og 7.3: brevsteget i SIDE_FOR_STEG, PDF-navnet gjør ikke
       feltet endret, avstemme vasken for endret annonse mot arkitekturen"
     owner: "KI (Claude) skriver det inn i storiene"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-16-prosess-en-beslutning-om-samtidighet-ell"
     epic: 2
     action: "Prosess: en beslutning om samtidighet eller to faner nevner alle ruter
       som lagrer søknaden"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-17-prosess-kopi-før-en-fil-endres-med-vilje"
     epic: 2
     action: "Prosess: kopi før en fil endres med vilje for å prøve en test, aldri
       git checkout på filer som ikke er i Git"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-18-prosess-readme-og-branches-sjekkes-mot-k"
     epic: 2
     action: "Prosess: README og branches sjekkes mot koden når en epic er ferdig"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
+  - id: "epic-3-retro-item-19-testen-for-logg-ut-på-brevsiden-ser-bare"
+    epic: 3
+    action: "Testen for «Logg ut» på brevsiden ser bare på hjørneraden, ikke på hele
+      siden"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-20-samle-testhjelperne-igjen-paa_resultat-p"
+    epic: 3
+    action: "Samle testhjelperne igjen (paa_resultat, paa_brev, html_av, element,
+      case 1) i hjelpere.py eller conftest.py, og ingen testfil henter fra en annen
+      testfil"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-21-word-fila-får-2-5-cm-marger-rundt-hele-b"
+    epic: 3
+    action: "Word-fila får 2,5 cm marger rundt hele (bestemt av Kristine), og README
+      à jour med status, adaptere og lenker til retrospektivene for epic 2 og 3"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-22-epic-4-brevteksten-renses-i-kontroller-b"
+    epic: 3
+    action: "Epic 4: brevteksten renses i kontroller(\"brev\") (kontrolltegn, linjeskift
+      og tab), med test av kontroller og lag_docx sammen"
+    owner: "KI (Claude) skriver det inn i storyen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-23-epic-7-vinduet-nytt-forslag-spør-også-nå"
+    epic: 3
+    action: "Epic 7: vinduet «Nytt forslag» spør også når «Lag søknadsbrevet mitt»
+      trykkes og et brev finnes"
+    owner: "KI (Claude) skriver det inn i storyen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-24-prosess-kjente-fallgruver-fokusring-ette"
+    epic: 3
+    action: "Prosess: kjente fallgruver (fokusring etter museklikk, høykontrast, svg-høyde)
+      skrives inn i konteksten for epic 4 og senere epics"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-3-retro-item-25-prosess-sjekk-statusen-før-et-funn-avvis"
+    epic: 3
+    action: "Prosess: sjekk statusen før et funn avvises med henvisning til et retro-punkt"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
