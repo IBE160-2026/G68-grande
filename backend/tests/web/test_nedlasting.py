@@ -2,63 +2,36 @@
 AD-11, UX-DR16). Story 3.2."""
 
 import re
-from datetime import date
 from io import BytesIO
 
 import pytest
 from docx import Document
 
 from soknad.adaptere import fil_ut
-from soknad.adaptere.ki import TESTDATA_MAPPE
-from soknad.kjerne.feil import FilFeil
-from soknad.kjerne.filnavn import lag_filnavn
-from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, sett_lastet_ned
+from soknad.kjerne.okt import Soknad, Tekstfelt, sett_lastet_ned
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
-from tests.web.hjelpere import STIL, css_blokk, main, med_autofocus, sett_soknad, soknaden, tagger_i
+from tests.web.hjelpere import (
+    ANNONSE,
+    CV,
+    NEDLASTING,
+    STIL,
+    css_blokk,
+    element,
+    filnavn_i_dag,
+    html_av,
+    main,
+    med_autofocus,
+    sett_soknad,
+    soknaden,
+    tagger_i,
+)
 
-CASE = TESTDATA_MAPPE / "case-1-utvikler"
-CV = (CASE / "cv.txt").read_text(encoding="utf-8")
-ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
-NEDLASTING = "/last-ned/docx"
-
-
-@pytest.fixture
-def paa_brev(app, innlogget_client):
-    """En innlogget klient som har lagt inn case 1, fått analysen og laget brevet."""
-    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
-    svar = innlogget_client.post(
-        "/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"}
-    )
-    assert svar.location == "/resultat"
-    assert innlogget_client.post("/resultat", data={"handling": "brev"}).location == "/brev"
-    return innlogget_client
-
-
-@pytest.fixture
-def filfeil(monkeypatch):
-    """Word-filen kan ikke lages."""
-
-    def feiler(avsnitt):
-        raise FilFeil()
-
-    monkeypatch.setattr(fil_ut, "lag_docx", feiler)
-
-
-def html_av(svar):
-    return svar.get_data(as_text=True)
-
-
-def element(html, id_):
-    return next(a for _, a in tagger_i(html) if a.get("id") == id_)
+# Fiksturene paa_brev og filfeil står i conftest.py.
 
 
 def knapp_html(html):
     return re.search(r'<a [^>]*id="last-ned-docx".*?</a>', html, re.S).group(0)
-
-
-def filnavn_i_dag():
-    return lag_filnavn(date.today(), "docx")
 
 
 # --- Matrisen ---

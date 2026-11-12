@@ -1,17 +1,32 @@
 """Felles hjelpere for webtestene. Dette er ikke en testfil, så pytest samler den ikke inn,
-og testfilene henter hjelperne herfra i stedet for fra hverandre."""
+og testfilene henter hjelperne herfra i stedet for fra hverandre. Felles fiksturer står i
+conftest.py ved siden av."""
 
+import json
 import re
+from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 
+from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
+from soknad.kjerne.filnavn import lag_filnavn
 from soknad.kjerne.okt import Innlogging
 from soknad.web.innlogging import OKT_ID
 
 WEB = Path(__file__).resolve().parents[2] / "soknad" / "web"
 STIL = WEB / "static" / "css" / "stil.css"
+
+# Testdataene fra case 1, som de fleste testene av flyten bruker.
+CASE = TESTDATA_MAPPE / "case-1-utvikler"
+CV = (CASE / "cv.txt").read_text(encoding="utf-8")
+ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
+NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
+GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
+
+# Adressen til nedlastingen av brevet som Word.
+NEDLASTING = "/last-ned/docx"
 
 
 class Tagger(HTMLParser):
@@ -31,6 +46,16 @@ def tagger_i(html):
     return leser.tagger
 
 
+def html_av(svar):
+    """Svaret som tekst."""
+    return svar.get_data(as_text=True)
+
+
+def element(html, id_):
+    """Attributtene til elementet med denne id-en."""
+    return next(a for _, a in tagger_i(html) if a.get("id") == id_)
+
+
 def header(html):
     """Det som står i <header>."""
     return re.search(r"<header[^>]*>(.*?)</header>", html, re.S).group(1)
@@ -39,6 +64,11 @@ def header(html):
 def main(html):
     """Det som står i <main>."""
     return re.search(r"<main[^>]*>(.*?)</main>", html, re.S).group(1)
+
+
+def footer(html):
+    """Det som står i <footer> (hjørneraden)."""
+    return re.search(r"<footer[^>]*>(.*?)</footer>", html, re.S).group(1)
 
 
 def css_blokk(css, velger):
@@ -53,6 +83,11 @@ def felt(html, felt_id):
 
 def med_autofocus(html):
     return [a.get("id") for _, a in tagger_i(html) if "autofocus" in a]
+
+
+def filnavn_i_dag():
+    """Filnavnet Word-filen får i dag."""
+    return lag_filnavn(date.today(), "docx")
 
 
 def logg_inn(client, epost=TESTBRUKER_EPOST, passord=TESTBRUKER_PASSORD):

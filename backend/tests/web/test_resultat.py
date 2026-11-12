@@ -3,47 +3,31 @@
 Story 2.5.2 og 2.6."""
 
 import html as html_modul
-import json
 import re
 
 import pytest
 
-from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
+    ANNONSE,
+    CASE,
+    CV,
+    GAP_SVAR,
+    NOKKELORD_SVAR,
     STIL,
     FeilendeKI,
     css_blokk,
+    html_av,
     main,
     sett_soknad,
     soknaden,
     tagger_i,
 )
 
-CASE = TESTDATA_MAPPE / "case-1-utvikler"
-CV = (CASE / "cv.txt").read_text(encoding="utf-8")
-ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
 FASIT = (CASE / "fasit.md").read_text(encoding="utf-8")
-GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
-NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
-
-
-@pytest.fixture
-def paa_resultat(app, innlogget_client):
-    """En innlogget klient som har lagt inn testdataene fra case 1 og fått analysen."""
-    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
-    svar = innlogget_client.post(
-        "/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"}
-    )
-    assert svar.location == "/resultat"
-    return innlogget_client
-
-
-def html_av(svar):
-    return svar.get_data(as_text=True)
 
 
 def liste(html, id_):

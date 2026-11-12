@@ -10,7 +10,7 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet og resultatsiden med gap-analyse og nøkkelordtreff. Søknadsbrevet, nedlastingen, Korrektur, PDF-opplasting og ekte KI kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting. Korrektur, PDF-opplasting, PDF-nedlasting og ekte KI kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
@@ -94,7 +94,7 @@ backend/                 Nettsiden (Python og Flask)
   soknad/
     web/                 Sidene: ruter, HTML-maler, tekstene på siden, CSS og JavaScript
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
-    adaptere/            Det som snakker med omverdenen: database, øktlager og KI
+    adaptere/            Det som snakker med omverdenen: database, øktlager, KI og Word-fila
   tests/                 De automatiske testene, delt på samme måte som soknad/
   testdata/              Fiktive CV-er og annonser med fasit og håndlagde KI-svar
   .env.example           Eksempel på innstillinger, uten ekte nøkler
@@ -127,6 +127,6 @@ Lagene er beskrevet i [arkitekturen](my-project/5-arkitektur/arkitektur.md): `we
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
 - [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant
 - [Mine valg og KI-feil i epics og stories](my-project/6-epics-og-stories/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil sjekkene fant
-- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og [retrospektiven for epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
+- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og retrospektivene for [epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md), [epic 2](my-project/9-koding/epic-2-retro-2026-11-10.md) og [epic 3](my-project/9-koding/epic-3-retro-2026-11-12.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
 - [Sesjonslogger](.logs/kristine/README.md): hva som ble gjort i hver arbeidsøkt, med [åpne punkter](.logs/kristine/issues.md)
 - [TO DO-liste](my-project/todo.md): hva som er gjort, og hva som gjenstår

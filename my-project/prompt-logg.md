@@ -629,3 +629,14 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 |---|---|---|
 | 347 | `/bmad-retrospective` «3» / «kjør» | KI-en samlet commits, spec-er, sesjonslogger og retrospektiven for epic 2, kjørte hele flyten mot nettsiden og lot tre hjelpere gå gjennom koden for hele epicen. De fant blant annet at testen for «Logg ut» på brevsiden ble grønn uansett etter story 3.3, og at testhjelperne var spredt igjen. **KI-feil:** i story 3.3 avviste KI-en et funn med feil begrunnelse (et retro-punkt som alt var gjort), og fokusring-feilen fra story 2.5.1 kom igjen |
 | 348 | Svar på fem beslutninger og «Ja, oppdater» | Brevteksten renses i epic 4, filnavnet over midnatt og vinduet ved trykket godtas for godt, «Nytt forslag» spør også på resultatsiden i epic 7, og Word-fila får 2,5 cm marger. Retrospektiven ble godkjent med åpne punkter, 7 nye punkter står i sprint-statusen, og 4 punkter fra epic 2 fikk ny status |
+
+## 2026-11-12 – Rettinger etter retrospektiven for epic 3
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-retro-3-rettinger.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 349 | «hva er de tre rettingene» / «okei, har du rettet dem?» | KI-en forklarte de tre rettingene og sa at ingen av dem var gjort ennå. Retrospektiven skriver bare ned hva som skal gjøres |
+| 350 | «ja vi retter dem nå», «Alle tre i én PR» og «Godkjenn og fortsett» | En hjelpeagent kodet på branchen `retro-3-rettinger`: testen for «Logg ut» ser bare på hjørneraden, testhjelperne er samlet, Word-fila har 2,5 cm marger, og README er à jour. Tre hjelpere fant 11 ting: 4 rettet (blant annet en ny test som stopper importer fra en annen testfil, så samme feil ikke kommer en tredje gang) og 7 avvist med begrunnelse. 562 tester |
+| 351 | «start nettsiden» / «den står på vanlig som er 2.5 hele veien» | KI-en startet nettsiden, og jeg sjekket i Word at margene er 2,5 cm på alle sider |
+| 352 | (svar etter sjekken i Word) | KI-en stoppet nettsiden, kopierte planen hit, oppdaterte oversikten og TO DO, pushet branchen og laget [PR #22](https://github.com/IBE160-2026/G68-grande/pull/22) med merknad om KI-feil og en kommentar om sjekken i Word |

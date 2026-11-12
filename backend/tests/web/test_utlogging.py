@@ -3,17 +3,16 @@
 import re
 
 from soknad.web import tekster
-from tests.web.hjelpere import STIL, er_innlogget, logg_inn, med_autofocus, okt_id, tagger_i
-
-
-def footer(html):
-    return re.search(r"<footer[^>]*>(.*?)</footer>", html, re.S).group(1)
-
-
-def css_blokk(css, velger):
-    """Innholdet i den første regelen øverst i fila (ikke i @media) med akkurat denne velgeren."""
-    return re.search(rf"^{re.escape(velger)}\s*\{{(.*?)\}}", css, re.S | re.M).group(1)
-
+from tests.web.hjelpere import (
+    STIL,
+    css_blokk,
+    er_innlogget,
+    footer,
+    logg_inn,
+    med_autofocus,
+    okt_id,
+    tagger_i,
+)
 
 # --- Logge ut ---
 

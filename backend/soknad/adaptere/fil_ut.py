@@ -14,6 +14,9 @@ from soknad.kjerne.feil import FilFeil
 DOCX_MEDIETYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 A4_BREDDE = Mm(210)
 A4_HOYDE = Mm(297)
+# Margen på alle fire sider. Malen i python-docx har 25,4 mm oppe og nede og 31,75 mm til
+# venstre og høyre. Kristine bestemte 2,5 cm rundt hele 2026-11-12 (retrospektiven for epic 3).
+MARG = Mm(25)
 # Språket i Word, så stavekontrollen er norsk.
 SPRAK = "nb-NO"
 
@@ -24,11 +27,15 @@ def lag_docx(avsnitt: list[str]) -> bytes:
     «python-docx». Går noe galt (for eksempel et tegn Word ikke tåler), gir den FilFeil."""
     try:
         dokument = Document()
-        # Malen i python-docx er amerikansk: Letter-papir og engelsk språk. Brevet får A4 og
-        # norsk bokmål, så Word ikke markerer hele brevet som stavefeil.
+        # Malen i python-docx er amerikansk: Letter-papir og engelsk språk. Brevet får A4,
+        # margen i MARG og norsk bokmål, så Word ikke markerer hele brevet som stavefeil.
         for seksjon in dokument.sections:
             seksjon.page_width = A4_BREDDE
             seksjon.page_height = A4_HOYDE
+            seksjon.top_margin = MARG
+            seksjon.bottom_margin = MARG
+            seksjon.left_margin = MARG
+            seksjon.right_margin = MARG
         for sprak in dokument.styles.element.iter(qn("w:lang")):
             sprak.set(qn("w:val"), SPRAK)
         egenskaper = dokument.core_properties
