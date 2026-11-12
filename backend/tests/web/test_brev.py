@@ -15,9 +15,15 @@ from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
+    ANNONSE,
+    CASE,
+    CV,
     STIL,
     FeilendeKI,
     css_blokk,
+    element,
+    footer,
+    html_av,
     main,
     med_autofocus,
     okt_id,
@@ -26,41 +32,14 @@ from tests.web.hjelpere import (
     tagger_i,
 )
 
-CASE = TESTDATA_MAPPE / "case-1-utvikler"
-CV = (CASE / "cv.txt").read_text(encoding="utf-8")
-ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
+# Fiksturene paa_resultat og paa_brev står i conftest.py.
+
 BREV_SVAR = json.loads((CASE / "ki-svar" / "brev-1.json").read_text(encoding="utf-8"))
-
-
-@pytest.fixture
-def paa_resultat(app, innlogget_client):
-    """En innlogget klient som har lagt inn testdataene fra case 1 og fått analysen."""
-    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
-    svar = innlogget_client.post(
-        "/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"}
-    )
-    assert svar.location == "/resultat"
-    return innlogget_client
-
-
-@pytest.fixture
-def paa_brev(paa_resultat):
-    """En innlogget klient som har trykket «Lag søknadsbrevet mitt» og fått brevet."""
-    assert lag_brev(paa_resultat).location == "/brev"
-    return paa_resultat
 
 
 def lag_brev(client, handling="brev"):
     data = {} if handling is None else {"handling": handling}
     return client.post("/resultat", data=data)
-
-
-def html_av(svar):
-    return svar.get_data(as_text=True)
-
-
-def element(html, id_):
-    return next(a for _, a in tagger_i(html) if a.get("id") == id_)
 
 
 def feilboks(html):
@@ -460,10 +439,15 @@ def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):
 
 
 def test_fr22_brevsiden_har_logg_ut_og_ingen_ventetegn(paa_brev):
-    """FR-22/NFR-4: «Logg ut» står i hjørneraden. Brevsiden har ingen KI-kall ennå, så den
-    har ikke ventetegnet."""
+    """FR-22/FR-6/NFR-4: «Logg ut» står i hjørneraden: nøyaktig ett skjema der, til
+    /logg-ut. Vinduet etter nedlasting (story 3.3) har også et skjema til /logg-ut, så
+    testen ser bare på <footer>. Brevsiden har ingen KI-kall ennå, så den har ikke
+    ventetegnet."""
     html = html_av(paa_brev.get("/brev"))
-    assert 'action="/logg-ut"' in html
+    hjornerad = footer(html)
+    skjemaer = [a for t, a in tagger_i(hjornerad) if t == "form"]
+    assert skjemaer == [{"class": "utlogging", "method": "post", "action": "/logg-ut"}]
+    assert tekster.LOGG_UT_KNAPP in hjornerad
     assert 'id="vente"' not in html
 
 

@@ -78,6 +78,22 @@ def test_fr29_filen_er_a4_og_norsk():
     assert set(sprak) == {"nb-NO"}
 
 
+def test_fr29_filen_har_2_5_cm_marger():
+    """FR-29: margen er 2,5 cm (25 mm) oppe, nede, til venstre og til høyre, ikke de
+    amerikanske margene fra malen (25,4 mm og 31,75 mm). Kristine bestemte 2,5 cm 2026-11-12
+    i retrospektiven for epic 3."""
+    dokument = _apne(lag_docx(AVSNITT))
+    assert dokument.sections
+    for seksjon in dokument.sections:
+        marger = (
+            seksjon.top_margin,
+            seksjon.bottom_margin,
+            seksjon.left_margin,
+            seksjon.right_margin,
+        )
+        assert [round(m.mm, 1) for m in marger] == [25.0, 25.0, 25.0, 25.0]
+
+
 @pytest.mark.parametrize("tekst", ["null\x00tegn", "kontroll\x0btegn"])
 def test_fr29_tegn_word_ikke_taler_gir_filfeil(tekst):
     """FR-29/AD-9: et tegn Word ikke tåler, gir FilFeil, ikke et annet unntak."""

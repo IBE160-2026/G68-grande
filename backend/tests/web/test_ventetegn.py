@@ -5,16 +5,19 @@ import re
 
 import pytest
 
-from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from tests.web.hjelpere import (
+    ANNONSE,
+    CV,
     STIL,
     WEB,
     FeilendeKI,
     css_blokk,
+    element,
+    html_av,
     main,
     med_autofocus,
     okt_id,
@@ -23,9 +26,6 @@ from tests.web.hjelpere import (
     tagger_i,
 )
 
-CASE = TESTDATA_MAPPE / "case-1-utvikler"
-CV = (CASE / "cv.txt").read_text(encoding="utf-8")
-ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
 VENTE_JS = WEB / "static" / "js" / "vente.js"
 
 
@@ -61,23 +61,8 @@ class SpionKI:
         return self.test_ki.gap(cv, annonse)
 
 
-@pytest.fixture
-def paa_innlegging(app, innlogget_client):
-    """En innlogget klient på innleggingen for Full generering."""
-    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
-    return innlogget_client
-
-
 def send(client, handling="sjekk"):
     return client.post("/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": handling})
-
-
-def html_av(svar):
-    return svar.get_data(as_text=True)
-
-
-def element(html, id_):
-    return next(a for _, a in tagger_i(html) if a.get("id") == id_)
 
 
 # --- Matrisen: «opptatt» på serveren ---

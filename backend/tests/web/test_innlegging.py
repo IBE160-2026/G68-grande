@@ -4,12 +4,10 @@ UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1. Analysen og KI-feilen (FR-15, FR-
 FR-28) kom i story 2.5.2."""
 
 import html as html_modul
-import json
 import re
 
 import pytest
 
-from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne import inndata
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
@@ -18,9 +16,15 @@ from soknad.kjerne.testdata_match import vask
 from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
+    ANNONSE,
+    CV,
+    GAP_SVAR,
+    NOKKELORD_SVAR,
     STIL,
     FeilendeKI,
     css_blokk,
+    element,
+    html_av,
     main,
     okt_id,
     sett_soknad,
@@ -29,20 +33,12 @@ from tests.web.hjelpere import (
     tagger_i,
 )
 
-CASE = TESTDATA_MAPPE / "case-1-utvikler"
-CV = (CASE / "cv.txt").read_text(encoding="utf-8")
-ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
-
 TOM_CV = "CV: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
 TOM_ANNONSE = "Stillingsannonse: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
 IKKE_TESTDATA_CV = "CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
 IKKE_TESTDATA_ANNONSE = (
     "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
 )
-
-
-NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
-GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
 
 
 def til_innlegging(app, client):
@@ -55,24 +51,8 @@ def uten_testmodus(app, client):
     til_innlegging(app, client)
 
 
-@pytest.fixture
-def paa_innlegging(app, innlogget_client):
-    """En innlogget klient på innleggingen for Full generering."""
-    til_innlegging(app, innlogget_client)
-    return innlogget_client
-
-
 def send(client, cv, annonse, handling="sjekk"):
     return client.post("/innlegging", data={"cv": cv, "annonse": annonse, "handling": handling})
-
-
-def html_av(svar):
-    return svar.get_data(as_text=True)
-
-
-def element(html, id_):
-    """Attributtene til elementet med denne id-en."""
-    return next(a for _, a in tagger_i(html) if a.get("id") == id_)
 
 
 def feilboks_lenker(html):

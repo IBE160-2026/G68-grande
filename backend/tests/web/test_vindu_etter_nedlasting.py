@@ -8,10 +8,13 @@ import pytest
 
 from soknad.kjerne.okt import Soknad
 from soknad.web import tekster
-from tests.web import test_nedlasting
 from tests.web.hjelpere import (
+    NEDLASTING,
     STIL,
     css_blokk,
+    element,
+    filnavn_i_dag,
+    html_av,
     main,
     med_autofocus,
     okt_id,
@@ -20,11 +23,9 @@ from tests.web.hjelpere import (
     soknaden,
     tagger_i,
 )
-from tests.web.test_nedlasting import NEDLASTING, element, filnavn_i_dag, html_av
 
-# Fiksturene fra story 3.2: innlogget på brevsiden med case 1, og Word-filen som ikke kan lages.
-paa_brev = test_nedlasting.paa_brev
-filfeil = test_nedlasting.filfeil
+# Fiksturene paa_brev (innlogget på brevsiden med case 1) og filfeil (Word-filen kan ikke
+# lages) står i conftest.py.
 
 SKRIPT = STIL.parents[1] / "js" / "nedlasting.js"
 MAL = STIL.parents[2] / "templates" / "brev.html"

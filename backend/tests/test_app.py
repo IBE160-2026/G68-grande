@@ -1,5 +1,6 @@
 """Tester for create_app: oppstart uten .env og innstillinger (NFR-2, NFR-8)."""
 
+import re
 from pathlib import Path
 
 import pytest
@@ -98,3 +99,25 @@ def test_nfr8_databasen_ligger_i_backend_instance():
     assert EKTE_INSTANCE_MAPPE == Path(soknad.__file__).resolve().parent.parent / "instance"
     assert EKTE_INSTANCE_MAPPE.name == "instance"
     assert EKTE_INSTANCE_MAPPE.parent.name == "backend"
+
+
+# Linjer som henter noe fra en testfil (test_*.py), også i en import med parentes over flere
+# linjer.
+IMPORT_FRA_TESTFIL = re.compile(
+    r"^\s*(?:from\s+tests(?:\.\w+)*\.test_\w*\s+import"
+    r"|from\s+tests(?:\.\w+)*\s+import\s*\(?\s*(?:\w+\s*,\s*)*test_"
+    r"|import\s+tests(?:\.\w+)*\.test_)",
+    re.M,
+)
+
+
+def test_nfr9_ingen_testfil_henter_fra_en_annen():
+    """NFR-9: ingen fil under backend/tests/ henter noe fra en testfil. Felles hjelpere står i
+    hjelpere.py og felles fiksturer i conftest.py (retrospektiven for epic 3, funn B2)."""
+    tester = Path(__file__).resolve().parent
+    treff = [
+        f"{fil.relative_to(tester)}: {m.group(0).strip()}"
+        for fil in sorted(tester.rglob("*.py"))
+        for m in IMPORT_FRA_TESTFIL.finditer(fil.read_text(encoding="utf-8"))
+    ]
+    assert treff == []
