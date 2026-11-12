@@ -2,7 +2,7 @@
 title: "PRD: Søknadsassistenten"
 status: final
 created: 2026-10-09
-updated: 2026-10-12
+updated: 2026-11-12
 ---
 
 # PRD: Søknadsassistenten
@@ -260,6 +260,8 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 
 Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på nytt uken etter 11. oktober, når tiden til andre fag er klar.
 
+Tabellen under er den opprinnelige planen. Fremdriften følges nå i sprintplanen og sjekkpunktene 22. og 29. november i §6.
+
 | Milepæl | Dato |
 |---|---|
 | PRD ferdig | 11. oktober |
@@ -279,7 +281,7 @@ Prosjektet leveres 15. desember 2026. Datoene er et utgangspunkt og vurderes på
 |---|---|---|
 | Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Avklart 12. oktober: ja, briefen tilsvarer proposal. Kuttlisten trenger ikke endres |
 | Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Kristine | Avklart 7. november: 17 fraser i fem grupper, se addendum |
-| Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Uken etter 11. oktober |
+| Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Avklart 3. november: datoene ble ikke fulgt (se merknad i §7). Ny plan: sprintplanen og sjekkpunktene 22. og 29. november |
 
 ### Avgjøres i UX og arkitektur
 
