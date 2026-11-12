@@ -200,6 +200,10 @@ def test_fr31_vinduet_i_css():
     lenkeknapp = css_blokk(css, ".lenkeknapp")
     assert "text-decoration: underline;" in lenkeknapp
     assert "border: none;" in lenkeknapp
+    # «Bli her» viser fokusringen også når vinduet ble åpnet med musa (bare :focus-visible
+    # gir ingen ring etter et museklikk).
+    bli_her = css_blokk(css, "#bli-her:focus")
+    assert "outline: 3px solid var(--focus-ring);" in bli_her
     # Høykontrastmodus: vinduet får en ramme, siden skyggen og sløret forsvinner.
     hoykontrast = re.search(r"@media \(forced-colors: active\) \{(.*?)\n\}", css, re.S).group(1)
     vindu_hoykontrast = re.search(r"^\s*\.vindu\s*\{(.*?)\}", hoykontrast, re.S | re.M).group(1)

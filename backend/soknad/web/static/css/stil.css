@@ -1212,6 +1212,14 @@ a.hovedknapp {
   cursor: pointer;
 }
 
+/* «Bli her» får fokus når vinduet åpnes. Nettleseren viser ikke ringen for :focus-visible når
+ * vinduet ble åpnet med et museklikk, så ringen vises for :focus (som «Lim inn tekst»). Trykker
+ * man på «Bli her», lukkes vinduet uansett. */
+#bli-her:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
 @media (max-width: 699px) {
   .brev-overskrift {
     font-size: var(--size-heading-letter-mobile);
