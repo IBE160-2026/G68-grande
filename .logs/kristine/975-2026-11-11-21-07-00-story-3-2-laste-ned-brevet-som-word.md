@@ -68,3 +68,20 @@ PR #20 er flettet og branchen slettet på GitHub. Avslutte story 3.2.
 
 ### Åpne punkter
 - Sjekke at CI på `main` (`7edce26`) blir grønn når GitHub Actions virker igjen. Står kjøringene fortsatt i kø etter at feilen er rettet: «Re-run». Blir den rød: rett i en liten ny PR.
+
+## 2026-11-12 kl. 19:06 — Kristine
+
+### Oppgave
+Sjekke om GitHub Actions virker igjen, og om CI er grønn etter story 3.2.
+
+### Plan
+- Hente fra GitHub, se på CI-kjøringene og statussiden til GitHub.
+
+### Resultat
+- GitHub virker igjen («All Systems Operational»).
+- Bård Pettersen har pushet to dokumenter til `main`: `my-project/2-prd/tilbakemelding-prd.md` og `my-project/5-arkitektur/technology.md`. Hentet med `git pull --rebase`.
+- CI for den nyeste `main` (`60c53f0`) er grønn. Den inneholder koden fra story 3.2 (`7edce26`), så koden er sjekket på Linux og Windows. Den første CI-kjøringen for PR #20 ble også grønn.
+- De gamle kjøringene fra 11. november står fortsatt som «queued» hos GitHub. De kan ikke avbrytes og har ingen betydning.
+
+### Åpne punkter
+- Lese tilbakemeldingen på PRD-en fra læreren (`my-project/2-prd/tilbakemelding-prd.md`).
