@@ -37,3 +37,19 @@ Kristine prøvde story 3.3 i nettleseren og ba om å få notatene inn i refleksj
 
 ### Åpne punkter
 - Story 3.3: kopi av spec-en, oversikten, TO DO og prompt-logg i `my-project/`, så PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og fletting (står alt i `issues.md`).
+
+## 2026-11-12 kl. 20:38 — Kristine
+
+### Oppgave
+Kristine sa «ja gjør det» til å stoppe nettsiden, føre story 3.3 inn i `my-project/` og lage PR-en.
+
+### Plan
+- Gjøre det samme som for story 3.2: kopi av spec-en, rad i oversikten, TO DO, prompt-logg og sprint-status, så push og PR med kommentar om prøvingen.
+
+### Resultat
+- Nettsiden stoppet.
+- Commit `00a1955`: kopi av spec-en i `my-project/9-koding/`, rad i `my-project/README.md`, TO DO (3.3 og vinduet lagt til punktet om nettlesertester, issue #16), prompt-logg 340–345 og sprint-status (3.3 «review»).
+- Branchen pushet og [PR #21](https://github.com/IBE160-2026/G68-grande/pull/21) laget med merknad om KI-feilen (fokusringen) og en kommentar om prøvingen i nettleseren. PR-lenken er ført inn i TO DO, oversikten og prompt-loggen.
+
+### Åpne punkter
+- PR #21: grønn CI og flette. Deretter 3.3 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
