@@ -72,11 +72,11 @@ Kravene beholder numrene de fikk da de ble skrevet, slik at henvisninger ikke br
 KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle, slik at tallet kan testes.
 
 - **FR-14:** Gap-analysen går gjennom kravene i stillingsannonsen og viser dem i to lister: krav CV-en **dekker** og krav CV-en **mangler**. Gap-analysen er merket som KI-generert.
-- **FR-15:** KI-en henter ut nøkkelordene fra stillingsannonsen én gang. Listen lagres i økten, og prosenten regnes alltid fra den lagrede listen, ikke fra et nytt KI-kall. Innenfor samme søknad gir samme annonse og samme CV derfor alltid samme prosent. Starter brukeren en ny søknad eller logger ut, glemmes listen. Da lager KI-en en ny liste, og prosenten kan bli litt annerledes.
+- **FR-15:** KI-en henter ut nøkkelordene fra stillingsannonsen én gang. Instruksen ber om 8–20 nøkkelord på 1–3 ord hver, uten duplikater. Er listen tom eller lengre enn 30 nøkkelord, regnes svaret som ubrukelig (FR-28). Listen lagres i søknaden, og prosenten regnes alltid fra den lagrede listen, ikke fra et nytt KI-kall. Innenfor samme søknad gir samme annonse og samme CV derfor alltid samme prosent. Starter brukeren en ny søknad eller logger ut, glemmes listen. Da lager KI-en en ny liste, og prosenten kan bli litt annerledes.
 - **FR-16:** Brukeren ser nøkkelordlisten, med hvert nøkkelord merket som treff eller ikke treff. Listen kan ikke endres av brukeren i versjon 1.
 - **FR-17:** Nøkkelordtreffet regnes ut av nettsiden med en fast regel og vises som «X av Y = Z %», for eksempel «7 av 10 = 70 %».
-  - **Telleregel:** Et nøkkelord er et treff hvis det finnes i CV-teksten, også som del av et lengre ord, uavhengig av store og små bokstaver. «Python» er altså et treff i «python-utvikler». Nøkkelord på 1–3 tegn må likevel stå som eget ord, så «C» er et treff i CV-teksten «Kan C og Python», men ikke i «Center».
-  - **Kjente begrensninger:** Bøyningsformer fanges ikke opp, så «prosjektledelse» er ikke et treff i «prosjektleder». Et nøkkelord på 4 tegn eller mer kan gi treff inne i et annet ord, for eksempel «Java» i «JavaScript». Et kort nøkkelord kan gi feil treff hvis det står alene i en annen betydning, for eksempel «C» i en liste nummerert med bokstaver (A, B, C).
+  - **Telleregel:** Et nøkkelord er et treff hvis det finnes i CV-teksten, også som del av et lengre ord, uavhengig av store og små bokstaver. «Python» er altså et treff i «python-utvikler». Nøkkelord på 1–3 tegn må likevel stå som eget ord, så «C» er et treff i CV-teksten «Kan C og Python», men ikke i «Center». Tegn som «#», «+» og «.» søkes som vanlige tegn, så «C#» er et treff i «Kan C# og SQL», og «.NET» er et treff i «Erfaring med .NET».
+  - **Kjente begrensninger:** Bøyningsformer fanges ikke opp, så «prosjektledelse» er ikke et treff i «prosjektleder». Et nøkkelord på 4 tegn eller mer kan gi treff inne i et annet ord, for eksempel «Java» i «JavaScript». Et kort nøkkelord kan gi feil treff hvis det står alene i en annen betydning, for eksempel «C» i en liste nummerert med bokstaver (A, B, C). «C» gir også treff i «C#» og «C++», fordi tegnet etter «C» ikke er en bokstav.
   - **Telling og avrunding:** Hvert nøkkelord telles bare én gang, selv om det står flere ganger i CV-en. Prosenten rundes til nærmeste hele tall, så «2 av 3» vises som «67 %».
 - **FR-18:** På resultatsiden forklarer nettsiden kort tre begreper:
   - **ATS:** et system mange arbeidsgivere sender søknadene gjennom før et menneske leser dem.
@@ -90,7 +90,7 @@ KI-en brukes til å finne kravene og nøkkelordene, og koden brukes til å telle
 ### 2.4 Søknadsbrev: Full generering og Korrektur
 
 - **FR-22:** I Full generering skriver KI-en et søknadsbrev basert på CV-en og stillingsannonsen. Brevet vises på nettsiden, slik at brukeren kan lese det før det lastes ned.
-- **FR-23:** I Korrektur lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. Endringene vises ikke bare med farge, men også på en annen måte, for eksempel med understreking.
+- **FR-23:** I Korrektur lager KI-en en forbedret versjon av brukerens eget brev, basert på CV-en og stillingsannonsen. Nettsiden viser hva som er endret, uten at brukeren må lese brevet to ganger. Utgangspunktet er at brevet vises én gang i den nye versjonen, at endrede setninger er markert, og at brukeren kan klikke på en markert setning for å se den gamle. Endelig løsning bestemmes i UX. Minstekrav: kuttes markeringene ved tidsnød (nødlisten, punkt 4), får brukeren det forbedrede brevet uten markeringer, og suksesskriterium 4 må endres. Slik ser brukeren hva som er endret og beholder kontrollen over sin egen stemme. Endringene vises ikke bare med farge, men også på en annen måte, for eksempel med understreking.
 - **FR-24:** Brevet skrives alltid på norsk, i formell og akademisk tone som gjør arbeidsgiver oppmerksom og engasjert, og skal ikke høres ut som en generisk KI-tekst. Dette gjelder begge modusene. Det betyr at brevet:
   - nevner stillingen og arbeidsgiveren ved navn
   - viser til minst to konkrete krav fra stillingsannonsen og kobler dem til noe i CV-en
@@ -205,7 +205,7 @@ Fristen er kort, og kjerneflyten skal være ferdig og stabil før noe annet legg
 |---|---|
 | Telleregelen på hvilken som helst CV i testmodus, med nøkkelordlisten fra test-annonsen | Ny funksjon, prioritert bort på grunn av tid. Telleregelen vises fortsatt med testdataene og har automatiske tester (NFR-9) |
 | Beholde CV-en når brukeren går til startsiden for å lage en ny søknad, slik at de kan søke på flere stillinger uten å laste opp CV-en på nytt | Ny funksjon, prioritert bort på grunn av tid. I versjon 1 starter en ny søknad med tomme felt (FR-31) |
-| Kort grunn ved hver endring i Korrektur, for eksempel «mer formell tone», som Kickresumes «What we changed» | Ny funksjon fra konkurrentanalysen, prioritert bort på grunn av tid. Svarformatet fra KI-en har plass til den (arkitekturen, AD-4) |
+| Kort grunn ved hver endring i Korrektur, for eksempel «mer formell tone», som Kickresumes «What we changed» | Ny funksjon fra konkurrentanalysen, prioritert bort på grunn av tid. Svarformatet fra KI-en har plass til den ([arkitekturen](../5-arkitektur/arkitektur.md), AD-4) |
 | Automatisk test av hele flyten i testmodus | Prioritert bort på grunn av tid. Flyten testes manuelt og skrives inn i testplanen (NFR-12) |
 
 ### Nødliste ved tidsnød
@@ -235,7 +235,7 @@ Betaling, automatisk innsending, oversikt over tidligere søknader og mobilapp.
 
 ## 5. Suksesskriterier
 
-Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11 og 12 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Feiler én kjøring, forbedres instruksen (prompten) én gang, og alle tre kjøres på nytt. Feiler det fortsatt, skrives kriteriet som ikke bestått i testplanen, med hva som gikk galt. Resultatet skrives i testplanen (NFR-12).
+Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriterium 1, 3, 11, 12 og 14 testes med ekte KI, ikke i testmodus. De kjøres tre ganger per testcase, og alle tre må bestå. Feiler én kjøring, forbedres instruksen (prompten) én gang, og alle tre kjøres på nytt. Feiler det fortsatt, skrives kriteriet som ikke bestått i testplanen, med hva som gikk galt. Resultatet skrives i testplanen (NFR-12).
 
 1. Gap-analysen viser alle krav som fasiten sier mangler, og ingen krav som fasiten sier er dekket, står under «mangler». (FR-14)
 2. Nøkkelordtreffet gir nøyaktig den prosenten fasiten sier, når nøkkelordlisten er fast. (FR-17)
@@ -250,6 +250,7 @@ Kriteriene testes mot 2–3 fiktive CV-er og stillingsannonser med fasit. Kriter
 11. Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i den fiktive CV-en. Sjekkes manuelt mot fasit. (FR-37)
 12. I Korrektur beholder det forbedrede brevet brukerens innhold, eksempler og rekkefølge. Sjekkes manuelt med testdataene. (FR-23, FR-24)
 13. En person som ikke kjenner prosjektet, helst en student eller noen som har søkt jobb nylig, ser resultatsiden for en av test-CV-ene, og kan med egne ord forklare hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. (FR-14, FR-18)
+14. For hver test-annonse har nøkkelordlisten fra KI-en alle nøkkelordene fasiten markerer som viktige. (FR-15)
 
 ## 6. Risiko
 
@@ -282,7 +283,7 @@ Tabellen under er den opprinnelige planen. Fremdriften følges nå i sprintplane
 
 ## 8. Åpne spørsmål
 
-| Spørsmål | Eier | Når |
+| Spørsmål | Eier | Svar |
 |---|---|---|
 | Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Avklart 12. oktober: ja, briefen tilsvarer proposal. Kuttlisten trenger ikke endres |
 | Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Kristine | Avklart 7. november: 17 fraser i fem grupper, se addendum |
@@ -297,8 +298,8 @@ PRD-en sier *hva* nettsiden skal gjøre. *Hvordan* den ser ut, bestemmes i UX, o
 | Hvordan endringene markeres i Korrektur (FR-23) | UX | Må prøves på skisse. Utgangspunkt og et alternativ ligger klart |
 | Filnavnet på det nedlastede brevet (FR-29) | UX | Det er noe brukeren ser, og det henger sammen med hvordan nedlastingen ser ut |
 | Utseende og plassering av knapper, ventetegn, testmodus-bryter og feilmarkering | UX | PRD-en bestemmer at de finnes, UX bestemmer hvordan de ser ut |
-| Grensen for filstørrelse (FR-12) | Arkitektur | Avhenger av hvor nettsiden kjøres og hva KI-tjenesten tåler |
-| KI-modell og kostnad (NFR-11) | Arkitektur | Krever at modellene sammenlignes på pris og kvalitet |
+| Grensen for filstørrelse (FR-12) | Arkitektur | Avhenger av hvor nettsiden kjøres og hva KI-tjenesten tåler. Avklart i arkitekturen: 5 MB per fil |
+| KI-modell og kostnad (NFR-11) | Arkitektur | Krever at modellene sammenlignes på pris og kvalitet. Avklart i arkitekturen: Claude Opus 5.5, tak på 250 kr (se også NFR-11) |
 | Hvor lenge nettsiden venter på KI-en (FR-28) | Arkitektur | Avhenger av modellen og må måles. Et langt brev kan ta 20–30 sekunder |
 | Hvordan PDF leses, og hvordan Word og PDF lages (FR-8, FR-11, FR-29) | Arkitektur | Valg av biblioteker er et teknisk valg |
 | CV-er med kolonner og tabeller (FR-11) | Arkitektur | Avhenger av hva biblioteket for PDF klarer |
@@ -312,6 +313,9 @@ PRD-en sier *hva* nettsiden skal gjøre. *Hvordan* den ser ut, bestemmes i UX, o
 - **Nøkkelordtreff:** hvor mange av annonsens nøkkelord som står i CV-en. Det regnes ut av koden med telleregelen (FR-17).
 - **Telleregel:** den faste regelen koden bruker for å regne ut nøkkelordtreffet.
 - **Økt:** fra brukeren logger inn til brukeren logger ut. Ingenting fra en økt lagres etter at brukeren logger ut (NFR-4).
+- **Søknad:** én runde i nettsiden, fra «Begynn å lage søknad» til brevet er laget. En økt kan ha flere søknader. Å komme til startsiden starter en ny søknad, og det som hørte til den forrige, glemmes.
+- **Stillingsannonse** (kort: annonse): teksten fra utlysningen av stillingen brukeren søker på.
+- **Søknadsbrev** (kort: brev): brevet KI-en skriver eller forbedrer. Siden som viser det, heter «Din ferdigstilte søknad!».
 - **Testmodus:** nettsiden bruker ferdige KI-svar og bare de fiktive testdataene, og trenger ingen API-nøkkel.
 - **Vanlig modus:** nettsiden bruker ekte KI.
 - **Fasit:** det riktige svaret for hvert testcase. Fasiten ligger sammen med testdataene.
