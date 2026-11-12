@@ -20,3 +20,20 @@ Kristine startet `bmad-build` for story 3.3: etter «Last ned som Word» skal et
 ### Åpne punkter
 - Prøve story 3.3 i nettleseren: vinduet åpnes ved hver nedlasting, fokus på «Bli her», Tab blir i vinduet, Esc og «Bli her» sender fokus tilbake til knappen (også etter «Prøv på nytt»), «Lag ny søknad» beholder testmodus, «Logg ut» virker, 320 px og 200 % zoom.
 - Story 3.3: kopi av spec-en, oversikten, TO DO og prompt-logg i `my-project/`, så PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og fletting.
+
+## 2026-11-12 kl. 20:35 — Kristine
+
+### Oppgave
+Kristine prøvde story 3.3 i nettleseren og ba om å få notatene inn i refleksjonsrapporten.
+
+### Plan
+- Starte nettsiden, åpne testannonsen på nytt (teksten på siden var slettet, fila var urørt) og rette det som ble funnet.
+- Legge story 3.3 inn i `my-project/8-refleksjonsrapport/notater.md`.
+
+### Resultat
+- Funnet ved prøving: første gang vinduet åpnes med musa, viste ikke «Bli her» fokusringen (`:focus-visible` gir ingen ring etter et museklikk). Rettet med `#bli-her:focus`, som `.lim-inn:focus`, og en ny sjekk i CSS-testen. Commit `3927d47`. 560 tester og `ruff` grønne.
+- Kristine prøvde resten av sjekklista, og alt virket.
+- Refleksjonsnotatene har fått et punkt om story 3.3 under 4.2: samme feil som i 2.5.1, og KI-en brukte ikke løsningen som alt fantes. Mappen `my-project/8-refleksjonsrapport/` er git-ignorert, så notatet er bare lagret lokalt.
+
+### Åpne punkter
+- Story 3.3: kopi av spec-en, oversikten, TO DO og prompt-logg i `my-project/`, så PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og fletting (står alt i `issues.md`).
