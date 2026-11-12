@@ -159,6 +159,13 @@ FERDIG_IKON = "✓"
 # Feilboksen øverst på brevsiden når filen ikke kan lages (FilFeil).
 FIL_FEIL = "Vi klarte ikke å lage filen. Prøv på nytt."
 
+# Vinduet etter nedlasting (FR-31, UX-DR17). Filnavnet står mellom overskriften og spørsmålet
+# (filnavn_linje under). «Logg ut» bruker LOGG_UT_KNAPP.
+VINDU_NEDLASTET_OVERSKRIFT = "Brevet er lastet ned!"
+VINDU_NEDLASTET_TEKST = "Vil du lage en ny søknad eller logge ut?"
+LAG_NY_SOKNAD_KNAPP = "Lag ny søknad"
+BLI_HER_KNAPP = "Bli her"
+
 
 def filnavn_linje(filnavn: str) -> str:
     """Under knappen etter nedlasting: «Filnavn: Soknad_2026-11-11.docx»."""
