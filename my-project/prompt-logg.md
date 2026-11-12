@@ -594,3 +594,13 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 332 | «alt er testet og ser bra ut» | Jeg prøvde nedlastingen i nettleseren og åpnet fila i Word: knappen ble grønn med filnavnet, og fila var riktig. KI-en stoppet nettsiden |
 | 333 | «push» | KI-en pushet branchen og laget [PR #20](https://github.com/IBE160-2026/G68-grande/pull/20) med merknad om KI-feil (Letter-papir og engelsk språk i Word-fila) og en kommentar om hva jeg har prøvd i nettleseren |
 | 334 | «da er den flettet og branch slettet fra github» | KI-en hentet `main`, slettet branchen på PC-en, satte story 3.2 til ferdig i sprint-statusen, krysset av i TO DO, la PR-lenken i oversikten og pushet loggene. CI sto fortsatt i kø da PR-en ble flettet |
+
+## 2026-11-12 – Tilbakemeldingen på PRD-en
+
+Verktøy: Claude Code. Tilbakemeldingen fra faglærer ligger i [`2-prd/tilbakemelding-prd.md`](2-prd/tilbakemelding-prd.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 335 | «kan du lese tilbakemeldingen … men det med milepæl osv syntes jeg var rart» | KI-en forklarte at merknaden og de nye sjekkpunktene alt sto i PRD-en, men at tabellen, det åpne spørsmålet og datoen øverst fortsatt viste den gamle planen. KI-en viste også at brukerreisene alt finnes i UX, og at taket på 250 kr står i arkitekturen |
+| 336 | «ja endingene om milepælene er bra … kostnader også i tokens … en komplett brukerreise» | KI-en merket tabellen i §7 som den opprinnelige planen, lukket spørsmålet i §8 og satte ny dato. Den skrev en kort brukerreise i §2 med henvisning til de tre reisene i UX |
+| 337 | «ja du kan legge det inn i PRD, tenker du disse tallene er rasjonelle?» / «ja» | KI-en la kostnad i tokens, et overslag (omtrent 2 kr per søknad med Opus 5.5) og grensene (15 000 tegn per felt, 10 KI-kall per søknad) inn i NFR-11. Jeg valgte «per søknad» i stedet for «per økt», så en student kan lage flere søknader i samme innlogging. Grensene står i TO DO for epic 4 |

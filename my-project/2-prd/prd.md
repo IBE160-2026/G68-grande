@@ -41,6 +41,8 @@ Kravene beholder numrene de fikk da de ble skrevet, slik at henvisninger ikke br
 
 **Flyten i korte trekk:** Innlogging eller registrering (FR-1–FR-4, FR-6, FR-7) → startside med samtykke og «Begynn å lage søknad» (FR-5, FR-36) → valg av modus (FR-20) → innleggingsside (FR-8–FR-13) → resultatside med gap-analyse og nøkkelordtreff (FR-14–FR-19, FR-21) → siden «Din ferdigstilte søknad!» med brevet (FR-22–FR-28, FR-37) → nedlasting (FR-29, FR-30) → startsiden eller logg ut (FR-31).
 
+**Brukerreise:** Ingrid er 21 år, studerer sykepleie og søker sin første deltidsjobb. Hun registrerer seg, leser «i»-teksten om hvorfor CV-en sendes til KI, og krysser av for samtykket. Hun velger Full generering, laster opp CV-en som PDF og limer inn annonsen. På resultatsiden ser hun hva CV-en dekker, hva hun kan jobbe videre med, og hvor mange av nøkkelordene som står i CV-en. Hun trykker «Lag søknadsbrevet mitt», leser brevet, laster det ned som Word og PDF og logger ut. Unntak: svarer ikke KI-en, får hun en feilmelding med «Prøv på nytt», og det hun har lagt inn, er der fortsatt (FR-28). Er PDF-en skannet, limer hun inn teksten i stedet (FR-11). Hele reisen, og to til (Korrektur på mobil og sensor i testmodus), står i UX-dokumentet ([EXPERIENCE.md](../3-ux/EXPERIENCE.md), «Key Flows»).
+
 ### 2.1 Registrering og innlogging
 
 - **FR-1:** Brukeren kan registrere seg med e-post og passord. Passordet må være minst 8 tegn. Etter registrering blir brukeren logget inn automatisk.
@@ -174,6 +176,9 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 ### KI-tjeneste
 
 - **NFR-11:** Den eksterne KI-en er Claude fra Anthropic, brukt via API. Modell og kostnad avklares i arkitekturen.
+  - **Kostnad i tokens:** KI-en tar betalt per token (ord og deler av ord) inn og ut. For hvert KI-kall leses antallet tokens inn og ut fra svaret. Bare antallet logges, aldri teksten. Testplanen (NFR-12) viser tokens og kroner per fullført søknad.
+  - **Overslag (12. november):** Claude Opus 5.5 koster 4 dollar per million tokens inn og 20 dollar per million tokens ut. En søknad i Full generering bruker tre KI-kall (nøkkelord, gap-analyse og brev), omtrent 10 000 tokens inn og 6 000 tokens ut, medregnet KI-ens egen tenking. Det blir omtrent 0,16 dollar, om lag 2 kr. Målet er under 3 kr per fullført søknad.
+  - **Grenser:** Hvert innleggingsfelt godtar høyst 15 000 tegn. Hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Taket på 250 kr i Claude Console er den siste sperren.
 
 ## 4. Omfang og kuttliste
 
