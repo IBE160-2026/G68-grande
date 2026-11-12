@@ -53,3 +53,19 @@ Kristine sa «ja gjør det» til å stoppe nettsiden, føre story 3.3 inn i `my-
 
 ### Åpne punkter
 - PR #21: grønn CI og flette. Deretter 3.3 til ferdig i sprint-statusen, kopien, oversikten og TO DO.
+
+## 2026-11-12 kl. 20:41 — Kristine
+
+### Oppgave
+Kristine meldte at alle sjekkene i PR #21 var grønne og at hun hadde flettet den.
+
+### Plan
+- Hente `main`, sette story 3.3 til ferdig og føre det inn, som for 3.2.
+
+### Resultat
+- `main` hentet med flettingen (`e91f9e5`).
+- Commit `eff4966` på `main`: story 3.3 og epic 3 er `done` i sprint-statusen (også i `_bmad-output/`), TO DO er krysset av, og prompt-logg 346 er lagt til. Sjekkpunktene 22. og 29. november i TO DO er krysset av som nådd alt 12. november, for hele flyten i testmodus (epic 1–3) virker.
+- Branchen `story/3-3-vinduet-etter-nedlasting` finnes fortsatt både lokalt og på GitHub.
+
+### Åpne punkter
+- Ingen nye. Retrospektiven for epic 3 er valgfri (`epic-3-retrospective: optional`).
