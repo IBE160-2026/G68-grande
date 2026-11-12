@@ -5,20 +5,20 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 ## Til UX
 
 - **Skisser (fra faglærer):** Skisser modusvalget (FR-20) og resultatsiden, med gap-analysen, nøkkelordlisten og forklaringen av begrepene (FR-14, FR-16, FR-18). På modusvalget viser knappene både modusnavnet og hva modusen gjør (FR-20).
-- **Logg ut-knapp (FR-6):** Kristine ser for seg en liten logg ut-knapp nederst på skjermen.
+- **Logg ut-knapp (FR-6):** Jeg ser for meg en liten logg ut-knapp nederst på skjermen.
 - **Tomme felt (FR-4) og feil e-post eller passord (FR-3):** Feltene får rød ramme.
-- **Innleggingssiden (FR-8, FR-13):** Kristine kaller feltene «opplastingsfelt», ett for CV og ett for stillingsannonsen, og i Korrektur også ett for brukerens eget søknadsbrev. Det skal være en angre-knapp.
-- **Ventetegn (FR-27):** Kristine ser for seg et «laster»-tegn som går rundt i en sirkel, med en tekst inni, for eksempel «På vei mot ny jobb» (frasen er ikke bestemt).
+- **Innleggingssiden (FR-8, FR-13):** Jeg kaller feltene «opplastingsfelt», ett for CV og ett for stillingsannonsen, og i Korrektur også ett for brukerens eget søknadsbrev. Det skal være en angre-knapp.
+- **Ventetegn (FR-27):** Jeg ser for meg et «laster»-tegn som går rundt i en sirkel, med en tekst inni, for eksempel «På vei mot ny jobb» (frasen er ikke bestemt).
 - **Testmodus-bryter (FR-32):** ligger i et hjørne av startsiden.
-- **Markeringer i Korrektur (FR-23):** Brukeren skal ikke måtte lese brevet to ganger. Kristines utgangspunkt: brevet vises én gang i den nye versjonen, endrede setninger er markert (for eksempel grønne og understreket), og et klikk på en markert setning viser den gamle. Alternativ som kan prøves på skisse: markering per ord, der bare ordene som er endret, vises i rødt og grønt. Avvist: per setning med gammel og ny setning under hverandre, fordi hele brevet da kan bli vist dobbelt.
+- **Markeringer i Korrektur (FR-23):** Brukeren skal ikke måtte lese brevet to ganger. Mitt utgangspunkt: brevet vises én gang i den nye versjonen, endrede setninger er markert (for eksempel grønne og understreket), og et klikk på en markert setning viser den gamle. Alternativ som kan prøves på skisse: markering per ord, der bare ordene som er endret, vises i rødt og grønt. Avvist: per setning med gammel og ny setning under hverandre, fordi hele brevet da kan bli vist dobbelt.
 - **Filnavn (FR-29):** Bestem navnet på den nedlastede filen, for eksempel «Soknad_2026-10-09.docx». Vurder om arbeidsgiveren skal stå i navnet, og unngå æ, ø og å.
 
 ## Til arkitektur
 
-- **Filstørrelse (FR-12):** Kristine vet ikke hvilken grense som passer. Arkitekturen bestemmer tallet.
+- **Filstørrelse (FR-12):** Jeg vet ikke hvilken grense som passer. Arkitekturen bestemmer tallet.
 - **Lese tekst fra PDF (FR-8, FR-11, fra product brief):** Hvordan nettsiden henter teksten ut av PDF-filer, avklares i arkitekturen.
 - **Biblioteker (fra faglærer):** Velg få og godt dokumenterte biblioteker for å lese PDF og lage .docx og PDF, og begrunn valgene.
-- **CV-er med kolonner og tabeller (FR-11, fra faglærer):** Bestem om testdataene skal ha en CV med to kolonner, eller om det skal skrives ned som en kjent begrensning at bare CV-er med én kolonne og uten tabeller støttes. Tekst fra CV-er med flere kolonner eller tabeller kan komme ut i feil rekkefølge, og da kan suksesskriterium 5 feile. Kristine vil prøve å støtte tabeller. Blir det vanskelig, settes det på kuttlisten.
+- **CV-er med kolonner og tabeller (FR-11, fra faglærer):** Bestem om testdataene skal ha en CV med to kolonner, eller om det skal skrives ned som en kjent begrensning at bare CV-er med én kolonne og uten tabeller støttes. Tekst fra CV-er med flere kolonner eller tabeller kan komme ut i feil rekkefølge, og da kan suksesskriterium 5 feile. Jeg vil prøve å støtte tabeller. Blir det vanskelig, settes det på kuttlisten.
 - **KI-tjeneste (NFR-11, fra product brief):** Claude (Anthropic) via API. Modell, kostnad og håndtering av nøkkelen avklares i arkitekturen. API-nøkkelen ligger bare lokalt og legges aldri i Git.
 - **Ventetid på KI-en (FR-28):** Arkitekturen bestemmer hvor lenge nettsiden venter på svar fra KI-en før det regnes som at KI-en ikke svarer. Et langt søknadsbrev kan ta 20–30 sekunder.
 - **Testdata og fasit (NFR-3):** Eksempel på mappestruktur, med én undermappe per testcase og fasiten ved siden av testdataene. Endelig struktur avklares i arkitekturen.
@@ -38,7 +38,7 @@ Detaljer som hører hjemme i UX-, arkitektur- eller andre dokumenter, men som ko
 
 ## Til prompten for brevet
 
-- **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Det gjelder begge modusene. I Korrektur skriver KI-en om slike fraser hvis brukeren har brukt dem selv. Listen ble bestemt av Kristine 7. november 2026.
+- **Typiske KI-fraser (FR-24):** Brevet skal ikke bruke fraser fra denne listen. Det gjelder begge modusene. I Korrektur skriver KI-en om slike fraser hvis brukeren har brukt dem selv. Listen ble bestemt av meg 7. november 2026.
   - Store, tomme åpninger:
     - «I dagens raskt skiftende arbeidsmarked …»
     - «I en verden der …»

@@ -285,9 +285,9 @@ Tabellen under er den opprinnelige planen. Fremdriften følges nå i sprintplane
 
 | Spørsmål | Eier | Svar |
 |---|---|---|
-| Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Kristine (spør faglærer) | Avklart 12. oktober: ja, briefen tilsvarer proposal. Kuttlisten trenger ikke endres |
-| Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Kristine | Avklart 7. november: 17 fraser i fem grupper, se addendum |
-| Passer milepælsdatoene, når tiden til andre fag er klar? | Kristine | Avklart 3. november: datoene ble ikke fulgt (se merknad i §7). Ny plan: sprintplanen og sjekkpunktene 22. og 29. november |
+| Regnes product brief som proposal? Hvis ikke, kan kuttlisten måtte endres. | Jeg (spør faglærer) | Avklart 12. oktober: ja, briefen tilsvarer proposal. Kuttlisten trenger ikke endres |
+| Hvilke fraser skal stå på listen over typiske KI-fraser (FR-24)? | Jeg | Avklart 7. november: 17 fraser i fem grupper, se addendum |
+| Passer milepælsdatoene, når tiden til andre fag er klar? | Jeg | Avklart 3. november: datoene ble ikke fulgt (se merknad i §7). Ny plan: sprintplanen og sjekkpunktene 22. og 29. november |
 
 ### Avgjøres i UX og arkitektur
 
