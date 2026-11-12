@@ -127,7 +127,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Story 3.1 «Se søknadsbrevet» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #19 flettet, CI grønn på Linux og Windows, 512 tester. Testbrevet er godkjent som plassholder til epic 4)
 - [x] Story 3.2 «Laste ned brevet som Word» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #20 flettet, 549 tester. Prøvd i nettleseren og i Word. Feilboksen har ikke «Brevet er ikke borte.»)
 - [x] Story 3.3 «Vinduet etter nedlasting» med egen branch og PR (`bmad-build`) (ferdig 12. november: PR #21 flettet, CI grønn på Linux og Windows, 560 tester. Prøvd i nettleseren. Fokusringen på «Bli her» ble rettet etter prøvingen)
-- [ ] Etter retrospektiven for epic 3: rette tre småting i en egen PR før epic 4 (kodet og gjennomgått 12. november, 562 tester. Margene er sjekket i Word. [PR #22](https://github.com/IBE160-2026/G68-grande/pull/22) er laget. Gjenstår: grønn CI og flette). Se [`9-koding/epic-3-retro-2026-11-12.md`](9-koding/epic-3-retro-2026-11-12.md):
+- [x] Etter retrospektiven for epic 3: rette tre småting i en egen PR før epic 4 (ferdig 12. november: PR #22 flettet, CI grønn på Linux og Windows, 562 tester. Margene er sjekket i Word). Se [`9-koding/epic-3-retro-2026-11-12.md`](9-koding/epic-3-retro-2026-11-12.md):
   - [x] Testen for «Logg ut» på brevsiden ser bare på hjørneraden
   - [x] Testhjelperne samles igjen, og ingen testfil henter fra en annen testfil (en ny test passer på det)
   - [x] Word-fila får 2,5 cm marger rundt hele (bestemt 12. november), og README à jour (status, Word-fila, lenker til retrospektivene)
