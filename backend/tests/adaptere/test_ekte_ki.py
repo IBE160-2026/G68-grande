@@ -211,14 +211,17 @@ def test_fr28_annen_api_feil_gir_kifeil_annet(status):
 @pytest.mark.parametrize(
     "stop_reason", ["max_tokens", "refusal", "stop_sequence", "tool_use", "pause_turn"]
 )
-def test_fr28_annen_stop_reason_enn_end_turn_gir_ubrukelig_svar(stop_reason):
+def test_fr28_annen_stop_reason_enn_end_turn_gir_ubrukelig_svar(caplog, stop_reason):
     """FR-28/AD-4: et avkuttet eller avvist svar gir KIFeil(ubrukelig_svar), også når
-    JSON-en ser gyldig ut. Ingen reservemodell ved refusal."""
+    JSON-en ser gyldig ut. Ingen reservemodell ved refusal. Loggen viser stop_reason, så
+    max_tokens (avkuttet) kan skilles fra refusal."""
+    caplog.set_level(logging.INFO, logger="soknad.adaptere.ki")
     klient = FalskKlient(_svar(json.dumps(GAP_SVAR), stop_reason=stop_reason))
     with pytest.raises(KIFeil) as feil:
         _ki(klient).gap(CV, ANNONSE)
     assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
     assert len(klient.kall) == 1
+    assert f"stopp {stop_reason}," in caplog.text
 
 
 @pytest.mark.parametrize(
@@ -260,7 +263,8 @@ def test_nfr11_vellykket_kall_logger_oppgave_tokens_og_pris(caplog):
     assert len(linjer) == 1
     assert linjer[0].levelno == logging.INFO
     assert linjer[0].getMessage() == (
-        "KI-kall gap (claude-opus-5-5): 812 tokens inn, 143 ut, anslått 0,0061 dollar (ca. 0,07 kr)"
+        "KI-kall gap (claude-opus-5-5): 812 tokens inn, 143 ut, stopp end_turn, anslått 0,0061"
+        " dollar (ca. 0,07 kr)"
     )
     for hemmelig in (CV, ANNONSE, NOKKEL, "Sara", "Testvik", "Docker"):
         assert hemmelig not in caplog.text
@@ -302,7 +306,7 @@ def test_fr28_ubrukelig_svar_logger_tokens_og_feiltype(caplog):
     caplog.set_level(logging.INFO, logger="soknad.adaptere.ki")
     with pytest.raises(KIFeil):
         _ki(FalskKlient(_svar("hemmelig ugyldig svar"))).gap(CV, ANNONSE)
-    assert "KI-kall gap (claude-opus-5-5): 812 tokens inn" in caplog.text
+    assert "KI-kall gap (claude-opus-5-5): 812 tokens inn, 143 ut, stopp end_turn" in caplog.text
     assert "KI-kall gap feilet: ubrukelig_svar" in caplog.text
     assert "hemmelig ugyldig svar" not in caplog.text
 
@@ -343,3 +347,19 @@ def test_nfr11_nettsiden_bruker_fortsatt_testki(app):
     """NFR-11: fram til story 4.3 bruker nettsiden TestKI, også uten API-nøkkel."""
     assert isinstance(app.extensions["test_ki"], TestKI)
     assert app.config["ANTHROPIC_API_KEY"] == ""
+
+
+def test_fr15_svar_med_31_nokkelord_gir_ubrukelig_svar():
+    """FR-15/FR-28: et svar fra Claude med 31 nøkkelord gir KIFeil(ubrukelig_svar)."""
+    svar = {"nokkelord": [f"ord{n}" for n in range(31)], "arbeidsgiver": None}
+    with pytest.raises(KIFeil) as feil:
+        _ki(FalskKlient(_svar(json.dumps(svar)))).nokkelord(ANNONSE)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def test_fr15_prompten_ber_om_8_til_20_nokkelord_pa_1_til_3_ord():
+    """FR-15: nøkkelordprompten ber om 8–20 nøkkelord på 1–3 ord hver, uten duplikater."""
+    prompt = (PROMPT_MAPPE / "nokkelord.md").read_text(encoding="utf-8")
+    assert "8–20 nøkkelord" in prompt
+    assert "1–3 ord" in prompt
+    assert "duplikater" in prompt

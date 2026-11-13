@@ -13,6 +13,10 @@ TESTBRUKER_PASSORD = "testpassord1"
 # Korteste passord ved registrering (FR-1).
 MIN_PASSORD_LENGDE = 8
 
+# Flest nøkkelord et KI-svar kan ha (FR-15). Prompten ber om 8–20, og et lengre svar enn
+# dette regnes som ubrukelig.
+MAKS_NOKKELORD = 30
+
 # KI-kallet til Claude (AD-13). Tidsgrensen er en startverdi og justeres etter målingen i
 # story 4.3. Den gjelder hver del av kallet (tilkobling, lesing, skriving), ikke hele kallet.
 # Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s, eller det API-et ber om med

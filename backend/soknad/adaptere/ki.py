@@ -188,11 +188,12 @@ class EkteKI:
         tokens_inn, tokens_ut = svar.usage.input_tokens, svar.usage.output_tokens
         pris = _anslatt_pris(tokens_inn, tokens_ut)
         logger.info(
-            "KI-kall %s (%s): %d tokens inn, %d ut, anslått %s dollar (ca. %s kr)",
+            "KI-kall %s (%s): %d tokens inn, %d ut, stopp %s, anslått %s dollar (ca. %s kr)",
             oppgave,
             self.modell,
             tokens_inn,
             tokens_ut,
+            svar.stop_reason,
             _desimalkomma(pris, 4),
             _desimalkomma(pris * KRONER_PER_DOLLAR, 2),
         )

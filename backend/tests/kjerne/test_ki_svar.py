@@ -2,10 +2,12 @@
 KIFeil(ubrukelig_svar)."""
 
 import copy
+import json
 import pickle
 
 import pytest
 
+from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.ki_svar import kontroller
 
@@ -114,4 +116,27 @@ def test_fr28_stop_reason_som_ikke_er_end_turn_gir_ubrukelig_svar(stop_reason):
     assert kontroller("gap", tekst) == kontroller("gap", tekst, "end_turn")
     with pytest.raises(KIFeil) as feil:
         kontroller("gap", tekst, stop_reason)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def _nokkelord(antall: int) -> str:
+    return json.dumps({"nokkelord": [f"ord{n}" for n in range(antall)], "arbeidsgiver": None})
+
+
+def test_fr15_grensen_er_maks_nokkelord():
+    """FR-15: grensen for antall nøkkelord er MAKS_NOKKELORD, som er 30."""
+    assert MAKS_NOKKELORD == 30
+
+
+def test_fr15_fr28_akkurat_30_nokkelord_godtas():
+    """FR-15/FR-28: et svar med akkurat MAKS_NOKKELORD nøkkelord godtas."""
+    svar = kontroller("nokkelord", _nokkelord(MAKS_NOKKELORD))
+    assert len(svar["nokkelord"]) == MAKS_NOKKELORD
+
+
+@pytest.mark.parametrize("antall", [MAKS_NOKKELORD + 1, 100])
+def test_fr15_fr28_flere_enn_30_nokkelord_gir_ubrukelig_svar(antall):
+    """FR-15/FR-28: flere enn MAKS_NOKKELORD nøkkelord gir KIFeil(ubrukelig_svar)."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("nokkelord", _nokkelord(antall))
     assert feil.value.type == KIFeilType.UBRUKELIG_SVAR

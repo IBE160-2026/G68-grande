@@ -4,9 +4,9 @@ Finn nøkkelordene i annonsen: ferdighetene, verktøyene og kravene arbeidsgiver
 
 Regler for nøkkelordene:
 
-- Hvert nøkkelord er ett kort ord eller et kort uttrykk, helst ett eller to ord.
+- Finn 8–20 nøkkelord. Hvert nøkkelord er ett kort ord eller et kort uttrykk på 1–3 ord.
 - Skriv nøkkelordet nøyaktig slik det står i annonsen, med samme stavemåte og bøyning. Nøkkelordene telles senere ved å søke etter dem ordrett i studentens CV, så et ord som ikke står i annonsen, kan ikke brukes.
-- Ta med hvert nøkkelord bare én gang.
+- Listen skal ikke ha duplikater: ta med hvert nøkkelord bare én gang.
 - Ta ikke med generelle ord som ikke er ferdigheter eller krav, for eksempel «team», «kunder», «møter», «arbeidstid», arbeidsgiverens navn, stillingstittelen eller navn på personer og steder.
 - Ta ikke med det arbeidsgiveren tilbyr, bare det de ser etter.
 
