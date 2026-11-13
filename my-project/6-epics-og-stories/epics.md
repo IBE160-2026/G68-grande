@@ -683,6 +683,7 @@ slik at jeg får en analyse av akkurat min søknad.
 **Så** sendes hver oppgave med sin prompt og sitt JSON-skjema med structured outputs (`output_config.format`), med `additionalProperties: false` og alle felt påkrevd (AD-4)
 **Og** svaret går gjennom den samme `kontroller()` som i testmodus, som også gir `KIFeil(ubrukelig_svar)` når `stop_reason` ikke er `end_turn` (AD-4)
 **Og** `nokkelord` gir også `arbeidsgiver` (eller `null`), som lagres i økten for Epic 7 (AD-4)
+**Og** prompten for `nokkelord` ber om 8–20 nøkkelord på 1–3 ord hver, uten duplikater. En liste som er tom eller lengre enn 30 nøkkelord, gir `KIFeil(ubrukelig_svar)` (FR-15, endret i PRD-en 12. november)
 
 **Gitt** en nettverksfeil
 **Så** kastes `KIFeil(nettverk)`, og andre API-feil gir `KIFeil(annet)` (AD-13, FR-28)
@@ -741,6 +742,7 @@ slik at jeg bestemmer over mine egne opplysninger.
 
 **Og** i vanlig modus sendes tekst til Claude bare når `Soknad.samtykke` er sann (AD-12)
 **Og** tester sjekker: bryteren kan ikke endres etter startsiden, samtykke kreves når testmodus er av, ikke når den er på, og ingen KI-kall uten samtykke (FR-32, FR-36)
+**Og** hvert innleggingsfelt godtar høyst 15 000 tegn, med egen feilmelding, og hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Grensene ligger i `innstillinger.py` og har tester (NFR-11, endret i PRD-en 12. november)
 **Og** Kristine prøver hele flyten én gang med ekte KI på testdataene: analysen, og brevet mot sjekklisten i `fasit.md` for kriterium 11 og 12 (AD-14). Hun noterer resultatet i PR-en, og hvor lang tid analysen og brevet tar, så 90 s kan justeres i `innstillinger.py` (arkitekturen, Utsatt)
 
 ### Story 4.4: Ekte KI-svar i testmodus
@@ -760,6 +762,8 @@ slik at testmodus viser hvordan nettsiden faktisk virker.
 **Så** er hver kjørt tre ganger og sjekket mot fasiten, og resultatet for kriterium 1, 3, 11 og 12 står i `my-project/testplan.md`, også når noe feiler, med plan B fra PRD del 5 (NFR-12)
 
 **Og** en test sjekker at ingen av de 17 KI-frasene står i `brev-1.json` og `brev-2.json` (FR-24, FR-38)
+**Og** `fasit.md` markerer hvilke nøkkelord som er viktige, og i hver av de tre kjøringene har nøkkelordlisten fra KI-en alle de viktige (suksesskriterium 14, FR-15)
+**Og** testplanen viser tokens og kroner per fullført søknad, fra loggen (mål: under 3 kr, NFR-11)
 **Og** alle testene som bruker testdataene, går fortsatt gjennom med de nye svarene
 **Og** README sier at testsvarene er ekte KI-svar, og hvordan skriptet kjøres (NFR-8, FR-38)
 **Og** Kristine prøver om KI-en forstår teksten fra Canva-CV-en riktig (hva som er utdanning, jobb og oppsummering) og noterer det i testplanen
@@ -775,7 +779,7 @@ slik at suksesskriteriene ikke bare holder for ett eksempel.
 **Gitt** `testdata/case-2-<navn>/`
 **Så** finnes en annen fiktiv CV (`cv.txt`) og en annen stillingsannonse (`annonse.txt`), gjerne fra et annet fagfelt enn case 1, med tydelige hull mot annonsen (NFR-3)
 **Og** CV-en er ulik CV-en i case 1, fordi CV-en avgjør testcaset (AD-10)
-**Og** `fasit.md` har kravene med begrunnelse, nøkkelordene og det forventede nøkkelordtreffet, som i story 2.2 (NFR-3)
+**Og** `fasit.md` har kravene med begrunnelse, nøkkelordene med de viktige markert (suksesskriterium 14) og det forventede nøkkelordtreffet, som i story 2.2 (NFR-3)
 **Og** `scripts/lag_testsvar.py` har laget `ki-svar/` for case 2, og testene som går gjennom testcasene, dekker begge, også testen for kriterium 2 (FR-38)
 **Og** case 2 er for Full generering. Korrektur (kriterium 4 og 12) testes med case 1, og README sier det (NFR-8)
 
