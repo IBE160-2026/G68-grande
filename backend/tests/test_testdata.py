@@ -163,13 +163,22 @@ KI_FRASER = (
 )
 
 
-def test_fr22_fr24_testbrevet_bestaar_kontrollen_uten_ki_fraser():
-    """FR-22/FR-24/FR-28: brev-1.json består kontroller(), og ingen avsnitt bruker frasene
-    fra addendum."""
-    brev = kontroller("brev", _les("ki-svar/brev-1.json"))
-    assert len(brev["avsnitt"]) >= 2
-    tekst = " ".join(" ".join(brev["avsnitt"]).split()).casefold()
-    assert [frase for frase in KI_FRASER if frase in tekst] == []
+def test_fr24_ki_fraselisten_har_17_fraser():
+    """FR-24: listen har alle de 17 frasene fra addendum, uten duplikater."""
+    assert len(set(KI_FRASER)) == len(KI_FRASER) == 17
+
+
+def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
+    """FR-22/FR-24/FR-28: hver ki-svar/brev-*.json i hvert testcase består kontroller(), og
+    ingen avsnitt bruker frasene fra addendum (uten hensyn til store og små bokstaver)."""
+    filer = sorted(CASE.parent.glob("case-*/ki-svar/brev-*.json"))
+    assert CASE / "ki-svar" / "brev-1.json" in filer
+    for fil in filer:
+        brev = kontroller("brev", fil.read_text(encoding="utf-8"))
+        assert len(brev["avsnitt"]) >= 2, fil
+        assert brev["avsnitt"][0].startswith("Søknad på stillingen som "), fil
+        tekst = " ".join(" ".join(brev["avsnitt"]).split()).casefold()
+        assert [frase for frase in KI_FRASER if frase in tekst] == [], fil
 
 
 # Ord fra «Sjekkliste for brevet» i fasit.md: det står ikke i CV-en, så brevet kan ikke

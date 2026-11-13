@@ -655,3 +655,15 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 358 | «Legg det inn i 4.1 nå» | **KI-feil:** planen manglet endringen i FR-15 fra 12. november (8–20 nøkkelord, høyst 30), fordi PRD-kopien KI-en leser fra og epics ikke var oppdatert. KI-en fant det da den oppdaterte TO DO. Regelen ble lagt inn i 4.1, og en ny runde med tre hjelpere fant 17 ting: 1 rettet, 2 utsatt og resten avvist eller ført videre fra første runde. KI-en oppdaterte PRD-kopien, epics og konteksten for epic 4 med resten av endringene. 614 tester |
 | 359 | «push» | KI-en pushet branchen og laget [PR #23](https://github.com/IBE160-2026/G68-grande/pull/23) med merknad om KI-feilen (nøkkelordregelen som manglet i planen). Ingen kommentar om nettleseren, fordi nettsiden fortsatt bruker testmodus |
 | 360 | «flettet» | KI-en sjekket at PR #23 var flettet med grønne sjekker, hentet `main`, satte story 4.1 til ferdig i sprint-statusen, krysset av i TO DO og pushet loggene |
+
+## 2026-11-13 – Story 4.2: Brevet fra Claude
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-2-brevet-fra-claude.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 361 | `/bmad-build` «4.2» | KI-en sjekket GitHub, leste konteksten for epic 4, planen for 4.1, FR-24, FR-37 og listen med de 17 KI-frasene, og skrev planen for 4.2 |
+| 362 | «Som testbrevet i dag», «Høyst én A4-side», «Behold samlet» og «Ja, bruk dem» | Jeg bestemte at brevet begynner rett på teksten og slutter med «Med vennlig hilsen» og navnet, at det er høyst én A4-side (250–400 ord), at planen beholdes samlet (ca. 2400 tokens), og at KI-en kan bruke hjelpeagenter |
+| 363 | «1» (godkjenn og fortsett) | En hjelpeagent kodet prompten for brevet, `EkteKI.brev` og rensingen av KI-svar på branchen `story/4-2-brevet-fra-claude`. Tre hjelpere fant 15 ting: 4 rettet (blant annet at Claude ikke skal gjette arbeidsgiverens navn eller strekke CV-en for å nå to krav), 3 utsatt og resten avvist med begrunnelse. 655 tester |
+| 364 | «burde det ikke vært en overskrift på søknaden?» og «ja vi endrer sånn at vi har med overskrift vanlig tekst» | Jeg ombestemte meg: brevet begynner nå med overskriften «Søknad på stillingen som …» som vanlig tekst, fordi det er vanlig i norske søknadsbrev. KI-en endret prompten, testbrevet `brev-1.json`, to tester og beslutningen i planen. 655 tester |
+| 365 | «ja åpne» og «det ser bra ut» | KI-en startet nettsiden, og jeg så at overskriften står over brevet på siden og i Word-fila. KI-en stoppet nettsiden, pushet branchen og laget [PR #24](https://github.com/IBE160-2026/G68-grande/pull/24) med merknad om KI-feil og en kommentar om sjekken i nettleseren |

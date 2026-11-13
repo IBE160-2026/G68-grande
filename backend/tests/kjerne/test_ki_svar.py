@@ -66,6 +66,8 @@ def test_fr28_gyldig_gapsvar_med_en_tom_liste():
         ("brev", '{"avsnitt": []}'),
         ("brev", '{"avsnitt": ["  "]}'),
         ("brev", '{"avsnitt": ["", " \\n"]}'),
+        # Brev med bare kontrolltegn, som blir tomt etter rensingen (story 4.2)
+        ("brev", '{"avsnitt": ["\\u000b", "\\u0000\\n\\u0001", "\\ud800\\uffff"]}'),
         # Brev med feil form
         ("brev", '{"avsnitt": "Hei"}'),
         ("brev", '{"avsnitt": ["Hei", 3]}'),
@@ -106,6 +108,77 @@ def test_fr22_gyldig_brev_gis_tilbake():
 def test_fr22_tomme_avsnitt_i_brevet_fjernes():
     """FR-22/FR-28: avsnitt som er tomme eller bare har mellomrom, fjernes fra brevet."""
     assert kontroller("brev", '{"avsnitt": ["Hei", "", "  "]}') == {"avsnitt": ["Hei"]}
+
+
+def _brev(*avsnitt: str) -> list[str]:
+    """Avsnittene etter kontroller() for et brev med disse avsnittene."""
+    return kontroller("brev", json.dumps({"avsnitt": list(avsnitt)}))["avsnitt"]
+
+
+def test_fr28_linjeskift_og_tab_i_brevet_blir_ett_mellomrom():
+    """FR-28/FR-30: \\n, \\r og \\t blir mellomrom, og flere mellomrom på rad blir ett, også
+    først og sist i avsnittet."""
+    assert _brev("Jeg søker\nstillingen\r\nsom\tutvikler.   Hei", "  Med vennlig\n\nhilsen ") == [
+        "Jeg søker stillingen som utvikler. Hei",
+        "Med vennlig hilsen",
+    ]
+
+
+@pytest.mark.parametrize(
+    "tegn",
+    ["\x00", "\x01", "\x0b", "\x0c", "\x1f", "\x7f", "\x85", "\x9f", "\ud800", "\udfff"]
+    + ["\ufffe", "\uffff"],
+)
+def test_fr28_kontrolltegn_i_brevet_fjernes(tegn):
+    """FR-28/FR-30: kontrolltegn (Cc), enslige surrogater (Cs) og U+FFFE/U+FFFF fjernes fra
+    avsnittet, og teksten rundt står igjen uten mellomrom der tegnet var."""
+    assert _brev(f"kontroll{tegn}tegn", "Sara") == ["kontrolltegn", "Sara"]
+
+
+def test_fr28_vanlige_tegn_i_brevet_beholdes():
+    """FR-28: æøå, sitattegn, tankestrek, emoji og tegn utenfor BMP beholdes."""
+    tekst = "Æ, ø og å, «sitat» – tankestrek, 😀 og 𝄞."
+    assert _brev(tekst) == [tekst]
+
+
+def test_fr28_kontrolltegn_fjernes_ogsa_fra_json_escape():
+    """FR-28: et kontrolltegn skrevet som \\u000b i JSON-en fjernes på samme måte."""
+    assert kontroller("brev", '{"avsnitt": ["a\\u000bb\\u0000c"]}') == {"avsnitt": ["abc"]}
+
+
+@pytest.mark.parametrize(
+    ("tekst", "forventet"),
+    [
+        (
+            '{"nokkelord": ["Python", "  ", "", "SQL"], "arbeidsgiver": "Testvik AS"}',
+            {"nokkelord": ["Python", "SQL"], "arbeidsgiver": "Testvik AS"},
+        ),
+        (
+            '{"dekker": ["Python", " \\n"], "mangler": ["", "SQL", "\\t"]}',
+            {"dekker": ["Python"], "mangler": ["SQL"]},
+        ),
+        ('{"dekker": ["  "], "mangler": ["SQL"]}', {"dekker": [], "mangler": ["SQL"]}),
+    ],
+)
+def test_fr28_tomme_punkter_fjernes(tekst, forventet):
+    """FR-28: punkter som er tomme eller bare har mellomrom, fjernes i nokkelord, dekker og
+    mangler, så resultatsiden ikke viser tomme punkter."""
+    oppgave = "nokkelord" if "nokkelord" in tekst else "gap"
+    assert kontroller(oppgave, tekst) == forventet
+
+
+@pytest.mark.parametrize("arbeidsgiver", ["", "   ", "\\n\\t"])
+def test_fr28_tom_arbeidsgiver_blir_none(arbeidsgiver):
+    """FR-28: en arbeidsgiver som er tom eller bare har mellomrom, blir None."""
+    svar = kontroller("nokkelord", f'{{"nokkelord": ["Python"], "arbeidsgiver": "{arbeidsgiver}"}}')
+    assert svar == {"nokkelord": ["Python"], "arbeidsgiver": None}
+
+
+def test_fr15_fr28_tomme_punkter_regnes_ikke_med_i_grensen():
+    """FR-15/FR-28: tomme punkter fjernes før grensen MAKS_NOKKELORD sjekkes."""
+    nokkelord = [f"ord{n}" for n in range(MAKS_NOKKELORD)] + ["", "  "]
+    svar = kontroller("nokkelord", json.dumps({"nokkelord": nokkelord, "arbeidsgiver": None}))
+    assert len(svar["nokkelord"]) == MAKS_NOKKELORD
 
 
 @pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal", "pause_turn", None])

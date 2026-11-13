@@ -1,6 +1,7 @@
 """Tester for Word-filen til nedlastingen (FR-29, FR-30, NFR-9, AD-11). Story 3.2. Filen
 åpnes med python-docx, som Word-filen brukeren laster ned."""
 
+import json
 from io import BytesIO
 
 import pytest
@@ -9,6 +10,7 @@ from docx.oxml.ns import qn
 
 from soknad.adaptere.fil_ut import lag_docx
 from soknad.kjerne.feil import FilFeil
+from soknad.kjerne.ki_svar import kontroller
 
 AVSNITT = [
     "Jeg søker stillingen som junior utvikler.",
@@ -99,3 +101,28 @@ def test_fr29_tegn_word_ikke_taler_gir_filfeil(tekst):
     """FR-29/AD-9: et tegn Word ikke tåler, gir FilFeil, ikke et annet unntak."""
     with pytest.raises(FilFeil):
         lag_docx(["Første avsnitt.", tekst])
+
+
+def test_fr30_brev_med_kontrolltegn_gar_gjennom_kontroller_og_lag_docx():
+    """FR-30/FR-28 (story 4.2): et brev med \\u000b, \\n og \\t går gjennom kontroller() og
+    så lag_docx() uten FilFeil, og avsnittene i fila er like avsnittene fra kontroller()."""
+    tekst = json.dumps(
+        {
+            "avsnitt": [
+                "Jeg søker\nstillingen\tsom junior utvikler.",
+                "Jeg kan Python\u000b og Flask.\r\n",
+                "\u0000",
+                "Med vennlig hilsen",
+                "Sara Eksempel",
+            ]
+        }
+    )
+    avsnitt = kontroller("brev", tekst)["avsnitt"]
+    assert avsnitt == [
+        "Jeg søker stillingen som junior utvikler.",
+        "Jeg kan Python og Flask.",
+        "Med vennlig hilsen",
+        "Sara Eksempel",
+    ]
+    dokument = _apne(lag_docx(avsnitt))
+    assert [p.text for p in dokument.paragraphs] == avsnitt

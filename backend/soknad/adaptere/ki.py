@@ -50,6 +50,12 @@ SKJEMA = {
         "required": ["dekker", "mangler"],
         "additionalProperties": False,
     },
+    "brev": {
+        "type": "object",
+        "properties": {"avsnitt": _TEKSTLISTE},
+        "required": ["avsnitt"],
+        "additionalProperties": False,
+    },
 }
 
 
@@ -137,9 +143,14 @@ def _kifeil(oppgave: str, type: KIFeilType) -> KIFeil:
     return KIFeil(type)
 
 
+def _cv_og_annonse(cv: str, annonse: str) -> str:
+    """Brukermeldingen med CV-en og annonsen i merker, for gap og brev."""
+    return f"<cv>\n{cv}\n</cv>\n\n<annonse>\n{annonse}\n</annonse>"
+
+
 class EkteKI:
-    """Claude via API-et (AD-13). Samme signaturer og svarformer som TestKI. brev kommer i
-    story 4.2. klient brukes av testene, som sender inn en falsk klient."""
+    """Claude via API-et (AD-13). Samme signaturer og svarformer som TestKI. klient brukes av
+    testene, som sender inn en falsk klient."""
 
     def __init__(self, api_nokkel: str, modell: str, klient=None):
         self.modell = modell
@@ -159,7 +170,12 @@ class EkteKI:
         return self._kall("nokkelord", f"<annonse>\n{annonse}\n</annonse>")
 
     def gap(self, cv: str, annonse: str) -> dict:
-        return self._kall("gap", f"<cv>\n{cv}\n</cv>\n\n<annonse>\n{annonse}\n</annonse>")
+        return self._kall("gap", _cv_og_annonse(cv, annonse))
+
+    def brev(self, cv: str, annonse: str, forslag: int) -> dict:
+        """Bare CV-en og annonsen sendes (FR-37). forslag sendes ikke, fordi hvert kall gir et
+        nytt brev. Parameteren er med for at signaturen skal være lik den i TestKI."""
+        return self._kall("brev", _cv_og_annonse(cv, annonse))
 
     def _kall(self, oppgave: str, brukermelding: str) -> dict:
         """Sender ett kall til Claude og gir det kontrollerte svaret. Ingen temperature og
