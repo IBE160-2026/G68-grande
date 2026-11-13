@@ -17,6 +17,7 @@ Kode story 4.2 med `/bmad-build 4.2`: Claude skal kunne skrive søknadsbrevet ut
 - Gjennomgangen fant 15 ting: 4 rettet, 3 utsatt (`deferred-work.md`) og resten avvist med begrunnelse.
 - ruff er rent, og alle 655 tester er grønne. Nettsiden bruker fortsatt testmodus.
 - Commits: `bfdb06c` (koden) og `390c2ca` (kopi av planen, oversikten, TO DO, prompt-logg 361–363 og sprint-status). Notatet til refleksjonsrapporten er lagt inn i `notater.md`, men den mappen ligger med vilje utenfor Git. Ikke pushet.
+- Etter gjennomgangen spurte Kristine om søknaden burde ha en overskrift. Brevet begynner nå med «Søknad på stillingen som …» som vanlig tekst (prompten, `brev-1.json`, to tester og beslutningen i planen). Commits `1307c82` (koden) og `c20fa91` (spec-kopien og prompt-logg 364). 655 tester grønne. Overskriften synes også på brevsiden i testmodus.
 - Lukket i `issues.md`: tomme punkter i KI-svar, og rensingen av brevteksten.
 
 ### Åpne punkter
