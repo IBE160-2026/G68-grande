@@ -2,10 +2,12 @@
 KIFeil(ubrukelig_svar)."""
 
 import copy
+import json
 import pickle
 
 import pytest
 
+from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.ki_svar import kontroller
 
@@ -104,3 +106,37 @@ def test_fr22_gyldig_brev_gis_tilbake():
 def test_fr22_tomme_avsnitt_i_brevet_fjernes():
     """FR-22/FR-28: avsnitt som er tomme eller bare har mellomrom, fjernes fra brevet."""
     assert kontroller("brev", '{"avsnitt": ["Hei", "", "  "]}') == {"avsnitt": ["Hei"]}
+
+
+@pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal", "pause_turn", None])
+def test_fr28_stop_reason_som_ikke_er_end_turn_gir_ubrukelig_svar(stop_reason):
+    """FR-28/AD-4: et avkuttet eller avvist svar gir KIFeil(ubrukelig_svar) før JSON-en leses,
+    også når JSON-en er gyldig. Uten stop_reason gjelder end_turn (TestKI)."""
+    tekst = '{"dekker": ["Python"], "mangler": []}'
+    assert kontroller("gap", tekst) == kontroller("gap", tekst, "end_turn")
+    with pytest.raises(KIFeil) as feil:
+        kontroller("gap", tekst, stop_reason)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def _nokkelord(antall: int) -> str:
+    return json.dumps({"nokkelord": [f"ord{n}" for n in range(antall)], "arbeidsgiver": None})
+
+
+def test_fr15_grensen_er_maks_nokkelord():
+    """FR-15: grensen for antall nøkkelord er MAKS_NOKKELORD, som er 30."""
+    assert MAKS_NOKKELORD == 30
+
+
+def test_fr15_fr28_akkurat_30_nokkelord_godtas():
+    """FR-15/FR-28: et svar med akkurat MAKS_NOKKELORD nøkkelord godtas."""
+    svar = kontroller("nokkelord", _nokkelord(MAKS_NOKKELORD))
+    assert len(svar["nokkelord"]) == MAKS_NOKKELORD
+
+
+@pytest.mark.parametrize("antall", [MAKS_NOKKELORD + 1, 100])
+def test_fr15_fr28_flere_enn_30_nokkelord_gir_ubrukelig_svar(antall):
+    """FR-15/FR-28: flere enn MAKS_NOKKELORD nøkkelord gir KIFeil(ubrukelig_svar)."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("nokkelord", _nokkelord(antall))
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR

@@ -1,8 +1,9 @@
-"""Kontroll av KI-svar (AD-4, FR-28). Både TestKI og senere EkteKI sender svaret hit, så et
+"""Kontroll av KI-svar (AD-4, FR-28). Både TestKI og EkteKI sender svaret hit, så et
 ubrukelig svar stoppes på samme sted uansett utgave."""
 
 import json
 
+from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
 
 # Feltene hver oppgave skal ha, og nøyaktig disse (AD-4).
@@ -43,18 +44,29 @@ def _tomt(oppgave: str, svar: dict) -> bool:
     return _bare_tomme(svar["dekker"] + svar["mangler"])
 
 
-def kontroller(oppgave: str, tekst: str) -> dict:
+def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -> dict:
     """Gir svaret i formen fra AD-4. Ugyldig JSON, feil form, tom nøkkelordliste, både
     dekker og mangler tomme eller et brev uten tekst gir KIFeil(ubrukelig_svar). En liste med
     bare tomme tekster regnes som tom. Oppgavene er nokkelord, gap og brev. I et brev fjernes
-    avsnitt som er tomme eller bare har mellomrom, så brevsiden ikke får tomme avsnitt."""
+    avsnitt som er tomme eller bare har mellomrom, så brevsiden ikke får tomme avsnitt.
+
+    En nøkkelordliste med flere enn MAKS_NOKKELORD (30) nøkkelord gir også
+    KIFeil(ubrukelig_svar) (FR-15). Det gjelder både TestKI og EkteKI.
+
+    stop_reason kommer fra Claude. Alt annet enn end_turn (for eksempel max_tokens eller
+    refusal) betyr at svaret er avkuttet eller avvist, og gir KIFeil(ubrukelig_svar) før
+    JSON-en leses. TestKI sender den ikke, og da gjelder standarden end_turn."""
     if oppgave not in FELT:
         raise ValueError(f"Ukjent KI-oppgave: {oppgave}")
+    if stop_reason != "end_turn":
+        raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     try:
         svar = json.loads(tekst)
     except (json.JSONDecodeError, RecursionError) as feil:
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR) from feil
     if not _riktig_form(oppgave, svar) or _tomt(oppgave, svar):
+        raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
+    if oppgave == "nokkelord" and len(svar["nokkelord"]) > MAKS_NOKKELORD:
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     if oppgave == "brev":
         return {"avsnitt": [avsnitt for avsnitt in svar["avsnitt"] if avsnitt.strip()]}

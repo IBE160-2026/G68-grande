@@ -641,3 +641,16 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 351 | «start nettsiden» / «den står på vanlig som er 2.5 hele veien» | KI-en startet nettsiden, og jeg sjekket i Word at margene er 2,5 cm på alle sider |
 | 352 | (svar etter sjekken i Word) | KI-en stoppet nettsiden, kopierte planen hit, oppdaterte oversikten og TO DO, pushet branchen og laget [PR #22](https://github.com/IBE160-2026/G68-grande/pull/22) med merknad om KI-feil og en kommentar om sjekken i Word |
 | 353 | «den er flettet» | KI-en hentet `main`, satte retro-punkt 19–21 for epic 3 til ferdige i sprint-statusen, krysset av i TO DO og pushet loggene |
+
+## 2026-11-13 – Story 4.1: Koble til Claude for nøkkelord og gap-analyse
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-1-koble-til-claude-for-nokkelord-og-gap-analyse.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 354 | `/bmad-build` «4» og «Ja, hele økta» til hjelpeagenter | KI-en valgte story 4.1. En hjelpeagent samlet planene for epic 4 i [`epic-4-context.md`](9-koding/epic-4-context.md), også de kjente fallgruvene fra retrospektivene. KI-en sjekket parameternavnene mot dokumentasjonen for anthropic 2.4.0 og skrev planen for 4.1 |
+| 355 | «Nei, «Prøv på nytt»» og «Behold samlet» | Jeg valgte at nettsiden ikke skal be om en reservemodell når Claude avviser et kall, og å beholde planen samlet (ca. 2500 tokens) |
+| 356 | «må jeg fikse sånn claude console først?» | KI-en forklarte at 4.1 ikke trenger nøkkel, fordi testene bruker en falsk Claude-klient. Konto, kreditt og nøkkel trengs før story 4.3 |
+| 357 | «godkjenn og fortsett» | En hjelpeagent kodet `EkteKI`, promptene for nøkkelord og gap-analyse, feilene og loggingen av tokens og pris på branchen `story/4-1-koble-til-claude-for-nokkelord-og-gap-analyse`. Den stoppet på bruksgrensen rett før slutten, og KI-en sjekket arbeidet etterpå. Tre hjelpere fant 16 ting: 4 rettet, 3 utsatt og resten avvist med begrunnelse |
+| 358 | «Legg det inn i 4.1 nå» | **KI-feil:** planen manglet endringen i FR-15 fra 12. november (8–20 nøkkelord, høyst 30), fordi PRD-kopien KI-en leser fra og epics ikke var oppdatert. KI-en fant det da den oppdaterte TO DO. Regelen ble lagt inn i 4.1, og en ny runde med tre hjelpere fant 17 ting: 1 rettet, 2 utsatt og resten avvist eller ført videre fra første runde. KI-en oppdaterte PRD-kopien, epics og konteksten for epic 4 med resten av endringene. 614 tester |
+| 359 | «push» | KI-en pushet branchen og laget [PR #23](https://github.com/IBE160-2026/G68-grande/pull/23) med merknad om KI-feilen (nøkkelordregelen som manglet i planen). Ingen kommentar om nettleseren, fordi nettsiden fortsatt bruker testmodus |
