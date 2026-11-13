@@ -37,8 +37,8 @@ Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
 
 Regler for formen:
 
-- Begynn rett på teksten, for eksempel «Jeg søker stillingen som …». Skriv ingen dato, adresse, overskrift eller tiltale.
-- Brevet er høyst én A4-side: omtrent 250–400 ord i 4–6 avsnitt. Hilsenen og navnet regnes ikke med, verken i ordene eller i avsnittene.
+- Det første avsnittet er overskriften «Søknad på stillingen som …», med stillingstittelen slik den står i annonsen. Overskriften er vanlig tekst, uten markdown. Skriv ingen dato, adresse eller tiltale.
+- Brevet er høyst én A4-side: omtrent 250–400 ord i 4–6 avsnitt. Overskriften, hilsenen og navnet regnes ikke med, verken i ordene eller i avsnittene.
 - Slutt med «Med vennlig hilsen» og studentens navn fra CV-en, som to egne avsnitt. Står det ikke noe navn i CV-en, slutter brevet med «Med vennlig hilsen».
 - Hvert avsnitt er ren tekst uten markdown, punktlister eller linjeskift.
 

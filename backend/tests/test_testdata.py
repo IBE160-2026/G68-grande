@@ -176,6 +176,7 @@ def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
     for fil in filer:
         brev = kontroller("brev", fil.read_text(encoding="utf-8"))
         assert len(brev["avsnitt"]) >= 2, fil
+        assert brev["avsnitt"][0].startswith("Søknad på stillingen som "), fil
         tekst = " ".join(" ".join(brev["avsnitt"]).split()).casefold()
         assert [frase for frase in KI_FRASER if frase in tekst] == [], fil
 
