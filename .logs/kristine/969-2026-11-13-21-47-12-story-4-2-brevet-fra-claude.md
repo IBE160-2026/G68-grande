@@ -19,6 +19,7 @@ Kode story 4.2 med `/bmad-build 4.2`: Claude skal kunne skrive søknadsbrevet ut
 - Commits: `bfdb06c` (koden) og `390c2ca` (kopi av planen, oversikten, TO DO, prompt-logg 361–363 og sprint-status). Notatet til refleksjonsrapporten er lagt inn i `notater.md`, men den mappen ligger med vilje utenfor Git. Ikke pushet.
 - Etter gjennomgangen spurte Kristine om søknaden burde ha en overskrift. Brevet begynner nå med «Søknad på stillingen som …» som vanlig tekst (prompten, `brev-1.json`, to tester og beslutningen i planen). Commits `1307c82` (koden) og `c20fa91` (spec-kopien og prompt-logg 364). 655 tester grønne. Kristine så i nettleseren at overskriften står over brevet og øverst i Word-fila. Branchen er pushet og [PR #24](https://github.com/IBE160-2026/G68-grande/pull/24) laget, med merknad om KI-feil og en kommentar om sjekken i nettleseren (`c21d2bb`: PR-en i TO DO, oversikten og prompt-logg 365).
 - Kristine flettet PR #24 (CI grønn på Linux og Windows). Story 4.2 er satt til done i sprint-statusen, og TO DO og prompt-logg 366 er oppdatert.
+- Etter 4.2 laget Kristine konto i Claude Console (individuell), kjøpte kreditt med auto-reload av og la API-nøkkelen i `backend/.env` (laget fra `.env.example`). Sjekket uten å vise nøkkelen: nettsiden finner den, og Git overser fila. TO DO er krysset av.
 - Lukket i `issues.md`: tomme punkter i KI-svar, rensingen av brevteksten og PR-en for 4.2.
 
 ### Åpne punkter
