@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-13-2026 19:47
+last_updated: 11-13-2026 20:23
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -59,7 +59,7 @@ development_status:
   epic-3-retrospective: done
 
   epic-4: in-progress
-  4-1-koble-til-claude-for-nøkkelord-og-gap-analyse: review
+  4-1-koble-til-claude-for-nøkkelord-og-gap-analyse: done
   4-2-brevet-fra-claude: backlog
   4-3-slå-av-testmodus-med-samtykke-og-ki-merknad: backlog
   4-4-ekte-ki-svar-i-testmodus: backlog
