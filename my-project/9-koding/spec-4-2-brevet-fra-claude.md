@@ -24,8 +24,8 @@ context:
 
 **Never:** Ingen endring i `web/` eller i `ki()` (4.3). Ikke `scripts/lag_testsvar.py` og ingen nye `ki-svar/*.json` (4.4). `forslag` sendes ikke til Claude (FR-37: bare CV og annonse). Ingen strømming, `temperature` eller `thinking`. Koden fra 4.1 (`_kall`, feilene, loggingen) skrives ikke om.
 
-**Beslutning (Kristine, 2026-11-13):** brevet begynner rett på teksten («Jeg søker stillingen som …») og slutter med «Med vennlig hilsen» og navnet fra CV-en som egne avsnitt, som `brev-1.json`. Ingen dato, adresse eller overskrift.
-**Beslutning (Kristine, 2026-11-13):** brevet er høyst én A4-side, omtrent 250–400 ord i 4–6 avsnitt (hilsen og navn ikke medregnet).
+**Beslutning (Kristine, 2026-11-13, endret samme kveld):** brevet begynner med overskriften «Søknad på stillingen som …» som vanlig tekst i første avsnitt, og slutter med «Med vennlig hilsen» og navnet fra CV-en som egne avsnitt. `brev-1.json` får samme overskrift. Ingen dato, adresse eller tiltale.
+**Beslutning (Kristine, 2026-11-13):** brevet er høyst én A4-side, omtrent 250–400 ord i 4–6 avsnitt (overskrift, hilsen og navn ikke medregnet).
 **Beslutning (Kristine, 2026-11-13):** spec-en beholdes samlet (ca. 2400 tokens), fordi rensingen og brevet testes sammen med `kontroller` og `lag_docx`.
 
 ## I/O & Edge-Case Matrix
@@ -89,6 +89,8 @@ Kontrolltegn fjernes i stedet for å gi `ubrukelig_svar`, fordi et nytt kall kan
 - Hjelperen `_cv_og_annonse` lager brukermeldingen for både `gap` og `brev`.
 
 ## Spec Change Log
+
+- **2026-11-13 (Kristine, etter gjennomgangen):** Kristine spurte om søknaden burde ha en overskrift, og valgte overskriften «Søknad på stillingen som …» som vanlig tekst (ikke fet), fordi det er vanlig i norske søknadsbrev. Endret: beslutningen om begynnelsen og lengden (inne i den frosne delen, godkjent av Kristine), regelen i `prompts/brev.md`, `brev-1.json` og to tester (prompten nevner overskriften, og hvert `brev-*.json` begynner med den). **KEEP:** resten av koden og rettingene fra gjennomgangen.
 
 ## Review Triage Log
 
