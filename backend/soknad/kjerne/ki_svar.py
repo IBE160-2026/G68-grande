@@ -2,6 +2,7 @@
 ubrukelig svar stoppes på samme sted uansett utgave."""
 
 import json
+import unicodedata
 
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
@@ -31,6 +32,42 @@ def _riktig_form(oppgave: str, svar) -> bool:
     return _er_tekstliste(svar["dekker"]) and _er_tekstliste(svar["mangler"])
 
 
+# Tegnene Word (XML) ikke tåler, fjernes fra brevet: kontrolltegn (kategori Cc), enslige
+# surrogater (Cs, kan komme fra for eksempel \ud800 i JSON) og U+FFFE og U+FFFF. Tab,
+# linjeskift og vognretur er også kontrolltegn, men de blir mellomrom i stedet.
+_MELLOMROM_KONTROLLTEGN = "\t\n\r"
+_IKKE_TEGN = "\ufffe\uffff"
+
+
+def _word_taler(tegn: str) -> bool:
+    if tegn in _MELLOMROM_KONTROLLTEGN:
+        return True
+    return unicodedata.category(tegn) not in ("Cc", "Cs") and tegn not in _IKKE_TEGN
+
+
+def _rens_avsnitt(avsnitt: str) -> str:
+    """Fjerner tegnene Word ikke tåler, og gjør alt mellomrom (også linjeskift og tab) om til
+    ett mellomrom. Nettleseren viser flere mellomrom som ett, så da blir Word-fila lik siden."""
+    return " ".join("".join(tegn for tegn in avsnitt if _word_taler(tegn)).split())
+
+
+def _uten_tomme(liste: list[str]) -> list[str]:
+    """Listen uten punkter som er tomme eller bare har mellomrom."""
+    return [element for element in liste if element.strip()]
+
+
+def _rens(oppgave: str, svar: dict) -> dict:
+    """Svaret uten tomme punkter. Tom arbeidsgiver blir None, og brevteksten renses."""
+    if oppgave == "nokkelord":
+        arbeidsgiver = svar["arbeidsgiver"]
+        if arbeidsgiver is not None and not arbeidsgiver.strip():
+            arbeidsgiver = None
+        return {"nokkelord": _uten_tomme(svar["nokkelord"]), "arbeidsgiver": arbeidsgiver}
+    if oppgave == "brev":
+        return {"avsnitt": _uten_tomme([_rens_avsnitt(avsnitt) for avsnitt in svar["avsnitt"]])}
+    return {"dekker": _uten_tomme(svar["dekker"]), "mangler": _uten_tomme(svar["mangler"])}
+
+
 def _bare_tomme(liste: list[str]) -> bool:
     """Sann når listen er tom eller bare har tomme tekster (også bare mellomrom)."""
     return not any(element.strip() for element in liste)
@@ -46,12 +83,19 @@ def _tomt(oppgave: str, svar: dict) -> bool:
 
 def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -> dict:
     """Gir svaret i formen fra AD-4. Ugyldig JSON, feil form, tom nøkkelordliste, både
-    dekker og mangler tomme eller et brev uten tekst gir KIFeil(ubrukelig_svar). En liste med
-    bare tomme tekster regnes som tom. Oppgavene er nokkelord, gap og brev. I et brev fjernes
-    avsnitt som er tomme eller bare har mellomrom, så brevsiden ikke får tomme avsnitt.
+    dekker og mangler tomme eller et brev uten tekst gir KIFeil(ubrukelig_svar). Oppgavene er
+    nokkelord, gap og brev.
 
-    En nøkkelordliste med flere enn MAKS_NOKKELORD (30) nøkkelord gir også
-    KIFeil(ubrukelig_svar) (FR-15). Det gjelder både TestKI og EkteKI.
+    Før tom-sjekken renses svaret (FR-28, FR-30), både for TestKI og EkteKI:
+    - Punkter som er tomme eller bare har mellomrom, fjernes i nokkelord, dekker, mangler og
+      avsnitt, så siden ikke viser tomme punkter. En liste med bare slike punkter er tom.
+    - Tom arbeidsgiver (eller bare mellomrom) blir None.
+    - I hvert avsnitt i brevet fjernes kontrolltegn og andre tegn Word ikke tåler, og alt
+      mellomrom (også linjeskift og tab) blir ett mellomrom, så Word-fila blir lik siden. Et
+      brev som blir tomt av dette, gir KIFeil(ubrukelig_svar).
+
+    En nøkkelordliste med flere enn MAKS_NOKKELORD (30) nøkkelord (tomme punkter ikke
+    medregnet) gir også KIFeil(ubrukelig_svar) (FR-15).
 
     stop_reason kommer fra Claude. Alt annet enn end_turn (for eksempel max_tokens eller
     refusal) betyr at svaret er avkuttet eller avvist, og gir KIFeil(ubrukelig_svar) før
@@ -64,10 +108,11 @@ def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -
         svar = json.loads(tekst)
     except (json.JSONDecodeError, RecursionError) as feil:
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR) from feil
-    if not _riktig_form(oppgave, svar) or _tomt(oppgave, svar):
+    if not _riktig_form(oppgave, svar):
+        raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
+    svar = _rens(oppgave, svar)
+    if _tomt(oppgave, svar):
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     if oppgave == "nokkelord" and len(svar["nokkelord"]) > MAKS_NOKKELORD:
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
-    if oppgave == "brev":
-        return {"avsnitt": [avsnitt for avsnitt in svar["avsnitt"] if avsnitt.strip()]}
     return svar
