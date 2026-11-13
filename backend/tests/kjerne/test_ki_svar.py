@@ -104,3 +104,14 @@ def test_fr22_gyldig_brev_gis_tilbake():
 def test_fr22_tomme_avsnitt_i_brevet_fjernes():
     """FR-22/FR-28: avsnitt som er tomme eller bare har mellomrom, fjernes fra brevet."""
     assert kontroller("brev", '{"avsnitt": ["Hei", "", "  "]}') == {"avsnitt": ["Hei"]}
+
+
+@pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal", "pause_turn", None])
+def test_fr28_stop_reason_som_ikke_er_end_turn_gir_ubrukelig_svar(stop_reason):
+    """FR-28/AD-4: et avkuttet eller avvist svar gir KIFeil(ubrukelig_svar) før JSON-en leses,
+    også når JSON-en er gyldig. Uten stop_reason gjelder end_turn (TestKI)."""
+    tekst = '{"dekker": ["Python"], "mangler": []}'
+    assert kontroller("gap", tekst) == kontroller("gap", tekst, "end_turn")
+    with pytest.raises(KIFeil) as feil:
+        kontroller("gap", tekst, stop_reason)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
