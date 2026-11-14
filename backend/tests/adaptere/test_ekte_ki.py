@@ -442,16 +442,18 @@ def test_fr24_fr37_brevprompten_har_reglene_for_brevet():
 
 
 def test_fr24_fr37_brevprompten_ber_om_et_avsnitt_om_studenten_som_person():
-    """FR-24/FR-37/NFR-10: mot slutten har brevet ett avsnitt som presenterer studenten som
-    person (bestemt av Kristine 14. november), bygd bare på det CV-en sier, for eksempel under
-    «Om meg». Står det ingenting om studenten som person i CV-en, skrives ikke avsnittet."""
+    """FR-24/FR-37/NFR-10: rett etter overskriften, før kravene og erfaringen, har brevet ett
+    avsnitt som presenterer studenten som person (bestemt av Kristine 14. november). Claude ser
+    etter alder, «Om meg», hobbyer, interesser og frivillig arbeid i hele CV-en og bygger bare
+    på det som står der. Står det ingenting om studenten som person, begynner brevet rett på
+    stillingen og kravene."""
     prompt = _brevprompt()
     for tekst in (
-        "Mot slutten, før det siste avsnittet",
+        "Rett etter overskriften, før avsnittene om kravene og erfaringen",
         "presenterer studenten som person",
-        "«Om meg»",
-        "skriver du ikke dette avsnittet",
-        "Dikt aldri opp egenskaper eller interesser",
+        "Se etter dette i hele CV-en, for eksempel alder, «Om meg», hobbyer, interesser",
+        "begynner du rett på stillingen og kravene",
+        "Dikt aldri opp alder, egenskaper, hobbyer eller interesser",
     ):
         assert tekst in prompt, tekst
 

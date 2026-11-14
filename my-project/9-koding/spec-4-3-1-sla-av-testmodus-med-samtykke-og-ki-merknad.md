@@ -26,7 +26,7 @@ context:
 
 **Beslutning (Kristine, 2026-11-13):** story 4.3 deles. 4.3.1 er bryteren, samtykket og KI-merknaden. 4.3.2 er grensene.
 **Beslutning (Kristine, 2026-11-13):** spec-en beholdes samlet (ca. 2500 tokens), fordi bryteren, samtykket og KI-merknaden henger tett sammen. Bryteren laster siden på nytt (ikke JavaScript som i skissen), og fokus blir på bryteren.
-**Beslutning (Kristine, 2026-11-14, etter prøven med ekte KI):** brevet får mot slutten, før det siste avsnittet, ett avsnitt som presenterer studenten som person, bygd bare på det CV-en sier (for eksempel «Om meg»). Uten noe slikt i CV-en skrives ikke avsnittet. Regelen står i `prompts/brev.md`.
+**Beslutning (Kristine, 2026-11-14, etter prøven med ekte KI, endret samme dag):** rett etter overskriften, før avsnittene om kravene og erfaringen, kommer ett avsnitt som presenterer studenten som person, så arbeidsgiveren først får vite hvem studenten er. Claude ser etter alder, «Om meg», hobbyer, interesser og frivillig arbeid i hele CV-en og bygger bare på det som står der. Uten noe slikt i CV-en begynner brevet rett på stillingen og kravene. Regelen står i `prompts/brev.md`.
 
 ## I/O & Edge-Case Matrix
 
@@ -100,6 +100,7 @@ Bryteren er et skjema med POST, ikke JavaScript, fordi skriptene bare endrer vis
 ## Spec Change Log
 
 - **2026-11-14 (Kristine, etter prøven med ekte KI på case 1):** Kristine savnet et avsnitt der studenten presenterer seg som person, fordi hele brevet handlet om erfaring. Hun valgte at avsnittet står mot slutten. Endret: beslutningen over (inne i den frosne delen, godkjent av Kristine), en ny regel i `prompts/brev.md` og en test i `test_ekte_ki.py`. **KEEP:** resten av koden og rettingene fra gjennomgangen.
+- **2026-11-14 (Kristine, samme dag):** Kristine ville at avsnittet om studenten som person kommer først, rett etter overskriften, så arbeidsgiveren blir kjent med personen før ferdighetene, og at Claude ser etter alder, hobbyer og interesser i hele CV-en. Endret: beslutningen over (inne i den frosne delen, godkjent av Kristine), regelen i `prompts/brev.md` og testen i `test_ekte_ki.py`. **KEEP:** som i forrige punkt.
 
 ## Review Triage Log
 
