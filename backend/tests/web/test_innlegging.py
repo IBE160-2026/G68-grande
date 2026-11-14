@@ -46,9 +46,8 @@ def til_innlegging(app, client):
 
 
 def uten_testmodus(app, client):
-    """Slår av testmodus. Det lager en ny økt uten søknad, så søknaden settes på nytt."""
+    """Slår av testmodus på samme økt-id. Søknaden beholdes (sett_testmodus)."""
     sett_testmodus(app, client, False)
-    til_innlegging(app, client)
 
 
 def send(client, cv, annonse, handling="sjekk"):

@@ -310,3 +310,15 @@ def test_fr29_sett_inndata_med_like_tekster_beholder_lastet_ned():
     """FR-19/FR-29: er tekstene like som før, er søknaden uendret, også lastet_ned."""
     soknad = _lastet_ned()
     assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
+
+
+def test_fr36_begynn_lagrer_samtykket():
+    """FR-36/AD-7: begynn(soknad, samtykke=True) lagrer samtykket. Uten samtykke er det usant."""
+    assert begynn(Soknad(), samtykke=True) == Soknad(steg=Steg.MODUS, samtykke=True)
+    assert begynn(Soknad()).samtykke is False
+
+
+def test_fr36_begynn_fjerner_aldri_et_samtykke():
+    """FR-36/AD-8: et samtykke som alt er gitt, beholdes når begynn kalles uten samtykke."""
+    soknad = Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING, samtykke=True)
+    assert begynn(soknad) == soknad

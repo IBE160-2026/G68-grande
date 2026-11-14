@@ -8,6 +8,7 @@ from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 
+from soknad import create_app
 from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
@@ -143,12 +144,38 @@ class FeilendeKI:
 
 
 def sett_testmodus(app, client, testmodus):
-    """Bytter innloggingen til en med testmodus satt til testmodus, med øktlagerets egne
-    metoder (slett og ny), og peker cookien på den nye økt-id-en. Testmodus kan ikke slås av
-    på nettsiden før Epic 4."""
+    """Bytter innloggingen til en med testmodus satt til testmodus, på samme økt-id og med
+    søknaden beholdt (Oktlager.bytt_innlogging). Brukes i apper uten API-nøkkel, der bryteren
+    på nettsiden er låst på."""
     lager = app.extensions["oktlager"]
     gammel = lager.hent(okt_id(client))
-    lager.slett(okt_id(client))
-    ny_id = lager.ny(Innlogging(gammel.bruker_id, testmodus=testmodus))
-    with client.session_transaction() as okt:
-        okt[OKT_ID] = ny_id
+    assert lager.bytt_innlogging(okt_id(client), Innlogging(gammel.bruker_id, testmodus))
+
+
+def app_med_nokkel(nokkel="sk-test"):
+    """En app der ANTHROPIC_API_KEY er satt til nokkel. EkteKI kobler ikke til nettet før det
+    første kallet, og testene bytter den ut med TellendeKI før noe kalles."""
+    return create_app({"TESTING": True, "SECRET_KEY": "test-nokkel", "ANTHROPIC_API_KEY": nokkel})
+
+
+class TellendeKI:
+    """En falsk KI som skriver hver oppgave i kalt og svarer med de ferdige svarene fra TestKI.
+    Settes inn med app.extensions["ekte_ki"] (eller "test_ki"), så testene ser hvilken KI som
+    ble kalt, uten nettverk."""
+
+    def __init__(self, test_ki, kalt=None):
+        self.test_ki = test_ki
+        self.caser = test_ki.caser
+        self.kalt = [] if kalt is None else kalt
+
+    def nokkelord(self, annonse):
+        self.kalt.append("nokkelord")
+        return self.test_ki.nokkelord(annonse)
+
+    def gap(self, cv, annonse):
+        self.kalt.append("gap")
+        return self.test_ki.gap(cv, annonse)
+
+    def brev(self, cv, annonse, forslag):
+        self.kalt.append("brev")
+        return self.test_ki.brev(cv, annonse, forslag)

@@ -1,25 +1,65 @@
 {% extends "base.html" %}
 {% block tittel %}{{ tekster.START_TITTEL }}{% endblock %}
+{% block skript %}
+{%- if not testmodus %}
+  <script src="{{ url_for('static', filename='js/info.js') }}" defer></script>
+{%- endif %}
+{%- endblock %}
 {% block topplinje %}
-{#- Bryteren er låst på fram til Epic 4. aria-disabled (ikke disabled), så den kan nås med Tab.
+{%- if har_nokkel %}
+{#- Med nøkkel er bryteren en knapp i et eget skjema (FR-32). Et trykk sender den nye verdien,
+    og siden lastes på nytt med fokus på bryteren (bryter_fokus), uten JavaScript. #}
+<form class="bryter-skjema" method="post" action="{{ url_for('web.bryter') }}">
+  <button class="bryter" type="submit" role="switch" name="testmodus"
+    value="{{ 'av' if testmodus else 'paa' }}" aria-checked="{{ 'true' if testmodus else 'false' }}"
+    {%- if bryter_fokus %} autofocus{% endif %}>
+    <span class="spor" aria-hidden="true"></span>
+    {{ tekster.TESTMODUS }}
+  </button>
+</form>
+{%- else %}
+{#- Uten nøkkel er bryteren låst på. aria-disabled (ikke disabled), så den kan nås med Tab.
     Den står ikke i et skjema og sender ingenting. #}
 <button class="bryter" type="button" role="switch"
-  aria-checked="{{ 'true' if testmodus else 'false' }}" aria-disabled="true"
-  {%- if mangler_nokkel %} aria-describedby="nokkeltekst"{% endif %}>
+  aria-checked="{{ 'true' if testmodus else 'false' }}" aria-disabled="true" aria-describedby="nokkeltekst">
   <span class="spor" aria-hidden="true"></span>
   {{ tekster.TESTMODUS }}
 </button>
-{%- if mangler_nokkel %}
 <p class="nokkeltekst" id="nokkeltekst">{{ tekster.MANGLER_NOKKEL }}</p>
 {%- endif %}
 {% endblock %}
 {% block innhold %}
 <h1 class="velkommen">{{ tekster.START_OVERSKRIFT }}</h1>
 <p class="ingress">{{ tekster.START_INGRESS }}</p>
-{#- Teksten kommer med siden og leses i vanlig rekkefølge. role="status" betyr først noe når
-    teksten endres uten at siden lastes på nytt (kanskje i Epic 4), så området finnes alltid. #}
+{#- Teksten kommer med siden og leses i vanlig rekkefølge. Området finnes alltid. #}
 <p class="testinfo" role="status">{% if testmodus %}{{ tekster.TESTMODUS_STATUS }}{% endif %}</p>
 <form class="begynn" method="post" action="{{ url_for('web.start') }}">
+  {%- if not testmodus %}
+  {#- Samtykket (FR-36): bare når testmodus er av, og boksen er alltid tom når siden åpnes.
+      Uten avkryssing: rød ramme, feilteksten koblet til boksen og fokus på boksen. Feilteksten
+      har ikke role="alert", for den leses opp når boksen får fokus. «i»-knappen med boksen
+      rett etter seg i leserekkefølgen (UX-DR11), som på resultatsiden. #}
+  <div class="samtykke">
+    <p class="samtykke-linje">{{ tekster.SAMTYKKE_LINJE }}</p>
+    <div class="samtykke-rad">
+      <label class="avkrysning"><input type="checkbox" id="samtykke" name="samtykke" value="ja"
+        {%- if samtykke_feil %} aria-invalid="true" aria-describedby="samtykke-feil" autofocus{% endif %}>
+        {{ tekster.SAMTYKKE_ETIKETT }}</label>
+      <div class="info">
+        <button class="info-knapp" type="button" aria-label="{{ tekster.SAMTYKKE_INFO_SKJERMLESER }}"
+          aria-expanded="false" aria-controls="info-samtykke"><span aria-hidden="true">{{ tekster.INFO_IKON }}</span></button>
+        <div class="info-boks" id="info-samtykke" hidden>
+          {%- for punkt in tekster.SAMTYKKE_INFO %}
+          <p><strong>{{ punkt.overskrift }}</strong> {{ punkt.tekst }}</p>
+          {%- endfor %}
+        </div>
+      </div>
+    </div>
+    {%- if samtykke_feil %}
+    <p class="feiltekst" id="samtykke-feil">{{ tekster.SAMTYKKE_FEIL }}</p>
+    {%- endif %}
+  </div>
+  {%- endif %}
   <button class="stor-knapp" type="submit">{{ tekster.START_KNAPP }}</button>
 </form>
 {% endblock %}

@@ -21,6 +21,44 @@ TESTMODUS_STATUS = (
 # Under bryteren når ANTHROPIC_API_KEY mangler.
 MANGLER_NOKKEL = "Mangler API-nøkkel, se README"
 
+
+class InfoPunkt(NamedTuple):
+    """Et punkt i en «i»-boks: overskriften i fet skrift og teksten etter."""
+
+    overskrift: str
+    tekst: str
+
+
+# Samtykket på startsiden, bare når testmodus er av (FR-36, UX-DR11).
+SAMTYKKE_LINJE = "Teksten din sendes til ekstern KI."
+SAMTYKKE_ETIKETT = "Jeg samtykker til bruk av KI"
+SAMTYKKE_INFO_SKJERMLESER = "Hva betyr samtykket?"
+SAMTYKKE_INFO = (
+    InfoPunkt(
+        "Hva samtykker jeg til?",
+        "Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til KI-tjenesten "
+        "Claude fra selskapet Anthropic.",
+    ),
+    InfoPunkt(
+        "Hvorfor sendes teksten?",
+        "KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.",
+    ),
+    InfoPunkt(
+        "Lagres noe?", "Nei. Nettsiden lagrer ingenting du legger inn etter at du logger ut."
+    ),
+    InfoPunkt(
+        "Personopplysninger:",
+        "Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. "
+        "Det er ditt valg.",
+    ),
+)
+SAMTYKKE_FEIL = "Du må samtykke før du kan begynne"
+
+# KI-merknaden nede til venstre i hjørneraden når testmodus er av (FR-35). Ikonet er bare
+# pynt og skjules for skjermlesere.
+KI_MERKNAD_IKON = "ⓘ"
+KI_MERKNAD = "Teksten behandles av ekstern KI"
+
 # «Tilbake» på modusvalget (og senere på innleggingen og resultatsiden).
 TILBAKE_KNAPP = "Tilbake"
 

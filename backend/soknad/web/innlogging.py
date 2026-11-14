@@ -1,5 +1,6 @@
 """Innloggingssjekken: cookien har bare økt-id-en, og øktene ligger i øktlageret."""
 
+from dataclasses import replace
 from functools import wraps
 
 from flask import current_app, make_response, redirect, session, url_for
@@ -44,12 +45,17 @@ def login_required(visning):
     return innpakket
 
 
-def logg_inn_bruker(bruker_id: int) -> None:
+def logg_inn_bruker(bruker_id: int, testmodus: bool) -> None:
     """Sletter den gamle økten med logg_ut_bruker (så økten ryddes bare ett sted) og lager
-    en ny med ny, tilfeldig økt-id."""
+    en ny med ny, tilfeldig økt-id. Rutene sender testmodus: av med API-nøkkel, på uten."""
     logg_ut_bruker()
-    # Testmodus er alltid på fram til Epic 4.
-    session[OKT_ID] = oktlager().ny(Innlogging(bruker_id, testmodus=True))
+    session[OKT_ID] = oktlager().ny(Innlogging(bruker_id, testmodus=testmodus))
+
+
+def endre_testmodus(innlogging: Innlogging, testmodus: bool) -> None:
+    """Bryteren på startsiden (FR-32): innloggingen byttes på samme økt-id, så søknaden og
+    cookien er de samme."""
+    oktlager().bytt_innlogging(session.get(OKT_ID), replace(innlogging, testmodus=testmodus))
 
 
 def logg_ut_bruker() -> None:

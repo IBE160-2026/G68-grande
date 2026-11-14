@@ -28,6 +28,16 @@ class Oktlager:
         with self._las:
             return self._innlogginger.get(okt_id)
 
+    def bytt_innlogging(self, okt_id: str | None, innlogging: Innlogging) -> bool:
+        """Bytter innloggingen på samme økt-id, for eksempel når testmodus slås av eller på
+        (FR-32). Søknaden beholdes. Det skjer bare når økten finnes, så en utlogget økt ikke
+        kommer tilbake. Gir True når innloggingen ble byttet."""
+        with self._las:
+            if okt_id in self._innlogginger:
+                self._innlogginger[okt_id] = innlogging
+                return True
+            return False
+
     def hent_soknad(self, okt_id: str | None) -> Soknad | None:
         if okt_id is None:
             return None

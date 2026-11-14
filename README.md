@@ -10,7 +10,7 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting. Korrektur, PDF-opplasting, PDF-nedlasting og ekte KI kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting. Med API-nøkkel kan testmodus slås av, og da brukes ekte KI (Claude). Korrektur, PDF-opplasting og PDF-nedlasting kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
@@ -50,11 +50,13 @@ uv run flask --app soknad run
 
 | Innstilling | Hva den gjør | Hvis den er tom |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | Nøkkel til Claude API | Nettsiden kjører i testmodus |
+| `ANTHROPIC_API_KEY` | Nøkkel til Claude API. Med nøkkel kan testmodus slås av | Nettsiden kjører i testmodus |
 | `ANTHROPIC_MODEL` | Hvilken Claude-modell som brukes | `claude-opus-5-5` |
 | `SECRET_KEY` | Signerer innloggingen | En tilfeldig nøkkel lages ved hver oppstart |
 
 **Testbruker:** logg inn med e-post `test@example.com` og passord `testpassord1`. Du trenger ikke registrere deg. Databasen (`backend/instance/brukere.db`) og testbrukeren lages automatisk første gang nettsiden starter. Vil du begynne på nytt med en tom database, stopper du nettsiden og sletter mappen `backend/instance/`. Innloggingen huskes bare i minnet, så når nettsiden startes på nytt, er alle logget ut og må logge inn igjen. Nettsiden kan kjøres i testmodus uten API-nøkkel.
+
+**Testmodus og samtykke:** uten API-nøkkel er bryteren «Testmodus» oppe til høyre på startsiden låst på, og under den står «Mangler API-nøkkel, se README». Nettsiden bruker da de ferdige svarene i `backend/testdata/`, og ingenting sendes til ekstern KI. Med API-nøkkel i `backend/.env` er testmodus av når du logger inn, og bryteren kan slås av og på, men bare på startsiden. Når testmodus er av, sendes CV-en og annonsen til Claude, og du må krysse av for «Jeg samtykker til bruk av KI» før «Begynn å lage søknad» virker. Avkrysningen må gjøres hver gang du kommer til startsiden. «i»-knappen ved siden av forklarer hva samtykket betyr. Nede til venstre står «Teksten behandles av ekstern KI» så lenge testmodus er av. Hvert kall til Claude koster litt (se `ANTHROPIC_MODEL` over). Nøkkelen leses bare når nettsiden starter, så du må starte nettsiden på nytt etter at du har endret `.env`. Er nøkkelen ugyldig, gir hvert KI-kall «Noe gikk galt hos KI-tjenesten. Prøv på nytt.». Rett da nøkkelen, eller slå på testmodus.
 
 ## Testdata og tester
 

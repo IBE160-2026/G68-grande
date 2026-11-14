@@ -55,9 +55,11 @@ class Soknad:
     opptatt: bool = False
 
 
-def begynn(soknad: Soknad) -> Soknad:
-    """«Begynn å lage søknad»: steget blir minst modus."""
-    return replace(soknad, steg=max(soknad.steg, Steg.MODUS))
+def begynn(soknad: Soknad, samtykke: bool = False) -> Soknad:
+    """«Begynn å lage søknad»: steget blir minst modus, og samtykket lagres (FR-36). Et
+    samtykke som alt er gitt, fjernes ikke, så en POST fra en gammel fane mens søknaden er
+    lenger fram, endrer ikke søknaden."""
+    return replace(soknad, steg=max(soknad.steg, Steg.MODUS), samtykke=soknad.samtykke or samtykke)
 
 
 def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
