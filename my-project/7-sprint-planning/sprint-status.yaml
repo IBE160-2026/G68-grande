@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-14-2026 18:30
+last_updated: 11-14-2026 18:44
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -64,7 +64,7 @@ development_status:
   4-3-slå-av-testmodus-med-samtykke-og-ki-merknad: done
   4-4-ekte-ki-svar-i-testmodus: done
   4-5-et-testcase-til-og-kriterium-3: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   epic-5: backlog
   5-1-velge-korrektur-og-legge-inn-eget-brev: backlog
@@ -185,7 +185,7 @@ action_items:
     action: "Epic 4: ki() velger ut fra testmodus med grensesnittet som type, tidsgrense
       på KI-kallet, tom arbeidsgiver gir None"
     owner: "KI (Claude) skriver det inn i storiene"
-    status: in-progress
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-15-story-3-1-6-1-og-7-3-brevsteget-i-side_f"
     epic: 2
@@ -241,7 +241,7 @@ action_items:
     action: "Epic 4: brevteksten renses i kontroller(\"brev\") (kontrolltegn, linjeskift
       og tab), med test av kontroller og lag_docx sammen"
     owner: "KI (Claude) skriver det inn i storyen"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
   - id: "epic-3-retro-item-23-epic-7-vinduet-nytt-forslag-spør-også-nå"
     epic: 3
@@ -261,5 +261,63 @@ action_items:
     epic: 3
     action: "Prosess: sjekk statusen før et funn avvises med henvisning til et retro-punkt"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
+  - id: "epic-4-retro-item-26-ki-kallet-i-innlegging-og-resultat-samle"
+    epic: 4
+    action: "KI-kallet i innlegging og resultat samles i én hjelper som leser innloggingen
+      én gang, sender utloggede til innloggingen, sjekker samtykke, plass og opptatt
+      og teller kallene, med tester"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-27-test-gjennom-det-ekte-anthropic-sdk-et-h"
+    epic: 4
+    action: "Test gjennom det ekte Anthropic-SDK-et (httpx2.MockTransport), én webtest
+      gjennom EkteKI og kontroller, sperre mot nettverk i conftest.py, og punktene
+      fra 4.1 i deferred-work.md lukkes eller flyttes"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-28-små-rettinger-med_nokkel-til-hjelpere-py"
+    epic: 4
+    action: "Små rettinger: med_nokkel til hjelpere.py, utdaterte kommentarer og test
+      om «måles i 4.3», surrogater i listene, README-rader og lenke til retro 4, kjent
+      begrensning om øktlageret, og de seks flettede branchene slettes"
+    owner: "KI (Claude), Kristine godkjenner PR og slettingen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-29-én-måling-med-cv-og-annonse-på-nær-15-00"
+    epic: 4
+    action: "Én måling med CV og annonse på nær 15 000 tegn hver, tiden skrives i
+      testplan.md og innstillinger.py"
+    owner: "KI (Claude) forbereder, Kristine godkjenner kostnaden"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-30-story-7-5-arbeidsgiver-renses-før-den-br"
+    epic: 4
+    action: "Story 7.5: arbeidsgiver renses før den brukes i filnavnet"
+    owner: "KI (Claude) skriver det inn i storyen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-31-prosess-utsatte-punkter-som-peker-på-en"
+    epic: 4
+    action: "Prosess: utsatte punkter som peker på en story som deles, skrives inn
+      i en av de nye storiene"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-32-prosess-en-endring-i-prd-en-føres-inn-i"
+    epic: 4
+    action: "Prosess: en endring i PRD-en føres inn i epics og epic-konteksten samme
+      dag"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-4-retro-item-33-prosess-samle-endringene-i-brev-prompten"
+    epic: 4
+    action: "Prosess: samle endringene i brev-prompten før kjøringene med ekte KI,
+      fordi hver endring krever at alle kriteriene kjøres på nytt"
+    owner: "KI (Claude) foreslår, Kristine bestemmer"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
