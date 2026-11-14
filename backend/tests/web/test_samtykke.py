@@ -365,14 +365,14 @@ def test_fr36_info_boksen_har_de_fire_punktene_og_aria(med_nokkel):
     assert punkter == [
         (
             "Hva samtykker jeg til?",
-            "Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til en ekstern "
-            "KI-tjeneste.",
+            "Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til KI-tjenesten "
+            "Claude fra selskapet Anthropic.",
         ),
         (
             "Hvorfor sendes teksten?",
             "KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.",
         ),
-        ("Lagres noe?", "Nei. Ingenting du legger inn, lagres etter at du logger ut."),
+        ("Lagres noe?", "Nei. Nettsiden lagrer ingenting du legger inn etter at du logger ut."),
         (
             "Personopplysninger:",
             "Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. "

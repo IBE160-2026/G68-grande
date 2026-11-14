@@ -101,6 +101,7 @@ Bryteren er et skjema med POST, ikke JavaScript, fordi skriptene bare endrer vis
 
 - **2026-11-14 (Kristine, etter prøven med ekte KI på case 1):** Kristine savnet et avsnitt der studenten presenterer seg som person, fordi hele brevet handlet om erfaring. Hun valgte at avsnittet står mot slutten. Endret: beslutningen over (inne i den frosne delen, godkjent av Kristine), en ny regel i `prompts/brev.md` og en test i `test_ekte_ki.py`. **KEEP:** resten av koden og rettingene fra gjennomgangen.
 - **2026-11-14 (Kristine, samme dag):** Kristine ville at avsnittet om studenten som person kommer først, rett etter overskriften, så arbeidsgiveren blir kjent med personen før ferdighetene, og at Claude ser etter alder, hobbyer og interesser i hele CV-en. Endret: beslutningen over (inne i den frosne delen, godkjent av Kristine), regelen i `prompts/brev.md` og testen i `test_ekte_ki.py`. **KEEP:** som i forrige punkt.
+- **2026-11-14 (Kristine, samtykketeksten):** to av de fire punktene i «i»-boksen er endret i EXPERIENCE (Kristines ordlyd): punkt 1 sier «sendes til KI-tjenesten Claude fra selskapet Anthropic», og punkt 3 sier «Nei. Nettsiden lagrer ingenting du legger inn etter at du logger ut.». KI-en foreslo også å nevne at Anthropic kan lagre teksten i opptil 30 dager, men Kristine valgte å la være. Endret: `tekster.py` og testen i `test_samtykke.py`. **KEEP:** resten.
 
 ## Review Triage Log
 

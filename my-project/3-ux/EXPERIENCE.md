@@ -106,9 +106,9 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 - Linje over avkrysningsboksen: «Teksten din sendes til ekstern KI.»
 - Avkrysningsboks: «Jeg samtykker til bruk av KI», med «i»-ikon ved siden av.
 - «i»-boksen (fra skissen):
-  - «**Hva samtykker jeg til?** Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til en ekstern KI-tjeneste.»
+  - «**Hva samtykker jeg til?** Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til KI-tjenesten Claude fra selskapet Anthropic.»
   - «**Hvorfor sendes teksten?** KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.»
-  - «**Lagres noe?** Nei. Ingenting du legger inn, lagres etter at du logger ut.»
+  - «**Lagres noe?** Nei. Nettsiden lagrer ingenting du legger inn etter at du logger ut.»
   - «**Personopplysninger:** Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. Det er ditt valg.»
 - Uten samtykke: «Du må samtykke før du kan begynne».
 - Knapp: «Begynn å lage søknad».

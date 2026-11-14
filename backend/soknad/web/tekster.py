@@ -36,14 +36,16 @@ SAMTYKKE_INFO_SKJERMLESER = "Hva betyr samtykket?"
 SAMTYKKE_INFO = (
     InfoPunkt(
         "Hva samtykker jeg til?",
-        "Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til en ekstern "
-        "KI-tjeneste.",
+        "Teksten du legger inn, altså CV, brev og stillingsannonse, sendes til KI-tjenesten "
+        "Claude fra selskapet Anthropic.",
     ),
     InfoPunkt(
         "Hvorfor sendes teksten?",
         "KI-tjenesten trenger teksten for å finne kravene i annonsen og skrive brevet.",
     ),
-    InfoPunkt("Lagres noe?", "Nei. Ingenting du legger inn, lagres etter at du logger ut."),
+    InfoPunkt(
+        "Lagres noe?", "Nei. Nettsiden lagrer ingenting du legger inn etter at du logger ut."
+    ),
     InfoPunkt(
         "Personopplysninger:",
         "Vi anbefaler at du fjerner adresse, telefonnummer og fødselsdato fra CV-en først. "
