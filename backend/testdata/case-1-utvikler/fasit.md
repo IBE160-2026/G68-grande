@@ -44,6 +44,7 @@ Tabellen har nøkkelordene fra `ki-svar/nokkelord.json`, i samme rekkefølge. «
 | --- | --- |
 | bachelorgrad | Nei |
 | informatikk | Nei |
+| IT | Ja |
 | Python | Ja |
 | Flask | Ja |
 | HTML | Ja |
@@ -60,9 +61,8 @@ Tabellen har nøkkelordene fra `ki-svar/nokkelord.json`, i samme rekkefølge. «
 | norsk | Ja |
 | engelsk | Ja |
 | tester | Nei |
-| webtjenester | Nei |
 
-9 av 19 = 47 %
+10 av 19 = 53 %
 
 ## Sjekkliste for brevet
 

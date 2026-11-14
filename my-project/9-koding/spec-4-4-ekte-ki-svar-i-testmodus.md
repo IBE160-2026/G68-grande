@@ -91,6 +91,7 @@ En fullført søknad er nøkkelord + gap + ett brev (`brev-2` er «Nytt forslag�
 - Uventet: to tester i `tests/web/test_resultat.py` hadde 64 % og (7)/(4) skrevet inn. De leser nå tallene fra fasiten.
 - Kriterium 11: ingen brev påstår noe fra sjekklisten. Små utbroderinger (Linux «fra studiet», «til daglig», «travle perioder») og en ærlig omtale av SQL i `brev-2` i kjøring 2 står som merknader i testplanen. Kristine avgjør om de er brudd (da plan B). Design Notes sier at en ærlig omtale gir plan B, men det gjelder sjekklistetesten på `ki-svar/`, og `brev-2` i kjøring 2 er ikke der.
 - Akseptansekriteriet om nettleseren er dekket av webtestene med testdataene, men Kristine prøver det selv.
+- Plan B (etter gjennomgangen, 14. november 2026): Kristine vurderte merknadene. Fakta som ikke står i CV-en (Linux «fra studiet», «til daglig») er brudd på kriterium 11, egenskaper lest ut av en jobb er greit, brevet skal ikke nevne krav CV-en ikke dekker, og stillingen skrives med liten forbokstav i overskriften. `prompts/brev.md` fikk tre nye regler, med en ny test i `tests/adaptere/test_ekte_ki.py`. Alle tre kjøringene ble gjort på nytt kl. 14.18–14.22 (ca. 4 kr). Runde 1 ligger i `testkjoringer/4-4/runde-1/`, runde 2 i `runde-2/`. Kriterium 1, 11 og 14 besto alle tre gangene. Fasiten er nå 10 av 19 = 53 % («IT» kom med). `brev-1` i runde 2, kjøring 3, mangler hilsenen og navnet (en formfeil, ikke kriterium 11). 757 tester grønne.
 
 ## Spec Change Log
 

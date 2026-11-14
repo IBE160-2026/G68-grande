@@ -1,0 +1,10 @@
+Runde 2 (plan B), kjøring 3 av story 4.4, 14. november 2026.
+Kommando (fra backend/): uv run python -m scripts.lag_testsvar --ut ../my-project/testkjoringer/4-4/runde-2/kjoring-3
+Utskriften fra terminalen:
+
+2026-11-14 14:20:37,117 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1501 tokens inn, 141 ut, stopp end_turn, anslått 0,0088 dollar (ca. 0,10 kr)
+2026-11-14 14:20:41,252 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2060 tokens inn, 348 ut, stopp end_turn, anslått 0,0152 dollar (ca. 0,17 kr)
+2026-11-14 14:20:58,452 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3432 tokens inn, 1752 ut, stopp end_turn, anslått 0,0488 dollar (ca. 0,54 kr)
+2026-11-14 14:21:45,458 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3432 tokens inn, 2276 ut, stopp end_turn, anslått 0,0592 dollar (ca. 0,65 kr)
+case-1-utvikler: svarene er skrevet i ..\my-project\testkjoringer\4-4\runde-2\kjoring-3\case-1-utvikler
+Feilkode 0, 80 sekunder i alt.

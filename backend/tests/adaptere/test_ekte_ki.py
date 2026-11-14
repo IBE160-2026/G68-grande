@@ -458,6 +458,23 @@ def test_fr24_fr37_brevprompten_ber_om_et_avsnitt_om_studenten_som_person():
         assert tekst in prompt, tekst
 
 
+def test_fr37_brevprompten_har_reglene_fra_plan_b_i_story_4_4():
+    """FR-37/FR-24/NFR-12: etter de tre kjøringene i story 4.4 bestemte Kristine (14. november
+    2026) at brevet ikke skal si hvor eller hvor ofte en ferdighet er brukt når CV-en ikke sier
+    det, ikke skal nevne krav CV-en ikke dekker, og skal ha stillingen med liten forbokstav i
+    overskriften."""
+    prompt = _brevprompt()
+    for tekst in (
+        "Skriv ikke hvor, når eller hvor ofte studenten har brukt en ferdighet",
+        "ikke at den er brukt i studiet, i et prosjekt eller «til daglig»",
+        "Knytt et verktøy til et prosjekt eller en jobb bare når CV-en gjør det",
+        "Nevn ikke krav fra annonsen som CV-en ikke dekker",
+        "med liten forbokstav",
+        "«Søknad på stillingen som junior utvikler»",
+    ):
+        assert tekst in prompt, tekst
+
+
 @pytest.mark.parametrize("forslag", [1, 2])
 def test_fr37_brev_sender_bare_cv_og_annonse(forslag):
     """FR-37: brukermeldingen til brevet har bare CV-en og annonsen i merker, og ikke

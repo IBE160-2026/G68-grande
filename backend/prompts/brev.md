@@ -9,6 +9,8 @@ Regler for innholdet:
 - Vis til minst to konkrete krav fra annonsen, og koble hvert av dem til noe som står i CV-en. Dekker CV-en færre enn to krav, kobler du bare de kravene CV-en faktisk dekker, og strekker aldri CV-en for å nå to.
 - Bygg bare på det som står i CV-en og annonsen. Legg aldri til erfaring, utdanning eller ferdigheter som ikke står i CV-en, og gjett ikke. Du får omformulere det som står i CV-en og koble det til kravene i annonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid».
 - Skriv ikke at studenten oppfyller et krav som CV-en ikke viser.
+- Skriv ikke hvor, når eller hvor ofte studenten har brukt en ferdighet, et verktøy eller en erfaring, hvis CV-en ikke sier det. Står en ferdighet bare under ferdigheter, skriver du at studenten kan den, ikke at den er brukt i studiet, i et prosjekt eller «til daglig». Knytt et verktøy til et prosjekt eller en jobb bare når CV-en gjør det.
+- Nevn ikke krav fra annonsen som CV-en ikke dekker, og skriv ikke om hva studenten mangler eller ennå ikke har gjort. Brevet viser bare det CV-en dekker.
 - Rett etter overskriften, før avsnittene om kravene og erfaringen, skriver du ett avsnitt som presenterer studenten som person, så arbeidsgiveren først får vite hvem studenten er: for eksempel alder, hva studenten studerer, hva studenten liker å gjøre og hvordan studenten jobber. Se etter dette i hele CV-en, for eksempel alder, «Om meg», hobbyer, interesser og frivillig arbeid. Avsnittet kan også si hvilken stilling studenten søker på. Bygg det bare på det som står i CV-en. Står det ikke noe om studenten som person i CV-en, begynner du rett på stillingen og kravene. Dikt aldri opp alder, egenskaper, hobbyer eller interesser.
 
 Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
@@ -38,7 +40,7 @@ Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
 
 Regler for formen:
 
-- Det første avsnittet er overskriften «Søknad på stillingen som …», med stillingstittelen slik den står i annonsen. Overskriften er vanlig tekst, uten markdown. Skriv ingen dato, adresse eller tiltale.
+- Det første avsnittet er overskriften «Søknad på stillingen som …», med stillingstittelen slik den står i annonsen, men med liten forbokstav slik det er vanlig midt i en setning på norsk, for eksempel «Søknad på stillingen som junior utvikler». Behold stor bokstav bare i navn og forkortelser. Overskriften er vanlig tekst, uten markdown. Skriv ingen dato, adresse eller tiltale.
 - Brevet er høyst én A4-side: omtrent 250–400 ord i 4–6 avsnitt. Overskriften, hilsenen og navnet regnes ikke med, verken i ordene eller i avsnittene.
 - Slutt med «Med vennlig hilsen» og studentens navn fra CV-en, som to egne avsnitt. Står det ikke noe navn i CV-en, slutter brevet med «Med vennlig hilsen».
 - Hvert avsnitt er ren tekst uten markdown, punktlister eller linjeskift.
