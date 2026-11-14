@@ -475,6 +475,20 @@ def test_fr37_brevprompten_har_reglene_fra_plan_b_i_story_4_4():
         assert tekst in prompt, tekst
 
 
+def test_fr37_brevprompten_har_regelen_fra_plan_b_i_story_4_5():
+    """FR-37/NFR-12: etter de tre kjøringene for kriterium 3 i story 4.5 bestemte Kristine
+    (14. november 2026) at «Python er språket jeg har jobbet mest med» og «min første faste
+    jobb» er brudd på kriterium 11. Brevet skal ikke rangere ferdighetene eller endre hvilken
+    jobb CV-en sier at studenten ser etter."""
+    prompt = _brevprompt()
+    for tekst in (
+        "Ranger eller sammenlign ikke ferdighetene",
+        "«Python er språket jeg har jobbet mest med»",
+        "skriver du ikke «min første faste jobb»",
+    ):
+        assert tekst in prompt, tekst
+
+
 @pytest.mark.parametrize("forslag", [1, 2])
 def test_fr37_brev_sender_bare_cv_og_annonse(forslag):
     """FR-37: brukermeldingen til brevet har bare CV-en og annonsen i merker, og ikke
