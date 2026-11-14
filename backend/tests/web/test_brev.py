@@ -12,7 +12,7 @@ from soknad.adaptere.ki import TESTDATA_MAPPE, TestKI
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
-from soknad.web import tekster
+from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
     ANNONSE,
@@ -307,6 +307,31 @@ def test_fr7_utlogget_midt_i_brevkallet_gir_innloggingen(app, paa_resultat):
     neste = paa_resultat.get(svar.location)
     assert neste.location == "/logg-inn?ikke_innlogget=1"
     assert app.extensions["oktlager"].hent_soknad(gammel_id) is None
+
+
+def test_fr7_utlogget_for_brevkallet_gir_innloggingen(app, paa_resultat, monkeypatch):
+    """FR-7/AD-8: logges brukeren ut i en annen fane etter login_required, men før «Lag
+    søknadsbrevet mitt» henter brevet, sendes hen til innloggingen med «Du må logge inn
+    først». Ingen feilside og ingen KI-feil, cookien tømmes, KI-en kalles ikke, og ingen
+    søknad lagres for den gamle økt-id-en."""
+    lager = app.extensions["oktlager"]
+    id_ = okt_id(paa_resultat)
+    ekte_hent = ruter.gjeldende_soknad
+
+    def hent_og_logg_ut():
+        soknad = ekte_hent()
+        lager.slett(id_)
+        return soknad
+
+    monkeypatch.setattr(ruter, "gjeldende_soknad", hent_og_logg_ut)
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    svar = lag_brev(paa_resultat)
+    assert svar.status_code == 302
+    assert svar.location == "/logg-inn?ikke_innlogget=1"
+    assert okt_id(paa_resultat) is None
+    assert kalt == []
+    assert lager.hent_soknad(id_) is None
 
 
 def test_fr27_uventet_feil_gir_opptatt_usann(app, paa_resultat):
