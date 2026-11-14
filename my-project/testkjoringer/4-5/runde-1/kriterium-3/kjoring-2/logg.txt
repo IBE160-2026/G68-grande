@@ -1,0 +1,5 @@
+2026-11-14 17:30:22,195 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1539 tokens inn, 147 ut, stopp end_turn, anslått 0,0091 dollar (ca. 0,10 kr)
+2026-11-14 17:30:29,004 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2098 tokens inn, 673 ut, stopp end_turn, anslått 0,0219 dollar (ca. 0,24 kr)
+2026-11-14 17:30:46,616 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3470 tokens inn, 1676 ut, stopp end_turn, anslått 0,0474 dollar (ca. 0,52 kr)
+2026-11-14 17:31:08,426 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3470 tokens inn, 2379 ut, stopp end_turn, anslått 0,0615 dollar (ca. 0,68 kr)
+case-1-cv-med-annonse-2: svarene er skrevet i ..\my-project\testkjoringer\4-5\kriterium-3\kjoring-2\case-1-cv-med-annonse-2
