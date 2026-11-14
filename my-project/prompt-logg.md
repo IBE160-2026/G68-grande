@@ -668,3 +668,13 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 364 | «burde det ikke vært en overskrift på søknaden?» og «ja vi endrer sånn at vi har med overskrift vanlig tekst» | Jeg ombestemte meg: brevet begynner nå med overskriften «Søknad på stillingen som …» som vanlig tekst, fordi det er vanlig i norske søknadsbrev. KI-en endret prompten, testbrevet `brev-1.json`, to tester og beslutningen i planen. 655 tester |
 | 365 | «ja åpne» og «det ser bra ut» | KI-en startet nettsiden, og jeg så at overskriften står over brevet på siden og i Word-fila. KI-en stoppet nettsiden, pushet branchen og laget [PR #24](https://github.com/IBE160-2026/G68-grande/pull/24) med merknad om KI-feil og en kommentar om sjekken i nettleseren |
 | 366 | «den er flettet» | KI-en sjekket at PR #24 var flettet med grønne sjekker, hentet `main`, satte story 4.2 til ferdig i sprint-statusen, krysset av i TO DO og pushet loggene |
+
+## 2026-11-13 – Story 4.3.1: Slå av testmodus, med samtykke og KI-merknad
+
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad.md).
+
+| # | Min prompt | Resultat |
+|---|---|---|
+| 367 | `/bmad-build` «4.3», «Dele i 4.3.1 og 4.3.2» og «Ja, som i 4.2» | KI-en sjekket GitHub og leste konteksten for epic 4, planen for 4.2 og UX-tekstene for samtykket. Den foreslo å dele story 4.3, fordi grensene (15 000 tegn og 10 KI-kall) kan lages for seg. Jeg valgte å dele og at KI-en kan bruke hjelpeagenter. Grensene er nå story 4.3.2 |
+| 368 | «Beholde samlet» og «Godkjenn og fortsett» | KI-en skrev planen for 4.3.1. Den valgte at bryteren laster siden på nytt (ikke JavaScript som i skissen), og jeg godtok det. Jeg valgte å beholde planen samlet (ca. 2500 tokens) |
+| 369 | (ingen ny prompt) | En hjelpeagent kodet bryteren, valget mellom ekte KI og testsvar, samtykket med «i»-boksen og KI-merknaden på branchen `story/4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad`. Tre hjelpere fant 16 ting: 7 rettet (blant annet at en annen fane kunne slå av testmodus midt i analysen, slik at CV-en ble sendt til Claude uten samtykke), 1 utsatt og resten avvist med begrunnelse. 708 tester |
