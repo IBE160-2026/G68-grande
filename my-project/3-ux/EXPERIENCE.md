@@ -140,6 +140,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 | Uleselig PDF | «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» | FR-11 |
 | For stor fil | «CV: Filen er for stor. Den kan være på høyst 5 MB.» (tallet er bestemt i arkitekturen) | FR-12 |
 | Ikke testdata i testmodus | «CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» | FR-34 |
+| CV og annonse fra ulike testcaser i testmodus | «Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i backend/testdata/.» (bestemt av Kristine 14. november 2026, story 4.5) | FR-34 |
 
 Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den samme teksten står også med rødt under feltnavnet i feltet med feil.
 

@@ -1,5 +1,6 @@
 """KI-grensesnittet (AD-3). Web-laget bruker bare grensesnittet og vet ikke hvilken utgave
-det får. TestKI gir de håndlagde svarene fra testdata/. EkteKI sender teksten til Claude.
+det får. TestKI gir de ferdige svarene fra testdata/ (ekte KI-svar, laget med
+scripts/lag_testsvar.py). EkteKI sender teksten til Claude.
 anthropic importeres bare her, aldri i kjerne/."""
 
 import logging
@@ -69,17 +70,49 @@ class KI(Protocol):
     def brev(self, cv: str, annonse: str, forslag: int) -> dict: ...
 
 
+class TestdataFeil(Exception):
+    """Testdataene i testdata/ mangler eller henger ikke sammen. Gis ved oppstart, så feilen
+    merkes med en gang og ikke som en KI-feil midt i flyten (story 4.5)."""
+
+    # Navnet begynner på Test, men dette er ikke en testklasse for pytest.
+    __test__ = False
+
+
+def _les_fil(case: Path, navn: str) -> str:
+    fil = case / navn
+    if not fil.is_file():
+        raise TestdataFeil(f"Testcaset {case.name} mangler fila {navn} (i {case}).")
+    return fil.read_text(encoding="utf-8")
+
+
+def _sjekk_unike(caser: list[Testcase]) -> None:
+    """To caser med samme vaskede CV eller annonse gir TestdataFeil. CV-en avgjør caset, og
+    nokkelord finner caset ut fra annonsen, så begge må være unike. Da gir nokkelord og gap
+    alltid svar fra samme case."""
+    for felt, navn in (("cv", "CV"), ("annonse", "annonse")):
+        sett: dict[str, str] = {}
+        for case in caser:
+            tekst = getattr(case, felt)
+            if tekst in sett:
+                raise TestdataFeil(
+                    f"Testcasene {sett[tekst]} og {case.navn} har samme {navn}. "
+                    "Hvert testcase må ha sin egen CV og annonse."
+                )
+            sett[tekst] = case.navn
+
+
 def les_testcaser(mappe: Path = TESTDATA_MAPPE) -> list[Testcase]:
-    """Leser cv.txt og annonse.txt i hver case-mappe, sortert på navn."""
-    return [
-        lag_testcase(
-            case.name,
-            (case / "cv.txt").read_text(encoding="utf-8"),
-            (case / "annonse.txt").read_text(encoding="utf-8"),
-        )
-        for case in sorted(mappe.glob("case-*"))
-        if case.is_dir()
+    """Leser cv.txt og annonse.txt i hver case-mappe, sortert på navn. Mangler mappen, en
+    case-mappe eller en av filene, eller er to CV-er eller annonser like, gis TestdataFeil."""
+    mapper = sorted(case for case in mappe.glob("case-*") if case.is_dir())
+    if not mapper:
+        raise TestdataFeil(f"Fant ingen testcaser (mapper som heter case-…) i {mappe}.")
+    caser = [
+        lag_testcase(case.name, _les_fil(case, "cv.txt"), _les_fil(case, "annonse.txt"))
+        for case in mapper
     ]
+    _sjekk_unike(caser)
+    return caser
 
 
 class TestKI:
@@ -93,7 +126,8 @@ class TestKI:
         self.caser = les_testcaser(mappe)
 
     def nokkelord(self, annonse: str) -> dict:
-        """Signaturen har bare annonsen, så caset finnes ut fra den."""
+        """Signaturen har bare annonsen, så caset finnes ut fra den. Annonsene er unike
+        (les_testcaser), så det er samme case som gap og brev finner ut fra CV-en."""
         return self._svar(case_for_annonse(annonse, self.caser), "nokkelord")
 
     def gap(self, cv: str, annonse: str) -> dict:

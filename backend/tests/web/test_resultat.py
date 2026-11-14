@@ -3,6 +3,7 @@
 Story 2.5.2 og 2.6."""
 
 import html as html_modul
+import json
 import re
 
 import pytest
@@ -67,6 +68,33 @@ def test_fr17_kriterium_2_case_1_gir_prosenten_i_fasiten(paa_resultat):
     svar = paa_resultat.get("/resultat")
     assert svar.status_code == 200
     assert nokkelordtreff(html_av(svar)) == fasit.group(0)
+
+
+def test_fr17_kriterium_2_case_2_gir_prosenten_og_brevet_fra_case_2(paa_innlegging):
+    """FR-17/FR-22/FR-34, suksesskriterium 2 (story 4.5): CV og annonse fra case 2 i testmodus
+    gir resultatsiden med linjen «X av Y = Z %» fra fasit.md i case 2, og brevet fra
+    ki-svar/brev-1.json i case 2. Gap-analysen er den fra ki-svar/gap.json i case 2."""
+    case_2 = CASE.parent / "case-2-okonomi"
+    cv, annonse, fasit = (
+        (case_2 / navn).read_text(encoding="utf-8")
+        for navn in ("cv.txt", "annonse.txt", "fasit.md")
+    )
+    linje = re.search(r"^\d+ av \d+ = \d+ %$", fasit, re.M)
+    assert linje, "Fant ingen linje «X av Y = Z %» i fasit.md for case 2"
+    svar = paa_innlegging.post(
+        "/innlegging", data={"cv": cv, "annonse": annonse, "handling": "sjekk"}
+    )
+    assert svar.location == "/resultat"
+    resultat = html_av(paa_innlegging.get("/resultat"))
+    assert nokkelordtreff(resultat) == linje.group(0)
+    gap = json.loads((case_2 / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
+    assert liste(resultat, "gap-dekker") == gap["dekker"]
+    assert liste(resultat, "gap-mangler") == gap["mangler"]
+
+    assert paa_innlegging.post("/resultat", data={"handling": "brev"}).location == "/brev"
+    brev = json.loads((case_2 / "ki-svar" / "brev-1.json").read_text(encoding="utf-8"))
+    side = html_modul.unescape(html_av(paa_innlegging.get("/brev")))
+    assert all(avsnitt in side for avsnitt in brev["avsnitt"])
 
 
 def test_fr15_samme_prosent_naar_siden_lastes_paa_nytt(app, paa_resultat):

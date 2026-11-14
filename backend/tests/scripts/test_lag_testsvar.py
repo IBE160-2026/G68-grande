@@ -197,3 +197,61 @@ def test_fr38_main_bruker_nokkel_og_modell_fra_miljoet(testdata, monkeypatch, tm
 
     monkeypatch.setattr(lag_testsvar, "EkteKI", lambda nokkel, modell: FalskKI("gap"))
     assert lag_testsvar.main([], testdata) == lag_testsvar.KI_FEILET == 1
+
+
+def test_fr38_case_kjorer_bare_ett_testcase(testdata, monkeypatch, tmp_path):
+    """FR-38 (story 4.5): med --case kjøres bare det testcaset, og de andre er uendret."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    ki = FalskKI()
+    monkeypatch.setattr(lag_testsvar, "EkteKI", lambda nokkel, modell: ki)
+    assert lag_testsvar.main(["--case", "case-2-annet"], testdata) == 0
+    assert (testdata / "case-2-annet" / "ki-svar" / "brev-1.json").exists()
+    assert [fil.name for fil in (testdata / "case-1-utvikler" / "ki-svar").iterdir()] == [
+        "gap.json"
+    ]
+    assert len(ki.kall) == 4
+    assert all("case-2-annet" in kall[1] for kall in ki.kall)
+
+
+def test_fr38_ukjent_case_gir_melding_og_ingen_ki(testdata, monkeypatch, tmp_path, capsys):
+    """FR-38 (story 4.5): et --case som ikke finnes, gir melding og feilkode 3, før nøkkelen
+    leses, så ingen KI lages."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    _ingen_ekte_ki(monkeypatch)
+    assert lag_testsvar.main(["--case", "case-9-finnes-ikke"], testdata) == 3
+    assert lag_testsvar.UKJENT_CASE == 3
+    assert "Fant ikke testcaset case-9-finnes-ikke" in capsys.readouterr().out
+    assert not (testdata / "case-2-annet" / "ki-svar" / "nokkelord.json").exists()
+
+
+def test_fr38_testdata_leser_casene_fra_en_annen_mappe(testdata, monkeypatch, tmp_path):
+    """FR-38 (story 4.5): med --testdata leses casene fra den mappen, og svarene skrives i
+    <mappe>/<case>/ki-svar/ (eller i --ut). Den vanlige testdata-mappen er uendret."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    ki = FalskKI()
+    monkeypatch.setattr(lag_testsvar, "EkteKI", lambda nokkel, modell: ki)
+    annen = tmp_path / "inndata"
+    (annen / "case-1-cv-med-annonse-2").mkdir(parents=True)
+    (annen / "case-1-cv-med-annonse-2" / "cv.txt").write_text("CV 1", encoding="utf-8")
+    (annen / "case-1-cv-med-annonse-2" / "annonse.txt").write_text("Annonse 2", encoding="utf-8")
+
+    assert lag_testsvar.main(["--testdata", str(annen)], testdata) == 0
+    assert (annen / "case-1-cv-med-annonse-2" / "ki-svar" / "brev-2.json").exists()
+    assert ki.kall[1] == ("gap", "CV 1", "Annonse 2")
+    assert not (testdata / "case-2-annet" / "ki-svar" / "nokkelord.json").exists()
+
+    ut = tmp_path / "ut"
+    assert lag_testsvar.main(["--testdata", str(annen), "--ut", str(ut)], testdata) == 0
+    assert (ut / "case-1-cv-med-annonse-2" / "nokkelord.json").exists()
+
+
+@pytest.mark.parametrize("argumenter", [["--case", ""], []])
+def test_fr38_tom_mappe_eller_tomt_case_gir_feilkode(tmp_path, monkeypatch, capsys, argumenter):
+    """FR-38 (story 4.5): peker --testdata på en mappe uten testcaser, eller er --case tomt,
+    ender skriptet med melding og feilkode 3, ikke med 0 uten at noe er gjort. Ingen KI lages."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    _ingen_ekte_ki(monkeypatch)
+    tom = tmp_path / "tom"
+    tom.mkdir()
+    assert lag_testsvar.main(["--testdata", str(tom), *argumenter]) == lag_testsvar.UKJENT_CASE
+    assert "Fant" in capsys.readouterr().out

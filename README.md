@@ -71,7 +71,7 @@ uv run ruff format --check
 
 `uv run pytest` kjører alle testene. `uv run ruff check` sjekker koden, blant annet at alle filer åpnes med en oppgitt `encoding` (vi bruker alltid utf-8), og `uv run ruff format --check` sjekker formateringen. De samme sjekkene kjører automatisk på GitHub (fanen «Actions») på både Linux og Windows ved hver PR.
 
-**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har ekte KI-svar fra Claude, slik at nettsiden kan kjøres i testmodus uten API-nøkkel og likevel viser hvordan den virker med ekte KI. Fasiten viser hvilke krav CV-en dekker og mangler, hvilke nøkkelord som er viktige, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
+**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase: `case-1-utvikler/` (en IT-student som søker som junior utvikler) og `case-2-okonomi/` (en økonomistudent som søker som junior økonomimedarbeider i et regnskapsbyrå). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har ekte KI-svar fra Claude, slik at nettsiden kan kjøres i testmodus uten API-nøkkel og likevel viser hvordan den virker med ekte KI. Fasiten viser hvilke krav CV-en dekker og mangler, hvilke nøkkelord som er viktige, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet. CV-en og annonsen må være fra samme mappe. CV-en fra én mappe og annonsen fra en annen gir «Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i backend/testdata/.». Begge casene er for Full generering. Korrektur testes bare med case 1. Mangler `backend/testdata/`, en case-mappe, `cv.txt` eller `annonse.txt`, eller har to caser samme CV eller annonse, starter ikke nettsiden, og feilmeldingen sier hva som er galt. Mangler en fil i `ki-svar/`, starter nettsiden, men steget som trenger fila, gir «Noe gikk galt hos KI-tjenesten».
 
 **Lage testsvarene på nytt:** svarene i `ki-svar/` lages med skriptet `backend/scripts/lag_testsvar.py`, og bare med det. Skriptet trenger API-nøkkelen i `backend/.env`, sender CV-en og annonsen i hvert testcase til Claude og skriver `nokkelord.json`, `gap.json`, `brev-1.json` og `brev-2.json`. Feiler et KI-kall, skrives ingenting for det testcaset. Med `--ut` skrives svarene i en annen mappe, og `ki-svar/` er uendret:
 
@@ -79,9 +79,13 @@ uv run ruff format --check
 cd backend
 uv run python -m scripts.lag_testsvar
 uv run python -m scripts.lag_testsvar --ut ../my-project/testkjoringer/<story>/kjoring-<n>
+uv run python -m scripts.lag_testsvar --case case-2-okonomi
+uv run python -m scripts.lag_testsvar --testdata ../my-project/testkjoringer/4-5/inndata --ut ../my-project/testkjoringer/<story>/kjoring-<n>
 ```
 
-En kjøring tar omtrent ett minutt og kostet ca. 1,2–1,5 kr per testcase 14. november 2026. Tokens og anslått pris for hvert kall står i terminalen. Feiler et testcase, kjøres de andre likevel, og skriptet ender med feilkode 1 (2 når API-nøkkelen mangler). Etter en ny kjøring oppdateres tabellen «Nøkkelord» og prosenten i `fasit.md`, ellers feiler testene. Testene sjekker også brevene: ingen av de 17 typiske KI-frasene, og ingenting fra sjekklisten i `fasit.md`. Feiler de, er det plan B i testplanen. Resultatet av kjøringene mot fasiten står i [testplanen](my-project/testplan.md).
+Med `--case` kjøres bare ett testcase. Med `--testdata` leses testcasene fra en annen mappe. Det brukes for kriterium 3, der CV-en fra case 1 kjøres mot annonsen fra case 2 (`my-project/testkjoringer/4-5/inndata/`).
+
+En kjøring tar omtrent ett minutt per testcase og kostet ca. 1,2–1,8 kr per testcase 14. november 2026. Tokens og anslått pris for hvert kall står i terminalen. Feiler et testcase, kjøres de andre likevel, og skriptet ender med feilkode 1 (2 når API-nøkkelen mangler, 3 når testcaset i `--case` ikke finnes eller mappen ikke har noen testcaser). Etter en ny kjøring oppdateres tabellen «Nøkkelord» og prosenten i `fasit.md`, ellers feiler testene. Testene sjekker også brevene: ingen av de 17 typiske KI-frasene, og ingenting fra sjekklisten i `fasit.md`. Feiler de, er det plan B i testplanen. Resultatet av kjøringene mot fasiten står i [testplanen](my-project/testplan.md).
 
 ## Skjermbilder
 
@@ -95,7 +99,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **Bøyningsformer fanges ikke opp:** «prosjektledelse» er ikke et treff i «prosjektleder».
 - **Et nøkkelord kan gi treff inne i et annet ord:** «Java» er et treff i «JavaScript». Korte nøkkelord på 1–3 tegn må stå som eget ord, men «C» kan likevel gi feil treff i en liste nummerert med bokstaver, og «C» gir også treff i «C#» og «C++».
 - **Gap-analysen og nøkkelordtreffet kan si hverandre imot,** fordi gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.
-- **I testmodus virker bare de fiktive testdataene i `backend/testdata/`.**
+- **I testmodus virker bare de fiktive testdataene i `backend/testdata/`,** og CV-en og annonsen må være fra samme testcase.
 - **Grenser mot høy kostnad:** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver. Med ekte KI kan hver søknad bruke høyst 10 KI-kall (en analyse er 2 kall, et brev 1, også «Prøv på nytt»). Deretter må du begynne på en ny søknad fra startsiden. I testmodus telles ingen kall. Grensen er en myk sperre mot mange trykk per søknad, og taket på 250 kr i Claude Console er den siste sperren. Grensene står i `backend/soknad/innstillinger.py`.
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
 - **Brevet skrives bare på norsk** i versjon 1.

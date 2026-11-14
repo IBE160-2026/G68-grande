@@ -185,7 +185,7 @@ flowchart TD
   2. `casefold()`
   3. beholder bare bokstaver og tall
 
-  Den samme `vask` brukes også i AD-4 og AD-8. Sjekken gjøres felt for felt. CV-en avgjør hvilket testcase det gjelder. Annonse og eget brev som ikke matcher samme case, får `ikke_testdata` på sitt eget felt. En test per case sjekker at `.pdf` og `.txt` gjenkjennes som samme case. Mangler `ANTHROPIC_API_KEY`, er testmodus låst på.
+  Den samme `vask` brukes også i AD-4 og AD-8. Sjekken gjøres felt for felt. CV-en avgjør hvilket testcase det gjelder. Annonse og eget brev som ikke matcher samme case, får `ikke_testdata` på sitt eget felt. Er annonsen annonsen i et annet case enn CV-en, får den `annen_case` i stedet, med en egen tekst (story 4.5). CV-ene og annonsene er unike på tvers av casene, ellers starter ikke nettsiden. En test per case sjekker at `.pdf` og `.txt` gjenkjennes som samme case. Mangler `ANTHROPIC_API_KEY`, er testmodus låst på.
 
 ### AD-11 — Inndata og utdata gjennom faste adaptere
 

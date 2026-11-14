@@ -8,6 +8,7 @@ import re
 
 import pytest
 
+from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.kjerne import inndata
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
@@ -87,6 +88,23 @@ def test_fr34_egen_cv_gir_feil_og_annonsen_star_igjen(paa_innlegging):
     assert feilboks_lenker(html) == [("#cv-felt", IKKE_TESTDATA_CV)]
     assert tekstboks(html, "cv") == "Min egen CV"
     assert tekstboks(html, "annonse") == ANNONSE
+
+
+def test_fr34_cv_og_annonse_fra_ulike_caser_gir_egen_tekst(app, paa_innlegging):
+    """FR-34 (story 4.5): CV-en fra case 1 og annonsen fra case 2 gir den egne teksten på
+    annonsefeltet, og KI-en kalles ikke (ingen analyse i søknaden)."""
+    case_2 = TESTDATA_MAPPE / "case-2-okonomi"
+    annonse_2 = (case_2 / "annonse.txt").read_text(encoding="utf-8")
+    html = html_av(send(paa_innlegging, CV, annonse_2))
+    assert feilboks_lenker(html) == [
+        (
+            "#annonse-felt",
+            "Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i "
+            "backend/testdata/.",
+        )
+    ]
+    assert soknaden(app, paa_innlegging).nokkelord is None
+    assert soknaden(app, paa_innlegging).steg == Steg.INNLEGGING
 
 
 def test_fr9_fr34_tom_cv_og_egen_annonse(paa_innlegging):

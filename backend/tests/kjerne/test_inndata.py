@@ -63,6 +63,7 @@ def test_fr3_feiltypene_er_lukket_liste():
         "feil_innlogging",
         "ikke_testdata",
         "for_lang",
+        "annen_case",
     ]
     assert FeilType.FEIL_INNLOGGING == "feil_innlogging"
 

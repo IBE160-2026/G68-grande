@@ -44,9 +44,24 @@ def test_fr34_annonse_fra_feil_sted_gir_feil_pa_annonsen():
     assert finn_case(CV, "Min egen annonse", CASER) == (None, [IKKE_TESTDATA_ANNONSE])
 
 
-def test_fr34_annonse_fra_et_annet_case_gir_feil_pa_annonsen():
-    """FR-34: annonsen må høre til samme case som CV-en."""
-    assert finn_case(CV, "En helt annen annonse", CASER) == (None, [IKKE_TESTDATA_ANNONSE])
+def test_fr34_annonse_fra_et_annet_case_gir_annen_case_pa_annonsen():
+    """FR-34 (story 4.5): annonsen må høre til samme case som CV-en. Er den annonsen i et
+    annet case, får annonsefeltet annen_case, ikke ikke_testdata."""
+    assert finn_case(CV, "En helt annen annonse", CASER) == (
+        None,
+        [InndataFeil("annonse", FeilType.ANNEN_CASE)],
+    )
+    # Med rotete tekst er det fortsatt annonsen i det andre caset.
+    assert finn_case(CV, "  EN HELT\nANNEN annonse ", CASER) == (
+        None,
+        [InndataFeil("annonse", FeilType.ANNEN_CASE)],
+    )
+
+
+def test_fr34_ukjent_cv_og_annonse_fra_et_case_gir_bare_feil_pa_cv():
+    """FR-34 (story 4.5): er CV-en ukjent, gjelder ikke annen_case. Annonsen er testdata og
+    får ingen feil."""
+    assert finn_case("Min egen CV", "En helt annen annonse", CASER) == (None, [IKKE_TESTDATA_CV])
 
 
 def test_fr34_begge_feil_gir_feil_pa_begge_feltene():

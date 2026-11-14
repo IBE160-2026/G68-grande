@@ -22,6 +22,15 @@ def test_fr34_feltnavnet_star_forst_i_teksten():
     )
 
 
+def test_fr34_annen_case_har_teksten_kristine_bestemte():
+    """FR-34 (story 4.5): CV og annonse fra ulike testcaser gir en egen tekst på
+    annonsefeltet, bestemt av Kristine 14. november 2026."""
+    assert tekster.feiltekst(InndataFeil("annonse", FeilType.ANNEN_CASE)) == (
+        "Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i "
+        "backend/testdata/."
+    )
+
+
 @pytest.mark.parametrize("type", list(KIFeilType))
 def test_fr28_hver_ki_feil_har_tekst(type):
     """FR-28: hver type KI-feil har en tekst."""
