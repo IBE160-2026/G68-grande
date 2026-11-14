@@ -1,19 +1,22 @@
-"""Tester for søknaden i økten (FR-5, FR-20, FR-29, AD-7, AD-8)."""
+"""Tester for søknaden i økten (FR-5, FR-20, FR-29, AD-7, AD-8, NFR-11)."""
 
 import dataclasses
 
 import pytest
 
+from soknad.innstillinger import MAKS_KI_KALL
 from soknad.kjerne.okt import (
     Modus,
     Soknad,
     Tekstfelt,
     begynn,
+    har_plass_til,
     sett_analyse,
     sett_brev,
     sett_inndata,
     sett_lastet_ned,
     sett_opptatt,
+    tell_ki_kall,
     velg_modus,
 )
 from soknad.kjerne.steg import Steg
@@ -57,6 +60,7 @@ def test_fr5_soknaden_har_faste_felt_og_kan_ikke_endres_direkte():
         "brev",
         "lastet_ned",
         "opptatt",
+        "ki_kall",
     ]
 
 
@@ -322,3 +326,48 @@ def test_fr36_begynn_fjerner_aldri_et_samtykke():
     """FR-36/AD-8: et samtykke som alt er gitt, beholdes når begynn kalles uten samtykke."""
     soknad = Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING, samtykke=True)
     assert begynn(soknad) == soknad
+
+
+# --- Telleren for KI-kall (story 4.3.2) ---
+
+
+def test_nfr11_ny_soknad_har_brukt_null_ki_kall():
+    """NFR-11/AD-7: en ny søknad begynner på 0 KI-kall."""
+    assert Soknad().ki_kall == 0
+
+
+def test_nfr11_tell_ki_kall_legger_til_og_endrer_ikke_resten():
+    """NFR-11: tell_ki_kall legger antall til telleren, og resten av søknaden er uendret."""
+    soknad = Soknad(steg=Steg.RESULTAT, modus=Modus.FULL_GENERERING, ki_kall=3)
+    assert tell_ki_kall(soknad, 2) == dataclasses.replace(soknad, ki_kall=5)
+    assert tell_ki_kall(soknad, 0) == soknad
+
+
+@pytest.mark.parametrize(
+    ("brukt", "antall", "plass"),
+    [(0, 2, True), (8, 2, True), (9, 2, False), (9, 1, True), (10, 1, False), (10, 0, True)],
+)
+def test_nfr11_har_plass_til_bare_naar_alle_kallene_faar_plass(brukt, antall, plass):
+    """NFR-11: en handling får plass bare når alle kallene den trenger, holder seg innenfor
+    MAKS_KI_KALL, så grensen aldri passeres."""
+    assert MAKS_KI_KALL == 10
+    assert har_plass_til(Soknad(ki_kall=brukt), antall) is plass
+
+
+def test_nfr11_telleren_folger_soknaden_gjennom_endringene():
+    """NFR-11: begynn, velg_modus, sett_inndata (også med endret tekst), sett_analyse,
+    sett_brev, sett_opptatt og sett_lastet_ned beholder telleren."""
+    soknad = Soknad(ki_kall=7)
+    soknad = begynn(soknad, samtykke=True)
+    soknad = velg_modus(soknad, Modus.FULL_GENERERING)
+    soknad = sett_inndata(soknad, cv=Tekstfelt("cv"), annonse=Tekstfelt("annonse"))
+    soknad = sett_opptatt(soknad, True)
+    soknad = sett_analyse(
+        soknad,
+        nokkelord={"nokkelord": ["Python"], "arbeidsgiver": None},
+        gap={"dekker": [], "mangler": []},
+    )
+    soknad = sett_brev(soknad, {"avsnitt": ["Hei"]})
+    soknad = sett_lastet_ned(soknad)
+    soknad = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonse"))
+    assert soknad.ki_kall == 7

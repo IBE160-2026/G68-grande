@@ -1,5 +1,5 @@
 """Tester for kjernen: feiltypene, økten og sjekken av innloggingen og registreringen
-(FR-1, FR-2, FR-3, FR-4, NFR-5)."""
+(FR-1, FR-2, FR-3, FR-4, NFR-5, NFR-11)."""
 
 import ast
 import dataclasses
@@ -7,9 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from soknad.innstillinger import MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.inndata import (
+    antall_tegn,
     normaliser_epost,
     sjekk_innlegging,
     sjekk_innlogging,
@@ -52,7 +53,7 @@ def test_fr3_utfylt_skjema_gir_ingen_feil():
 
 
 def test_fr3_feiltypene_er_lukket_liste():
-    """FR-3/FR-4/FR-34: feiltypene så langt er nøyaktig disse."""
+    """FR-3/FR-4/FR-34/NFR-11: feiltypene så langt er nøyaktig disse."""
     assert [t.value for t in FeilType] == [
         "tom",
         "epost_finnes",
@@ -61,6 +62,7 @@ def test_fr3_feiltypene_er_lukket_liste():
         "passord_ulike",
         "feil_innlogging",
         "ikke_testdata",
+        "for_lang",
     ]
     assert FeilType.FEIL_INNLOGGING == "feil_innlogging"
 
@@ -294,3 +296,55 @@ def test_fr34_uten_testmodus_sjekkes_bare_tomme_felt():
     """FR-34: med caser=None (ikke testmodus) gir egen tekst ingen feil."""
     assert sjekk_innlegging("Min egen CV", "Min egen annonse", None) == []
     assert sjekk_innlegging("Min egen CV", "", None) == [TOM_ANNONSE]
+
+
+# --- Tegngrensen (story 4.3.2) ---
+
+FOR_LANG_CV = InndataFeil("cv", FeilType.FOR_LANG)
+FOR_LANG_ANNONSE = InndataFeil("annonse", FeilType.FOR_LANG)
+
+
+def test_nfr11_grensene_ligger_i_innstillinger():
+    """NFR-11: hvert felt godtar høyst 15 000 tegn, og hver søknad høyst 10 KI-kall."""
+    assert MAKS_TEGN == 15_000
+    assert MAKS_KI_KALL == 10
+
+
+def test_nfr11_akkurat_maks_tegn_godtas_og_ett_til_er_for_lang():
+    """NFR-11: 15 000 tegn godtas, 15 001 gir for_lang på feltet."""
+    assert sjekk_innlegging("a" * MAKS_TEGN, "b" * MAKS_TEGN, None) == []
+    assert sjekk_innlegging("a" * (MAKS_TEGN + 1), "annonse", None) == [FOR_LANG_CV]
+    assert sjekk_innlegging("cv", "b" * (MAKS_TEGN + 1), None) == [FOR_LANG_ANNONSE]
+
+
+def test_nfr11_linjeskift_som_crlf_telles_som_ett_tegn():
+    """NFR-11: et linjeskift sendt som \r\n telles som ett tegn, slik brukeren ser teksten."""
+    tekst = ("a" * 99 + "\r\n") * (MAKS_TEGN // 100)
+    assert antall_tegn(tekst) == MAKS_TEGN
+    assert len(tekst) > MAKS_TEGN
+    assert sjekk_innlegging(tekst, "annonse", None) == []
+    assert sjekk_innlegging(tekst + "a", "annonse", None) == [FOR_LANG_CV]
+
+
+def test_nfr11_for_lang_cv_og_tom_annonse_gir_begge_feilene():
+    """NFR-11/FR-9: for lang CV og tom annonse gir begge feilene samtidig, CV først."""
+    assert sjekk_innlegging("a" * (MAKS_TEGN + 1), "", None) == [FOR_LANG_CV, TOM_ANNONSE]
+    assert sjekk_innlegging("a" * (MAKS_TEGN + 1), "", CASER) == [FOR_LANG_CV, TOM_ANNONSE]
+
+
+def test_nfr11_tom_sjekkes_for_for_lang():
+    """NFR-11: et felt med bare mellomrom er tomt, også når det er langt."""
+    assert sjekk_innlegging(" " * (MAKS_TEGN + 1), ANNONSE, None) == [TOM_CV]
+
+
+def test_nfr11_for_lang_gir_ikke_ogsaa_ikke_testdata():
+    """NFR-11/FR-34: i testmodus gir en for lang tekst bare for_lang, ikke ikke_testdata, og
+    høyst én feil per felt. Det andre feltet sjekkes som før."""
+    lang = "a" * (MAKS_TEGN + 1)
+    assert sjekk_innlegging(lang, ANNONSE, CASER) == [FOR_LANG_CV]
+    assert sjekk_innlegging(lang, "Min egen annonse", CASER) == [
+        FOR_LANG_CV,
+        IKKE_TESTDATA_ANNONSE,
+    ]
+    assert sjekk_innlegging(CV, lang, CASER) == [FOR_LANG_ANNONSE]
+    assert sjekk_innlegging("Min egen CV", lang, CASER) == [IKKE_TESTDATA_CV, FOR_LANG_ANNONSE]

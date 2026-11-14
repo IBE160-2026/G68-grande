@@ -14,6 +14,7 @@ class FeilType(StrEnum):
     PASSORD_ULIKE = "passord_ulike"
     FEIL_INNLOGGING = "feil_innlogging"
     IKKE_TESTDATA = "ikke_testdata"
+    FOR_LANG = "for_lang"
 
 
 @dataclass(frozen=True)

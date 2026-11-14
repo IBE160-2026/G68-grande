@@ -14,14 +14,17 @@
 {%- if ki_feil %}
 {#- En KI-feil står i boksen uten lenker, med setningen om at ingenting er tapt og knappen
     som prøver på nytt. Knappen står utenfor skjemaet, men sender det med form= som «Sjekk
-    CV-en min», med feltene slik de er nå, og viser ventetegnet (FR-27, FR-28). #}
+    CV-en min», med feltene slik de er nå, og viser ventetegnet (FR-27, FR-28). Meldingen om
+    at alle KI-kallene er brukt, står i samme boks, men uten knappen (NFR-11). #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
   <p class="feilboks-overskrift">{{ ki_feil }}</p>
   <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_INNLEGGING }}</p>
+  {%- if prov_pa_nytt %}
   <p class="feilboks-knapp">
     <button class="hovedknapp" type="submit" form="innlegging-skjema" name="handling"
       value="sjekk" data-vente="{{ tekster.VENTE_SJEKKER }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
+  {%- endif %}
 </div>
 {%- elif feltfeil %}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>

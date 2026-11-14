@@ -39,14 +39,17 @@
 {%- if ki_feil %}
 {#- KI-feil fra «Lag søknadsbrevet mitt»: som på innleggingen. Boksen får fokus og har ikke
     role="alert". «Prøv på nytt» står utenfor skjemaet, men sender det med form= som
-    «Lag søknadsbrevet mitt» og viser ventetegnet (FR-27, FR-28, UX-DR7). #}
+    «Lag søknadsbrevet mitt» og viser ventetegnet (FR-27, FR-28, UX-DR7). Meldingen om at
+    alle KI-kallene er brukt, står i samme boks, men uten knappen (NFR-11). #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
   <p class="feilboks-overskrift">{{ ki_feil }}</p>
   <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_RESULTAT }}</p>
+  {%- if prov_pa_nytt %}
   <p class="feilboks-knapp">
     <button class="hovedknapp" type="submit" form="resultat-skjema" name="handling"
       value="brev" data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
+  {%- endif %}
 </div>
 {%- endif %}
 {#- Rekkefølgen er fast: gap-analysen, linjen om at de kan si forskjellig, nøkkelordtreffet

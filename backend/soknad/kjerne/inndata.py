@@ -2,7 +2,7 @@
 
 import re
 
-from soknad.innstillinger import MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_TEGN, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.testdata_match import Testcase, finn_case
 
@@ -52,17 +52,26 @@ def sjekk_registrering(epost: str, passord: str, gjenta: str) -> list[InndataFei
 INNLEGGINGSFELT = ("cv", "annonse")
 
 
+def antall_tegn(tekst: str) -> int:
+    """Antall Unicode-tegn (kodepunkter) i teksten. Et linjeskift som nettleseren sender som
+    \\r\\n, telles som ett tegn (NFR-11)."""
+    return len(tekst.replace("\r\n", "\n"))
+
+
 def sjekk_innlegging(cv: str, annonse: str, caser: list[Testcase] | None) -> list[InndataFeil]:
     """Finner feil i innleggingen. Alle feilene kommer samtidig, høyst én per felt og i
-    rekkefølgen cv, annonse. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så
-    testdata når caser ikke er None (testmodus, FR-34). finn_case gir ikke ikke_testdata
-    på et tomt felt (AD-9)."""
-    feil = [
-        InndataFeil(navn, FeilType.TOM)
-        for navn, tekst in zip(INNLEGGINGSFELT, (cv, annonse), strict=True)
-        if not tekst.strip()
-    ]
+    rekkefølgen cv, annonse. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så for
+    lang (mer enn MAKS_TEGN tegn, NFR-11), så testdata når caser ikke er None (testmodus,
+    FR-34). finn_case gir ikke ikke_testdata på et tomt felt (AD-9), og et felt med for lang
+    tekst får heller ikke ikke_testdata."""
+    feil = []
+    for navn, tekst in zip(INNLEGGINGSFELT, (cv, annonse), strict=True):
+        if not tekst.strip():
+            feil.append(InndataFeil(navn, FeilType.TOM))
+        elif antall_tegn(tekst) > MAKS_TEGN:
+            feil.append(InndataFeil(navn, FeilType.FOR_LANG))
     if caser is not None:
         _, testdatafeil = finn_case(cv, annonse, caser)
-        feil += testdatafeil
+        har_feil = {f.felt for f in feil}
+        feil += [f for f in testdatafeil if f.felt not in har_feil]
     return sorted(feil, key=lambda f: INNLEGGINGSFELT.index(f.felt))

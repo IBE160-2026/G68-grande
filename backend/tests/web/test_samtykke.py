@@ -281,7 +281,8 @@ def test_fr32_testmodus_av_midt_i_analysen_gir_ikke_ekte_ki(med_nokkel):
 
 def test_fr28_ki_feil_fra_ekte_ki_vises_paa_innleggingen(med_nokkel):
     """FR-28: gir EkteKI en KIFeil (testmodus av, samtykke gitt), vises feilteksten på
-    innleggingen, og søknaden har feltene, men ingen analyse og er ikke opptatt."""
+    innleggingen, og søknaden har feltene, men ingen analyse og er ikke opptatt. Kallet som
+    feilet, er telt (NFR-11)."""
     app, client, _ = med_nokkel
     app.extensions["ekte_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave="nokkelord")
     soknad = Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING, samtykke=True)
@@ -291,7 +292,9 @@ def test_fr28_ki_feil_fra_ekte_ki_vises_paa_innleggingen(med_nokkel):
     html = html_av(svar)
     assert tekster.KI_FEILTEKSTER[KIFeilType.ANNET] in html
     assert tekster.KI_FEIL_BEHOLDT_INNLEGGING in html
-    assert soknaden(app, client) == replace(soknad, cv=Tekstfelt(CV), annonse=Tekstfelt(ANNONSE))
+    assert soknaden(app, client) == replace(
+        soknad, cv=Tekstfelt(CV), annonse=Tekstfelt(ANNONSE), ki_kall=1
+    )
 
 
 @pytest.mark.parametrize(
