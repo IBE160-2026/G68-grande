@@ -17,6 +17,15 @@ MIN_PASSORD_LENGDE = 8
 # dette regnes som ubrukelig.
 MAKS_NOKKELORD = 30
 
+# Grensene mot høy kostnad med ekte KI (NFR-11). Hvert innleggingsfelt godtar høyst MAKS_TEGN
+# tegn, og et linjeskift (\r\n fra nettleseren) telles som ett tegn. Hver søknad kan bruke
+# høyst MAKS_KI_KALL KI-kall (nøkkelord, gap og brev er ett kall hver). Grensen på KI-kall
+# gjelder bare med ekte KI, ikke i testmodus. Med KI_NYE_FORSOK = 1 kan ett telt kall bli opptil
+# to forespørsler til API-et. Grensen er en myk sperre per søknad (en ny søknad begynner på 0),
+# og taket på 250 kr i Claude Console er den siste sperren.
+MAKS_TEGN = 15_000
+MAKS_KI_KALL = 10
+
 # KI-kallet til Claude (AD-13). Tidsgrensen er en startverdi og justeres etter målingen i
 # story 4.3. Den gjelder hver del av kallet (tilkobling, lesing, skriving), ikke hele kallet.
 # Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s, eller det API-et ber om med

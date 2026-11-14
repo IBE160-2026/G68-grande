@@ -2,7 +2,7 @@
 
 from typing import NamedTuple
 
-from soknad.innstillinger import MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_TEGN, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus
 
@@ -251,6 +251,9 @@ LOGG_UT_KNAPP = "Logg ut"
 # Skjemafeil-boksen på innloggingen når man prøver en side uten å være logget inn.
 MA_LOGGE_INN = "Du må logge inn først"
 
+# Tegngrensen med mellomrom mellom tusenene: «15 000» (NFR-11).
+MAKS_TEGN_TEKST = f"{MAKS_TEGN:,}".replace(",", " ")
+
 # Feiltekstene slås opp med (felt, type). felt=None betyr hele skjemaet.
 FEILTEKSTER = {
     ("epost", FeilType.TOM): "Fyll inn e-post",
@@ -271,6 +274,12 @@ FEILTEKSTER = {
     ("annonse", FeilType.IKKE_TESTDATA): (
         "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
+    ("cv", FeilType.FOR_LANG): (
+        f"CV: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
+    ),
+    ("annonse", FeilType.FOR_LANG): (
+        f"Stillingsannonse: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
+    ),
 }
 
 # Feil fra KI-en (FR-28). Et ubrukelig svar får samme tekst som andre feil.
@@ -284,6 +293,10 @@ KI_FEIL_BEHOLDT_INNLEGGING = "Det du har lagt inn, er ikke borte."
 KI_FEIL_BEHOLDT_RESULTAT = "Resultatet og det du har lagt inn, er ikke borte."
 # Knappen i feilboksen som prøver KI-kallet på nytt.
 PROV_PA_NYTT_KNAPP = "Prøv på nytt"
+# I feilboksen når søknaden har brukt alle KI-kallene (NFR-11), uten «Prøv på nytt».
+KI_KALL_BRUKT = (
+    "Du har brukt alle KI-kallene for denne søknaden. Begynn på en ny søknad fra startsiden."
+)
 
 
 def feiltekst(feil: InndataFeil) -> str:

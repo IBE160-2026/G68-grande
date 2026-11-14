@@ -5,6 +5,7 @@ Søknaden endres bare gjennom funksjonene nederst, som lager en ny Soknad (AD-8)
 from dataclasses import dataclass, field, replace
 from enum import StrEnum
 
+from soknad.innstillinger import MAKS_KI_KALL
 from soknad.kjerne.steg import Steg
 from soknad.kjerne.testdata_match import vask
 
@@ -53,6 +54,8 @@ class Soknad:
     # Sann når brevet er lastet ned som Word (FR-29). Gjelder bare brevet som er der nå.
     lastet_ned: bool = False
     opptatt: bool = False
+    # KI-kallene søknaden har brukt med ekte KI (NFR-11). En ny søknad begynner på 0.
+    ki_kall: int = 0
 
 
 def begynn(soknad: Soknad, samtykke: bool = False) -> Soknad:
@@ -120,3 +123,17 @@ def sett_brev(soknad: Soknad, brev: dict) -> Soknad:
 def sett_lastet_ned(soknad: Soknad) -> Soknad:
     """Brevet er lastet ned (FR-29). Resten av søknaden er uendret."""
     return replace(soknad, lastet_ned=True)
+
+
+def har_plass_til(soknad: Soknad, antall: int) -> bool:
+    """Sann når søknaden kan bruke antall KI-kall til uten å gå over MAKS_KI_KALL (NFR-11).
+    En handling startes bare når alle kallene den trenger, får plass (analysen trenger 2,
+    brevet 1), så grensen aldri passeres."""
+    return soknad.ki_kall + antall <= MAKS_KI_KALL
+
+
+def tell_ki_kall(soknad: Soknad, antall: int) -> Soknad:
+    """Legger antall KI-kall til telleren (NFR-11). Hvert kall telles når det startes, også
+    når det feiler. Resten av søknaden er uendret. har_plass_til må kalles først. Korrektur
+    (Epic 5) og «Nytt forslag» (Epic 7) må bruke begge."""
+    return replace(soknad, ki_kall=soknad.ki_kall + antall)

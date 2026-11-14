@@ -15,11 +15,13 @@ from soknad.kjerne.okt import (
     Soknad,
     Tekstfelt,
     begynn,
+    har_plass_til,
     sett_analyse,
     sett_brev,
     sett_inndata,
     sett_lastet_ned,
     sett_opptatt,
+    tell_ki_kall,
     velg_modus,
 )
 from soknad.kjerne.steg import Steg
@@ -44,6 +46,10 @@ from soknad.web.innlogging import (
     login_required,
     til_innloggingen,
 )
+
+# KI-kallene hver handling trenger (NFR-11): analysen er nøkkelord og gap, brevet er ett kall.
+ANALYSE_KALL = 2
+BREV_KALL = 1
 
 
 @web.app_context_processor
@@ -143,7 +149,9 @@ def innlegging():
     noe lagres eller KI-en kalles (AD-8, FR-27). Er søknaden byttet ut med en ny fra startsiden
     mens KI-en jobbet, blir den nye stående, og analysen kastes.
 
-    Er testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12)."""
+    Er testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12).
+    Med ekte KI telles KI-kallene i søknaden. Er det ikke plass til begge kallene i analysen,
+    vises innleggingen med meldingen om det, uten KI-kall (NFR-11)."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
@@ -175,21 +183,32 @@ def innlegging():
     # Én KI for begge kallene: slås testmodus av i en annen fane mellom kallene, går gap
     # likevel til samme KI som sjekken over gjaldt for (AD-12).
     valgt_ki = ki()
+    # Med ekte KI telles hvert kall som 1. I testmodus telles ingen kall (NFR-11).
+    per_kall = 1 if _bruker_ekte_ki(valgt_ki) else 0
+    # Analysen trenger to kall (nøkkelord og gap). Er det ikke plass til begge, kalles ikke
+    # KI-en. Feltene er alt lagret med sett_inndata, og telleren er uendret (NFR-11).
+    if per_kall and not har_plass_til(soknad, ANALYSE_KALL):
+        return _vis_innlegging(soknad, feil=[], ki_feil=tekster.KI_KALL_BRUKT, prov_pa_nytt=False)
     # Feltene er alt lagret med sett_inndata. Nå lagres søknaden som opptatt. Etter KI-kallene
     # lagrer finally resultatet uten opptatt: analysen når kallene lyktes, ellers søknaden fra
     # før, også ved et uventet unntak. Det lagres bare når søknaden i øktlageret fortsatt er den
     # som ble satt opptatt, så en ny søknad fra startsiden i en annen fane blir stående.
+    # Hvert kall telles når det startes, også når det feiler, så telleren i det som lagres,
+    # er riktig både når alt lykkes og ved KI-feil (NFR-11).
     opptatt_soknad = sett_opptatt(soknad, True)
     lagre_soknad(opptatt_soknad)
     ferdig = soknad
+    kall = 0
     try:
+        kall += per_kall
         nokkelord = valgt_ki.nokkelord(annonse)
+        kall += per_kall
         gap = valgt_ki.gap(cv, annonse)
         ferdig = sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
     except KIFeil as ki_feil:
         return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
     finally:
-        erstatt_soknad(opptatt_soknad, ferdig)
+        erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, kall))
     return redirect(url_for("web.resultat"))
 
 
@@ -201,10 +220,12 @@ def resultat():
 
     POST er «Lag søknadsbrevet mitt» (FR-21, FR-22). Brevet hentes fra KI-en, lagres, og
     brukeren sendes til brevsiden. En KIFeil gir resultatsiden på nytt med feilteksten, uten
-    redirect, og søknaden er uendret (FR-28). Mens KI-en jobber, er søknaden opptatt, og en ny
-    POST sendes til siden for steget uten at KI-en kalles (AD-8, FR-27). Er søknaden byttet ut
-    med en ny fra startsiden mens KI-en jobbet, blir den nye stående, og brevet kastes. Er
-    testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12)."""
+    redirect, og søknaden er uendret bortsett fra telleren for KI-kall (FR-28). Mens KI-en
+    jobber, er søknaden opptatt, og en ny POST sendes til siden for steget uten at KI-en kalles
+    (AD-8, FR-27). Er søknaden byttet ut med en ny fra startsiden mens KI-en jobbet, blir den
+    nye stående, og brevet kastes. Er testmodus av og samtykket mangler, sendes brukeren til
+    startsiden uten KI-kall (AD-12). Med ekte KI og alle KI-kallene brukt vises resultatsiden
+    med meldingen om det, uten KI-kall (NFR-11)."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -219,18 +240,26 @@ def resultat():
     uten_samtykke = til_start_uten_samtykke(lagret)
     if uten_samtykke is not None:
         return uten_samtykke
+    valgt_ki = ki()
+    per_kall = 1 if _bruker_ekte_ki(valgt_ki) else 0
+    # Brevet trenger ett kall. Er det ikke plass, kalles ikke KI-en, og søknaden er uendret.
+    if per_kall and not har_plass_til(lagret, BREV_KALL):
+        return _vis_resultat(lagret, ki_feil=tekster.KI_KALL_BRUKT, prov_pa_nytt=False)
     # Som på innleggingen: finally lagrer brevet når kallet lyktes, ellers søknaden fra før,
-    # men bare når søknaden i øktlageret fortsatt er den som ble satt opptatt.
+    # men bare når søknaden i øktlageret fortsatt er den som ble satt opptatt. Kallet telles
+    # når det startes, også når det feiler (NFR-11).
     opptatt_soknad = sett_opptatt(lagret, True)
     lagre_soknad(opptatt_soknad)
     ferdig = lagret
+    kall = 0
     try:
-        svar = ki().brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
+        kall += per_kall
+        svar = valgt_ki.brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
         ferdig = sett_brev(lagret, svar)
     except KIFeil as ki_feil:
         return _vis_resultat(lagret, ki_feil=tekster.ki_feiltekst(ki_feil))
     finally:
-        erstatt_soknad(opptatt_soknad, ferdig)
+        erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, kall))
     return redirect(url_for("web.brev"))
 
 
@@ -348,20 +377,36 @@ def _vis_start(samtykke_feil=False, bryter_fokus=False):
     )
 
 
-def _vis_innlegging(soknad, feil, ki_feil=None):
+def _bruker_ekte_ki(valgt_ki) -> bool:
+    """Sann når valgt_ki er ekte KI og ikke TestKI. Bare da telles KI-kallene, og bare da
+    gjelder grensen på MAKS_KI_KALL (NFR-11)."""
+    return valgt_ki is not current_app.extensions["test_ki"]
+
+
+def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
     """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
     feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står øverst i
-    feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt»."""
+    feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt».
+    prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
+    (NFR-11)."""
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
     tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
-    return render_template("innlegging.html", tekst=tekst, feltfeil=feltfeil, ki_feil=ki_feil)
+    return render_template(
+        "innlegging.html",
+        tekst=tekst,
+        feltfeil=feltfeil,
+        ki_feil=ki_feil,
+        prov_pa_nytt=prov_pa_nytt,
+    )
 
 
-def _vis_resultat(soknad, ki_feil=None):
+def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     """Viser resultatsiden. Prosenten regnes med telleregelen fra den lagrede nøkkelordlisten
     og CV-en hver gang siden vises, så samme søknad alltid gir samme prosent (FR-15, FR-17).
     ki_feil er teksten til en KI-feil fra «Lag søknadsbrevet mitt», som står øverst i
-    feilboksen over «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt»."""
+    feilboksen over «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt».
+    prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
+    (NFR-11)."""
     treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
     return render_template(
         "resultat.html",
@@ -369,6 +414,7 @@ def _vis_resultat(soknad, ki_feil=None):
         treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
         ki_feil=ki_feil,
+        prov_pa_nytt=prov_pa_nytt,
     )
 
 
