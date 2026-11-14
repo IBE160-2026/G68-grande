@@ -1,0 +1,147 @@
+Ingrid Prøvesen
+E-post: ingrid.provesen@example.com
+Telefon: 000 00 000
+Adresse: Prøvegata 12, 0000 Eksempelby
+Født: 2003
+Førerkort: klasse B
+
+Om meg
+Jeg er student i tredje år på bachelor i informatikk ved Eksempelby universitet, og jeg blir ferdig med graden i juni 2027. Jeg begynte å programmere på videregående, da jeg laget en enkel nettside for håndballaget mitt, og siden har jeg vært opptatt av hvordan man lager programvare som er enkel å bruke og lett å vedlikeholde. I studiet har jeg jobbet mest med webutvikling, databaser og testing, og jeg har vært med på flere gruppeprosjekter der vi har jobbet etter Scrum med sprinter på to uker.
+
+Ved siden av studiet har jeg hatt deltidsjobb i kundeservice i fire år og vært studentassistent i to emner. Fra kundeservice har jeg lært å lytte, stille gode spørsmål og forklare tekniske ting på en enkel måte. Som studentassistent har jeg lært å lese andres kode, finne feil og gi tilbakemeldinger som er konkrete og vennlige. Jeg liker å jobbe i team, og jeg er ikke redd for å spørre når jeg står fast. Samtidig liker jeg å sette meg ned alene og jobbe konsentrert med et vanskelig problem til jeg forstår det.
+
+Nå ser jeg etter min første faste jobb som utvikler, helst i et team der jeg kan lære av erfarne kolleger, bidra i hele prosessen fra idé til ferdig løsning og få ansvar etter hvert som jeg lærer mer.
+
+Nøkkelkvalifikasjoner
+- Tre års studier i informatikk med fordypning i programvareutvikling og databaser.
+- God i Python og Flask, brukt i bacheloroppgaven, i to emneprosjekter og i egne prosjekter.
+- God i SQL og PostgreSQL, med ansvar for databasen i bacheloroppgaven og karakter A i databaseemnet.
+- Erfaring med automatiske tester i pytest og med testplaner, fra testemnet og bacheloroppgaven.
+- Har jobbet etter Scrum i tre gruppeprosjekter, og har vært scrum master i to sprinter.
+- Bruker Git og GitHub daglig i studiet, med pull requests og kodegjennomgang.
+- Fire års erfaring fra kundeservice, der jeg forklarer tekniske ting for folk som ikke er tekniske.
+- Erfaring med å veilede andre som studentassistent i to emner.
+
+Utdanning
+2024–2027: Bachelor i informatikk, Eksempelby universitet (fullføres juni 2027)
+Fordypning: programvareutvikling og databaser.
+Emner jeg har tatt:
+- Grunnleggende programmering i Python (karakter A)
+- Objektorientert programmering i Java (karakter B)
+- Algoritmer og datastrukturer (karakter B)
+- Webutvikling med HTML, CSS og JavaScript (karakter A)
+- Databaser og SQL, med PostgreSQL (karakter A)
+- Programvareutvikling og smidige metoder (karakter A)
+- Operativsystemer og Linux (karakter C)
+- Datanettverk og sikkerhet (karakter B)
+- Testing og kvalitetssikring av programvare (karakter A)
+- Menneske–maskin-interaksjon og universell utforming (karakter B)
+- Diskret matematikk og statistikk (karakter C)
+Bacheloroppgave (2026–2027): et system for å bestille og følge opp reparasjoner av utstyr på et bibliotek, laget for en tenkt oppdragsgiver. Se mer under Prosjekter.
+
+2023–2024: Årsstudium i matematikk, Eksempelby universitet
+Emner: kalkulus, lineær algebra og innføring i programmering. Jeg tok årsstudiet for å bli tryggere i matematikk før jeg begynte på informatikk, og det var her jeg bestemte meg for å studere videre innen IT.
+
+2019–2022: Studiespesialisering med realfag, Eksempelby videregående skole
+Fordypning i matematikk R1 og R2, fysikk 1 og informasjonsteknologi 1 og 2. I informasjonsteknologi 2 laget jeg et lite spill i JavaScript som klassen brukte i undervisningen.
+
+Ferdigheter
+Programmeringsspråk: Python (god), JavaScript (god), Java (middels), SQL (god), TypeScript (grunnleggende)
+Web: HTML og CSS, Flask, React (grunnleggende), REST-API-er, JSON
+Databaser: PostgreSQL, SQLite, databasemodellering med ER-diagrammer, normalisering
+Testing: pytest, enhetstester og integrasjonstester, testdrevet utvikling i emneprosjektene, manuell testing etter testplan
+Verktøy: Git og GitHub, GitHub Actions, Visual Studio Code, PyCharm, Docker (grunnleggende, fra ett emneprosjekt), Postman
+Operativsystemer: Linux (Ubuntu) og Windows
+Metoder: Scrum og Kanban, brukerhistorier, kodegjennomgang med pull requests, parprogrammering
+Universell utforming: WCAG 2.1, testing med skjermleser og tastatur
+Annet: Figma for enkle skisser, Markdown, grunnleggende kunnskap om skytjenester fra et valgfritt kurs
+
+Prosjekter
+Bacheloroppgave (2026–2027): Reparasjonssystem for utstyr på et bibliotek
+Vi er fire studenter som lager en nettside der ansatte på et bibliotek kan melde inn utstyr som er ødelagt, for eksempel skrivere, PC-er og lånekortlesere, og følge med på hvor langt reparasjonen har kommet. Systemet er laget i Python med Flask, og dataene lagres i PostgreSQL. Jeg har hovedansvaret for databasen og for testene. Jeg har laget datamodellen, skrevet migreringene og satt opp pytest med en egen testdatabase, slik at testene kan kjøres på nytt uten å ødelegge dataene. Vi bruker GitHub til versjonskontroll og kodegjennomgang, og GitHub Actions kjører testene hver gang noen lager en pull request. Vi jobber i sprinter på to uker, med planlegging, korte møter tre ganger i uka og en gjennomgang med veilederen på slutten av hver sprint. Jeg har vært scrum master i to av sprintene.
+Det jeg har gjort i prosjektet:
+- Laget datamodellen med tabeller for utstyr, saker, ansatte og statusendringer, og skrevet migreringene.
+- Skrevet de fleste testene, ca. 180 i alt, og satt opp at testene kjøres automatisk i GitHub Actions.
+- Laget siden der de ansatte ser alle åpne saker, med filter på type utstyr og status.
+- Skrevet brukerveiledningen og README-en, slik at en ny utvikler kan sette opp prosjektet på egen maskin.
+- Hatt to møter med en bibliotekar for å teste nettsiden og samle tilbakemeldinger, og skrevet om skjemaet for nye saker etter det hun sa.
+Det jeg har lært: å planlegge en database før man skriver koden, å skrive tester som er lette å lese, og at det lønner seg å vise nettsiden til brukerne tidlig.
+
+Emneprosjekt i programvareutvikling (våren 2026): Matplanlegger for studenter
+En nettside der studenter kan legge inn hva de har i kjøleskapet, og få forslag til middager og en handleliste for uka. Vi var fem på gruppa og jobbet etter Scrum i åtte uker. Jeg laget grensesnittet i HTML, CSS og JavaScript og skrev API-et for oppskriftene i Flask. Vi la vekt på universell utforming, og jeg testet siden med skjermleser og bare tastatur. Prosjektet fikk karakter A.
+
+Emneprosjekt i databaser (høsten 2025): Database for en idrettsforening
+Vi modellerte og laget en database for medlemmer, lag, treninger og kontingent for en tenkt idrettsforening. Jeg laget ER-diagrammet, skrev tabellene og spørringene i SQL og laget en enkel rapport over hvem som ikke hadde betalt kontingenten. Vi brukte PostgreSQL og testet spørringene med eksempeldata på flere tusen rader for å se at de var raske nok.
+
+Emneprosjekt i testing (høsten 2025): Testing av en eksisterende nettbutikk
+Vi fikk en ferdig nettbutikk med kjente og ukjente feil, og skulle lage en testplan, skrive automatiske tester og rapportere feilene. Jeg skrev enhetstester og integrasjonstester i pytest og laget en enkel oversikt over feilene med alvorlighetsgrad og forslag til retting. Vi fant 23 feil, blant annet at handlekurven regnet feil rabatt når man kjøpte flere varer.
+
+Emneprosjekt i operativsystemer (våren 2025): Overvåking av en Linux-server
+Jeg satte opp en liten server med Ubuntu på en virtuell maskin og skrev skript i Python og Bash som sjekket diskplass, minne og hvilke tjenester som kjørte, og sendte en melding når noe var galt. Vi brukte Docker til å kjøre en enkel webtjeneste på serveren.
+
+Emneprosjekt i objektorientert programmering (våren 2025): Utlånssystem i Java
+Et program for utlån av bøker og filmer i en tenkt skole, med klasser for medier, låntakere og lån. Jeg skrev klassene for lån og purringer og enhetstestene i JUnit. Vi var to på gruppa og brukte Git for første gang i et større prosjekt. Programmet ble kjørt i terminalen og lagret dataene i tekstfiler.
+
+Emneprosjekt i webutvikling (høsten 2024): Nettside for en tenkt kafé
+En nettside med meny, åpningstider og et skjema for å bestille bord, laget i HTML, CSS og JavaScript uten rammeverk. Jeg laget siden alene. Siden virker på mobil og PC, og jeg sjekket fargene og kontrastene mot WCAG. Skjemaet sjekker at feltene er fylt ut før det sendes, og viser feilmeldinger ved siden av hvert felt.
+
+Eget prosjekt (2024–i dag): Nettside for håndballaget
+Jeg har laget og vedlikeholder nettsiden til håndballaget jeg spilte på i mange år. Siden viser terminlisten, resultater og nyheter, og trenerne kan legge inn nyheter selv. Den første versjonen var ren HTML og CSS. I 2025 laget jeg den på nytt i Flask med SQLite, slik at trenerne ikke trenger å redigere filer. Rundt 150 personer bruker siden hver uke i sesongen. Koden ligger på GitHub, og jeg har skrevet tester for de viktigste sidene. Siden kjører på en liten virtuell server med Linux, og jeg tar sikkerhetskopi av databasen hver natt med et skript.
+
+Kodekonkurranse (høsten 2025): 24 timer med linjeforeningen
+Vi var tre studenter som laget en enkel nettside der folk i et borettslag kan låne verktøy av hverandre. Vi brukte Flask og SQLite og hadde en fungerende versjon etter 24 timer. Jeg laget innloggingen og siden for å legge ut verktøy. Vi kom på andreplass av ni lag.
+
+Eget prosjekt (2025): Budsjettapp i Python
+Et lite program for å holde oversikt over egne utgifter. Programmet leser filer fra nettbanken, sorterer utgiftene i kategorier og viser dem som grafer. Jeg laget det for å lære mer om å lese og rydde data, og for å prøve testdrevet utvikling i et eget prosjekt. Programmet har ca. 40 tester, og jeg skrev hver test før koden den tester.
+
+Arbeidserfaring
+2022–i dag: Kundeservicemedarbeider (deltid, ca. 30 prosent), Eksempel Strøm AS, Eksempelby
+Svarer på henvendelser fra kunder på telefon, e-post og chat om strømavtaler, fakturaer og flytting. Jeg hjelper kunder med å bruke Min side og appen, og forklarer fakturaen når den er vanskelig å forstå. Jeg har fått ansvar for å lære opp nye medarbeidere i chat-verktøyet, og jeg har vært med i en gruppe som samlet tilbakemeldinger fra kundene om nettsiden og sendte dem videre til utviklerne. Det var der jeg første gang fikk se hvordan et utviklingsteam jobber med feil og forbedringer meldt av brukerne.
+Jeg har fått gode tilbakemeldinger fra kundene, og i 2024 fikk jeg prisen for beste kundetilfredshet i avdelingen. I travle perioder, for eksempel når strømprisene endrer seg mye, har jeg svart på opptil 60 henvendelser på en vakt.
+
+2025–i dag: Studentassistent i grunnleggende programmering i Python, Eksempelby universitet
+Leder to grupper på ca. 25 studenter hver én gang i uka, hjelper studentene med øvingene og retter innleveringer. Jeg gir skriftlige tilbakemeldinger på koden og forklarer feilmeldinger og god kodestil. Jeg har også laget ekstra oppgaver for studenter som synes øvingene er for lette.
+
+Våren 2026: Studentassistent i databaser og SQL, Eksempelby universitet
+Hjalp studentene med ER-diagrammer, normalisering og SQL-spørringer på lab to ganger i uka, og rettet tre obligatoriske innleveringer. Jeg laget også et sett med øvingsspørringer mot en eksempeldatabase, som emneansvarlig har tatt med i emnet neste år.
+
+Sommeren 2025: Sommervikar i IT-avdelingen, Eksempelby kommune
+Jobbet i brukerstøtte i åtte uker. Satte opp nye PC-er, installerte programmer, hjalp ansatte med pålogging og passord og registrerte saker i saksbehandlingssystemet. Jeg skrev også en kort brukerveiledning for det nye videomøteverktøyet, som ble lagt ut på intranettet. Mot slutten av sommeren laget jeg et lite skript i Python som hentet ut hvor mange saker som var åpne i hver kategori, slik at lederen slapp å telle dem for hand hver fredag.
+
+2019–2022: Butikkmedarbeider (deltid), en sportsbutikk i Eksempelby
+Kundeservice, kasse, varemottak og opptelling. Jeg hadde ansvar for avdelingen for ballsport de to siste årene, og jeg lærte nye medarbeidere å bruke kassesystemet.
+
+Verv og frivillig arbeid
+2025–i dag: Leder for faggruppen i linjeforeningen for informatikk
+Planlegger kodekvelder, workshoper og bedriftspresentasjoner for studentene. Jeg har arrangert en workshop i Git for nye studenter og en kveld om testing med en ekstern foredragsholder. Jeg har ansvar for budsjettet til faggruppen, ca. 20 000 kroner i året. Jeg leder et styre på fem studenter og har møter med bedriftene som vil presentere seg for studentene. I 2026 startet jeg en fast mentorordning der studenter i tredje år hjelper nye studenter med programmering én kveld i måneden. Rundt 30 nye studenter har vært med så langt.
+
+2024–2025: Styremedlem i studentenes håndballklubb
+Hadde ansvar for medlemslisten og nettsiden og var med på å arrangere en turnering med åtte lag.
+
+2020–2023: Trener for et jentelag i håndball, 10–12 år
+Trente laget to ganger i uka sammen med en annen trener og var med på kamper og cuper.
+
+Slik jeg jobber
+Jeg liker å dele opp et stort problem i små biter og få én bit til å virke før jeg går videre. Jeg skriver gjerne testene tidlig, fordi det gjør det lettere å endre koden senere. I gruppeprosjektene har jeg ofte vært den som holder oversikten over oppgavene og passer på at alle vet hva de skal gjøre. Jeg tar gjerne imot tilbakemeldinger på koden min, og jeg prøver å gi tilbakemeldinger som hjelper den andre videre. Når jeg ikke vet noe, leser jeg dokumentasjonen først, og så spør jeg.
+
+Foredrag og presentasjoner
+2026: «Tester som er lette å lese», kort foredrag på en kodekveld i linjeforeningen (ca. 40 tilhørere)
+2025: Presentasjon av matplanleggeren for klassen og to gjestesensorer fra næringslivet
+
+Kurs og sertifiseringer
+2026: Innføring i skytjenester, valgfritt kurs ved Eksempelby universitet (5 studiepoeng)
+2025: Kurs i universell utforming av nettsider, nettkurs (ca. 10 timer)
+2024: Førstehjelpskurs for trenere, gjennom håndballklubben i Eksempelby
+
+Språk
+Norsk: morsmål
+Engelsk: flytende, muntlig og skriftlig. Mye av pensum og dokumentasjonen jeg leser, er på engelsk.
+Tysk: grunnleggende, fra videregående
+
+Interesser
+Håndball, fjellturer og brettspill. Jeg leser gjerne om hvordan andre har løst tekniske problemer, og jeg følger med på blogger og podkaster om webutvikling. Om vinteren går jeg på ski så ofte jeg kan. Sammen med noen venner arrangerer jeg en brettspillkveld hver måned, og vi har laget et lite program som holder oversikt over hvem som har vunnet hvilke spill.
+
+Referanser
+Teamleder i kundeservice, Eksempel Strøm AS
+Emneansvarlig i grunnleggende programmering, Eksempelby universitet
+Kontaktopplysninger oppgis ved forespørsel.

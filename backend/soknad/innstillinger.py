@@ -29,9 +29,12 @@ MAKS_KI_KALL = 10
 # KI-kallet til Claude (AD-13). Tidsgrensen gjelder hver del av kallet (tilkobling, lesing,
 # skriving), ikke hele kallet. Målt med testdataene i 4.3.1, 4.4 og 4.5: nøkkelord og gap tok
 # 2–5 s hver, og et brev 16–47 s (4.4 og 4.5 i my-project/testplan.md, 4.3.1 i sesjonsloggen
-# .logs/kristine/968-…). 90 s er beholdt med vilje, fordi det lengste brevet tok 47 s. Målingen
-# med lange tekster kommer senere. Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s,
-# eller det API-et ber om med retry-after) kan et kall ta lenger enn 2 x 90 s.
+# .logs/kristine/968-…). 90 s er beholdt med vilje, fordi det lengste brevet tok 47 s. Målt med
+# lange tekster etter retro 4 (CV og annonse på ca. 14 600 tegn hver, én kjøring): nøkkelord
+# ca. 12 s med oppstarten av skriptet, gap 14 s, og de to brevene 25 s og 21 s (retro 4 i
+# my-project/testplan.md). 90 s er beholdt også etter den målingen, fordi det lengste kallet
+# tok 25 s (bare én kjøring). Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s, eller
+# det API-et ber om med retry-after) kan et kall ta lenger enn 2 x 90 s.
 KI_TIDSGRENSE = 90  # sekunder
 KI_NYE_FORSOK = 1
 KI_MAKS_TOKENS = 16000

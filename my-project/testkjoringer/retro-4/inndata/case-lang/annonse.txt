@@ -1,0 +1,160 @@
+Junior utvikler i teamet for digitale tjenester – Prøvestad Data AS
+
+Vil du starte karrieren din i et selskap der du får lære, prøve og feile, og der det du lager blir brukt av tusenvis av mennesker hver dag? Prøvestad Data AS søker to junior utviklere til teamet for digitale tjenester i Eksempelby. Stillingene er faste, og vi ønsker tiltredelse i august 2027. Vi tar gjerne imot søknader fra studenter som blir ferdige med utdanningen til sommeren.
+
+Om oss
+Prøvestad Data AS er et norsk IT-selskap med rundt 140 ansatte fordelt på kontorer i Eksempelby og Prøvevik. Vi har laget programvare for kommuner, energiselskaper og organisasjoner i over 20 år. Kundene våre bruker løsningene våre til alt fra timebestilling og søknader til fakturering, kundeservice og intern saksbehandling. Vi lager det meste selv, fra databasene og API-ene til nettsidene og appene som innbyggerne og kundene bruker.
+
+Vi er stolte av at mange av de ansatte har vært hos oss lenge, og at flere av dem som i dag leder team, startet hos oss som junior utviklere. Vi mener at den beste måten å lære på er å jobbe med ekte oppgaver sammen med folk som har gjort det før, og derfor har alle nye utviklere en fast fadder det første året.
+
+Kundene våre og samfunnsansvar
+Over halvparten av kundene våre er kommuner og andre offentlige virksomheter. Det betyr at løsningene vi lager, må virke for alle: for unge og eldre, for folk som bruker skjermleser, og for folk som har dårlig nettforbindelse. Vi har som mål at alle løsningene våre skal være universelt utformet, og vi tester dem sammen med brukere før de settes i drift. Vi er også opptatt av at løsningene skal bruke lite strøm og være lette å vedlikeholde, slik at kundene kan bruke dem i mange år. Hvert år gir vi to dager av arbeidstiden til hver ansatt som kan brukes til frivillig arbeid, for eksempel kodeklubber for barn eller hjelp til eldre som vil lære å bruke digitale tjenester.
+
+Om teamet
+Teamet for digitale tjenester består i dag av ti personer: syv utviklere, en designer, en tester og en produkteier. Teamet lager og drifter nettsidene og selvbetjeningsløsningene som kundene til våre kunder bruker, for eksempel Min side for et energiselskap og skjemaer for søknader i flere kommuner. Til sammen har løsningene våre over 200 000 brukere i måneden.
+
+Vi jobber smidig etter Scrum, med sprinter på to uker, daglige korte møter, sprintplanlegging og en gjennomgang med kundene på slutten av hver sprint. Vi legger stor vekt på kodekvalitet: all kode går gjennom kodegjennomgang med pull requests før den flettes inn, og vi har automatiske tester som kjøres hver gang noen gjør en endring. Vi setter nye versjoner i drift flere ganger i uka.
+
+Teknologien vi bruker
+- Backend: Python med Flask og FastAPI, og noen eldre tjenester i Java
+- Frontend: HTML, CSS og JavaScript, og React med TypeScript i de nyeste løsningene
+- Databaser: PostgreSQL, og Redis til mellomlagring
+- Drift: Docker, Linux-servere og en skytjeneste, med GitHub Actions for bygging og testing
+- Verktøy: Git og GitHub, Jira, Confluence og Figma
+- Testing: pytest, Playwright for testing i nettleseren og manuelle tester etter testplan
+Du trenger ikke kunne alt dette fra før. Vi forventer at du kan noe av det, og at du har lyst til å lære resten.
+
+Eksempler på prosjekter du kan jobbe med
+- Ny Min side for et energiselskap: kundene skal se forbruket sitt time for time, laste ned fakturaer og endre avtalen sin uten å ringe kundeservice. Løsningen lages i Python med FastAPI og React, med data fra PostgreSQL. Vi skal også lage et nytt varsel når forbruket er uvanlig høyt.
+- Digitale skjemaer for kommuner: innbyggerne skal kunne søke om for eksempel parkeringstillatelse, plass i barnehage eller tilskudd til lag og foreninger på nett. Skjemaene må virke på mobil, med skjermleser og med bare tastatur, og svarene skal sendes trygt til saksbehandlingssystemet i kommunen.
+- Timebestilling for helsestasjoner: en løsning der foreldre kan bestille, flytte og avbestille timer. Løsningen er laget i Flask og skal flyttes til en ny plattform med Docker i løpet av 2027.
+- Interne verktøy for kundeservice: et verktøy der kundeservice kan se historikken til en kunde og svare raskere. Her jobber vi tett med kundeservicemedarbeidere hos kunden, som tester nye versjoner og gir oss tilbakemeldinger.
+
+En vanlig uke i teamet
+Uka starter med et kort møte der vi går gjennom det viktigste som skal skje. Hver dag har vi et daglig møte på et kvarter, der alle sier hva de jobber med og om de står fast. Resten av dagen jobber du med oppgavene dine, ofte sammen med en annen utvikler i parprogrammering. Du lager pull requests og ber om kodegjennomgang, og du går selv gjennom koden til andre. Annenhver fredag har vi fagdag. På slutten av hver sprint viser vi kundene det vi har laget, og vi har et eget møte der vi snakker om hva som gikk bra og hva vi kan gjøre bedre.
+
+Hva sier de som har startet hos oss?
+«Jeg var redd for at jeg ikke kunne nok da jeg begynte, men fadderen min tok seg tid til å forklare alt jeg lurte på. Etter to uker satte jeg min første endring i drift.» (utvikler, startet som junior i 2024)
+«Det beste med jobben er at vi ser hvem vi lager løsningene for. Når vi møter brukerne og ser at noe vi har laget gjør hverdagen deres enklere, er det veldig motiverende.» (utvikler, startet som junior i 2022)
+«Jeg kom fra en jobb i kundeservice før jeg studerte. Det har vært en stor fordel, fordi jeg vet hvordan det er å stå på den andre siden.» (tester, startet i 2023)
+«Fagdagene er noe av det jeg liker best. Der har jeg lært TypeScript og Docker, og jeg har laget et lite verktøy for testdata som hele teamet bruker nå.» (utvikler, startet som junior i 2025)
+
+Sikkerhet og personvern
+Løsningene våre behandler ofte personopplysninger og andre opplysninger som må beskyttes. Derfor er sikkerhet og personvern en del av alt vi gjør. Alle nye ansatte får opplæring i sikker utvikling og i personvernregelverket, og vi følger faste rutiner for tilgangsstyring, logging og kodegjennomgang. Du trenger ikke være ekspert på sikkerhet fra før, men vi forventer at du tar det på alvor.
+
+Arbeidsoppgaver
+Som junior utvikler blir du en fullverdig del av teamet fra første dag. Du får oppgaver som passer erfaringen din, og mer ansvar etter hvert. Typiske oppgaver er:
+- Utvikle nye funksjoner i nettsidene og selvbetjeningsløsningene, i backend og frontend
+- Lage og endre API-er som andre team og kunder bruker
+- Lage og endre tabeller og spørringer i databasene
+- Skrive automatiske tester og rette feil som brukerne melder inn
+- Delta i kodegjennomgang, både ved å få og gi tilbakemeldinger
+- Delta i sprintplanlegging, daglige møter og gjennomganger med kundene
+- Bidra til at løsningene er universelt utformet og følger kravene i WCAG
+- Skrive og oppdatere dokumentasjon for løsningene
+- Etter en tid: delta i vaktordningen for driften på dagtid, sammen med en erfaren kollega
+
+Kvalifikasjoner
+Vi ser etter deg som:
+- Har eller fullfører en bachelorgrad i informatikk, IT eller tilsvarende innen sommeren 2027
+- Har erfaring med Python, gjerne med Flask eller et annet rammeverk for web
+- Kan HTML, CSS og JavaScript
+- Har erfaring med SQL og relasjonsdatabaser, gjerne PostgreSQL
+- Bruker Git til versjonskontroll og kjenner til pull requests
+- Har skrevet automatiske tester, for eksempel med pytest
+- Kjenner smidig utvikling, gjerne Scrum
+- Snakker og skriver godt norsk og engelsk
+
+Det er en fordel om du:
+- Har erfaring med Docker eller andre verktøy for containere
+- Har jobbet med Linux
+- Har erfaring med React eller TypeScript
+- Kjenner til universell utforming og WCAG
+- Har erfaring med kundeservice eller brukerstøtte, eller annen erfaring med å forstå hva brukerne trenger
+- Har vært med i frivillig arbeid, verv eller annet der du har tatt ansvar
+
+Personlige egenskaper
+Vi legger like stor vekt på hvem du er, som på hva du kan. Vi tror du:
+- Er nysgjerrig og liker å lære nye ting
+- Liker å jobbe i team, og deler gjerne det du kan med andre
+- Tar ansvar for oppgavene dine og sier fra når du står fast
+- Er ryddig og nøyaktig, og bryr deg om at koden er lett å lese for andre
+- Tåler at ting endrer seg, og ser på tilbakemeldinger som en hjelp
+- Kommuniserer godt, både muntlig og skriftlig, også med folk som ikke er tekniske
+
+Vi tilbyr
+- Fast stilling med en trygg start: fast fadder det første året og et eget opplæringsprogram for nye utviklere de første tre månedene
+- Spennende oppgaver med løsninger som brukes av mange mennesker hver dag
+- Et fagmiljø med erfarne kolleger som gjerne deler det de kan
+- Fem kursdager i året og dekning av relevante kurs og sertifiseringer
+- Fagdager annenhver fredag, der du kan lære noe nytt eller jobbe med egne ideer
+- Fleksibel arbeidstid og mulighet for hjemmekontor to dager i uka etter opplæringen
+- Konkurransedyktig lønn, god pensjonsordning og forsikringer
+- Bedriftshytte, treningstilbud og et aktivt sosialt miljø med alt fra brettspillkvelder til fjellturer
+- Nye lokaler sentralt i Eksempelby, nær buss og tog
+
+Lønn og vilkår
+Startlønnen for junior utviklere er fastsatt etter en egen lønnsstige, som du får se i første intervju. Lønnen vurderes hvert år, og første gang etter seks måneder. Vi har innskuddspensjon på sju prosent av lønnen, behandlingsforsikring og reiseforsikring for hele familien. Du får bærbar PC, mobiltelefon og det utstyret du trenger for å jobbe godt hjemme. Vi dekker også internett hjemme. Arbeidstiden er 37,5 timer i uka, med kjernetid fra kl. 9 til 14.
+
+Om opplæringen
+De første tre månedene følger du et opplæringsprogram sammen med de andre nye utviklerne. Du lærer hvordan vi bygger, tester og setter løsningene i drift, og du blir kjent med kundene og produktene våre. Fadderen din hjelper deg med de første oppgavene i teamet, og dere har en fast samtale hver uke. Etter seks måneder har du en samtale med lederen din om hva du vil lære videre, og hvilket ansvar du vil ha.
+Opplæringsprogrammet har tre deler. I den første måneden lærer du utviklingsmiljøet, rutinene for kodegjennomgang og testing, og hvordan vi setter nye versjoner i drift. I den andre måneden jobber du med en liten, ekte oppgave i teamet, med fadderen ved siden av deg. I den tredje måneden lager du en ny funksjon selv, fra brukerhistorie til drift, og viser den for teamet og kunden på slutten av sprinten. Underveis har du fagdager med de andre nye utviklerne, der dere lærer om sikkerhet, universell utforming og databaser.
+
+Søknadsprosessen
+Søknaden skal inneholde et søknadsbrev og en CV. Legg gjerne ved karakterutskrift og lenke til prosjekter du har laget, for eksempel på GitHub. Vi leser søknadene fortløpende og kan kalle inn til intervju før fristen. Alle som søker, får svar, også de som ikke blir kalt inn til intervju. Vi tar vare på søknaden din bare så lenge rekrutteringen pågår, og sletter den når stillingene er besatt, hvis du ikke har sagt at vi kan ta vare på den lenger.
+
+Slik foregår prosessen:
+1. Vi leser søknaden og CV-en din og gir deg svar innen to uker.
+2. Første intervju er en samtale på ca. en time med lederen for teamet og en utvikler, der vi blir kjent med deg og du får spørsmål om erfaringen din og prosjektene du har laget.
+3. Andre intervju er en teknisk samtale på ca. to timer. Du får en liten oppgave noen dager før, og vi går gjennom løsningen din sammen. Det er ingen prøve med fasit: vi vil se hvordan du tenker og hvordan du forklarer valgene dine.
+4. Vi tar kontakt med referansene dine.
+5. Vi gir et tilbud, normalt innen tre uker etter det andre intervjuet.
+
+Mangfold og tilrettelegging
+Vi ønsker at de ansatte skal speile brukerne av løsningene våre, og vi oppfordrer alle kvalifiserte søkere til å søke, uansett kjønn, alder, funksjonsevne og bakgrunn. Har du behov for tilrettelegging i søknadsprosessen eller i jobben, gi oss beskjed, så finner vi en løsning sammen. Lokalene våre er universelt utformet.
+
+Ofte stilte spørsmål
+Må jeg kunne alle teknologiene i listen?
+Nei. Vi forventer at du har erfaring med noen av dem, først og fremst Python, SQL og Git. Resten lærer du i opplæringen og sammen med teamet.
+
+Kan jeg søke selv om jeg ikke er ferdig med graden ennå?
+Ja. Mange av dem vi ansetter som junior utviklere, søker mens de skriver bacheloroppgaven. Tilbudet gis med forbehold om at du fullfører graden før du begynner.
+
+Teller erfaring fra deltidsjobber og verv?
+Ja. Erfaring fra for eksempel kundeservice, butikk, brukerstøtte, studentassistent eller verv i en forening viser oss at du kan ta ansvar, samarbeide og forstå hva brukerne trenger. Skriv gjerne kort om hva du har lært.
+
+Hva legger dere vekt på i søknadsbrevet?
+Fortell hvorfor du søker akkurat denne stillingen, og hva du kan bidra med. Vis gjerne til ett eller to prosjekter du er stolt av, og forklar hva du gjorde selv. Hold brevet kort, helst under én side.
+
+Hvor mye hjemmekontor kan jeg ha?
+De første tre månedene er du på kontoret, så du blir godt kjent med teamet. Etter det kan du ha hjemmekontor inntil to dager i uka.
+
+Hvordan er vaktordningen?
+Etter et halvt år kan du bli med i vaktordningen for driften. Vakten er bare på dagtid, og du har alltid en erfaren kollega med deg. Du får opplæring før du starter, og du kan si fra hvis du ikke føler deg klar.
+
+Må jeg ha førerkort?
+Nei. Du kan av og til være med på møter hos kundene, men vi reiser med tog, buss eller sammen med en kollega.
+
+Kan jeg bytte team senere?
+Ja. Mange av de ansatte har jobbet i flere team. Etter to år kan du søke deg til et annet team, for eksempel teamet som lager API-er for energiselskapene, eller teamet for drift og sikkerhet.
+
+Om Eksempelby
+Eksempelby er en by med rundt 60 000 innbyggere, et universitet og et rikt kulturliv. Det er kort vei til fjellet og sjøen, og byen har gode tilbud for idrett og friluftsliv. Kontoret vårt ligger fem minutter å gå fra togstasjonen, og mange av de ansatte sykler eller går til jobben. Vi hjelper gjerne til hvis du må flytte for å begynne hos oss, for eksempel med å finne bolig.
+
+Praktisk informasjon
+Stillingstittel: Junior utvikler
+Antall stillinger: 2
+Ansettelsesform: fast, 100 prosent
+Arbeidssted: Eksempelby, med mulighet for noe hjemmekontor
+Søknadsfrist: 15. februar 2027
+Tiltredelse: august 2027
+Søknaden sendes via nettsiden vår. Vi tar ikke imot søknader på e-post.
+
+Kontaktperson
+Har du spørsmål om stillingen, ta kontakt med Kari Eksempelsen, leder for teamet for digitale tjenester.
+E-post: kari.eksempelsen@example.com
+Telefon: 000 00 000
+Har du spørsmål om søknadsprosessen, ta kontakt med rekrutteringsavdelingen.
+E-post: rekruttering@example.com
+
+Prøvestad Data AS, Prøvegata 1, 0000 Eksempelby
