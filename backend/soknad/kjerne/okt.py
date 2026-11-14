@@ -134,6 +134,7 @@ def har_plass_til(soknad: Soknad, antall: int) -> bool:
 
 def tell_ki_kall(soknad: Soknad, antall: int) -> Soknad:
     """Legger antall KI-kall til telleren (NFR-11). Hvert kall telles når det startes, også
-    når det feiler. Resten av søknaden er uendret. har_plass_til må kalles først. Korrektur
-    (Epic 5) og «Nytt forslag» (Epic 7) må bruke begge."""
+    når det feiler. Resten av søknaden er uendret. har_plass_til må kalles først. Begge brukes
+    av hjelperen for KI-kallet i web/ruter.py (_med_ki), og Korrektur (Epic 5) og «Nytt
+    forslag» (Epic 7) skal bruke den hjelperen."""
     return replace(soknad, ki_kall=soknad.ki_kall + antall)

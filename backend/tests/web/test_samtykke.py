@@ -6,7 +6,6 @@ import re
 from dataclasses import replace
 
 import pytest
-from flask import session
 
 from soknad.adaptere.ki import EkteKI
 from soknad.kjerne.feil import KIFeilType
@@ -14,7 +13,6 @@ from soknad.kjerne.okt import Innlogging, Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import ruter, tekster
 from soknad.web.flyt import ki
-from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
     ANNONSE,
     CV,
@@ -279,6 +277,92 @@ def test_fr32_testmodus_av_midt_i_analysen_gir_ikke_ekte_ki(med_nokkel):
     assert kalt == []
 
 
+def i_testmodus_til_innleggingen(app, client):
+    """Slår på testmodus, begynner uten samtykke og velger Full generering. Gir økt-id-en og
+    listen over kallene til TestKI, som er byttet ut med TellendeKI."""
+    client.get("/")
+    client.post("/testmodus", data={"testmodus": "paa"})
+    client.get("/")
+    assert client.post("/").location == "/modus"
+    client.post("/modus", data={"modus": "full_generering"})
+    test_kalt = []
+    app.extensions["test_ki"] = TellendeKI(app.extensions["test_ki"], kalt=test_kalt)
+    return okt_id(client), test_kalt
+
+
+def slaa_av_etter_samtykket(monkeypatch, app, id_):
+    """Slår av testmodus (fra på) som fra en annen fane rett etter samtykkesjekken, før KI-en
+    velges. Svaret fra sjekken er det samme som før."""
+    lager = app.extensions["oktlager"]
+    ekte_sjekk = ruter.til_start_uten_samtykke
+
+    def sjekk_og_slaa_av(soknad, innlogging):
+        svar = ekte_sjekk(soknad, innlogging)
+        lager.bytt_innlogging(id_, Innlogging(lager.hent(id_).bruker_id, testmodus=False))
+        return svar
+
+    monkeypatch.setattr(ruter, "til_start_uten_samtykke", sjekk_og_slaa_av)
+
+
+def test_fr36_testmodus_av_mellom_samtykket_og_valget_gir_ikke_ekte_ki_i_analysen(
+    med_nokkel, monkeypatch
+):
+    """AD-12/FR-36: slås testmodus av (fra på) i en annen fane etter at samtykket er sjekket,
+    men før KI-en velges, går analysen til TestKI, som sjekken gjaldt for. EkteKI kalles
+    aldri, for samtykket mangler."""
+    app, client, kalt = med_nokkel
+    id_, test_kalt = i_testmodus_til_innleggingen(app, client)
+    slaa_av_etter_samtykket(monkeypatch, app, id_)
+    svar = client.post("/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"})
+    assert svar.location == "/resultat"
+    assert app.extensions["oktlager"].hent(id_).testmodus is False
+    assert test_kalt == ["nokkelord", "gap"]
+    assert kalt == []
+    assert soknaden(app, client).samtykke is False
+    assert soknaden(app, client).ki_kall == 0
+
+
+def test_fr36_testmodus_av_etter_feltsjekken_gir_ikke_ekte_ki_i_analysen(med_nokkel, monkeypatch):
+    """AD-12/FR-36: slås testmodus av (fra på) i en annen fane etter at feltene er sjekket mot
+    testcasene, går analysen til TestKI. Innleggingen bruker samme innlogging til testcasene,
+    samtykket og valget av KI, så EkteKI kalles aldri, for samtykket mangler."""
+    app, client, kalt = med_nokkel
+    lager = app.extensions["oktlager"]
+    id_, test_kalt = i_testmodus_til_innleggingen(app, client)
+    ekte_sjekk = ruter.sjekk_innlegging
+
+    def sjekk_og_slaa_av(cv, annonse, caser):
+        feil = ekte_sjekk(cv, annonse, caser)
+        lager.bytt_innlogging(id_, Innlogging(lager.hent(id_).bruker_id, testmodus=False))
+        return feil
+
+    monkeypatch.setattr(ruter, "sjekk_innlegging", sjekk_og_slaa_av)
+    svar = client.post("/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"})
+    assert svar.location == "/resultat"
+    assert lager.hent(id_).testmodus is False
+    assert test_kalt == ["nokkelord", "gap"]
+    assert kalt == []
+
+
+def test_fr36_testmodus_av_mellom_samtykket_og_valget_gir_ikke_ekte_ki_i_brevet(
+    med_nokkel, monkeypatch
+):
+    """AD-12/FR-36: det samme for «Lag søknadsbrevet mitt»: slås testmodus av etter at
+    samtykket er sjekket, men før KI-en velges, lages brevet av TestKI, og EkteKI kalles
+    aldri."""
+    app, client, kalt = med_nokkel
+    id_, test_kalt = i_testmodus_til_innleggingen(app, client)
+    svar = client.post("/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"})
+    assert svar.location == "/resultat"
+    slaa_av_etter_samtykket(monkeypatch, app, id_)
+    assert client.post("/resultat", data={"handling": "brev"}).location == "/brev"
+    assert app.extensions["oktlager"].hent(id_).testmodus is False
+    assert test_kalt == ["nokkelord", "gap", "brev"]
+    assert kalt == []
+    assert soknaden(app, client).samtykke is False
+    assert soknaden(app, client).ki_kall == 0
+
+
 def test_fr28_ki_feil_fra_ekte_ki_vises_paa_innleggingen(med_nokkel):
     """FR-28: gir EkteKI en KIFeil (testmodus av, samtykke gitt), vises feilteksten på
     innleggingen, og søknaden har feltene, men ingen analyse og er ikke opptatt. Kallet som
@@ -307,8 +391,7 @@ def test_fr32_ki_velger_utgave_ut_fra_testmodus(testmodus, forventet):
     app = app_med_nokkel()
     assert isinstance(app.extensions["ekte_ki"], EkteKI)
     with app.test_request_context():
-        session[OKT_ID] = app.extensions["oktlager"].ny(Innlogging(1, testmodus=testmodus))
-        assert ki() is app.extensions[forventet]
+        assert ki(Innlogging(1, testmodus=testmodus)) is app.extensions[forventet]
 
 
 def test_fr32_ki_uten_ekte_ki_gir_test_ki(app):
@@ -316,9 +399,8 @@ def test_fr32_ki_uten_ekte_ki_gir_test_ki(app):
     skulle være av. Utlogget gir også TestKI."""
     assert app.extensions["ekte_ki"] is None
     with app.test_request_context():
-        assert ki() is app.extensions["test_ki"]
-        session[OKT_ID] = app.extensions["oktlager"].ny(Innlogging(1, testmodus=False))
-        assert ki() is app.extensions["test_ki"]
+        assert ki(None) is app.extensions["test_ki"]
+        assert ki(Innlogging(1, testmodus=False)) is app.extensions["test_ki"]
 
 
 # --- Samtykket på siden ---

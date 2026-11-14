@@ -6,9 +6,9 @@ from flask import current_app, redirect, session, url_for
 from werkzeug.wrappers import Response
 
 from soknad.adaptere.ki import KI
-from soknad.kjerne.okt import Soknad
+from soknad.kjerne.okt import Innlogging, Soknad
 from soknad.kjerne.steg import Steg, kan_vises
-from soknad.web.innlogging import OKT_ID, gjeldende_innlogging, oktlager
+from soknad.web.innlogging import OKT_ID, oktlager
 
 # Siden for hvert steg.
 SIDE_FOR_STEG = {
@@ -26,22 +26,24 @@ def har_nokkel() -> bool:
     return current_app.extensions.get("ekte_ki") is not None
 
 
-def ki() -> KI:
-    """KI-en for denne økten (AD-3): EkteKI når testmodus er av, ellers TestKI. Rutene vet
+def ki(innlogging: Innlogging | None) -> KI:
+    """KI-en for innloggingen (AD-3): EkteKI når testmodus er av, ellers TestKI. Rutene vet
     ikke hvilken som brukes. Uten ekte KI (ingen nøkkel) brukes TestKI, som aldri sender noe
-    ut. Det skjer ikke i vanlig bruk, for uten nøkkel er testmodus alltid på."""
-    innlogging = gjeldende_innlogging()
+    ut. Det skjer ikke i vanlig bruk, for uten nøkkel er testmodus alltid på. Utlogget
+    (None) gir også TestKI. _med_ki i ruter.py gir den samme innloggingen hit og til
+    til_start_uten_samtykke, så KI-en velges for samme testmodus som samtykket ble sjekket for."""
     ekte_ki = current_app.extensions.get("ekte_ki")
     if innlogging is not None and not innlogging.testmodus and ekte_ki is not None:
         return ekte_ki
     return current_app.extensions["test_ki"]
 
 
-def til_start_uten_samtykke(soknad: Soknad) -> Response | None:
+def til_start_uten_samtykke(soknad: Soknad, innlogging: Innlogging | None) -> Response | None:
     """En sikring før hvert KI-kall (AD-12, FR-36): er testmodus av og samtykket mangler, gir
     den en redirect til startsiden, og ingen tekst sendes til KI-en. Ellers None. I vanlig bruk
-    kommer ikke søknaden forbi startsiden uten samtykke når testmodus er av."""
-    innlogging = gjeldende_innlogging()
+    kommer ikke søknaden forbi startsiden uten samtykke når testmodus er av. _med_ki i ruter.py
+    gir den samme innloggingen hit og til ki(), så sjekken og valget av KI gjelder samme
+    testmodus."""
     if innlogging is not None and not innlogging.testmodus and not soknad.samtykke:
         return redirect(url_for("web.start"))
     return None

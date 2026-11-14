@@ -1,6 +1,7 @@
 """Rutene på nettsiden."""
 
 from datetime import date
+from functools import partial
 from io import BytesIO
 
 from flask import current_app, redirect, render_template, request, send_file, url_for
@@ -168,48 +169,34 @@ def innlegging():
     lagre_soknad(soknad)
     if handling == "tilbake":
         return redirect(url_for("web.modus"))
+    # Innloggingen leses én gang og brukes både til testcasene og til KI-kallet, så alt i
+    # denne POST-en gjelder samme testmodus (AD-12).
     innlogging = gjeldende_innlogging()
     if innlogging is None:
         # Logget ut i en annen fane etter login_required: til innloggingen, ingen feilside.
         return til_innloggingen()
-    # Testcasene finnes bare i TestKI, så de hentes derfra, ikke fra ki() (AD-3).
+    # Testcasene finnes bare i TestKI, så de hentes derfra, ikke fra KI-en som velges (AD-3).
     caser = current_app.extensions["test_ki"].caser if innlogging.testmodus else None
     feil = sjekk_innlegging(cv, annonse, caser)
     if feil:
         return _vis_innlegging(soknad, feil=feil)
-    uten_samtykke = til_start_uten_samtykke(soknad)
-    if uten_samtykke is not None:
-        return uten_samtykke
-    # Én KI for begge kallene: slås testmodus av i en annen fane mellom kallene, går gap
-    # likevel til samme KI som sjekken over gjaldt for (AD-12).
-    valgt_ki = ki()
-    # Med ekte KI telles hvert kall som 1. I testmodus telles ingen kall (NFR-11).
-    per_kall = 1 if _bruker_ekte_ki(valgt_ki) else 0
-    # Analysen trenger to kall (nøkkelord og gap). Er det ikke plass til begge, kalles ikke
-    # KI-en. Feltene er alt lagret med sett_inndata, og telleren er uendret (NFR-11).
-    if per_kall and not har_plass_til(soknad, ANALYSE_KALL):
-        return _vis_innlegging(soknad, feil=[], ki_feil=tekster.KI_KALL_BRUKT, prov_pa_nytt=False)
-    # Feltene er alt lagret med sett_inndata. Nå lagres søknaden som opptatt. Etter KI-kallene
-    # lagrer finally resultatet uten opptatt: analysen når kallene lyktes, ellers søknaden fra
-    # før, også ved et uventet unntak. Det lagres bare når søknaden i øktlageret fortsatt er den
-    # som ble satt opptatt, så en ny søknad fra startsiden i en annen fane blir stående.
-    # Hvert kall telles når det startes, også når det feiler, så telleren i det som lagres,
-    # er riktig både når alt lykkes og ved KI-feil (NFR-11).
-    opptatt_soknad = sett_opptatt(soknad, True)
-    lagre_soknad(opptatt_soknad)
-    ferdig = soknad
-    kall = 0
-    try:
-        kall += per_kall
+
+    def analyse(valgt_ki):
+        # Én KI for begge kallene: slås testmodus av i en annen fane mellom kallene, går gap
+        # likevel til samme KI som samtykket ble sjekket for (AD-12).
         nokkelord = valgt_ki.nokkelord(annonse)
-        kall += per_kall
         gap = valgt_ki.gap(cv, annonse)
-        ferdig = sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
-    except KIFeil as ki_feil:
-        return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
-    finally:
-        erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, kall))
-    return redirect(url_for("web.resultat"))
+        return sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
+
+    # Feltene er alt lagret med sett_inndata, så de står igjen også når KI-en ikke kalles.
+    return _med_ki(
+        soknad,
+        innlogging,
+        kall=ANALYSE_KALL,
+        arbeid=analyse,
+        vis_feil=partial(_vis_innlegging, soknad, feil=[]),
+        neste="web.resultat",
+    )
 
 
 @web.route("/resultat", methods=["GET", "POST"])
@@ -225,7 +212,8 @@ def resultat():
     (AD-8, FR-27). Er søknaden byttet ut med en ny fra startsiden mens KI-en jobbet, blir den
     nye stående, og brevet kastes. Er testmodus av og samtykket mangler, sendes brukeren til
     startsiden uten KI-kall (AD-12). Med ekte KI og alle KI-kallene brukt vises resultatsiden
-    med meldingen om det, uten KI-kall (NFR-11)."""
+    med meldingen om det, uten KI-kall (NFR-11). Er brukeren logget ut i en annen fane etter
+    stegsjekken, sendes hen til innloggingen uten KI-kall (FR-7)."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -237,30 +225,20 @@ def resultat():
     if request.form.get("handling") != "brev":
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
         return _vis_resultat(lagret), 400
-    uten_samtykke = til_start_uten_samtykke(lagret)
-    if uten_samtykke is not None:
-        return uten_samtykke
-    valgt_ki = ki()
-    per_kall = 1 if _bruker_ekte_ki(valgt_ki) else 0
-    # Brevet trenger ett kall. Er det ikke plass, kalles ikke KI-en, og søknaden er uendret.
-    if per_kall and not har_plass_til(lagret, BREV_KALL):
-        return _vis_resultat(lagret, ki_feil=tekster.KI_KALL_BRUKT, prov_pa_nytt=False)
-    # Som på innleggingen: finally lagrer brevet når kallet lyktes, ellers søknaden fra før,
-    # men bare når søknaden i øktlageret fortsatt er den som ble satt opptatt. Kallet telles
-    # når det startes, også når det feiler (NFR-11).
-    opptatt_soknad = sett_opptatt(lagret, True)
-    lagre_soknad(opptatt_soknad)
-    ferdig = lagret
-    kall = 0
-    try:
-        kall += per_kall
+
+    def brevet(valgt_ki):
         svar = valgt_ki.brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
-        ferdig = sett_brev(lagret, svar)
-    except KIFeil as ki_feil:
-        return _vis_resultat(lagret, ki_feil=tekster.ki_feiltekst(ki_feil))
-    finally:
-        erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, kall))
-    return redirect(url_for("web.brev"))
+        return sett_brev(lagret, svar)
+
+    # Logget ut i en annen fane etter login_required: _med_ki sender til innloggingen.
+    return _med_ki(
+        lagret,
+        gjeldende_innlogging(),
+        kall=BREV_KALL,
+        arbeid=brevet,
+        vis_feil=partial(_vis_resultat, lagret),
+        neste="web.brev",
+    )
 
 
 @web.route("/brev")
@@ -377,10 +355,69 @@ def _vis_start(samtykke_feil=False, bryter_fokus=False):
     )
 
 
-def _bruker_ekte_ki(valgt_ki) -> bool:
-    """Sann når valgt_ki er ekte KI og ikke TestKI. Bare da telles KI-kallene, og bare da
-    gjelder grensen på MAKS_KI_KALL (NFR-11)."""
-    return valgt_ki is not current_app.extensions["test_ki"]
+class _TelteKall:
+    """KI-en, men hvert kall til en av metodene telles når det startes, også når det feiler
+    (NFR-11). per_kall er 1 med ekte KI og 0 med TestKI, for i testmodus telles ingen kall."""
+
+    def __init__(self, valgt_ki, per_kall):
+        self._ki = valgt_ki
+        self._per_kall = per_kall
+        self.kall = 0
+
+    def __getattr__(self, navn):
+        metode = getattr(self._ki, navn)
+        if not callable(metode):
+            # Bare metodene er KI-kall. Andre attributter (for eksempel caser) gis uendret.
+            return metode
+
+        def telt(*args, **kwargs):
+            self.kall += self._per_kall
+            return metode(*args, **kwargs)
+
+        return telt
+
+
+def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
+    """KI-kallet for alle rutene som bruker KI-en (AD-8, AD-12, FR-27, FR-28, NFR-11).
+    Korrektur (Epic 5) og «Nytt forslag» (Epic 7) skal også bruke den.
+
+    Ruten leser innloggingen én gang og gir den hit, så samtykket sjekkes for samme testmodus
+    som velger KI-en. En annen fane som slår av testmodus i mellomtiden, endrer ingenting her.
+    Stegene, i denne rekkefølgen:
+    1. Utlogget (None): til innloggingen, uten KI-kall (FR-7).
+    2. Testmodus av og samtykket mangler: til startsiden, uten KI-kall (AD-12, FR-36).
+    3. KI-en velges ut fra den samme innloggingen (AD-3).
+    4. Med ekte KI og ikke plass til alle kallene (kall) vises vis_feil med meldingen om det,
+       uten «Prøv på nytt» og uten KI-kall. Søknaden er uendret (NFR-11).
+    5. Søknaden lagres som opptatt (AD-8, FR-27).
+    6. arbeid(valgt_ki) gjør kallene og gir den nye søknaden. Hvert kall telles når det
+       startes, også når det feiler. En KIFeil gir vis_feil med feilteksten (FR-28).
+    7. finally lagrer resultatet uten opptatt: den nye søknaden når kallene lyktes, ellers
+       søknaden fra før, også ved et uventet unntak. Telleren er med i begge. Det lagres bare
+       når søknaden i øktlageret fortsatt er den som ble satt opptatt, så en ny søknad fra
+       startsiden i en annen fane blir stående.
+    Til slutt sendes brukeren til siden neste."""
+    if innlogging is None:
+        return til_innloggingen()
+    uten_samtykke = til_start_uten_samtykke(soknad, innlogging)
+    if uten_samtykke is not None:
+        return uten_samtykke
+    valgt_ki = ki(innlogging)
+    # Bare med ekte KI telles kallene, og bare da gjelder grensen på MAKS_KI_KALL (NFR-11).
+    ekte = valgt_ki is not current_app.extensions["test_ki"]
+    if ekte and not har_plass_til(soknad, kall):
+        return vis_feil(ki_feil=tekster.KI_KALL_BRUKT, prov_pa_nytt=False)
+    opptatt_soknad = sett_opptatt(soknad, True)
+    lagre_soknad(opptatt_soknad)
+    telte = _TelteKall(valgt_ki, per_kall=1 if ekte else 0)
+    ferdig = soknad
+    try:
+        ferdig = arbeid(telte)
+    except KIFeil as ki_feil:
+        return vis_feil(ki_feil=tekster.ki_feiltekst(ki_feil))
+    finally:
+        erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, telte.kall))
+    return redirect(url_for(neste))
 
 
 def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
