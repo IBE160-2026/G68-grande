@@ -141,7 +141,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [x] Retrospektiv for epic 4 (`bmad-retrospective`), valgfri. Alle storyene i epic 4 er ferdige (14. november) (ferdig 14. november: godkjent med åpne punkter, 8 punkter. Se [`9-koding/epic-4-retro-2026-11-14.md`](9-koding/epic-4-retro-2026-11-14.md))
 - [ ] Etter retrospektiven for epic 4: rettinger før epic 5, delt i to runder (bestemt 14. november). Runde 1 er punktet om KI-kallet (branch `retro-4-rettinger`), og resten tas i en ny runde:
   - [x] KI-kallet på innleggingen og resultatsiden samles i én hjelper (samtykket og valget av KI leser samme innlogging, og utlogging på resultatsiden sender til innloggingen) (ferdig 14. november: [PR #29](https://github.com/IBE160-2026/G68-grande/pull/29) flettet, CI grønn på Linux og Windows, 793 tester. Prøvd i nettleseren med testmodus og ekte KI)
-  - [ ] Test gjennom det ekte Anthropic-SDK-et, én webtest gjennom `EkteKI`, og sperre mot nettverk i testene
+  - [ ] Test gjennom det ekte Anthropic-SDK-et, én webtest gjennom `EkteKI`, og sperre mot nettverk i testene (kodet og gjennomgått 14. november på branch `retro-4-rettinger-2`, 798 tester. Gjenstår: PR, grønn CI og flette)
   - [ ] Småting: `med_nokkel` samles i `hjelpere.py`, gamle kommentarer om «4.3», README-rader og lenke til retrospektiven, kjent begrensning om øktlageret, og de seks gamle branchene slettes
   - [ ] Én måling med CV og annonse på nær 15 000 tegn hver (ca. 1 kr)
 - [ ] Fra retrospektiven for epic 4: `arbeidsgiver` renses før den brukes i filnavnet (story 7.5). «</cv>» i teksten og traceback i skriptet er godtatt for godt, og samtykketeksten står (bestemt 14. november)
