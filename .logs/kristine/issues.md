@@ -132,3 +132,6 @@ Hovedlista er `my-project/todo.md`. Alle punktene her står også der (se `READM
 - [ ] 2026-11-14 [retrospektiv-epic-4](964-2026-11-14-18-44-58-retrospektiv-epic-4.md) — Story 7.5: `arbeidsgiver` renses før den brukes i filnavnet
 - [x] 2026-11-14 [retro-4-rettinger](963-2026-11-14-19-29-14-retro-4-rettinger.md) — PR #29: sette action item 1 til `done` i sprint-statusen etter fletting (nettlesertesten er gjort) (løst 2026-11-14)
 - [ ] 2026-11-14 [retro-4-rettinger](963-2026-11-14-19-29-14-retro-4-rettinger.md) — Epic 5 og 7: nye ruter med KI-kall (Korrektur, «Nytt forslag») bruker `_med_ki` i `ruter.py` (samtykke, plass og telling)
+- [ ] 2026-11-14 [retro-4-rettinger](963-2026-11-14-19-29-14-retro-4-rettinger.md) — Vurdere de fem merknadene om svarene fra målingen med lange tekster i `my-project/testplan.md` (React og TypeScript, egne krav, «krav» om noe som er en fordel, nåtid om en ferdig jobb)
+- [ ] 2026-11-14 [retro-4-rettinger](963-2026-11-14-19-29-14-retro-4-rettinger.md) — Epic 7: med lange tekster koster en søknad med «Nytt forslag» 3,82 kr, over målet på 3 kr. Bestemme om det er greit
+- [ ] 2026-11-14 [retro-4-rettinger](963-2026-11-14-19-29-14-retro-4-rettinger.md) — Etter fletting av PR #31 og runde 4: action item 3 og 4 fra retro 4 til `done` i sprint-statusen, og TO DO
