@@ -101,6 +101,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **Gap-analysen og nøkkelordtreffet kan si hverandre imot,** fordi gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.
 - **I testmodus virker bare de fiktive testdataene i `backend/testdata/`,** og CV-en og annonsen må være fra samme testcase.
 - **Grenser mot høy kostnad:** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver. Med ekte KI kan hver søknad bruke høyst 10 KI-kall (en analyse er 2 kall, et brev 1, også «Prøv på nytt»). Deretter må du begynne på en ny søknad fra startsiden. I testmodus telles ingen kall. Grensen er en myk sperre mot mange trykk per søknad, og taket på 250 kr i Claude Console er den siste sperren. Grensene står i `backend/soknad/innstillinger.py`.
+- **Et svar fra Claude om å vente kan gjøre at det tar lenge:** ber API-et om å vente før neste forsøk (`retry-after`), venter nettsiden så lenge før det ene nye forsøket, uten noen øvre grense. Det gjelder alle KI-kallene: «Sjekk CV-en min», «Lag søknadsbrevet mitt» og «Prøv på nytt».
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
 - **Brevet skrives bare på norsk** i versjon 1.
 
