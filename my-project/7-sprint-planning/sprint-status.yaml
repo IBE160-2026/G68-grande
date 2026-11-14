@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-14-2026 21:44
+last_updated: 11-14-2026 22:22
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -285,7 +285,7 @@ action_items:
       om «måles i 4.3», surrogater i listene, README-rader og lenke til retro 4, kjent
       begrensning om øktlageret, og de seks flettede branchene slettes"
     owner: "KI (Claude), Kristine godkjenner PR og slettingen"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
   - id: "epic-4-retro-item-29-én-måling-med-cv-og-annonse-på-nær-15-00"
     epic: 4
