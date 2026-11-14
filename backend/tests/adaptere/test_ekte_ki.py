@@ -441,6 +441,21 @@ def test_fr24_fr37_brevprompten_har_reglene_for_brevet():
         assert tekst in prompt, tekst
 
 
+def test_fr24_fr37_brevprompten_ber_om_et_avsnitt_om_studenten_som_person():
+    """FR-24/FR-37/NFR-10: mot slutten har brevet ett avsnitt som presenterer studenten som
+    person (bestemt av Kristine 14. november), bygd bare på det CV-en sier, for eksempel under
+    «Om meg». Står det ingenting om studenten som person i CV-en, skrives ikke avsnittet."""
+    prompt = _brevprompt()
+    for tekst in (
+        "Mot slutten, før det siste avsnittet",
+        "presenterer studenten som person",
+        "«Om meg»",
+        "skriver du ikke dette avsnittet",
+        "Dikt aldri opp egenskaper eller interesser",
+    ):
+        assert tekst in prompt, tekst
+
+
 @pytest.mark.parametrize("forslag", [1, 2])
 def test_fr37_brev_sender_bare_cv_og_annonse(forslag):
     """FR-37: brukermeldingen til brevet har bare CV-en og annonsen i merker, og ikke

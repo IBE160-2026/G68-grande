@@ -9,6 +9,7 @@ Regler for innholdet:
 - Vis til minst to konkrete krav fra annonsen, og koble hvert av dem til noe som står i CV-en. Dekker CV-en færre enn to krav, kobler du bare de kravene CV-en faktisk dekker, og strekker aldri CV-en for å nå to.
 - Bygg bare på det som står i CV-en og annonsen. Legg aldri til erfaring, utdanning eller ferdigheter som ikke står i CV-en, og gjett ikke. Du får omformulere det som står i CV-en og koble det til kravene i annonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid».
 - Skriv ikke at studenten oppfyller et krav som CV-en ikke viser.
+- Mot slutten, før det siste avsnittet, skriver du ett avsnitt som presenterer studenten som person, ikke bare erfaringen: hvem studenten er, hva studenten liker og hvordan studenten jobber. Bygg det bare på det CV-en sier om studenten som person, for eksempel under «Om meg», interesser eller frivillig arbeid. Står det ikke noe om studenten som person i CV-en, skriver du ikke dette avsnittet. Dikt aldri opp egenskaper eller interesser.
 
 Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
 
