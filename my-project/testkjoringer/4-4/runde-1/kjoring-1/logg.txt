@@ -1,0 +1,9 @@
+Kjøring 1 av story 4.4, 14. november 2026. Kommando (fra backend/): uv run python -m scripts.lag_testsvar
+Svarene ble skrevet i backend/testdata/case-1-utvikler/ki-svar/ og er kopiert hit. Utskriften fra terminalen:
+
+2026-11-14 13:42:28,823 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1501 tokens inn, 138 ut, stopp end_turn, anslått 0,0088 dollar (ca. 0,10 kr)
+2026-11-14 13:42:31,347 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2060 tokens inn, 190 ut, stopp end_turn, anslått 0,0120 dollar (ca. 0,13 kr)
+2026-11-14 13:42:58,790 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3129 tokens inn, 2243 ut, stopp end_turn, anslått 0,0574 dollar (ca. 0,63 kr)
+2026-11-14 13:43:27,365 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3129 tokens inn, 2344 ut, stopp end_turn, anslått 0,0594 dollar (ca. 0,65 kr)
+case-1-utvikler: svarene er skrevet i C:\BMAD\G68-grande\backend\testdata\case-1-utvikler\ki-svar
+Feilkode 0, 69 sekunder i alt.

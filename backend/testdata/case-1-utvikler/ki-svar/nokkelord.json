@@ -1,16 +1,24 @@
 {
   "nokkelord": [
+    "bachelorgrad",
+    "informatikk",
+    "IT",
     "Python",
     "Flask",
     "HTML",
     "CSS",
     "SQL",
+    "relasjonsdatabaser",
     "Git",
+    "versjonskontroll",
     "Linux",
     "Docker",
+    "smidig utvikling",
     "Scrum",
-    "førerkort",
-    "engelsk"
+    "førerkort klasse B",
+    "norsk",
+    "engelsk",
+    "tester"
   ],
   "arbeidsgiver": "Testvik Utvikling AS"
 }

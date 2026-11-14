@@ -71,7 +71,17 @@ uv run ruff format --check
 
 `uv run pytest` kjører alle testene. `uv run ruff check` sjekker koden, blant annet at alle filer åpnes med en oppgitt `encoding` (vi bruker alltid utf-8), og `uv run ruff format --check` sjekker formateringen. De samme sjekkene kjører automatisk på GitHub (fanen «Actions») på både Linux og Windows ved hver PR.
 
-**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har håndlagde KI-svar, slik at nettsiden kan kjøres i testmodus uten API-nøkkel. De byttes senere ut med ekte KI-svar. Fasiten viser hvilke krav CV-en dekker og mangler, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
+**Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase (for eksempel `case-1-utvikler/`). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har ekte KI-svar fra Claude, slik at nettsiden kan kjøres i testmodus uten API-nøkkel og likevel viser hvordan den virker med ekte KI. Fasiten viser hvilke krav CV-en dekker og mangler, hvilke nøkkelord som er viktige, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet.
+
+**Lage testsvarene på nytt:** svarene i `ki-svar/` lages med skriptet `backend/scripts/lag_testsvar.py`, og bare med det. Skriptet trenger API-nøkkelen i `backend/.env`, sender CV-en og annonsen i hvert testcase til Claude og skriver `nokkelord.json`, `gap.json`, `brev-1.json` og `brev-2.json`. Feiler et KI-kall, skrives ingenting for det testcaset. Med `--ut` skrives svarene i en annen mappe, og `ki-svar/` er uendret:
+
+```bash
+cd backend
+uv run python -m scripts.lag_testsvar
+uv run python -m scripts.lag_testsvar --ut ../my-project/testkjoringer/<story>/kjoring-<n>
+```
+
+En kjøring tar omtrent ett minutt og kostet ca. 1,2–1,5 kr per testcase 14. november 2026. Tokens og anslått pris for hvert kall står i terminalen. Feiler et testcase, kjøres de andre likevel, og skriptet ender med feilkode 1 (2 når API-nøkkelen mangler). Etter en ny kjøring oppdateres tabellen «Nøkkelord» og prosenten i `fasit.md`, ellers feiler testene. Testene sjekker også brevene: ingen av de 17 typiske KI-frasene, og ingenting fra sjekklisten i `fasit.md`. Feiler de, er det plan B i testplanen. Resultatet av kjøringene mot fasiten står i [testplanen](my-project/testplan.md).
 
 ## Skjermbilder
 
@@ -99,7 +109,8 @@ backend/                 Nettsiden (Python og Flask)
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
     adaptere/            Det som snakker med omverdenen: database, øktlager, KI og Word-fila
   tests/                 De automatiske testene, delt på samme måte som soknad/
-  testdata/              Fiktive CV-er og annonser med fasit og håndlagde KI-svar
+  testdata/              Fiktive CV-er og annonser med fasit og ekte KI-svar til testmodus
+  scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI
   .env.example           Eksempel på innstillinger, uten ekte nøkler
 my-project/              Alle plan- og prosessdokumentene (se oversikten der)
 .logs/kristine/          Sesjonslogger og åpne punkter

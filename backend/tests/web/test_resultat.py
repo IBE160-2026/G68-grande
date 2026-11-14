@@ -29,6 +29,12 @@ from tests.web.hjelpere import (
 
 FASIT = (CASE / "fasit.md").read_text(encoding="utf-8")
 
+# Tallene i linjen «X av Y = Z %» i fasiten. De følger KI-svarene (story 4.4), så testene
+# leser dem fra fila.
+_PROSENTLINJE = re.search(r"^(\d+) av (\d+) = (\d+) %$", FASIT, re.M)
+assert _PROSENTLINJE, "Fant ingen linje «X av Y = Z %» i fasit.md"
+TREFF, ANTALL, PROSENT = (int(tall) for tall in _PROSENTLINJE.groups())
+
 
 def liste(html, id_):
     """Punktene i listen med denne id-en, uten pynteikonet og med HTML-escapingen fjernet.
@@ -115,8 +121,8 @@ def test_nfr6_overskriftene_har_riktig_niva_og_sidetittel(paa_resultat):
         ("h3", "Dette dekker CV-en din"),
         ("h3", "Dette kan du jobbe videre med"),
         ("h2", "Nøkkelordtreff"),
-        ("h3", "Står i CV-en (7)"),
-        ("h3", "Står ikke i CV-en (4)"),
+        ("h3", f"Står i CV-en ({TREFF})"),
+        ("h3", f"Står ikke i CV-en ({ANTALL - TREFF})"),
     ]
     assert "<title>Resultat – Søknadsassistenten</title>" in html
 
@@ -225,7 +231,7 @@ def h3_tekster(html):
 
 
 def test_fr16_nokkelordlistene_som_i_fasiten(paa_resultat):
-    """FR-16/FR-17: «Står i CV-en (7)» og «Står ikke i CV-en (4)» har nøkkelordene fra
+    """FR-16/FR-17: «Står i CV-en (…)» og «Står ikke i CV-en (…)» har nøkkelordene fra
     tabellen i fasit.md, i listens rekkefølge."""
     rader = re.findall(r"^\| (.+?) \| (Ja|Nei) \|$", FASIT, re.M)
     ja = [ord_ for ord_, svar in rader if svar == "Ja"]
@@ -337,8 +343,8 @@ def test_fr17_tallet_har_forklaringen_ved_siden_av(paa_resultat):
 
 
 def test_fr17_prosentlinjen_er_pynt_og_fylt_til_prosenten(paa_resultat):
-    """FR-17/UX-DR13: prosentlinjen er skjult for skjermlesere, 12 px høy og fylt til 64 %
-    av 100 uten animasjon."""
+    """FR-17/UX-DR13: prosentlinjen er skjult for skjermlesere, 12 px høy og fylt til
+    prosenten i fasiten (av 100) uten animasjon."""
     html = html_av(paa_resultat.get("/resultat"))
     linje = next(a for t, a in tagger_i(main(html)) if t == "svg")
     assert linje["class"] == "prosentlinje"
@@ -349,7 +355,7 @@ def test_fr17_prosentlinjen_er_pynt_og_fylt_til_prosenten(paa_resultat):
     rect = [a for t, a in tagger_i(main(html)) if t == "rect"]
     assert rect == [
         {"class": "spor", "width": "100", "height": "12"},
-        {"class": "fyll", "width": "64", "height": "12"},
+        {"class": "fyll", "width": str(PROSENT), "height": "12"},
     ]
     css = STIL.read_text(encoding="utf-8")
     for velger in (".prosentlinje", ".prosentlinje .spor", ".prosentlinje .fyll"):

@@ -70,6 +70,8 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`spec-4-2-brevet-fra-claude.md`](9-koding/spec-4-2-brevet-fra-claude.md) | Planen for story 4.2 med oppgaver og akseptansekriterier, mine valg om brevets form og lengde, og kodegjennomgangen: alle 15 funn med vurdering, hva som ble rettet, hva som ble utsatt og hvorfor resten ble avvist ([PR #24](https://github.com/IBE160-2026/G68-grande/pull/24)) |
 | [`spec-4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad.md`](9-koding/spec-4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad.md) | Planen for story 4.3.1 (første halvdel av story 4.3: bryteren, samtykket og KI-merknaden) med oppgaver og akseptansekriterier, mine valg om å dele storyen og om bryteren, og kodegjennomgangen: alle 16 funn med vurdering, hva som ble rettet, hva som ble utsatt og hvorfor resten ble avvist ([PR #25](https://github.com/IBE160-2026/G68-grande/pull/25)) |
 | **Felles** | |
+| [`testplan.md`](testplan.md) | Testplanen: resultatet for suksesskriteriene som ikke testes automatisk, blant annet tre kjøringer med ekte KI mot fasiten, og hva en søknad koster |
+| [`testkjoringer/`](testkjoringer/) | KI-svarene og loggen (tokens og pris) fra hver kjøring med ekte KI i testplanen, så de kan sjekkes i etterkant. Kjøring 1 er også de ferdige svarene i `backend/testdata/` |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
 | [`../.logs/kristine/`](../.logs/kristine/) | Sesjonsloggene: hva som ble gjort i hver arbeidsøkt, og listen over åpne punkter (`issues.md`). Ligger i roten av repoet, fordi faglærers regler sier det |
