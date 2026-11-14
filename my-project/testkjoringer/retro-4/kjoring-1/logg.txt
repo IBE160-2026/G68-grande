@@ -1,0 +1,9 @@
+Måling med lange tekster etter retro 4 (action item 4), 14. november 2026. Kommando (fra backend/): uv run python -m scripts.lag_testsvar --testdata ../my-project/testkjoringer/retro-4/inndata --ut ../my-project/testkjoringer/retro-4/kjoring-1
+CV-en har 14 622 tegn og annonsen 14 584 tegn (antall_tegn). Kjørt på commit 88a35a7 (branch retro-4-rettinger-4). Promptene i backend/prompts/ er uendret siden story 4.5 (sist endret i 584ec6f). Kjøringen startet kl. 22:00:09,966 (klokkeslett rett før kommandoen). Utskriften fra terminalen:
+
+2026-11-14 22:00:21,964 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 7389 tokens inn, 134 ut, stopp end_turn, anslått 0,0322 dollar (ca. 0,35 kr)
+2026-11-14 22:00:35,829 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 13866 tokens inn, 1440 ut, stopp end_turn, anslått 0,0843 dollar (ca. 0,93 kr)
+2026-11-14 22:01:00,815 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 15392 tokens inn, 2908 ut, stopp end_turn, anslått 0,1197 dollar (ca. 1,32 kr)
+2026-11-14 22:01:22,091 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 15392 tokens inn, 2471 ut, stopp end_turn, anslått 0,1110 dollar (ca. 1,22 kr)
+case-lang: svarene er skrevet i ..\my-project\testkjoringer\retro-4\kjoring-1\case-lang
+Feilkode 0, 73 sekunder i alt (slutt kl. 22:01:23,339).

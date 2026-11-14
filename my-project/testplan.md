@@ -179,3 +179,35 @@ Tallene er fra loggen i terminalen. En fullført søknad er nøkkelord, gap og e
 | Runde 2, kriterium 3, kjøring 3 | 7 261 | 139 + 603 + 2 281 = 3 023 | 0,10 + 0,22 + 0,66 = 0,98 kr | 0,64 kr | 1,62 kr |
 
 En fullført søknad kostet 0,80–1,07 kr, under målet på 3 kr (NFR-11). Den nye regelen i brev-prompten gir ca. 150 flere tokens inn per brev. De femten kjøringene i story 4.5 kostet ca. 24 kr i alt. Det er mer enn anslaget på ca. 8–9 kr pluss ca. 8 kr for plan B, fordi også kriterium 3 måtte kjøres på nytt i runde 2. Et brev tok 16–25 sekunder, innenfor tidsgrensen på 90 sekunder.
+
+## Retro 4: måling med lange tekster (14. november 2026)
+
+Nettsiden godtar CV og annonse på høyst 15 000 tegn hver (story 4.3.2), men tiden for KI-kallene var bare målt med testdataene, som har ca. 1 200–1 400 tegn per felt. Kallet strømmes ikke, så tidsgrensen på 90 sekunder i `backend/soknad/innstillinger.py` gjelder i praksis hele svaret (retro 4, funn B7, action item 4). Derfor ble skriptet `backend/scripts/lag_testsvar.py` kjørt én gang med ekte KI på en fiktiv CV og en fiktiv annonse som er nesten så lange som grensen.
+
+Modell: `claude-opus-5-5`. Kjøringen ble gjort på commit `88a35a7` (branch `retro-4-rettinger-4`). Promptene i `backend/prompts/` er uendret siden story 4.5 (sist endret i `584ec6f`). Claude skrev CV-en og annonsen: en informatikkstudent, Ingrid Prøvesen, som søker som junior utvikler i Prøvestad Data AS. Personen, firmaene, adressene og telefonnumrene er fiktive. CV-en har 14 622 tegn og annonsen 14 584 tegn, telt med `antall_tegn` (samme telling som nettsiden). Inndataene ligger i `my-project/testkjoringer/retro-4/inndata/case-lang/`, og svarene og loggen i `my-project/testkjoringer/retro-4/kjoring-1/`. Caset har ingen fasit, så innholdet i svarene er ikke vurdert mot kriteriene.
+
+### Kostnad og tid
+
+Tallene er fra loggen i terminalen. Tiden for hvert kall er tiden fra forrige logglinje til logglinjen for kallet. For nøkkelordene er det tiden fra starten av kommandoen (kl. 22:00:09,966), så den tar også med oppstarten av skriptet. Kronene er regnet med 11 kr per dollar.
+
+| Kall | Tokens inn | Tokens ut | Tid | Kroner |
+| --- | --- | --- | --- | --- |
+| Nøkkelord | 7 389 | 134 | ca. 12,0 s (med oppstarten) | 0,35 kr |
+| Gap | 13 866 | 1 440 | 13,9 s | 0,93 kr |
+| Brev 1 | 15 392 | 2 908 | 25,0 s | 1,32 kr |
+| Brev 2 (det andre brevet) | 15 392 | 2 471 | 21,3 s | 1,22 kr |
+| Hele kjøringen | 52 039 | 6 953 | 73 s | 3,82 kr |
+
+En fullført søknad (nøkkelord, gap og ett brev) har 7 389 + 13 866 + 15 392 = 36 647 tokens inn og 134 + 1 440 + 2 908 = 4 482 tokens ut, og kostet 0,35 + 0,93 + 1,32 = 2,60 kr. Det er omtrent tre ganger så mye som med testdataene (0,67–1,07 kr), og over overslaget på omtrent 2 kr i PRD-en. Målet på 3 kr (NFR-11) gjelder en fullført søknad med ett brev, så 2,60 kr holder målet, men med liten margin. Med det andre brevet («Nytt forslag» i Epic 7) blir det 3,82 kr, så en søknad med lange tekster og «Nytt forslag» koster mer enn 3 kr.
+
+**Hva det betyr for grensen på 90 sekunder:** det lengste kallet, det første brevet, tok 25 sekunder. Det er godt innenfor 90 sekunder. I denne ene kjøringen gjorde de lange tekstene særlig de korte kallene tregere: nøkkelordene tok ca. 12 sekunder (med oppstarten av skriptet) og gap-analysen 14 sekunder, mot 2–5 sekunder med testdataene, selv om nøkkelordene bare ga 134 tokens ut. Brevene tok 25 og 21 sekunder, omtrent like lenge som et brev med testdataene (16–47 sekunder). Målingen viser altså ikke at grensen bør endres. Det er bare én måling, og med testdataene varierte et brev mellom 16 og 47 sekunder, så et kall med lange tekster kan også ta lenger tid enn her.
+
+### Merknader om svarene (Kristine vurderer)
+
+Caset har ingen fasit, men disse feilene er sjekket mot CV-en og annonsen:
+
+1. **Gap-analysen sier at «Har erfaring med React eller TypeScript» mangler.** CV-en har «React (grunnleggende)» og «TypeScript (grunnleggende)» under Ferdigheter.
+2. **Gap-analysen har laget kravet «Tar sikkerhet og personvern på alvor».** Det står ikke i listene i annonsen. Annonsen skriver i avsnittet «Sikkerhet og personvern» at «vi forventer at du tar det på alvor». CV-en har emnet «Datanettverk og sikkerhet».
+3. **Gap-analysen sier at «Tåler at ting endrer seg, og ser på tilbakemeldinger som en hjelp» mangler.** CV-en sier «Jeg tar gjerne imot tilbakemeldinger på koden min» (under «Slik jeg jobber»), men ikke noe om at ting endrer seg.
+4. **`brev-2` kaller universell utforming «kravet deres».** I annonsen står «Kjenner til universell utforming og WCAG» under «Det er en fordel om du», ikke under kravene.
+5. **`brev-1` skriver «Som studentassistent i Python og i databaser leser jeg andres kode …» i presens.** I CV-en er jobben i databaser bare «Våren 2026». Jobben i Python er «2025–i dag».
