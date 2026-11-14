@@ -26,7 +26,6 @@ from tests.web.hjelpere import (
     element,
     footer,
     html_av,
-    logg_inn,
     main,
     med_autofocus,
     okt_id,
@@ -34,18 +33,6 @@ from tests.web.hjelpere import (
     soknaden,
     tagger_i,
 )
-
-
-@pytest.fixture
-def med_nokkel():
-    """(app, klient, kalt): innlogget i en app med API-nøkkel, så testmodus er av. EkteKI er
-    byttet ut med TellendeKI, og kalt viser hvilke oppgaver den har fått."""
-    app = app_med_nokkel()
-    kalt = []
-    app.extensions["ekte_ki"] = TellendeKI(app.extensions["test_ki"], kalt=kalt)
-    client = app.test_client()
-    assert logg_inn(client).status_code == 302
-    return app, client, kalt
 
 
 def avkrysningsboks(html):

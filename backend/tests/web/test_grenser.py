@@ -20,10 +20,8 @@ from tests.web.hjelpere import (
     WEB,
     FeilendeKI,
     TellendeKI,
-    app_med_nokkel,
     element,
     html_av,
-    logg_inn,
     med_autofocus,
     sett_soknad,
     soknaden,
@@ -47,18 +45,6 @@ class FasteSvarKI(TellendeKI):
     def gap(self, cv, annonse):
         self.kalt.append("gap")
         return GAP_SVAR
-
-
-@pytest.fixture
-def med_nokkel():
-    """(app, klient, kalt): innlogget i en app med API-nøkkel, så testmodus er av. EkteKI er
-    byttet ut med TellendeKI, og kalt viser hvilke oppgaver den har fått."""
-    app = app_med_nokkel()
-    kalt = []
-    app.extensions["ekte_ki"] = TellendeKI(app.extensions["test_ki"], kalt=kalt)
-    client = app.test_client()
-    assert logg_inn(client).status_code == 302
-    return app, client, kalt
 
 
 def legg_paa_innlegging(app, client, ki_kall=0):

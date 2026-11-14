@@ -167,6 +167,35 @@ def test_fr28_tomme_punkter_fjernes(tekst, forventet):
     assert kontroller(oppgave, tekst) == forventet
 
 
+@pytest.mark.parametrize(
+    ("oppgave", "tekst", "forventet"),
+    [
+        (
+            "nokkelord",
+            '{"nokkelord": ["Py\\ud800thon", "\\ud800", "SQL"], "arbeidsgiver": null}',
+            {"nokkelord": ["Python", "SQL"], "arbeidsgiver": None},
+        ),
+        (
+            "gap",
+            '{"dekker": ["SQL\\udfff"], "mangler": ["\\ud800", "G\\ud800it"]}',
+            {"dekker": ["SQL"], "mangler": ["Git"]},
+        ),
+    ],
+)
+def test_fr28_enslige_surrogater_fjernes_fra_listene(oppgave, tekst, forventet):
+    """FR-28: enslige surrogater (for eksempel \\ud800 i JSON-en) fjernes fra punktene i
+    nokkelord, dekker og mangler, så resultatsiden ikke gir en feilside. Et punkt med bare en
+    surrogat blir borte."""
+    assert kontroller(oppgave, tekst) == forventet
+
+
+def test_fr28_bare_surrogater_i_nokkelordene_gir_ubrukelig_svar():
+    """FR-28: blir nøkkelordlisten tom når surrogatene er fjernet, er svaret ubrukelig."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("nokkelord", '{"nokkelord": ["\\ud800", "\\udfff"], "arbeidsgiver": null}')
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
 @pytest.mark.parametrize("arbeidsgiver", ["", "   ", "\\n\\t"])
 def test_fr28_tom_arbeidsgiver_blir_none(arbeidsgiver):
     """FR-28: en arbeidsgiver som er tom eller bare har mellomrom, blir None."""

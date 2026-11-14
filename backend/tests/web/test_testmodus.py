@@ -228,15 +228,6 @@ def test_fr33_merkelappen_er_fersken_uten_nowrap():
 # --- Bryteren slås av og på (story 4.3.1) ---
 
 
-@pytest.fixture
-def med_nokkel():
-    """(app, klient): innlogget i en app med API-nøkkel, så testmodus er av."""
-    app = app_med_nokkel()
-    client = app.test_client()
-    assert logg_inn(client).status_code == 302
-    return app, client
-
-
 def innlogging(app, client):
     return app.extensions["oktlager"].hent(okt_id(client))
 
@@ -244,7 +235,7 @@ def innlogging(app, client):
 def test_fr32_slaa_paa_og_av_med_nokkel_gir_startsiden_med_fokus_paa_bryteren(med_nokkel):
     """FR-32: med nøkkel på steg start slår POST /testmodus testmodus på og av igjen, på samme
     økt-id. Brukeren sendes til startsiden med ?bryter=1, og der har bryteren autofocus."""
-    app, client = med_nokkel
+    app, client, _ = med_nokkel
     id_ = okt_id(client)
     client.get("/")
     svar = client.post("/testmodus", data={"testmodus": "paa"})
@@ -269,7 +260,7 @@ def test_fr32_slaa_paa_og_av_med_nokkel_gir_startsiden_med_fokus_paa_bryteren(me
 
 def test_fr32_bryteren_har_ikke_fokus_uten_bryter_i_adressen(med_nokkel):
     """FR-32: vanlig GET / gir ikke bryteren fokus."""
-    _, client = med_nokkel
+    _, client, _ = med_nokkel
     html = client.get("/").get_data(as_text=True)
     assert med_autofocus(html) == []
 
@@ -296,7 +287,7 @@ def test_fr32_nokkel_med_bare_mellomrom_endrer_ingenting():
 
 def test_fr32_ukjent_verdi_endrer_ingenting(med_nokkel):
     """FR-32: uten testmodus=av eller testmodus=paa er testmodus uendret."""
-    app, client = med_nokkel
+    app, client, _ = med_nokkel
     client.get("/")
     for data in ({}, {"testmodus": "ja"}):
         assert client.post("/testmodus", data=data).location == "/?bryter=1"
@@ -317,7 +308,7 @@ def test_fr32_ukjent_verdi_endrer_ingenting(med_nokkel):
 def test_fr32_bryteren_endres_ikke_etter_startsiden(med_nokkel, soknad, side):
     """FR-32/AD-8: er søknaden forbi steg start, eller opptatt, sendes brukeren til siden for
     steget, og testmodus og søknaden er uendret."""
-    app, client = med_nokkel
+    app, client, _ = med_nokkel
     sett_soknad(app, client, soknad)
     svar = client.post("/testmodus", data={"testmodus": "paa"})
     assert svar.status_code == 302
@@ -328,7 +319,7 @@ def test_fr32_bryteren_endres_ikke_etter_startsiden(med_nokkel, soknad, side):
 
 def test_fr32_slaa_av_beholder_soknaden_paa_steg_start(med_nokkel):
     """FR-32: bryteren bytter bare innloggingen. Søknaden på steg start er den samme."""
-    app, client = med_nokkel
+    app, client, _ = med_nokkel
     client.get("/")
     soknad = soknaden(app, client)
     client.post("/testmodus", data={"testmodus": "paa"})
@@ -353,7 +344,7 @@ def test_fr7_utlogget_for_bryteren_gir_innloggingen(med_nokkel, monkeypatch):
     """FR-7/AD-8: logges brukeren ut i en annen fane etter login_required, men før bryteren
     henter innloggingen, sendes hen til innloggingen med «Du må logge inn først». Ingen
     feilside, og ingen innlogging kommer tilbake."""
-    app, client = med_nokkel
+    app, client, _ = med_nokkel
     lager = app.extensions["oktlager"]
     id_ = okt_id(client)
     ekte_hent = ruter.gjeldende_soknad
