@@ -5,15 +5,21 @@ import re
 
 import pytest
 
-from soknad import create_app
-from soknad.web import tekster
+from soknad.kjerne.okt import Modus, Soknad
+from soknad.kjerne.steg import Steg
+from soknad.web import ruter, tekster
 from tests.web.hjelpere import (
     STIL,
+    app_med_nokkel,
     css_blokk,
     header,
     logg_inn,
     main,
+    med_autofocus,
+    okt_id,
+    sett_soknad,
     sett_testmodus,
+    soknaden,
     tagger_i,
 )
 
@@ -29,7 +35,7 @@ def merkelapper(html):
 
 def innlogget_med_nokkel(nokkel):
     """En innlogget klient i en app der ANTHROPIC_API_KEY er satt til nokkel."""
-    app = create_app({"TESTING": True, "SECRET_KEY": "test-nokkel", "ANTHROPIC_API_KEY": nokkel})
+    app = app_med_nokkel(nokkel)
     client = app.test_client()
     assert logg_inn(client).status_code == 302
     return client
@@ -56,17 +62,26 @@ def test_fr32_uten_nokkel_er_bryteren_paa_og_last_med_nokkeltekst(innlogget_clie
     assert tekster.TESTMODUS_STATUS in main(html)
 
 
-def test_fr32_med_nokkel_er_bryteren_fortsatt_last_uten_nokkeltekst():
-    """FR-32: med API-nøkkel er bryteren fortsatt på og låst fram til Epic 4, men uten
-    nøkkeltekst og uten aria-describedby."""
+def test_fr32_med_nokkel_er_bryteren_av_og_i_et_eget_skjema():
+    """FR-32: med API-nøkkel er testmodus av etter innlogging. Bryteren er ikke låst, står i et
+    eget POST-skjema mot /testmodus og sender testmodus=paa. Ingen nøkkeltekst, og
+    statusområdet er tomt."""
     html = innlogget_med_nokkel("sk-test").get("/").get_data(as_text=True)
-    attributter = bryter(header(html))
-    assert attributter["aria-checked"] == "true"
-    assert attributter["aria-disabled"] == "true"
-    assert "aria-describedby" not in attributter
+    topp = header(html)
+    assert bryter(topp) == {
+        "class": "bryter",
+        "type": "submit",
+        "role": "switch",
+        "name": "testmodus",
+        "value": "paa",
+        "aria-checked": "false",
+    }
+    skjemaer = [a for t, a in tagger_i(topp) if t == "form"]
+    assert skjemaer == [{"class": "bryter-skjema", "method": "post", "action": "/testmodus"}]
+    assert re.search(r'<form class="bryter-skjema"[^>]*>\s*<button class="bryter"', topp)
     assert tekster.MANGLER_NOKKEL not in html
     assert 'id="nokkeltekst"' not in html
-    assert tekster.TESTMODUS_STATUS in main(html)
+    assert '<p class="testinfo" role="status"></p>' in main(html)
 
 
 def test_fr32_nokkel_med_bare_mellomrom_regnes_som_mangler():
@@ -113,9 +128,9 @@ def test_fr32_fr33_utlogget_har_verken_bryter_merkelapp_eller_statustekst(client
 # --- Resten ---
 
 
-def test_fr32_bryteren_star_ikke_i_et_skjema(innlogget_client):
-    """FR-32: bryteren står i header, utenfor alle skjemaer, så et trykk sender ingenting.
-    Etiketten «Testmodus» står inne i knappen, og sporet er skjult for skjermlesere."""
+def test_fr32_last_bryter_star_ikke_i_et_skjema(innlogget_client):
+    """FR-32: uten nøkkel står bryteren i header, utenfor alle skjemaer, så et trykk sender
+    ingenting. Etiketten «Testmodus» står inne i knappen, og sporet er skjult for skjermlesere."""
     topp = header(innlogget_client.get("/").get_data(as_text=True))
     assert "<form" not in topp
     knapp = re.search(r'<button class="bryter"[^>]*>(.*?)</button>', topp, re.S).group(1)
@@ -135,14 +150,13 @@ def test_fr32_statusomradet_har_role_status_mellom_ingressen_og_knappen(innlogge
 
 
 def test_fr32_fr33_testmodus_av_gir_tom_status_og_ingen_merkelapp(app, innlogget_client):
-    """FR-32/FR-33: er testmodus av i innloggingen (Epic 4), er bryteren av, statusområdet
-    tomt og merkelappen borte. Testmodus kan ikke slås av på nettsiden ennå, så innloggingen
-    byttes med sett_testmodus."""
+    """FR-32/FR-33: er testmodus av i innloggingen, er bryteren av, statusområdet tomt og
+    merkelappen borte. Appen har ingen nøkkel, så innloggingen byttes med sett_testmodus."""
     sett_testmodus(app, innlogget_client, False)
     html = innlogget_client.get("/").get_data(as_text=True)
     assert bryter(html)["aria-checked"] == "false"
     assert '<p class="testinfo" role="status"></p>' in html
-    innlogget_client.post("/")
+    innlogget_client.post("/", data={"samtykke": "ja"})
     svar = innlogget_client.get("/modus")
     assert svar.status_code == 200
     html = svar.get_data(as_text=True)
@@ -209,3 +223,149 @@ def test_fr33_merkelappen_er_fersken_uten_nowrap():
         assert verdi in merkelapp
     assert "height" not in merkelapp
     assert "nowrap" not in css
+
+
+# --- Bryteren slås av og på (story 4.3.1) ---
+
+
+@pytest.fixture
+def med_nokkel():
+    """(app, klient): innlogget i en app med API-nøkkel, så testmodus er av."""
+    app = app_med_nokkel()
+    client = app.test_client()
+    assert logg_inn(client).status_code == 302
+    return app, client
+
+
+def innlogging(app, client):
+    return app.extensions["oktlager"].hent(okt_id(client))
+
+
+def test_fr32_slaa_paa_og_av_med_nokkel_gir_startsiden_med_fokus_paa_bryteren(med_nokkel):
+    """FR-32: med nøkkel på steg start slår POST /testmodus testmodus på og av igjen, på samme
+    økt-id. Brukeren sendes til startsiden med ?bryter=1, og der har bryteren autofocus."""
+    app, client = med_nokkel
+    id_ = okt_id(client)
+    client.get("/")
+    svar = client.post("/testmodus", data={"testmodus": "paa"})
+    assert svar.status_code == 302
+    assert svar.location == "/?bryter=1"
+    assert innlogging(app, client).testmodus is True
+    assert okt_id(client) == id_
+    html = client.get(svar.location).get_data(as_text=True)
+    attributter = bryter(header(html))
+    assert attributter["aria-checked"] == "true"
+    assert attributter["value"] == "av"
+    assert "autofocus" in attributter
+    assert tekster.TESTMODUS_STATUS in main(html)
+
+    svar = client.post("/testmodus", data={"testmodus": "av"})
+    assert svar.location == "/?bryter=1"
+    assert innlogging(app, client).testmodus is False
+    html = client.get(svar.location).get_data(as_text=True)
+    assert bryter(header(html))["aria-checked"] == "false"
+    assert 'id="samtykke"' in main(html)
+
+
+def test_fr32_bryteren_har_ikke_fokus_uten_bryter_i_adressen(med_nokkel):
+    """FR-32: vanlig GET / gir ikke bryteren fokus."""
+    _, client = med_nokkel
+    html = client.get("/").get_data(as_text=True)
+    assert med_autofocus(html) == []
+
+
+def test_fr32_uten_nokkel_endrer_post_ingenting(app, innlogget_client):
+    """FR-32: uten nøkkel er testmodus fortsatt på etter POST /testmodus."""
+    innlogget_client.get("/")
+    svar = innlogget_client.post("/testmodus", data={"testmodus": "av"})
+    assert svar.status_code == 302
+    assert innlogging(app, innlogget_client).testmodus is True
+
+
+def test_fr32_nokkel_med_bare_mellomrom_endrer_ingenting():
+    """FR-32: en nøkkel med bare mellomrom er ingen nøkkel. Testmodus er på etter innlogging,
+    og POST /testmodus endrer ingenting. Det finnes ingen ekte KI."""
+    app = app_med_nokkel("   ")
+    client = app.test_client()
+    logg_inn(client)
+    assert app.extensions["ekte_ki"] is None
+    client.get("/")
+    client.post("/testmodus", data={"testmodus": "av"})
+    assert innlogging(app, client).testmodus is True
+
+
+def test_fr32_ukjent_verdi_endrer_ingenting(med_nokkel):
+    """FR-32: uten testmodus=av eller testmodus=paa er testmodus uendret."""
+    app, client = med_nokkel
+    client.get("/")
+    for data in ({}, {"testmodus": "ja"}):
+        assert client.post("/testmodus", data=data).location == "/?bryter=1"
+        assert innlogging(app, client).testmodus is False
+
+
+@pytest.mark.parametrize(
+    ("soknad", "side"),
+    [
+        (Soknad(steg=Steg.MODUS), "/modus"),
+        (Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING), "/innlegging"),
+        (Soknad(steg=Steg.RESULTAT, modus=Modus.FULL_GENERERING), "/resultat"),
+        (Soknad(steg=Steg.BREV, modus=Modus.FULL_GENERERING), "/brev"),
+        (Soknad(opptatt=True), "/"),
+    ],
+    ids=["modus", "innlegging", "resultat", "brev", "opptatt"],
+)
+def test_fr32_bryteren_endres_ikke_etter_startsiden(med_nokkel, soknad, side):
+    """FR-32/AD-8: er søknaden forbi steg start, eller opptatt, sendes brukeren til siden for
+    steget, og testmodus og søknaden er uendret."""
+    app, client = med_nokkel
+    sett_soknad(app, client, soknad)
+    svar = client.post("/testmodus", data={"testmodus": "paa"})
+    assert svar.status_code == 302
+    assert svar.location == side
+    assert innlogging(app, client).testmodus is False
+    assert soknaden(app, client) == soknad
+
+
+def test_fr32_slaa_av_beholder_soknaden_paa_steg_start(med_nokkel):
+    """FR-32: bryteren bytter bare innloggingen. Søknaden på steg start er den samme."""
+    app, client = med_nokkel
+    client.get("/")
+    soknad = soknaden(app, client)
+    client.post("/testmodus", data={"testmodus": "paa"})
+    assert soknaden(app, client) is soknad
+
+
+def test_fr32_bryteren_av_og_paa_synes_i_hoykontrastmodus():
+    """FR-32/NFR-6: i høykontrastmodus skilles av og på også med farge: sporet er Canvas når
+    bryteren er av, og Highlight når den er på."""
+    css = STIL.read_text(encoding="utf-8")
+    hoykontrast = re.search(r"@media \(forced-colors: active\)\s*\{(.*?)\n\}", css, re.S).group(1)
+    assert re.search(
+        r'\.bryter\[aria-checked="false"\] \.spor \{\s*background: Canvas;', hoykontrast
+    )
+    assert re.search(
+        r'\.bryter\[aria-checked="true"\] \.spor \{\s*background: Highlight;', hoykontrast
+    )
+    assert "forced-color-adjust: none" in hoykontrast
+
+
+def test_fr7_utlogget_for_bryteren_gir_innloggingen(med_nokkel, monkeypatch):
+    """FR-7/AD-8: logges brukeren ut i en annen fane etter login_required, men før bryteren
+    henter innloggingen, sendes hen til innloggingen med «Du må logge inn først». Ingen
+    feilside, og ingen innlogging kommer tilbake."""
+    app, client = med_nokkel
+    lager = app.extensions["oktlager"]
+    id_ = okt_id(client)
+    ekte_hent = ruter.gjeldende_soknad
+
+    def hent_og_logg_ut():
+        soknad = ekte_hent()
+        lager.slett(id_)
+        return soknad
+
+    monkeypatch.setattr(ruter, "gjeldende_soknad", hent_og_logg_ut)
+    svar = client.post("/testmodus", data={"testmodus": "paa"})
+    assert svar.status_code == 302
+    assert svar.location == "/logg-inn?ikke_innlogget=1"
+    assert okt_id(client) is None
+    assert lager.hent(id_) is None

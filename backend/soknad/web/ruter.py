@@ -26,14 +26,18 @@ from soknad.kjerne.steg import Steg
 from soknad.kjerne.telleregel import tell_treff
 from soknad.web import tekster, web
 from soknad.web.flyt import (
+    SIDE_FOR_STEG,
     erstatt_soknad,
     gjeldende_soknad,
+    har_nokkel,
     ki,
     krever_steg,
     lagre_soknad,
+    til_start_uten_samtykke,
     til_steget_hvis_opptatt,
 )
 from soknad.web.innlogging import (
+    endre_testmodus,
     gjeldende_innlogging,
     logg_inn_bruker,
     logg_ut_bruker,
@@ -59,19 +63,50 @@ def felles_tekster():
 @login_required
 def start():
     """GET lager alltid en ny søknad (testmodus i Innlogging beholdes), også mens en annen er
-    opptatt. POST er «Begynn å lage søknad» og sender til modusvalget. Mens søknaden er opptatt,
-    sendes POST til siden for steget uten at noe lagres (AD-8)."""
+    opptatt. Da er avkrysningsboksen for samtykket alltid tom. ?bryter=1 (etter bryteren) gir
+    bryteren fokus.
+
+    POST er «Begynn å lage søknad» og sender til modusvalget. Når testmodus er av, må boksen
+    være krysset av (FR-36). Ellers vises startsiden på nytt med feilen, og steget er fortsatt
+    start. Mens søknaden er opptatt, sendes POST til siden for steget uten at noe lagres
+    (AD-8)."""
     if request.method == "POST":
         lagret = gjeldende_soknad()
         opptatt = til_steget_hvis_opptatt(lagret)
         if opptatt is not None:
             return opptatt
-        lagre_soknad(begynn(lagret))
+        innlogging = gjeldende_innlogging()
+        if innlogging is None:
+            # Logget ut i en annen fane etter login_required: til innloggingen.
+            return til_innloggingen()
+        samtykke = request.form.get("samtykke") == "ja"
+        # Et samtykke som alt er lagret (søknaden er lenger fram i en annen fane), gjelder.
+        if not innlogging.testmodus and not samtykke and not lagret.samtykke:
+            return _vis_start(samtykke_feil=True)
+        # I testmodus vises ingen boks, så et samtykke derfra lagres ikke.
+        lagre_soknad(begynn(lagret, samtykke=samtykke and not innlogging.testmodus))
         return redirect(url_for("web.modus"))
     lagre_soknad(Soknad())
-    # Bryteren er låst på fram til Epic 4. Uten nøkkel står «Mangler API-nøkkel, se README».
-    mangler_nokkel = not (current_app.config.get("ANTHROPIC_API_KEY") or "").strip()
-    return render_template("start.html", mangler_nokkel=mangler_nokkel)
+    return _vis_start(bryter_fokus=request.args.get("bryter") == "1")
+
+
+@web.route("/testmodus", methods=["POST"])
+@login_required
+def bryter():
+    """Bryteren «Testmodus» (FR-32). Skjemaet sender testmodus=av eller testmodus=paa, og
+    brukeren sendes til startsiden med fokus på bryteren. Bryteren endres bare når søknaden er
+    på steg start og ikke opptatt. Ellers sendes brukeren til siden for steget, og ingenting
+    endres (AD-8). Uten API-nøkkel er testmodus alltid på, og ingenting endres."""
+    lagret = gjeldende_soknad()
+    if lagret.steg != Steg.START or lagret.opptatt:
+        return redirect(url_for(SIDE_FOR_STEG[lagret.steg]))
+    innlogging = gjeldende_innlogging()
+    if innlogging is None:
+        return til_innloggingen()
+    valg = request.form.get("testmodus")
+    if har_nokkel() and valg in ("av", "paa"):
+        endre_testmodus(innlogging, testmodus=valg == "paa")
+    return redirect(url_for("web.start", bryter=1))
 
 
 @web.route("/modus", methods=["GET", "POST"])
@@ -106,7 +141,9 @@ def innlegging():
 
     Mens KI-en jobber, er søknaden opptatt. En ny POST da sendes til siden for steget, uten at
     noe lagres eller KI-en kalles (AD-8, FR-27). Er søknaden byttet ut med en ny fra startsiden
-    mens KI-en jobbet, blir den nye stående, og analysen kastes."""
+    mens KI-en jobbet, blir den nye stående, og analysen kastes.
+
+    Er testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12)."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
@@ -127,10 +164,17 @@ def innlegging():
     if innlogging is None:
         # Logget ut i en annen fane etter login_required: til innloggingen, ingen feilside.
         return til_innloggingen()
-    caser = ki().caser if innlogging.testmodus else None
+    # Testcasene finnes bare i TestKI, så de hentes derfra, ikke fra ki() (AD-3).
+    caser = current_app.extensions["test_ki"].caser if innlogging.testmodus else None
     feil = sjekk_innlegging(cv, annonse, caser)
     if feil:
         return _vis_innlegging(soknad, feil=feil)
+    uten_samtykke = til_start_uten_samtykke(soknad)
+    if uten_samtykke is not None:
+        return uten_samtykke
+    # Én KI for begge kallene: slås testmodus av i en annen fane mellom kallene, går gap
+    # likevel til samme KI som sjekken over gjaldt for (AD-12).
+    valgt_ki = ki()
     # Feltene er alt lagret med sett_inndata. Nå lagres søknaden som opptatt. Etter KI-kallene
     # lagrer finally resultatet uten opptatt: analysen når kallene lyktes, ellers søknaden fra
     # før, også ved et uventet unntak. Det lagres bare når søknaden i øktlageret fortsatt er den
@@ -139,8 +183,8 @@ def innlegging():
     lagre_soknad(opptatt_soknad)
     ferdig = soknad
     try:
-        nokkelord = ki().nokkelord(annonse)
-        gap = ki().gap(cv, annonse)
+        nokkelord = valgt_ki.nokkelord(annonse)
+        gap = valgt_ki.gap(cv, annonse)
         ferdig = sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
     except KIFeil as ki_feil:
         return _vis_innlegging(soknad, feil=[], ki_feil=tekster.ki_feiltekst(ki_feil))
@@ -159,7 +203,8 @@ def resultat():
     brukeren sendes til brevsiden. En KIFeil gir resultatsiden på nytt med feilteksten, uten
     redirect, og søknaden er uendret (FR-28). Mens KI-en jobber, er søknaden opptatt, og en ny
     POST sendes til siden for steget uten at KI-en kalles (AD-8, FR-27). Er søknaden byttet ut
-    med en ny fra startsiden mens KI-en jobbet, blir den nye stående, og brevet kastes."""
+    med en ny fra startsiden mens KI-en jobbet, blir den nye stående, og brevet kastes. Er
+    testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12)."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -171,6 +216,9 @@ def resultat():
     if request.form.get("handling") != "brev":
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
         return _vis_resultat(lagret), 400
+    uten_samtykke = til_start_uten_samtykke(lagret)
+    if uten_samtykke is not None:
+        return uten_samtykke
     # Som på innleggingen: finally lagrer brevet når kallet lyktes, ellers søknaden fra før,
     # men bare når søknaden i øktlageret fortsatt er den som ble satt opptatt.
     opptatt_soknad = sett_opptatt(lagret, True)
@@ -252,7 +300,7 @@ def logg_inn():
     if not feil:
         bruker_id = finn_bruker(current_app.config["DATABASE"], epost, passord)
         if bruker_id is not None:
-            logg_inn_bruker(bruker_id)
+            logg_inn_bruker(bruker_id, testmodus=not har_nokkel())
             return redirect(url_for("web.start"))
         feil = [InndataFeil(None, FeilType.FEIL_INNLOGGING)]
     # Feil: samme side på nytt uten redirect. E-posten står igjen, passordet aldri.
@@ -279,12 +327,25 @@ def registrer():
     if not feil:
         bruker_id = lag_bruker(database, epost, passord)
         if bruker_id is not None:
-            logg_inn_bruker(bruker_id)
+            logg_inn_bruker(bruker_id, testmodus=not har_nokkel())
             return redirect(url_for("web.start"))
         # E-posten ble registrert i mellomtiden.
         feil = [InndataFeil("epost", FeilType.EPOST_FINNES)]
     # Feil: samme side på nytt uten redirect. E-posten står igjen, passordene aldri.
     return _vis_skjema("registrer.html", epost=epost, feil=feil)
+
+
+def _vis_start(samtykke_feil=False, bryter_fokus=False):
+    """Viser startsiden. Med nøkkel står bryteren i et eget skjema, uten nøkkel er den låst på
+    med «Mangler API-nøkkel, se README» (FR-32). samtykke_feil: «Begynn å lage søknad» uten
+    avkryssing gir rød ramme, feilteksten og fokus på boksen (FR-36). bryter_fokus gir bryteren
+    fokus etter at den er trykket, så tastaturbrukere ikke mister plassen."""
+    return render_template(
+        "start.html",
+        har_nokkel=har_nokkel(),
+        samtykke_feil=samtykke_feil,
+        bryter_fokus=bryter_fokus,
+    )
 
 
 def _vis_innlegging(soknad, feil, ki_feil=None):

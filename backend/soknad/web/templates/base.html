@@ -28,8 +28,12 @@
   <main class="innhold">
     {% block innhold %}{% endblock %}
   </main>
-  {#- Hjørneraden (corner-row): bare etter innlogging. KI-merknaden kommer til venstre i Epic 4. #}
+  {#- Hjørneraden (corner-row): bare etter innlogging. KI-merknaden til venstre bare når
+      testmodus er av (FR-35), «Logg ut» til høyre. ⓘ er bare pynt. #}
   <footer class="bunn{% if innlogget %} hjornerad{% endif %}">
+    {%- if innlogget and not testmodus %}
+    <p class="ki-merknad"><span aria-hidden="true">{{ tekster.KI_MERKNAD_IKON }}</span> {{ tekster.KI_MERKNAD }}</p>
+    {%- endif %}
     {%- if innlogget %}
     <form class="utlogging" method="post" action="{{ url_for('web.logg_ut') }}">
       <button class="sekundaerknapp liten" type="submit">{{ tekster.LOGG_UT_KNAPP }}</button>

@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from flask import Flask
 
 from soknad.adaptere.db import lag_database
-from soknad.adaptere.ki import TestKI
+from soknad.adaptere.ki import EkteKI, TestKI
 from soknad.adaptere.oktlager import Oktlager
 from soknad.innstillinger import MAKS_FORESPORSEL, STANDARD_MODELL
 
@@ -63,6 +63,10 @@ def create_app(test_config=None):
     app.extensions["oktlager"] = Oktlager()
     # Testmodus: de ferdige KI-svarene og testcasene, lest fra testdata/ én gang.
     app.extensions["test_ki"] = TestKI()
+    # Ekte KI (Claude) bare når API-nøkkelen finnes (ikke bare mellomrom). EkteKI kobler ikke
+    # til nettet før det første kallet. Uten nøkkel er testmodus alltid på (FR-32).
+    nokkel = (app.config.get("ANTHROPIC_API_KEY") or "").strip()
+    app.extensions["ekte_ki"] = EkteKI(nokkel, app.config["ANTHROPIC_MODEL"]) if nokkel else None
 
     from soknad.web import web
 

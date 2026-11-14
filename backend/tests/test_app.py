@@ -7,6 +7,7 @@ import pytest
 
 import soknad
 from soknad import create_app
+from soknad.adaptere.ki import EkteKI
 from soknad.innstillinger import MAKS_FORESPORSEL, STANDARD_MODELL
 
 # Leses når testfilen importeres, før autouse-fiksturen bytter den ut med tmp_path.
@@ -121,3 +122,21 @@ def test_nfr9_ingen_testfil_henter_fra_en_annen():
         for m in IMPORT_FRA_TESTFIL.finditer(fil.read_text(encoding="utf-8"))
     ]
     assert treff == []
+
+
+@pytest.mark.parametrize(
+    ("nokkel", "har_ekte_ki"),
+    [("", False), ("   ", False), ("sk-test", True), (" sk-test\n", True)],
+    ids=["tom", "mellomrom", "nokkel", "nokkel-med-mellomrom"],
+)
+def test_fr32_ekte_ki_bare_med_nokkel(nokkel, har_ekte_ki):
+    """FR-32/AD-3: create_app lager EkteKI bare når API-nøkkelen finnes (ikke bare mellomrom),
+    uten å koble til nettet. Nøkkelen sendes uten mellomrom rundt. Ellers er ekte_ki None."""
+    app = create_app({"TESTING": True, "ANTHROPIC_API_KEY": nokkel})
+    ekte_ki = app.extensions["ekte_ki"]
+    if har_ekte_ki:
+        assert isinstance(ekte_ki, EkteKI)
+        assert ekte_ki.klient.api_key == "sk-test"
+        assert ekte_ki.modell == app.config["ANTHROPIC_MODEL"]
+    else:
+        assert ekte_ki is None

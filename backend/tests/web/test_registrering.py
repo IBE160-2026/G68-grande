@@ -14,7 +14,16 @@ from soknad.kjerne.feil import FeilType
 from soknad.kjerne.okt import Innlogging
 from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID
-from tests.web.hjelpere import STIL, er_innlogget, felt, logg_inn, med_autofocus, okt_id, tagger_i
+from tests.web.hjelpere import (
+    STIL,
+    app_med_nokkel,
+    er_innlogget,
+    felt,
+    logg_inn,
+    med_autofocus,
+    okt_id,
+    tagger_i,
+)
 
 
 def registrer(client, epost="ola@x.no", passord="passord12", gjenta="passord12"):
@@ -364,3 +373,11 @@ def test_fr1_innlogget_som_sender_registrering_lagrer_ingenting(
     assert antall_brukere(app) == for_forsok
     assert okt_id(innlogget_client) == for_svar
     assert lager.hent(for_svar) == bruker_for
+
+
+def test_fr32_registrering_med_nokkel_gir_testmodus_av():
+    """FR-32: med API-nøkkel er testmodus av når den nye brukeren logges inn."""
+    app = app_med_nokkel()
+    client = app.test_client()
+    assert registrer(client).status_code == 302
+    assert app.extensions["oktlager"].hent(okt_id(client)).testmodus is False

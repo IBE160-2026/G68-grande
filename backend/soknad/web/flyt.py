@@ -5,10 +5,10 @@ from functools import wraps
 from flask import current_app, redirect, session, url_for
 from werkzeug.wrappers import Response
 
-from soknad.adaptere.ki import TestKI
+from soknad.adaptere.ki import KI
 from soknad.kjerne.okt import Soknad
 from soknad.kjerne.steg import Steg, kan_vises
-from soknad.web.innlogging import OKT_ID, oktlager
+from soknad.web.innlogging import OKT_ID, gjeldende_innlogging, oktlager
 
 # Siden for hvert steg.
 SIDE_FOR_STEG = {
@@ -20,10 +20,31 @@ SIDE_FOR_STEG = {
 }
 
 
-def ki() -> TestKI:
-    """KI-en for denne økten. Fram til Epic 4 er det alltid TestKI. Da velges utgaven ut fra
-    Innlogging.testmodus, og typen blir KI-grensesnittet."""
+def har_nokkel() -> bool:
+    """Sann når ANTHROPIC_API_KEY finnes (ikke bare mellomrom), altså når create_app har laget
+    EkteKI. Uten nøkkel er bryteren låst på, og testmodus kan ikke slås av (FR-32)."""
+    return current_app.extensions.get("ekte_ki") is not None
+
+
+def ki() -> KI:
+    """KI-en for denne økten (AD-3): EkteKI når testmodus er av, ellers TestKI. Rutene vet
+    ikke hvilken som brukes. Uten ekte KI (ingen nøkkel) brukes TestKI, som aldri sender noe
+    ut. Det skjer ikke i vanlig bruk, for uten nøkkel er testmodus alltid på."""
+    innlogging = gjeldende_innlogging()
+    ekte_ki = current_app.extensions.get("ekte_ki")
+    if innlogging is not None and not innlogging.testmodus and ekte_ki is not None:
+        return ekte_ki
     return current_app.extensions["test_ki"]
+
+
+def til_start_uten_samtykke(soknad: Soknad) -> Response | None:
+    """En sikring før hvert KI-kall (AD-12, FR-36): er testmodus av og samtykket mangler, gir
+    den en redirect til startsiden, og ingen tekst sendes til KI-en. Ellers None. I vanlig bruk
+    kommer ikke søknaden forbi startsiden uten samtykke når testmodus er av."""
+    innlogging = gjeldende_innlogging()
+    if innlogging is not None and not innlogging.testmodus and not soknad.samtykke:
+        return redirect(url_for("web.start"))
+    return None
 
 
 def gjeldende_soknad() -> Soknad:

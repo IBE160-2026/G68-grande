@@ -160,8 +160,13 @@ svg {
   padding-top: var(--space-3);
 }
 
+/* Skjemaet rundt bryteren (med API-nøkkel): bare en ramme rundt knappen */
+.bryter-skjema {
+  margin: 0;
+}
+
 /* Bryteren (testmode-toggle): en knapp med spor og knott, etiketten ved siden av.
- * Låst fram til Epic 4: bare sporet er 60 % synlig, etiketten har full farge. */
+ * Låst uten API-nøkkel: bare sporet er 60 % synlig, etiketten har full farge. */
 .bryter {
   display: inline-flex;
   align-items: center;
@@ -265,7 +270,7 @@ svg {
 }
 
 /* Teksten om testmodus: et hvitt kort i midten, over den store knappen (statusområde).
- * Uten tekst (testmodus av, Epic 4) tar området ingen plass. */
+ * Uten tekst (testmodus av) tar området ingen plass. */
 .testinfo {
   width: fit-content;
   max-width: 100%;
@@ -289,6 +294,111 @@ svg {
 .begynn {
   margin: var(--space-7) 0;
   text-align: center;
+}
+
+/* Samtykket (FR-36): et hvitt kort i midten, bare så bredt som innholdet, over den store
+ * knappen. Bare når testmodus er av. */
+.samtykke {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto var(--space-7);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--size-label);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow);
+}
+
+.samtykke-linje {
+  margin: 0 0 var(--space-2);
+  color: var(--text-muted);
+}
+
+/* Avkrysningsboksen og «i»-knappen på én linje. «i»-boksen legges under raden. */
+.samtykke-rad {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.avkrysning {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Avkrysningsboks (checkbox): 22 × 22 px uten fast høyde, ramme og hake i primary */
+.avkrysning input {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-content: center;
+  flex: none;
+  width: 22px;
+  min-height: 22px;
+  aspect-ratio: 1;
+  margin: 0;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Haken er bare pynt (tom alternativ tekst etter /). Avkrysningen leses som avkrysset. */
+.avkrysning input::before {
+  content: "✓";
+  content: "✓" / "";
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary-contrast);
+  visibility: hidden;
+}
+
+.avkrysning input:checked {
+  background: var(--primary);
+}
+
+.avkrysning input:checked::before {
+  visibility: visible;
+}
+
+/* Uten avkryssing: rød ramme (2 px error med 2 px avstand), og selve boksen får rød kant, så
+ * feilen synes også mens fokusringen ligger utenpå */
+.avkrysning input[aria-invalid="true"] {
+  border-color: var(--error);
+  outline: 2px solid var(--error);
+  outline-offset: 2px;
+}
+
+/* Boksen får fokus fra autofocus etter «Begynn å lage søknad» med musa. Nettleseren viser ikke
+ * ringen for :focus-visible da, så ringen vises for :focus (som «Lim inn tekst»). */
+.avkrysning input:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.samtykke .feiltekst {
+  margin: var(--space-2) 0 0;
+}
+
+/* «i»-boksen med de fire punktene: teksten venstrestilt */
+.samtykke .info-boks {
+  text-align: left;
+}
+
+.info-boks p {
+  margin: 0 0 var(--space-2);
+}
+
+.info-boks p:last-child {
+  margin-bottom: 0;
 }
 
 /* Stor knapp (button-hero): «Begynn å lage søknad», den største knappen på startsiden.
@@ -1231,7 +1341,7 @@ a.hovedknapp {
 }
 
 /* Hjørneraden (corner-row): festet nederst på skjermen på alle sider etter innlogging.
- * «Logg ut» til høyre, plass til KI-merknaden til venstre (Epic 4). */
+ * KI-merknaden til venstre når testmodus er av, «Logg ut» til høyre. */
 .hjornerad {
   position: sticky;
   bottom: 0;
@@ -1243,6 +1353,13 @@ a.hovedknapp {
   padding-block: var(--space-3);
   background: var(--background);
   border-top: 1px solid var(--border);
+}
+
+/* KI-merknaden (FR-35): liten, dempet tekst nede til venstre */
+.ki-merknad {
+  margin: 0;
+  font-size: var(--size-caption);
+  color: var(--text-muted);
 }
 
 .utlogging {
@@ -1270,6 +1387,50 @@ a.hovedknapp {
 
   .bryter .spor::after {
     background: CanvasText;
+  }
+
+  /* Av og på skilles også med farge, ikke bare med hvor knotten står: sporet er Canvas når
+   * bryteren er av og Highlight når den er på */
+  .bryter .spor,
+  .bryter .spor::after {
+    forced-color-adjust: none;
+  }
+
+  .bryter[aria-checked="false"] .spor {
+    background: Canvas;
+  }
+
+  .bryter[aria-checked="true"] .spor {
+    background: Highlight;
+  }
+
+  .bryter[aria-checked="true"] .spor::after {
+    background: HighlightText;
+  }
+
+  /* Avkrysningsboksen: rammen og haken i systemfarger. Den røde rammen ved feil blir en
+   * tykkere ramme i CanvasText, siden fargen forsvinner */
+  .avkrysning input {
+    border-color: CanvasText;
+  }
+
+  .avkrysning input:checked::before {
+    color: CanvasText;
+  }
+
+  .avkrysning input[aria-invalid="true"] {
+    border-width: 3px;
+    outline: 2px solid CanvasText;
+  }
+
+  /* Fokusringen står etter feilrammen, så den vinner når boksen har fokus */
+  .avkrysning input:focus {
+    outline: 3px solid Highlight;
+  }
+
+  /* KI-merknaden er dempet tekst. Den får vanlig tekstfarge, så den ikke blekes bort */
+  .ki-merknad {
+    color: CanvasText;
   }
 
   /* Prosentlinjen: SVG-farger tvinges ikke om, så sporet og fyllet får systemfarger */

@@ -12,7 +12,15 @@ from soknad.kjerne.okt import Innlogging
 from soknad.web import innlogging as innlogging_modul
 from soknad.web import ruter, tekster
 from soknad.web.innlogging import OKT_ID, logg_inn_bruker
-from tests.web.hjelpere import er_innlogget, felt, logg_inn, med_autofocus, okt_id, tagger_i
+from tests.web.hjelpere import (
+    app_med_nokkel,
+    er_innlogget,
+    felt,
+    logg_inn,
+    med_autofocus,
+    okt_id,
+    tagger_i,
+)
 
 # --- Siden ---
 
@@ -111,7 +119,7 @@ def test_fr3_ny_innlogging_rydder_den_gamle_okten_med_logg_ut_bruker(app, monkey
     with app.test_request_context():
         gammel = lager.ny(Innlogging(1, testmodus=True))
         session[OKT_ID] = gammel
-        logg_inn_bruker(2)
+        logg_inn_bruker(2, testmodus=True)
         ny = session[OKT_ID]
     assert kall == [True]
     assert lager.hent(gammel) is None
@@ -277,3 +285,12 @@ def test_fr3_innlogget_som_sender_innlogging_beholder_okten(app, innlogget_clien
     assert bruker_for.bruker_id == finn_bruker(
         app.config["DATABASE"], TESTBRUKER_EPOST, TESTBRUKER_PASSORD
     )
+
+
+def test_fr32_innlogging_med_nokkel_gir_testmodus_av():
+    """FR-32: med API-nøkkel er testmodus av etter innlogging. Uten nøkkel er den på (testene
+    over)."""
+    app = app_med_nokkel()
+    client = app.test_client()
+    assert logg_inn(client).status_code == 302
+    assert app.extensions["oktlager"].hent(okt_id(client)).testmodus is False
