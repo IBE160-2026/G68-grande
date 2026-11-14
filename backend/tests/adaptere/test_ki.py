@@ -1,4 +1,4 @@
-"""Tester for TestKI, som gir de håndlagde KI-svarene i testmodus (FR-28, FR-32, FR-34, AD-3).
+"""Tester for TestKI, som gir de ferdige KI-svarene i testmodus (FR-28, FR-32, FR-34, AD-3).
 Testene bruker de ekte testdataene i testdata/, eller en kopi i tmp_path når et svar skal
 ødelegges."""
 
@@ -67,7 +67,8 @@ def test_fr22_brev_oddetall_gir_brev_1_og_partall_brev_2(kopi):
 
 
 def test_fr28_brevfil_som_mangler_gir_kifeil_annet(kopi):
-    """FR-28: mangler brevfila (brev-2.json finnes ikke ennå), gir det KIFeil(annet)."""
+    """FR-28: mangler brevfila, gir det KIFeil(annet), både for brev-2.json og brev-1.json."""
+    (kopi / "case-1-utvikler" / "ki-svar" / "brev-2.json").unlink(missing_ok=True)
     ki = TestKI(kopi)
     with pytest.raises(KIFeil) as feil:
         ki.brev(_les("cv.txt"), _les("annonse.txt"), forslag=2)

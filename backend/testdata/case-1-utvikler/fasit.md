@@ -4,7 +4,7 @@ Alt i denne casen er fiktivt. Sara Eksempel, Testvik Utvikling AS, Ola Nordmann,
 
 Casen er en student i siste år på bachelor i IT som søker en stilling som junior utvikler. CV-en dekker de fleste kravene i annonsen, men har tydelige hull: SQL, Docker, Scrum og førerkort. Casen tester at gap-analysen finner hullene, og at nøkkelordtreffet gir nøyaktig prosenten under.
 
-KI-svarene i `ki-svar/` er håndlagde, slik at nettsiden kan kjøres i testmodus uten API-nøkkel. I Epic 4 byttes de ut med ekte KI-svar (FR-38), og da oppdateres tabellen «Nøkkelord» og prosenten sammen med `ki-svar/nokkelord.json`. Tabellen «Krav» og sjekklisten for brevet endres ikke. De ekte KI-svarene sjekkes mot dem (suksesskriterium 1).
+KI-svarene i `ki-svar/` er ekte svar fra Claude, laget med `backend/scripts/lag_testsvar.py` (FR-38), slik at nettsiden kan kjøres i testmodus uten API-nøkkel. Når svarene lages på nytt, oppdateres tabellen «Nøkkelord» og prosenten sammen med `ki-svar/nokkelord.json`. Tabellen «Krav», listen «Viktige nøkkelord» og sjekklisten for brevet endres ikke. KI-svarene sjekkes mot dem (suksesskriterium 1, 11 og 14).
 
 ## Krav
 
@@ -21,23 +21,48 @@ KI-svarene i `ki-svar/` er håndlagde, slik at nettsiden kan kjøres i testmodus
 | Har førerkort klasse B | Nei | Førerkort står ikke i CV-en. |
 | Snakker og skriver godt norsk og engelsk | Ja | Norsk er morsmål, og engelsk er flytende muntlig og skriftlig. |
 
+## Viktige nøkkelord
+
+Nøkkelordlisten fra KI-en skal ha alle disse (suksesskriterium 14). Et viktig nøkkelord er med når det står som eget ord i et av nøkkelordene i listen, så «førerkort klasse B» har med «førerkort». Listen er de åtte ferdighetene, verktøyene og sertifikatet som annonsen krever, valgt av Kristine 14. november 2026. Flask og Scrum står med «gjerne» i annonsen og er derfor ikke viktige. Graden (bachelor i informatikk eller IT) og språkene (norsk og engelsk) er krav, men ikke med i listen.
+
+| Viktig nøkkelord |
+| --- |
+| Python |
+| HTML |
+| CSS |
+| SQL |
+| Git |
+| Linux |
+| Docker |
+| førerkort |
+
 ## Nøkkelord
+
+Tabellen har nøkkelordene fra `ki-svar/nokkelord.json`, i samme rekkefølge. «Står i CV-en» betyr at nøkkelordet står ordrett i CV-en, slik telleregelen søker. «bachelorgrad» er derfor Nei, selv om CV-en har «bachelor».
 
 | Nøkkelord | Står i CV-en |
 | --- | --- |
+| bachelorgrad | Nei |
+| informatikk | Nei |
 | Python | Ja |
 | Flask | Ja |
 | HTML | Ja |
 | CSS | Ja |
 | SQL | Nei |
+| relasjonsdatabaser | Nei |
 | Git | Ja |
+| versjonskontroll | Ja |
 | Linux | Ja |
 | Docker | Nei |
+| smidig utvikling | Nei |
 | Scrum | Nei |
-| førerkort | Nei |
+| førerkort klasse B | Nei |
+| norsk | Ja |
 | engelsk | Ja |
+| tester | Nei |
+| webtjenester | Nei |
 
-7 av 11 = 64 %
+9 av 19 = 47 %
 
 ## Sjekkliste for brevet
 

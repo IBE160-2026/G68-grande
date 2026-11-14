@@ -1,6 +1,6 @@
 """Tester for de fiktive testdataene og fasiten i testdata/case-1-utvikler/ (NFR-3, FR-17,
-FR-38). Testene sjekker at filene henger sammen, også når de håndlagde KI-svarene byttes ut
-med ekte KI-svar i Epic 4. Ordlyden i gap.json sjekkes derfor ikke mot fasiten."""
+FR-38). Testene sjekker at filene henger sammen, også når KI-svarene lages på nytt med
+scripts/lag_testsvar.py. Ordlyden i gap.json sjekkes derfor ikke mot fasiten."""
 
 import json
 import re
@@ -114,8 +114,30 @@ def test_nfr3_kravtabellen_i_fasiten_har_ja_og_nei():
     assert "Nei" in dekket
 
 
+# De viktige nøkkelordene i fasiten (suksesskriterium 14), bestemt av Kristine 14. november 2026.
+VIKTIGE_NOKKELORD = ["Python", "HTML", "CSS", "SQL", "Git", "Linux", "Docker", "førerkort"]
+
+
+def test_fr15_fasiten_markerer_de_viktige_nokkelordene():
+    """FR-15 (suksesskriterium 14): tabellen «Viktige nøkkelord» i fasiten har akkurat de
+    åtte som er bestemt, og hvert av dem står i annonsen."""
+    viktige = [rad[0] for rad in _tabell(_les("fasit.md"), "Viktige nøkkelord")]
+    assert viktige == VIKTIGE_NOKKELORD
+    annonse = _les("annonse.txt")
+    assert [ord_ for ord_ in viktige if not _er_eget_ord(ord_, annonse)] == []
+
+
+def test_fr15_nokkelordlisten_har_alle_de_viktige():
+    """FR-15 (suksesskriterium 14): hvert viktige nøkkelord står som eget ord i minst ett av
+    nøkkelordene i nokkelord.json, så «førerkort klasse B» har med «førerkort»."""
+    nokkelord = _les_json("ki-svar/nokkelord.json")["nokkelord"]
+    viktige = [rad[0] for rad in _tabell(_les("fasit.md"), "Viktige nøkkelord")]
+    mangler = [v for v in viktige if not any(_er_eget_ord(v, ord_) for ord_ in nokkelord)]
+    assert mangler == []
+
+
 def test_fr38_ki_svarene_har_riktig_form():
-    """FR-38 (AD-4): de håndlagde KI-svarene er gyldig JSON med akkurat feltene fra AD-4,
+    """FR-38 (AD-4): KI-svarene er gyldig JSON med akkurat feltene fra AD-4,
     nøkkelordlisten er ikke tom, og dekker og mangler er ikke begge tomme."""
     nokkelord = _les_json("ki-svar/nokkelord.json")
     assert set(nokkelord) == {"nokkelord", "arbeidsgiver"}
@@ -173,6 +195,7 @@ def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
     ingen avsnitt bruker frasene fra addendum (uten hensyn til store og små bokstaver)."""
     filer = sorted(CASE.parent.glob("case-*/ki-svar/brev-*.json"))
     assert CASE / "ki-svar" / "brev-1.json" in filer
+    assert CASE / "ki-svar" / "brev-2.json" in filer
     for fil in filer:
         brev = kontroller("brev", fil.read_text(encoding="utf-8"))
         assert len(brev["avsnitt"]) >= 2, fil
@@ -186,9 +209,10 @@ def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
 SJEKKLISTE_ORD = ("sql", "database", "docker", "scrum", "smidig", "førerkort")
 
 
-def test_fr37_testbrevet_har_ingen_pastander_fra_sjekklisten():
-    """FR-37: brev-1.json nevner ingenting fra sjekklisten i fasit.md (SQL, databaser, Docker,
-    Scrum, smidig utvikling, førerkort)."""
-    brev = kontroller("brev", _les("ki-svar/brev-1.json"))
-    tekst = " ".join(brev["avsnitt"]).casefold()
-    assert [ord_ for ord_ in SJEKKLISTE_ORD if ord_ in tekst] == []
+def test_fr37_testbrevene_har_ingen_pastander_fra_sjekklisten():
+    """FR-37: brev-1.json og brev-2.json nevner ingenting fra sjekklisten i fasit.md (SQL,
+    databaser, Docker, Scrum, smidig utvikling, førerkort)."""
+    for navn in ("ki-svar/brev-1.json", "ki-svar/brev-2.json"):
+        brev = kontroller("brev", _les(navn))
+        tekst = " ".join(brev["avsnitt"]).casefold()
+        assert [ord_ for ord_ in SJEKKLISTE_ORD if ord_ in tekst] == [], navn

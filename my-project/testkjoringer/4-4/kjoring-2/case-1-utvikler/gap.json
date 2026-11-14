@@ -1,0 +1,16 @@
+{
+  "dekker": [
+    "Har eller fullfører en bachelorgrad i informatikk eller IT",
+    "Har erfaring med Python, gjerne med rammeverket Flask",
+    "Kan HTML og CSS",
+    "Bruker Git til versjonskontroll",
+    "Har jobbet med Linux",
+    "Snakker og skriver godt norsk og engelsk"
+  ],
+  "mangler": [
+    "Har erfaring med SQL og relasjonsdatabaser",
+    "Har erfaring med Docker",
+    "Kjenner smidig utvikling, gjerne Scrum",
+    "Har førerkort klasse B"
+  ]
+}
