@@ -1,0 +1,33 @@
+Sara Eksempel
+E-post: sara.eksempel@example.com
+Telefon: 876 54 321
+Adresse: Eksempelveien 1, 1234 Eksempelby
+
+Om meg
+Jeg er student i tredje år på bachelor i IT og blir ferdig våren 2027. Jeg liker å lage nettsider som er enkle å bruke, og jeg lærer nye verktøy raskt. Nå ser jeg etter min første jobb som utvikler.
+
+Utdanning
+2024–2027: Bachelor i IT, Eksempelby høgskole (fullføres våren 2027)
+Emner: programmering, webutvikling, operativsystemer og datanettverk
+2021–2024: Studiespesialisering, Eksempelby videregående skole
+
+Ferdigheter
+Programmering: Python
+Web: HTML og CSS, Flask
+Verktøy: Git og GitHub, Visual Studio Code
+Operativsystemer: Linux og Windows
+
+Prosjekter
+Bachelorprosjekt (2026–2027): en nettside der studenter kan booke grupperom. Laget i Python med Flask, HTML og CSS. Vi var tre på gruppa og brukte Git til versjonskontroll. Dataene lagres i JSON-filer.
+Emneprosjekt (2025): et lite program i Python som henter værdata og viser dem som grafer.
+
+Arbeidserfaring
+2022–i dag: Butikkmedarbeider (deltid), en dagligvarebutikk i Eksempelby. Kundeservice, kasse og varepåfylling.
+Sommeren 2025: IT-assistent på høgskolen. Hjalp studenter med pålogging og satte opp PC-er med Linux.
+
+Språk
+Norsk: morsmål
+Engelsk: flytende, muntlig og skriftlig
+
+Referanser
+Oppgis ved forespørsel.

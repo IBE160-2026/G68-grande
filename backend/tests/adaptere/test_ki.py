@@ -7,7 +7,8 @@ import shutil
 
 import pytest
 
-from soknad.adaptere.ki import TESTDATA_MAPPE, TestKI, les_testcaser
+import soknad
+from soknad.adaptere.ki import TESTDATA_MAPPE, TestdataFeil, TestKI, les_testcaser
 from soknad.kjerne.feil import KIFeil, KIFeilType
 
 CASE = TESTDATA_MAPPE / "case-1-utvikler"
@@ -37,7 +38,68 @@ def test_fr34_testcasene_leses_fra_testdata():
     assert navn == sorted(navn)
 
 
-def test_fr32_testki_gir_de_handlagde_svarene():
+def _case(mappe, navn, cv, annonse):
+    """En case-mappe med cv.txt og annonse.txt."""
+    (mappe / navn).mkdir(parents=True)
+    (mappe / navn / "cv.txt").write_text(cv, encoding="utf-8")
+    (mappe / navn / "annonse.txt").write_text(annonse, encoding="utf-8")
+
+
+def test_fr34_testdata_som_mangler_gir_tydelig_feil(tmp_path):
+    """FR-34 (story 4.5): mangler testdata/, eller har den ingen case-mapper, gir
+    les_testcaser TestdataFeil som nevner mappen."""
+    for mappe in (tmp_path / "finnes-ikke", tmp_path):
+        with pytest.raises(TestdataFeil, match="Fant ingen testcaser") as feil:
+            les_testcaser(mappe)
+        assert str(mappe) in str(feil.value)
+
+
+@pytest.mark.parametrize("fil", ["cv.txt", "annonse.txt"])
+def test_fr34_fil_som_mangler_gir_tydelig_feil(tmp_path, fil):
+    """FR-34 (story 4.5): mangler cv.txt eller annonse.txt i en case-mappe, nevner feilen
+    caset og fila."""
+    _case(tmp_path, "case-1-a", "CV a", "Annonse a")
+    (tmp_path / "case-1-a" / fil).unlink()
+    with pytest.raises(TestdataFeil, match=f"case-1-a mangler fila {fil}"):
+        les_testcaser(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("cv_b", "annonse_b", "navn"),
+    [("  cv A\n", "Annonse b", "CV"), ("CV b", "ANNONSE  a", "annonse")],
+)
+def test_fr34_like_caser_gir_tydelig_feil(tmp_path, cv_b, annonse_b, navn):
+    """FR-34/AD-10 (story 4.5): to caser med samme vaskede CV eller annonse gir TestdataFeil
+    som nevner begge casene. Da kan nokkelord (annonsen) og gap (CV-en) aldri finne hvert sitt
+    case."""
+    _case(tmp_path, "case-1-a", "CV a", "Annonse a")
+    _case(tmp_path, "case-2-b", cv_b, annonse_b)
+    with pytest.raises(TestdataFeil, match=f"case-1-a og case-2-b har samme {navn}"):
+        les_testcaser(tmp_path)
+
+
+def test_fr34_appen_starter_ikke_med_feil_i_testdata(monkeypatch, tmp_path):
+    """FR-34 (story 4.5): create_app stopper med TestdataFeil når testdataene mangler."""
+    monkeypatch.setattr(soknad, "TestKI", lambda: TestKI(tmp_path / "finnes-ikke"))
+    with pytest.raises(TestdataFeil):
+        soknad.create_app({"TESTING": True, "DATABASE": str(tmp_path / "brukere.db")})
+
+
+def test_fr34_testki_gir_svarene_fra_hvert_case():
+    """FR-34/FR-38 (story 4.5): med to caser gir nokkelord, gap og brev svarene fra caset CV-en
+    og annonsen hører til."""
+    ki = TestKI()
+    for case in sorted(mappe for mappe in TESTDATA_MAPPE.glob("case-*") if mappe.is_dir()):
+        cv = (case / "cv.txt").read_text(encoding="utf-8")
+        annonse = (case / "annonse.txt").read_text(encoding="utf-8")
+        svar = case / "ki-svar"
+        assert ki.nokkelord(annonse) == json.loads((svar / "nokkelord.json").read_text("utf-8"))
+        assert ki.gap(cv, annonse) == json.loads((svar / "gap.json").read_text("utf-8"))
+        assert ki.brev(cv, annonse, 1) == json.loads((svar / "brev-1.json").read_text("utf-8"))
+        assert ki.brev(cv, annonse, 2) == json.loads((svar / "brev-2.json").read_text("utf-8"))
+
+
+def test_fr32_testki_gir_de_ferdige_svarene():
     """FR-32: TestKI gir nøyaktig svarene i ki-svar/, uten API-nøkkel."""
     ki = TestKI()
     cv, annonse = _les("cv.txt"), _les("annonse.txt")

@@ -61,8 +61,9 @@ Tabellen har nøkkelordene fra `ki-svar/nokkelord.json`, i samme rekkefølge. «
 | norsk | Ja |
 | engelsk | Ja |
 | tester | Nei |
+| webtjenester | Nei |
 
-10 av 19 = 53 %
+10 av 20 = 50 %
 
 ## Sjekkliste for brevet
 

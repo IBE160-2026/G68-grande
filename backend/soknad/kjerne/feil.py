@@ -15,6 +15,8 @@ class FeilType(StrEnum):
     FEIL_INNLOGGING = "feil_innlogging"
     IKKE_TESTDATA = "ikke_testdata"
     FOR_LANG = "for_lang"
+    # CV og annonse er begge testdata, men fra ulike testcaser (story 4.5).
+    ANNEN_CASE = "annen_case"
 
 
 @dataclass(frozen=True)

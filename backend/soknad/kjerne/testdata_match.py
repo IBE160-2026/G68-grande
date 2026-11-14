@@ -37,7 +37,8 @@ def case_for_annonse(annonse: str, caser: list[Testcase]) -> str | None:
 def finn_case(cv: str, annonse: str, caser: list[Testcase]) -> tuple[str | None, list[InndataFeil]]:
     """CV-en avgjør testcaset. Gir (navnet på caset, []) når CV og annonse hører til samme
     case, ellers (None, feilene). Alle feilene kommer samtidig, cv først. Et tomt felt får
-    ingen ikke_testdata, fordi tom sjekkes først (AD-9)."""
+    ingen ikke_testdata, fordi tom sjekkes først (AD-9). Er annonsen annonsen i et annet case
+    enn CV-en, får den annen_case i stedet for ikke_testdata (story 4.5)."""
     feil = []
     cv_tom = not cv.strip()
     annonse_tom = not annonse.strip()
@@ -52,7 +53,9 @@ def finn_case(cv: str, annonse: str, caser: list[Testcase]) -> tuple[str | None,
         if not annonse_tom and not any(c.annonse == vasket_annonse for c in caser):
             feil.append(InndataFeil("annonse", FeilType.IKKE_TESTDATA))
     elif not annonse_tom and case.annonse != vasket_annonse:
-        feil.append(InndataFeil("annonse", FeilType.IKKE_TESTDATA))
+        annen_case = any(c.annonse == vasket_annonse for c in caser)
+        feiltype = FeilType.ANNEN_CASE if annen_case else FeilType.IKKE_TESTDATA
+        feil.append(InndataFeil("annonse", feiltype))
 
     if feil or cv_tom or annonse_tom:
         return None, feil

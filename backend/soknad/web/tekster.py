@@ -274,6 +274,11 @@ FEILTEKSTER = {
     ("annonse", FeilType.IKKE_TESTDATA): (
         "Stillingsannonse: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
+    # CV og annonse fra ulike testcaser. Teksten er bestemt av Kristine 14. november 2026.
+    ("annonse", FeilType.ANNEN_CASE): (
+        "Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i "
+        "backend/testdata/."
+    ),
     ("cv", FeilType.FOR_LANG): (
         f"CV: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
     ),
