@@ -1,4 +1,4 @@
-"""Test av hele flyten med EkteKI og kontroller sammen (FR-32, FR-36, NFR-11, FR-28, AD-3,
+"""Tester av hele flyten med EkteKI og kontroller sammen (FR-32, FR-36, NFR-11, FR-28, AD-3,
 AD-13). EkteKI har en ekte Anthropic-klient med httpx2.MockTransport (tests/falsk_api.py),
 så rutene, EkteKI, SDK-et og kontroller testes samlet. Ingen test går mot nettet, og ingen
 bruker en ekte API-nøkkel."""
@@ -29,26 +29,37 @@ SVAR = {
 }
 
 
-def test_fr32_hele_flyten_med_ekte_ki_gjennom_sdk_et():
-    """FR-32/FR-36/NFR-11/FR-28/AD-3: med nøkkel, testmodus av og samtykke går «Sjekk CV-en
-    min» og «Lag søknadsbrevet mitt» gjennom EkteKI, SDK-et og kontroller. Resultatsiden viser
-    nøkkelordene og gap-svaret, brevsiden viser avsnittene, og tre forespørsler er sendt
-    (nokkelord, gap og brev). TestKI kalles ikke."""
+def app_med_falsk_api(svar, sendt):
+    """(app, klient): innlogget i en app med nøkkel, der EkteKI har den falske transporten med
+    svar. Testmodus er av."""
     app = app_med_nokkel()
-    sendt = []
     app.extensions["ekte_ki"] = EkteKI(
-        "sk-test", app.config["ANTHROPIC_MODEL"], klient=klient_med_svar(SVAR, sendt)
+        "sk-test", app.config["ANTHROPIC_MODEL"], klient=klient_med_svar(svar, sendt)
     )
-    test_kalt = []
-    app.extensions["test_ki"] = TellendeKI(app.extensions["test_ki"], kalt=test_kalt)
     client = app.test_client()
     assert logg_inn(client).status_code == 302
+    return app, client
 
+
+def til_resultatsiden(client):
+    """Samtykke, Full generering og «Sjekk CV-en min» med testdataene fra case 1."""
     client.get("/")
     assert client.post("/", data={"samtykke": "ja"}).location == "/modus"
     assert client.post("/modus", data={"modus": "full_generering"}).location == "/innlegging"
     svar = client.post("/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"})
     assert svar.location == "/resultat"
+
+
+def test_fr32_hele_flyten_med_ekte_ki_gjennom_sdk_et():
+    """FR-32/FR-36/NFR-11/FR-28/AD-3: med nøkkel, testmodus av og samtykke går «Sjekk CV-en
+    min» og «Lag søknadsbrevet mitt» gjennom EkteKI, SDK-et og kontroller. Resultatsiden viser
+    nøkkelordene og gap-svaret, brevsiden viser avsnittene, og tre forespørsler er sendt
+    (nokkelord, gap og brev). TestKI kalles ikke."""
+    sendt = []
+    app, client = app_med_falsk_api(SVAR, sendt)
+    test_kalt = []
+    app.extensions["test_ki"] = TellendeKI(app.extensions["test_ki"], kalt=test_kalt)
+    til_resultatsiden(client)
 
     for ord_ in NOKKELORD:
         assert ord_ not in CV + ANNONSE + str(SVAR["gap"]), ord_
@@ -72,3 +83,20 @@ def test_fr32_hele_flyten_med_ekte_ki_gjennom_sdk_et():
         app.config["ANTHROPIC_MODEL"]
     }
     assert test_kalt == []
+
+
+def test_fr28_enslig_surrogat_i_gap_svaret_gir_resultatsiden():
+    """FR-28: et gap-svar fra KI-en med en enslig surrogat (\\ud800 i JSON-en) gir resultatsiden
+    (200) uten surrogaten, ikke en feilside. Et punkt med bare surrogaten vises ikke."""
+    svar = {
+        **SVAR,
+        "gap": {"dekker": ["Dekket\ud800 fra falsk API", "\ud800"], "mangler": ["Mangler"]},
+    }
+    _, client = app_med_falsk_api(svar, [])
+    til_resultatsiden(client)
+
+    side = client.get("/resultat")
+    assert side.status_code == 200
+    resultat = main(html_av(side))
+    assert "Dekket fra falsk API" in resultat
+    assert re.search(r"</span>\s*</li>", resultat) is None

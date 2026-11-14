@@ -56,16 +56,27 @@ def _uten_tomme(liste: list[str]) -> list[str]:
     return [element for element in liste if element.strip()]
 
 
+def _uten_surrogater(liste: list[str]) -> list[str]:
+    """Listen der enslige surrogater (Cs) er fjernet fra hvert punkt. Ellers gir siden en
+    feilside når punktet skal vises. Et punkt med bare surrogater blir tomt."""
+    return ["".join(t for t in element if unicodedata.category(t) != "Cs") for element in liste]
+
+
 def _rens(oppgave: str, svar: dict) -> dict:
-    """Svaret uten tomme punkter. Tom arbeidsgiver blir None, og brevteksten renses."""
+    """Svaret uten tomme punkter og uten enslige surrogater i listene. Tom arbeidsgiver blir
+    None, og brevteksten renses. Ellers renses ikke arbeidsgiver før story 7.5."""
     if oppgave == "nokkelord":
         arbeidsgiver = svar["arbeidsgiver"]
         if arbeidsgiver is not None and not arbeidsgiver.strip():
             arbeidsgiver = None
-        return {"nokkelord": _uten_tomme(svar["nokkelord"]), "arbeidsgiver": arbeidsgiver}
+        nokkelord = _uten_tomme(_uten_surrogater(svar["nokkelord"]))
+        return {"nokkelord": nokkelord, "arbeidsgiver": arbeidsgiver}
     if oppgave == "brev":
         return {"avsnitt": _uten_tomme([_rens_avsnitt(avsnitt) for avsnitt in svar["avsnitt"]])}
-    return {"dekker": _uten_tomme(svar["dekker"]), "mangler": _uten_tomme(svar["mangler"])}
+    return {
+        "dekker": _uten_tomme(_uten_surrogater(svar["dekker"])),
+        "mangler": _uten_tomme(_uten_surrogater(svar["mangler"])),
+    }
 
 
 def _bare_tomme(liste: list[str]) -> bool:
@@ -89,6 +100,8 @@ def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -
     Før tom-sjekken renses svaret (FR-28, FR-30), både for TestKI og EkteKI:
     - Punkter som er tomme eller bare har mellomrom, fjernes i nokkelord, dekker, mangler og
       avsnitt, så siden ikke viser tomme punkter. En liste med bare slike punkter er tom.
+    - Enslige surrogater fjernes fra punktene i nokkelord, dekker og mangler, før de tomme
+      punktene fjernes. Et punkt med bare surrogater blir altså borte.
     - Tom arbeidsgiver (eller bare mellomrom) blir None.
     - I hvert avsnitt i brevet fjernes kontrolltegn og andre tegn Word ikke tåler, og alt
       mellomrom (også linjeskift og tab) blir ett mellomrom, så Word-fila blir lik siden. Et

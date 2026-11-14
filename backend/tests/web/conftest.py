@@ -7,7 +7,19 @@ from soknad.adaptere import fil_ut
 from soknad.kjerne.feil import FilFeil
 from soknad.kjerne.okt import Modus, Soknad
 from soknad.kjerne.steg import Steg
-from tests.web.hjelpere import ANNONSE, CV, sett_soknad
+from tests.web.hjelpere import ANNONSE, CV, TellendeKI, app_med_nokkel, logg_inn, sett_soknad
+
+
+@pytest.fixture
+def med_nokkel():
+    """(app, klient, kalt): innlogget i en app med API-nøkkel, så testmodus er av (FR-32). EkteKI
+    er byttet ut med TellendeKI, og kalt viser hvilke oppgaver den har fått."""
+    app = app_med_nokkel()
+    kalt = []
+    app.extensions["ekte_ki"] = TellendeKI(app.extensions["test_ki"], kalt=kalt)
+    client = app.test_client()
+    assert logg_inn(client).status_code == 302
+    return app, client, kalt
 
 
 @pytest.fixture

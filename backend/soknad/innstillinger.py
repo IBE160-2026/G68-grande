@@ -26,10 +26,12 @@ MAKS_NOKKELORD = 30
 MAKS_TEGN = 15_000
 MAKS_KI_KALL = 10
 
-# KI-kallet til Claude (AD-13). Tidsgrensen er en startverdi og justeres etter målingen i
-# story 4.3. Den gjelder hver del av kallet (tilkobling, lesing, skriving), ikke hele kallet.
-# Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s, eller det API-et ber om med
-# retry-after) kan et kall ta lenger enn 2 x 90 sekunder. Den faktiske tiden måles i 4.3.
+# KI-kallet til Claude (AD-13). Tidsgrensen gjelder hver del av kallet (tilkobling, lesing,
+# skriving), ikke hele kallet. Målt med testdataene i 4.3.1, 4.4 og 4.5: nøkkelord og gap tok
+# 2–5 s hver, og et brev 16–47 s (4.4 og 4.5 i my-project/testplan.md, 4.3.1 i sesjonsloggen
+# .logs/kristine/968-…). 90 s er beholdt med vilje, fordi det lengste brevet tok 47 s. Målingen
+# med lange tekster kommer senere. Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s,
+# eller det API-et ber om med retry-after) kan et kall ta lenger enn 2 x 90 s.
 KI_TIDSGRENSE = 90  # sekunder
 KI_NYE_FORSOK = 1
 KI_MAKS_TOKENS = 16000

@@ -354,12 +354,6 @@ def test_nfr11_create_app_gir_loggeren_soknad_en_handler(app):
     assert isinstance(TERMINAL_LOGG, logging.StreamHandler)
 
 
-def test_nfr11_nettsiden_bruker_fortsatt_testki(app):
-    """NFR-11: fram til story 4.3 bruker nettsiden TestKI, også uten API-nøkkel."""
-    assert isinstance(app.extensions["test_ki"], TestKI)
-    assert app.config["ANTHROPIC_API_KEY"] == ""
-
-
 def test_fr15_svar_med_31_nokkelord_gir_ubrukelig_svar():
     """FR-15/FR-28: et svar fra Claude med 31 nøkkelord gir KIFeil(ubrukelig_svar)."""
     svar = {"nokkelord": [f"ord{n}" for n in range(31)], "arbeidsgiver": None}

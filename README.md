@@ -103,6 +103,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **Grenser mot høy kostnad:** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver. Med ekte KI kan hver søknad bruke høyst 10 KI-kall (en analyse er 2 kall, et brev 1, også «Prøv på nytt»). Deretter må du begynne på en ny søknad fra startsiden. I testmodus telles ingen kall. Grensen er en myk sperre mot mange trykk per søknad, og taket på 250 kr i Claude Console er den siste sperren. Grensene står i `backend/soknad/innstillinger.py`.
 - **Et svar fra Claude om å vente kan gjøre at det tar lenge:** ber API-et om å vente før neste forsøk (`retry-after`), venter nettsiden så lenge før det ene nye forsøket, uten noen øvre grense. Det gjelder alle KI-kallene: «Sjekk CV-en min», «Lag søknadsbrevet mitt» og «Prøv på nytt».
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
+- **Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.
 - **Brevet skrives bare på norsk** i versjon 1.
 
 ## Mappestruktur
@@ -146,6 +147,6 @@ Lagene er beskrevet i [arkitekturen](my-project/5-arkitektur/arkitektur.md): `we
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
 - [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant
 - [Mine valg og KI-feil i epics og stories](my-project/6-epics-og-stories/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil sjekkene fant
-- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og retrospektivene for [epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md), [epic 2](my-project/9-koding/epic-2-retro-2026-11-10.md) og [epic 3](my-project/9-koding/epic-3-retro-2026-11-12.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
+- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og retrospektivene for [epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md), [epic 2](my-project/9-koding/epic-2-retro-2026-11-10.md), [epic 3](my-project/9-koding/epic-3-retro-2026-11-12.md) og [epic 4](my-project/9-koding/epic-4-retro-2026-11-14.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
 - [Sesjonslogger](.logs/kristine/README.md): hva som ble gjort i hver arbeidsøkt, med [åpne punkter](.logs/kristine/issues.md)
 - [TO DO-liste](my-project/todo.md): hva som er gjort, og hva som gjenstår

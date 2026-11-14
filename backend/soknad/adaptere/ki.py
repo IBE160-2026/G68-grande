@@ -190,8 +190,8 @@ class EkteKI:
         self.modell = modell
         # Begge verdiene settes uttrykkelig. Tidsgrensen gjelder hver del av kallet (tilkobling,
         # lesing, skriving) og ikke hele kallet, og før det nye forsøket venter biblioteket litt
-        # (opptil ca. 8 s, eller så lenge API-et ber om med retry-after). Hvor lang tid et kall
-        # faktisk tar, måles i story 4.3.
+        # (opptil ca. 8 s, eller så lenge API-et ber om med retry-after), så et kall kan ta lenger
+        # enn 2 x 90 s. Hva som er målt, står ved KI_TIDSGRENSE i innstillinger.py.
         if klient is None:
             klient = Anthropic(api_key=api_nokkel, timeout=KI_TIDSGRENSE, max_retries=KI_NYE_FORSOK)
         self.klient = klient
