@@ -80,4 +80,4 @@ Kristine prøver om KI-en forstår teksten fra Canva-CV-en sin riktig (hva som e
 
 | Dato | Hva KI-en forsto riktig | Hva den misforsto | Resultat |
 | --- | --- | --- | --- |
-| *(Kristine fyller inn)* | | | |
+| 14. november 2026 | Teksten ble kopiert fra Canva-PDF-en (`Ctrl+A`, `Ctrl+C`) og limt inn, sammen med annonsen fra case 1. CV-en har bare fiktive opplysninger (Ola Nordmann, example.com). KI-en skilte riktig mellom utdanning (bachelor i datateknologi, så master i informatikk, med skolene), jobb (programvareutvikler, så senior programvareutvikler, med firmaene), oppsummering (profilteksten ble brukt i innledningen) og kurs og ferdigheter (Udemy-kurset, JavaScript, React og Node.js). Alt brevet påstår, står i CV-en (sjekket av Kristine). Brevet følger reglene fra plan B: liten j i overskriften, hilsen og navn, og bare krav CV-en dekker | Ingenting misforstått. Kristine merket ikke at teksten ble rotete da den ble limt inn, eller at noe havnet feil på resultatsiden. Én setning er klønete: «Norsk og engelsk er de to språkene jeg oppgir i CV-en min» | Bestått |
