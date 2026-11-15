@@ -2,7 +2,7 @@
 title: 'Rettinger etter retro 5, runde B: langt eget brev og bedre flyt i Korrektur'
 type: 'feature'
 created: '2026-11-15'
-status: 'in-review'
+status: 'done'
 baseline_commit: '55b737e60dccac2fcad09b2cb5397ac77ae0ee39'
 route: 'dispatch'
 review_loop_iteration: 0
