@@ -154,7 +154,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] Etter story 5.3: bedre flyt i brevet fra Korrektur, med egen branch og PR (`bmad-build`). Brevet leser som setninger på rad uten bindeord (sett av Kristine i nettleseren 15. november). Prompten får lov til å bruke bindeord og slå sammen korte setninger i samme avsnitt, men beholder innhold og rekkefølge. Tre nye kjøringer med ekte KI (ca. 5 kr, Kristine godkjenner først) og ny sjekk mot «Sjekkliste for Korrektur» (kriterium 12)
 - [x] Retrospektiv for epic 5 (`bmad-retrospective`), valgfri. Alle storyene i epic 5 er ferdige (15. november) (ferdig 15. november: godkjent med åpne punkter, 7 punkter. Se [`9-koding/epic-5-retro-2026-11-15.md`](9-koding/epic-5-retro-2026-11-15.md))
 - [ ] Etter retrospektiven for epic 5, før epic 6: rettinger i tre runder (bestemt 15. november):
-  - [ ] Runde A: «Du skrev» sjekkes ordrett, og testen av Korrektur-svarene sjekker sjekklisten (branch `retro-5-rettinger`. Kodet og gjennomgått 15. november: 1038 tester. Gjenstår: PR og fletting)
+  - [x] Runde A: «Du skrev» sjekkes ordrett, og testen av Korrektur-svarene sjekker sjekklisten (ferdig 15. november: [PR #38](https://github.com/IBE160-2026/G68-grande/pull/38) flettet, CI grønn på Linux og Windows, 1038 tester)
   - [ ] Runde B: en måling med et langt eget brev og bedre flyt i brevet (Kristine godkjenner kostnaden), og prompten sier at `gammel` kopieres nøyaktig
   - [ ] Runde C: beslutningene fra epic 5 i `epics.md`, UX-en, epic-konteksten og README, og de fire flettede branchene slettes
 - [ ] Epic 7: med lange tekster koster en søknad med «Nytt forslag» 3,82 kr, over målet på 3 kr. Bestemme om det er greit
