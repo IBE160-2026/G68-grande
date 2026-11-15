@@ -13,7 +13,7 @@ Kjøringene gjøres med skriptet `backend/scripts/lag_testsvar.py` (se README). 
 | 1 | Gap-analysen finner alle krav som mangler, og ingen dekkede krav står under «mangler» | `gap.json` mot tabellen «Krav» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4). Bestått for case 2 i begge rundene, og for case 1 på nytt i runde 2 (story 4.5). Bestått i begge rundene for case 1 og 2 etter de nye reglene i brevet (15. november) |
 | 3 | Samme CV med to annonser gir brev med krav som er spesifikke for hver annonse | Brevene for CV-en i case 1 mot annonsen i case 1 og case 2 | Bestått i begge rundene: brevene nevner krav som er spesifikke for hver annonse. Brevene i runde 1 hadde to påstander som ikke står i CV-en (et brudd på kriterium 11), så alt ble kjørt på nytt etter plan B, og runde 2 besto også kriterium 11 (story 4.5). Bestått igjen i begge rundene etter de nye reglene i brevet (15. november) |
 | 11 | Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i CV-en | `brev-1.json` mot CV-en og «Sjekkliste for brevet» i `fasit.md` | Case 1: ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.4), og bestått igjen i runde 2 i story 4.5 (runde 1 ble ikke kjørt for case 1). Case 2: bestått i begge rundene (story 4.5). CV-en fra case 1 mot annonsen fra case 2 (kriterium 3): ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.5). Slutningene under «Story 4.5» er godkjent av Kristine. Etter de nye reglene i brevet (15. november): case 1 og 2 bestått i begge rundene, kriterium 3 ikke bestått i runde 1 og bestått i runde 2 etter plan B. Slutningene er godkjent av Kristine |
-| 12 | Korrektur beholder brukerens innhold, eksempler og rekkefølge | Korrektur-svarene mot det opprinnelige brevet | Testes i Epic 5 (trenger Korrektur) |
+| 12 | Korrektur beholder brukerens innhold, eksempler og rekkefølge | `korrektur-1.json` og `korrektur-2.json` mot `eget-brev.txt` og «Sjekkliste for Korrektur» i `fasit.md` | Bestått i alle tre kjøringene for case 1, uten plan B (story 5.2.1 og 5.2.2). Omformuleringene under «Story 5.2.2» er godkjent av Kristine |
 | 14 | Nøkkelordlisten har alle nøkkelordene fasiten markerer som viktige | `nokkelord.json` mot «Viktige nøkkelord» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4) og i runde 2 i story 4.5. Bestått for case 2 i begge rundene (story 4.5). Bestått for case 1 og 2 i begge rundene etter de nye reglene i brevet (15. november) |
 
 ## Story 4.4: ekte KI-svar for case 1 (14. november 2026)
@@ -290,3 +290,51 @@ Tallene er fra loggen i terminalen. Kronene er regnet med 11 kr per dollar.
 | Alt | ca. 34 kr |
 
 Brev-prompten er litt lengre, så et brev har nå ca. 4 050–4 120 tokens inn for testdataene, mot 3 590–3 660 før. En fullført søknad med de lange tekstene til Ingrid (nøkkelord, gap og ett brev) kostet 0,35 + 0,93 + 1,36 = 2,64 kr, mot 2,60 kr i retro 4. Med det andre brevet blir det 4,02 kr. Det lengste brevkallet tok ca. 25 sekunder.
+
+## Story 5.2.2: Korrektur og kriterium 12 (15. november 2026)
+
+Modell: `claude-opus-5-5`. Korrektur-prompten (`backend/prompts/korrektur.md`) fra story 5.2.1 er kjørt tre ganger på det egne brevet til Sara i case 1 (`eget-brev.txt`). Hver kjøring gir to brev, `korrektur-1.json` og `korrektur-2.json`. Kjøring 1 (kl. 15.57, story 5.2.1) er de ferdige svarene i testmodus. Kjøring 2 og 3 (kl. 16.33–16.35) ble skrevet rett i `my-project/testkjoringer/5-2/runde-1/` med `uv run python -m scripts.lag_testsvar --case case-1-utvikler --bare-korrektur --ut ../my-project/testkjoringer/5-2/runde-1/kjoring-<n>` fra `backend/`. Prompten er den som ble committet i `35daffe` (story 5.2.1). Kodegjennomgangen av 5.2.1 kom etter kjøring 1 og endret ikke prompten, så alle tre kjøringene brukte den samme prompten.
+
+### Runde 1
+
+| Kriterium | Kjøring 1 | Kjøring 2 | Kjøring 3 |
+| --- | --- | --- | --- |
+| 12: innhold, eksempler og rekkefølge beholdt | Bestått: begge brevene | Bestått: begge brevene | Bestått: begge brevene |
+| 4 (svarene): passer med det egne brevet, og minst én setning er endret | Bestått: 11 og 13 endret | Bestått: 12 og 13 endret | Bestått: 11 og 11 endret |
+| Fjernede og nye setninger | 1 fjernet («Hei!»), ingen nye | Det samme | Det samme |
+| De 17 KI-frasene i den nye teksten | Ingen | Ingen | Ingen |
+
+Hvert svar har 18 oppføringer, én per setning i det egne brevet, og brevene har 214–223 ord. «Ingen nye» betyr at ingen oppføring har tom `gammel`. I alle seks brevene er den lange setningen om butikkjobben delt i to setninger inne i samme `ny` («… dagligvarebutikk. Der har jeg lært …»), slik prompten sier (AD-5). Alle seks brevene består `kontroller()` mot `eget-brev.txt`, altså at alle de gamle setningene satt sammen er hele det egne brevet. Kriterium 4 sier også at den nedlastede fila er uten markeringer. Det sjekker `test_fr30_korrektur_filen_er_lik_brevet_paa_siden` i `backend/tests/web/test_nedlasting.py` fra story 5.2.1. Markeringene på brevsiden kommer i story 5.3.
+
+Resultatet gjelder testbrevet i case 1, som er kort og har en overskrift. Det slår ikke sammen setninger og blander «dere» og «du». Korrektur testes bare med case 1 (bestemt i story 5.1).
+
+**Sjekklisten for Korrektur:** alle seks brevene beholder innholdet i samme rekkefølge: hvorfor Sara søker, ferdig våren 2027 og kan begynne i august, bachelorprosjektet med grupperom (Python, Flask, HTML, CSS, Git, tre på gruppa, JSON-filer), værdata-programmet, IT-assistent sommeren 2025 med pålogging og Linux, butikkjobben og kundeservicen, at hun lærer fort, og fadderordningen. Alle søker hos Testvik Utvikling AS og sier at hun liker å lage nettsider. «Jeg er lidenskapelig opptatt av» og «Takk for at du tok deg tid til å lese søknaden min» er skrevet om. «Hei!» er fjernet, og «midt i blinken», «det var gøy» og «ganske greit stort sett» er borte. Alle bruker «dere» hele veien, og overskriften er «Søknad på stillingen som junior utvikler». Hilsenen og navnet står som Sara skrev dem. Ingen brev legger til noe fra «Sjekkliste for brevet» (SQL, Docker, Scrum, førerkort og annet).
+
+**Regelen for vurderingen (bestemt av Kristine):** det viktigste er at ingenting som ikke står i CV-en, brevet eller annonsen, blir dratt inn i søknaden. Å skrive om dårlig formulerte setninger, også KI-frasene, er det KI-en skal gjøre, og noe som ikke hører hjemme i en søknad (som «det var gøy»), kan fjernes.
+
+**Godkjent av Kristine som omformuleringer:**
+- Avslutningen: «Takk for at dere har lest søknaden.», «Jeg håper dere vil vurdere søknaden min.», «Takk for oppmerksomheten.» og «Takk for at dere vurderer søknaden min.»
+- «en fast fadder» (alle brevene). Brevet sier «en fadder», og annonsen sier «en fast fadder». Det er en tydeligere kobling til annonsen.
+- «Vi bruker Git til versjonskontroll» (alle brevene). CV-en sier «brukte Git til versjonskontroll».
+- «imøtekommende» for «blid».
+- «I et emneprosjekt har jeg også laget et lite program …» (kjøring 2, `korrektur-1`). Står i CV-en: «Emneprosjekt (2025)».
+- «jeg har laget / utviklet en stor del av løsningen» (kjøring 2) for «jeg har laget mye av det».
+- «det har stort sett fungert greit / godt / bra» for «det har gått ganske greit stort sett». «Godt» og «bra» er litt mer positivt enn det Sara skrev, men ingenting nytt er dratt inn, og teksten skal ikke være mindre formell enn det.
+- Små endringer i ordlyd: «jeg ønsker å jobbe» for «jeg vil veldig gjerne jobbe», «fordi jeg fortsatt har mye å lære», «nyttig i møter med kunder» for «nyttig når jeg skal være med i møter med kunder», «stillingen som junior utvikler passer godt» (tittelen fra annonsen) og «hjalp jeg studenter med pålogging» for «hjalp jeg studenter som ikke fikk logget på».
+
+**Godkjent av Kristine som formell nok tone:** kjøring 3 `korrektur-1` beholder «booke» og «gruppa». De står ikke blant de muntlige ordene i sjekklisten, og de andre brevene skriver «reservere» og «gruppen». Flere brev beholder «Jeg lærer nye ting fort og liker å jobbe sammen med andre» uendret.
+
+**Prompten:** kodegjennomgangen av story 5.2.1 fant to uklarheter: prompten sier både «skriv frasen om» og «heller ikke omskrivinger», og eksempelet fjerner «Det var gøy». De er godtatt av Kristine og rettes ikke, fordi alle kjøringene besto, og en endring betyr tre nye kjøringer.
+
+### Kostnad og tid
+
+Tallene er fra loggen i terminalen. Kronene er regnet med 11 kr per dollar.
+
+| | Tokens inn per brev | Tokens ut (`korrektur-1` + `korrektur-2`) | Hele kjøringen |
+| --- | --- | --- | --- |
+| Kjøring 1 | 4 686 | 2 956 + 2 934 | 0,86 + 0,85 = 1,71 kr |
+| Kjøring 2 | 4 686 | 3 080 + 3 103 | 0,88 + 0,89 = 1,77 kr |
+| Kjøring 3 | 4 686 | 3 014 + 3 030 | 0,87 + 0,87 = 1,74 kr |
+| Alt | | | ca. 5,2 kr |
+
+Et brev i Korrektur koster ca. 0,85–0,89 kr. Svaret er ca. 3 000 tokens ut, fordi det har hver setning både gammel og ny. En fullført søknad i Korrektur med testdataene koster da ca. 0,10 + 0,17 + 0,87 = 1,14 kr, under målet på 3 kr (NFR-11). Nøkkelord og gap er tallene for case 1 fra story 4.4, runde 2. Med lange tekster blir det mer: nøkkelord og gap kostet 0,35 + 0,93 kr med Ingrid-CV-en, og et langt eget brev gir flere tokens ut, fordi svaret har hver setning to ganger. Et langt eget brev er ikke målt ennå (et åpent punkt fra kodegjennomgangen av story 5.2.1). Det gikk ca. 22 sekunder mellom de to kallene i hver kjøring i loggen. Loggen viser bare når et kall er ferdig, så det er ikke en målt tid for hvert kall.
