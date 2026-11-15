@@ -37,7 +37,9 @@
 {#- Brevet som et hvitt ark (letter-card), ett avsnitt per element. Det kan bare leses, ikke
     redigeres (FR-26). I Korrektur kommer avsnittene fra visning, med de samme avsnittene som
     Word-fila, og setningene med ett mellomrom mellom. En endret setning (endret fra kjernen,
-    aldri regnet ut her) er en knapp med den skjulte teksten «Endret setning» først, og «Du
+    aldri regnet ut her) er et <span> med role="button" og tabindex="0", ikke en <button>, så
+    den brytes over linjer som resten av avsnittet. Den har den skjulte teksten «Endret
+    setning» først, og «Du
     skrev» står skjult rett etter, med én linje per gammel setning, eller «(Ny setning)».
     endringer.js åpner og lukker den. Uten JavaScript åpnes den ikke. Mellomrommene styres
     med - i taggene, så teksten i hvert avsnitt (uten de skjulte tekstene og «Du skrev») er lik
@@ -51,7 +53,7 @@
       {%- if not loop.first %} {% endif %}
       {%- if setning.endret %}
         {%- set boks = "du-skrev-" ~ avsnitt_nr ~ "-" ~ loop.index -%}
-        <button type="button" class="endret-setning" aria-expanded="false" aria-controls="{{ boks }}"><span class="skjult">{{ tekster.ENDRET_SETNING_SKJERMLESER }} </span>{{ setning.ny }}</button>
+        <span class="endret-setning" role="button" tabindex="0" aria-expanded="false" aria-controls="{{ boks }}"><span class="skjult">{{ tekster.ENDRET_SETNING_SKJERMLESER }} </span>{{ setning.ny }}</span>
         {#- #}<span class="du-skrev" id="{{ boks }}" hidden><span class="du-skrev-overskrift">{{ tekster.DU_SKREV }}</span>
           {%- for gammel in setning.gammel -%}
           <span>{{ gammel }}</span>
