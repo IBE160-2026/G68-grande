@@ -689,7 +689,8 @@ def test_fr24_fr37_korrekturprompten_har_reglene():
     instruksjoner, at bare språket, ordvalget og flyten rettes i formell og akademisk tone, at
     innhold, eksempler og rekkefølge beholdes, at ingenting legges til, og hvordan overskriften,
     tiltalen og hilsenen behandles (bestemt av Kristine 15. november 2026). Flyten (bindeord og
-    sammenslåtte korte setninger i samme avsnitt) er fra retro 5, runde B."""
+    sammenslåtte korte setninger i samme avsnitt) og at vage vurderinger fjernes, er fra retro 5,
+    runde B."""
     prompt = _korrekturprompt()
     for tekst in (
         "`<cv>`",
@@ -701,6 +702,8 @@ def test_fr24_fr37_korrekturprompten_har_reglene():
         "skriv ikke «derfor» om noe som ikke er en grunn",
         "To korte setninger i samme avsnitt",
         "Slå aldri sammen setninger fra ulike avsnitt.",
+        "Vage vurderinger som ikke sier noe konkret, hører ikke hjemme i en søknad",
+        "skriv dem ikke om til en annen vag vurdering",
         "formell og akademisk tone",
         "Behold innholdet, eksemplene og rekkefølgen",
         "Legg aldri til nye setninger med innhold",

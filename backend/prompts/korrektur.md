@@ -12,6 +12,7 @@ Regler for innholdet:
 - Skriv ikke at studenten oppfyller et krav som verken CV-en eller brevet viser, og gjør ikke det studenten skriver, større enn det er.
 - Bruk samme tiltale til arbeidsgiveren hele veien. Blander brevet «dere» og «du», bruker du «dere».
 - Overskriften skal ha samme form som «Søknad på stillingen som …», med stillingstittelen slik den står i annonsen, men med liten forbokstav slik det er vanlig midt i en setning på norsk, for eksempel «Søknad på stillingen som junior utvikler». Behold stor bokstav bare i navn og forkortelser. Har brevet en annen overskrift, retter du den til denne formen. Har brevet ingen overskrift, legger du ikke til noen.
+- Vage vurderinger som ikke sier noe konkret, hører ikke hjemme i en søknad, for eksempel «det har gått ganske greit stort sett», «det har fungert greit», «det var gøy» og «det var ganske lærerikt egentlig». De er ikke innhold som skal beholdes. Fjern dem, og skriv dem ikke om til en annen vag vurdering som «det har fungert godt». Står vurderingen i en setning med annet innhold, beholder du resten av setningen. Står den alene, er `ny` null.
 - En muntlig tiltale som «Hei!», «Hei,» eller «Hallo» passer ikke i en søknad. Fjern den: `ny` er null for den setningen.
 - Hilsen og navn til slutt, for eksempel «Med vennlig hilsen» og studentens navn, står nøyaktig slik studenten skrev dem. Mangler de, legger du ikke til noe.
 

@@ -21,6 +21,10 @@ context:
 
 **Beslutning (Kristine, 2026-11-15):** runde B gjøres alene, med egen branch og PR. Runde C kommer etterpå. «Bedre flyt» betyr at brevet skal kunne leses mer naturlig: setningene og avsnittene henger bedre sammen.
 
+**Beslutning (Kristine, 2026-11-15, etter målingen):** brevfeltet i Korrektur får en egen grense på 5 000 tegn (valg A), med egen feilmelding. CV og annonse beholder 15 000.
+
+**Beslutning (Kristine, 2026-11-15, etter runde 1):** vage vurderinger som «det har stort sett gått greit» hører ikke hjemme i en søknad og fjernes, også når de er skrevet om til «fungert godt» eller «bra». Det erstatter godkjenningen av «det har stort sett fungert greit / godt / bra» i story 5.2.2. Bindeordene «derfor» og «samtidig» i runde 1 er godtatt. Plan B: regelen legges i prompten, og alle tre kjøringene kjøres på nytt.
+
 ## Boundaries & Constraints
 
 **Always:**
@@ -61,13 +65,13 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `backend/prompts/korrektur.md` -- la KI-en bruke bindeord og slå sammen korte setninger i samme avsnitt, så brevet leses naturlig. Si at `gammel` kopieres nøyaktig, med store og små bokstaver og tegnsetting. Eksempelet viser én sammenslåing -- retro 5, punkt 4 og runde A, funn 6
-- [ ] `backend/tests/adaptere/test_ekte_ki.py` -- tekstbitene for de nye reglene, og at eksempelet har en sammenslåing (`len(gammel) == 2`)
-- [ ] `my-project/testkjoringer/retro-5/inndata/case-lang/` -- Ingrids CV og annonse fra retro 4, og et fiktivt `eget-brev.txt` på 14 500–15 000 tegn (telt med `antall_tegn`) med vanlige feil. Ingen ekte personer
-- [ ] **Måling (Kristine sier ja først, ca. 3–8 kr):** ett `korrektur`-kall med `max_tokens` 48 000 og tidsgrense 600 s satt bare i kommandoen. Tid, tokens inn og ut, `stop_reason` og om svaret består `kontroller` skrives i `testplan.md`, og svaret i `retro-5/maling/`
-- [ ] **HALT: Kristine bestemmer** ut fra målingen: A) egen, lavere grense for brevfeltet (`MAKS_TEGN_EGET_BREV`, brukt i `sjekk_innlegging` og feilteksten), eller B) egen `max_tokens` og tidsgrense for Korrektur i `innstillinger.py` og `EkteKI._kall`. Med tester og oppdatert kommentar i `innstillinger.py`
-- [ ] **Tre kjøringer (Kristine sier ja først, ca. 5–6 kr):** kjøring 1 i `testdata/` (svarene i testmodus), kjøring 2 og 3 i `my-project/testkjoringer/retro-5/kjoring-<n>/`. Sjekk mot «Sjekkliste for Korrektur». Plan B ved feil: prompten rettes én gang, og alle tre kjøres på nytt
-- [ ] `my-project/testplan.md` -- ny seksjon «Retro 5: langt eget brev og flyt»: målingen, beslutningen, tabellen for kriterium 12 og 4, og kostnaden
+- [x] `backend/prompts/korrektur.md` -- la KI-en bruke bindeord og slå sammen korte setninger i samme avsnitt, så brevet leses naturlig. Si at `gammel` kopieres nøyaktig, med store og små bokstaver og tegnsetting. Eksempelet viser én sammenslåing -- retro 5, punkt 4 og runde A, funn 6
+- [x] `backend/tests/adaptere/test_ekte_ki.py` -- tekstbitene for de nye reglene, og at eksempelet har en sammenslåing (`len(gammel) == 2`)
+- [x] `my-project/testkjoringer/retro-5/inndata/case-lang/` -- Ingrids CV og annonse fra retro 4, og et fiktivt `eget-brev.txt` på 14 500–15 000 tegn (telt med `antall_tegn`) med vanlige feil. Ingen ekte personer
+- [x] **Måling (Kristine sier ja først, ca. 3–8 kr):** ett `korrektur`-kall med `max_tokens` 48 000 og tidsgrense 600 s satt bare i kommandoen. Tid, tokens inn og ut, `stop_reason` og om svaret består `kontroller` skrives i `testplan.md`, og svaret i `retro-5/maling/`
+- [x] **HALT: Kristine bestemmer** ut fra målingen: A) egen, lavere grense for brevfeltet (`MAKS_TEGN_EGET_BREV`, brukt i `sjekk_innlegging` og feilteksten), eller B) egen `max_tokens` og tidsgrense for Korrektur i `innstillinger.py` og `EkteKI._kall`. Med tester og oppdatert kommentar i `innstillinger.py`
+- [x] **Tre kjøringer (Kristine sier ja først, ca. 5–6 kr):** kjøring 1 i `testdata/` (svarene i testmodus), kjøring 2 og 3 i `my-project/testkjoringer/retro-5/kjoring-<n>/`. Sjekk mot «Sjekkliste for Korrektur». Plan B ved feil: prompten rettes én gang, og alle tre kjøres på nytt
+- [x] `my-project/testplan.md` -- ny seksjon «Retro 5: langt eget brev og flyt»: målingen, beslutningen, tabellen for kriterium 12 og 4, og kostnaden
 
 **Acceptance Criteria:**
 - Given den nye prompten, when tre kjøringer sjekkes, then alle seks brevene består kriterium 12 og 4 og `kontroller`, og Kristine har godkjent flyten.
@@ -75,6 +79,16 @@ context:
 - Given hele rettingen, when testene og ruff kjøres, then alt består.
 
 ## Implementation Notes
+
+- Gjort i denne økten, ikke av en hjelpeagent, fordi spec-en har tre stopp der Kristine må si ja eller bestemme.
+- `prompts/korrektur.md`: flyten (bindeord, korte setninger slås sammen bare i samme avsnitt, «derfor» bare når det er en grunn), at `gammel` kopieres nøyaktig, og et eksempel der to setninger slås sammen. Etter runde 1 kom plan B: vage vurderinger fjernes og skrives ikke om til en annen vag vurdering (Kristines beslutning i den frosne blokken).
+- Målingen: `my-project/testkjoringer/retro-5/inndata/case-lang/eget-brev.txt` (14 585 tegn), ett kall med `max_tokens` 48 000 og `Anthropic(timeout=600, max_retries=0)` fra et engangsskript utenfor repoet. 28 686 tokens ut, 190 s, `end_turn`, `kontroller` bestått, ca. 7,31 kr. Tallene står i `my-project/testplan.md` og `retro-5/maling/`.
+- Valg A med 5 000 tegn: `MAKS_TEGN_EGET_BREV` i `innstillinger.py`, `inndata.maks_tegn(felt)` brukt i `sjekk_innlegging`, `MAKS_TEGN_EGET_BREV_TEKST` i feilteksten i `tekster.py`. Kommentarene ved grensene og `KI_TIDSGRENSE` viser målingen. README (grensene) er rettet, fordi den ellers ville sagt feil.
+- Testene: `test_inndata.py` (5 000 godtas, også med `
+`, 5 001 gir `for_lang`, CV og annonse har 15 000 i Korrektur), `test_innlegging.py` og `test_tekster.py` (den nye teksten), `test_grenser.py` (`eget-brev.txt` i testdataene er under grensen), `test_ekte_ki.py` (de nye reglene og sammenslåingen i eksempelet).
+- Runde 1 og runde 2 (etter plan B) i `retro-5/runde-1/` og `runde-2/`. Kjøring 1 i runde 2 er svarene i testmodus. Alle 12 svarene besto `kontroller`. Kristine godkjente runde 2 for kriterium 12, og godtok det feilaktige «Derfor» i kjøring 3, `korrektur-2`, som et kjent svakt punkt.
+- Kostnad i alt: ca. 18 kr.
+- 1038 tester består, og ruff er uten feil.
 
 ## Spec Change Log
 
