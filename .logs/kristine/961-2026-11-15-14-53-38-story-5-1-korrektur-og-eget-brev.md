@@ -25,3 +25,6 @@ Kristine startet story 5.1 med `/bmad-build 5.1`. Målet er at en student som ha
 
 ### Tillegg kl. 15:10
 Kristine prøvde Korrektur i nettleseren (modusvalget, case 1, tomt og feil brev, case 2, «Tilbake» og bredden) og sa «alt fungerer bra». Punktet om nettleserprøven i `issues.md` er lukket.
+
+### Tillegg kl. 15:20
+Kristine sa «bare å pushe». Branchen er pushet, og [PR #34](https://github.com/IBE160-2026/G68-grande/pull/34) er laget med merknad om KI-feilene og en kommentar om nettleserprøven. CI ble grønn på Linux og Windows. Kristine flettet PR-en. Story 5.1 er satt til ferdig i sprint-statusen, krysset av i TO DO, og PR-lenken står i `my-project/README.md`. Punktet om å lese testbrevet og sjekklisten er lukket (godkjent ved fletting). Neste er story 5.2.
