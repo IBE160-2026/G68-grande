@@ -106,16 +106,15 @@
   <p>{{ avsnitt }}</p>
   {%- endfor %}
 </details>
-{#- «Tilbake» til venstre, «Lag søknadsbrevet mitt» til høyre. Trykket er bekreftelsen, uten
-    ekstra spørsmål (FR-21). data-vente: knappen starter et KI-kall og viser ventetegnet.
-    I Korrektur står bare «Tilbake», for knappen videre kommer i story 5.2. #}
+{#- «Tilbake» til venstre, knappen videre til høyre: «Lag søknadsbrevet mitt» i Full
+    generering og «Oppdater søknadsbrevet mitt» i Korrektur (brev_knapp, FR-21, FR-23).
+    Trykket er bekreftelsen, uten ekstra spørsmål. data-vente: knappen starter et KI-kall og
+    viser ventetegnet. #}
 <form method="post" action="{{ url_for('web.resultat') }}" id="resultat-skjema">
   <div class="knapperad mellomrom">
     <a class="sekundaerknapp" href="{{ url_for('web.innlegging') }}">{{ tekster.TILBAKE_KNAPP }}</a>
-    {%- if lag_brev %}
     <button class="hovedknapp" type="submit" name="handling" value="brev"
-      data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.LAG_BREV_KNAPP }}</button>
-    {%- endif %}
+      data-vente="{{ tekster.VENTE_BREV }}">{{ brev_knapp }}</button>
   </div>
 </form>
 {% endblock %}

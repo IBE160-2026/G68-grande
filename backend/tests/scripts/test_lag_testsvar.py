@@ -1,5 +1,6 @@
 """Tester for scripts/lag_testsvar.py (FR-38, AD-4). Testene bruker en falsk KI og kaller
-aldri det ekte API-et. De skriver bare i tmp_path, aldri i den ekte testdata/."""
+aldri det ekte API-et. De skriver bare i tmp_path, aldri i den ekte testdata/. Svarene i
+Korrektur og --bare-korrektur kom i story 5.2.1 (FR-23)."""
 
 import json
 
@@ -16,6 +17,10 @@ GAP = {"dekker": ["Kan Python"], "mangler": ["Har førerkort klasse B"]}
 
 def _brev(forslag):
     return {"avsnitt": ["Søknad på stillingen som utvikler", f"Forslag {forslag}"], "navn": "Sara"}
+
+
+def _korrektur(forslag):
+    return {"setninger": [{"ny": f"Forslag {forslag}", "gammel": ["Hei"], "nytt_avsnitt": True}]}
 
 
 class FalskKI:
@@ -41,6 +46,10 @@ class FalskKI:
     def brev(self, cv, annonse, forslag):
         self._kall("brev", cv, annonse, forslag)
         return _brev(forslag)
+
+    def korrektur(self, cv, annonse, eget_brev, forslag):
+        self._kall("korrektur", cv, annonse, eget_brev, forslag)
+        return _korrektur(forslag)
 
 
 @pytest.fixture
@@ -139,6 +148,92 @@ def _ingen_ekte_ki(monkeypatch):
         raise AssertionError("EkteKI skal ikke lages")
 
     monkeypatch.setattr(lag_testsvar, "EkteKI", feil)
+
+
+# --- Korrektur (story 5.2.1) ---
+
+
+@pytest.fixture
+def med_eget_brev(testdata):
+    """Case 1 har også et eget brev, som i den ekte testdata/."""
+    (testdata / "case-1-utvikler" / "eget-brev.txt").write_text("Mitt brev", encoding="utf-8")
+    return testdata
+
+
+def test_fr38_case_med_eget_brev_far_ogsa_korrektur_1_og_2(med_eget_brev):
+    """FR-23/FR-38: et case med eget-brev.txt får også korrektur-1.json og korrektur-2.json,
+    med CV, annonse og det egne brevet urørt og forslag 1 og 2. Et case uten eget brev får
+    bare de fire andre."""
+    ki = FalskKI()
+    assert lag_testsvar.lag_testsvar(ki, med_eget_brev) is True
+    svar = med_eget_brev / "case-1-utvikler" / "ki-svar"
+    assert sorted(fil.name for fil in svar.iterdir()) == [
+        "brev-1.json",
+        "brev-2.json",
+        "gap.json",
+        "korrektur-1.json",
+        "korrektur-2.json",
+        "nokkelord.json",
+    ]
+    assert json.loads(_les(svar / "korrektur-1.json")) == _korrektur(1)
+    assert json.loads(_les(svar / "korrektur-2.json")) == _korrektur(2)
+    cv, annonse = "CV for case-1-utvikler", "Annonse for case-1-utvikler"
+    assert ki.kall[4:6] == [
+        ("korrektur", cv, annonse, "Mitt brev", 1),
+        ("korrektur", cv, annonse, "Mitt brev", 2),
+    ]
+    assert not (med_eget_brev / "case-2-annet" / "ki-svar" / "korrektur-1.json").exists()
+    assert len(ki.kall) == 10
+
+
+def test_fr38_bare_korrektur_lager_bare_korrektur_svarene(med_eget_brev, capsys):
+    """FR-38 (story 5.2.1): med bare_korrektur lages bare korrektur-1.json og korrektur-2.json,
+    og de sjekkede brev-, gap- og nøkkelordsvarene er uendret. Caset uten eget brev hoppes
+    over, uten feil."""
+    ki = FalskKI()
+    assert lag_testsvar.lag_testsvar(ki, med_eget_brev, bare_korrektur=True) is True
+    svar = med_eget_brev / "case-1-utvikler" / "ki-svar"
+    assert sorted(fil.name for fil in svar.iterdir()) == [
+        "gap.json",
+        "korrektur-1.json",
+        "korrektur-2.json",
+    ]
+    assert _les(svar / "gap.json") == "gammelt"
+    assert [kall[0] for kall in ki.kall] == ["korrektur", "korrektur"]
+    assert list((med_eget_brev / "case-2-annet" / "ki-svar").iterdir()) == []
+    assert "case-2-annet: har ikke eget-brev.txt" in capsys.readouterr().out
+
+
+def test_fr38_korrektur_som_feiler_skriver_ingenting_for_caset(med_eget_brev):
+    """FR-28/FR-38 (story 5.2.1): feiler et korrekturkall, skrives ingenting for caset, heller
+    ikke de andre svarene."""
+    ki = FalskKI(feiler_paa="korrektur")
+    assert lag_testsvar.lag_testsvar(ki, med_eget_brev, bare_korrektur=True) is False
+    assert lag_testsvar.lag_testsvar(ki, med_eget_brev) is False
+    svar = med_eget_brev / "case-1-utvikler" / "ki-svar"
+    assert [fil.name for fil in svar.iterdir()] == ["gap.json"]
+
+
+def test_fr38_main_med_bare_korrektur(med_eget_brev, monkeypatch, tmp_path):
+    """FR-38 (story 5.2.1): --case case-1-utvikler --bare-korrektur gir 2 KI-kall og bare de
+    to korrektur-svarene."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    ki = FalskKI()
+    monkeypatch.setattr(lag_testsvar, "EkteKI", lambda nokkel, modell: ki)
+    argumenter = ["--case", "case-1-utvikler", "--bare-korrektur"]
+    assert lag_testsvar.main(argumenter, med_eget_brev) == 0
+    assert [kall[0] for kall in ki.kall] == ["korrektur", "korrektur"]
+    assert (med_eget_brev / "case-1-utvikler" / "ki-svar" / "korrektur-2.json").exists()
+
+
+def test_fr38_bare_korrektur_uten_eget_brev_gir_feilkode(testdata, monkeypatch, tmp_path, capsys):
+    """FR-38 (story 5.2.1): har ingen av de valgte casene eget-brev.txt, ender --bare-korrektur
+    med melding og feilkode 3 før nøkkelen leses, ikke med 0 uten at noe er gjort."""
+    _env_fil(monkeypatch, tmp_path, "ANTHROPIC_API_KEY=sk-fra-env\n")
+    _ingen_ekte_ki(monkeypatch)
+    argumenter = ["--case", "case-2-annet", "--bare-korrektur"]
+    assert lag_testsvar.main(argumenter, testdata) == lag_testsvar.UKJENT_CASE
+    assert "Ingen av testcasene har eget-brev.txt" in capsys.readouterr().out
 
 
 def test_fr38_uten_nokkel_gir_melding_og_ingen_ki(testdata, monkeypatch, capsys):

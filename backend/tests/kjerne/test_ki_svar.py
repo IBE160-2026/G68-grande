@@ -9,7 +9,7 @@ import pytest
 
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
-from soknad.kjerne.ki_svar import HILSEN, hele_brevet, kontroller
+from soknad.kjerne.ki_svar import HILSEN, hele_brevet, kontroller, korrigert_brev
 
 
 def test_fr28_gyldig_nokkelordsvar_gis_tilbake():
@@ -101,9 +101,211 @@ def test_fr28_kifeil_beholder_typen_ved_kopi():
 
 
 def test_fr28_ukjent_oppgave_er_en_programfeil():
-    """FR-28: korrektur kommer i Epic 5. En ukjent oppgave er en feil i koden."""
+    """FR-28: en ukjent oppgave er en feil i koden."""
     with pytest.raises(ValueError):
-        kontroller("korrektur", '{"avsnitt": ["Hei"], "navn": null}')
+        kontroller("oversetting", '{"avsnitt": ["Hei"], "navn": null}')
+
+
+# --- korrektur (story 5.2.1) ---
+
+EGET_BREV = (
+    "Søknad på jobb\n\nHei!\n\nJeg har jobbet i butikk. Det var gøy.\n\nMed vennlig hilsen\nSara"
+)
+
+
+def _setning(ny, gammel, nytt_avsnitt=False):
+    return {"ny": ny, "gammel": gammel, "nytt_avsnitt": nytt_avsnitt}
+
+
+def _korrektur(*setninger, eget_brev=EGET_BREV):
+    return kontroller("korrektur", json.dumps({"setninger": list(setninger)}), eget_brev=eget_brev)
+
+
+GYLDIG = [
+    _setning("Søknad på stillingen som utvikler", ["Søknad på jobb"], True),
+    _setning(None, ["Hei!"], True),
+    _setning("Jeg har jobbet i butikk.", ["Jeg har jobbet i butikk."], True),
+    _setning("Der lærte jeg mye.", ["Det var gøy."]),
+    _setning("Med vennlig hilsen", ["Med vennlig hilsen"], True),
+    _setning("Sara", ["Sara"], True),
+]
+
+
+def test_fr23_gyldig_korrektur_gis_tilbake():
+    """FR-23/FR-28: et gyldig svar gis tilbake i formen fra AD-4, {setninger: [{ny, gammel,
+    nytt_avsnitt}]}, også med en fjernet setning (ny null)."""
+    assert _korrektur(*GYLDIG) == {"setninger": GYLDIG}
+
+
+def test_fr23_korrektur_uten_eget_brev_er_en_programfeil():
+    """FR-23: kontroller trenger det egne brevet for å sjekke svaret i Korrektur."""
+    with pytest.raises(ValueError):
+        kontroller("korrektur", json.dumps({"setninger": GYLDIG}))
+
+
+@pytest.mark.parametrize(
+    "svar",
+    [
+        # Feil form
+        {"setninger": []},
+        {"setninger": "Hei"},
+        {"setninger": [["Hei"]]},
+        {"setninger": GYLDIG, "navn": "Sara"},
+        {"avsnitt": ["Hei"]},
+        [GYLDIG],
+        {"setninger": [{"ny": "Hei", "gammel": ["Hei"]}]},
+        {"setninger": [{**GYLDIG[0], "ekstra": 1}]},
+        {"setninger": [_setning(3, ["Hei"], True)]},
+        {"setninger": [_setning("Hei", "Hei", True)]},
+        {"setninger": [_setning("Hei", ["Hei", 3], True)]},
+        {"setninger": [_setning("Hei", [None], True)]},
+        # nytt_avsnitt er et tall eller null, ikke true eller false
+        {"setninger": [_setning("Hei", ["Hei"], 1)]},
+        {"setninger": [_setning("Hei", ["Hei"], 0)]},
+        {"setninger": [_setning("Hei", ["Hei"], None)]},
+    ],
+)
+def test_fr28_korrektur_med_feil_form_gir_kifeil(svar):
+    """FR-28 (story 5.2.1): tom setninger, feil felt eller feil type gir KIFeil(ubrukelig_svar)."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("korrektur", json.dumps(svar), eget_brev="Hei")
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+@pytest.mark.parametrize(
+    "tekst", ["", "ikke json", '{"setninger": [', "[" * 100_000 + "]" * 100_000]
+)
+def test_fr28_korrektur_med_ugyldig_json_gir_kifeil(tekst):
+    """FR-28 (story 5.2.1): ugyldig JSON gir KIFeil(ubrukelig_svar)."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("korrektur", tekst, eget_brev=EGET_BREV)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+@pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal", None])
+def test_fr28_korrektur_som_ikke_er_ferdig_gir_kifeil(stop_reason):
+    """FR-28 (story 5.2.1): stop_reason som ikke er end_turn gir KIFeil(ubrukelig_svar)."""
+    with pytest.raises(KIFeil) as feil:
+        kontroller("korrektur", json.dumps({"setninger": GYLDIG}), stop_reason, EGET_BREV)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+@pytest.mark.parametrize("ny", [None, "", "  ", "\n\t", "\u000b"])
+def test_fr28_korrektur_der_alle_ny_er_tomme_gir_kifeil(ny):
+    """FR-28 (story 5.2.1): er alle ny null (eller tomme etter rensingen), er brevet borte, og
+    det gir KIFeil(ubrukelig_svar)."""
+    setninger = [{**setning, "ny": ny} for setning in GYLDIG]
+    with pytest.raises(KIFeil) as feil:
+        _korrektur(*setninger)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+@pytest.mark.parametrize(
+    "gammel",
+    [
+        # Et ord mangler: «Det var gøy.» er ikke med.
+        [s["gammel"] for s in GYLDIG[:3]] + [[]] + [s["gammel"] for s in GYLDIG[4:]],
+        # Et ord er lagt til
+        [s["gammel"] for s in GYLDIG[:5]] + [["Sara Eksempel"]],
+        # Rekkefølgen er en annen
+        [s["gammel"] for s in reversed(GYLDIG)],
+        # gammel er tomme hele veien
+        [[] for _ in GYLDIG],
+    ],
+)
+def test_fr24_korrektur_som_ikke_stemmer_med_brevet_gir_kifeil(gammel):
+    """FR-24/FR-28 (story 5.2.1): er alle gammel satt sammen og vasket ikke det egne brevet
+    vasket, gir det KIFeil(ubrukelig_svar)."""
+    setninger = [{**setning, "gammel": g} for setning, g in zip(GYLDIG, gammel, strict=True)]
+    with pytest.raises(KIFeil) as feil:
+        _korrektur(*setninger)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def test_fr24_korrektur_sjekken_ser_bort_fra_tegnsetting_og_linjeskift():
+    """FR-24 (story 5.2.1): sjekken mot det egne brevet bruker samme vask som testdataene, så
+    tegnsetting, store bokstaver, mellomrom og linjeskift teller ikke. Sammenslåtte setninger
+    med to gammel stemmer også."""
+    setninger = [
+        _setning("Søknad på stillingen som utvikler", ["SØKNAD  på jobb:"], True),
+        _setning(None, ["Hei"], True),
+        _setning(
+            "Jeg har jobbet i butikk, og der lærte jeg mye.",
+            ["Jeg har jobbet\ni butikk", "Det var gøy!"],
+            True,
+        ),
+        _setning("Med vennlig hilsen Sara", ["Med vennlig hilsen", "Sara"], True),
+    ]
+    assert _korrektur(*setninger)["setninger"][2]["gammel"] == [
+        "Jeg har jobbet i butikk",
+        "Det var gøy!",
+    ]
+
+
+def test_fr28_korrektur_renses_som_brevet():
+    """FR-28/FR-30 (story 5.2.1): kontrolltegn fjernes, og linjeskift og tab blir ett mellomrom i
+    ny og hver gammel, så Word-fila blir lik siden. Tom ny blir None."""
+    setninger = [
+        _setning("Søknad på\tstillingen\u0000", ["Søknad på jobb\n"], True),
+        _setning("  ", ["Hei!"], True),
+        _setning("Jeg har\njobbet i butikk.", ["Jeg har jobbet i butikk."], True),
+        _setning("Det var\u000b gøy.", ["Det var gøy."]),
+        _setning("Med vennlig hilsen", ["Med vennlig hilsen"], True),
+        _setning("Sara", ["Sara"], True),
+    ]
+    svar = _korrektur(*setninger)["setninger"]
+    assert [s["ny"] for s in svar] == [
+        "Søknad på stillingen",
+        None,
+        "Jeg har jobbet i butikk.",
+        "Det var gøy.",
+        "Med vennlig hilsen",
+        "Sara",
+    ]
+    assert svar[0]["gammel"] == ["Søknad på jobb"]
+
+
+def _korrigert(*setninger):
+    return korrigert_brev({"setninger": list(setninger)})
+
+
+def test_fr23_korrigert_brev_setter_sammen_avsnittene():
+    """FR-23/FR-30 (story 5.2.1): brevet er alle ny som ikke er None. nytt_avsnitt sann på
+    setning 1 og 3 gir to avsnitt: setning 1 og 2, og setning 3 og 4, med ett mellomrom."""
+    assert _korrigert(
+        _setning("En.", ["En."], True),
+        _setning("To.", ["To."]),
+        _setning("Tre.", ["Tre."], True),
+        _setning("Fire.", ["Fire."]),
+    ) == ["En. To.", "Tre. Fire."]
+
+
+def test_fr23_korrigert_brev_fjernet_setning_som_begynte_et_avsnitt():
+    """FR-23 (story 5.2.1): er en setning som begynte et avsnitt, fjernet, begynner den neste
+    setningen avsnittet, også når den selv har nytt_avsnitt usann."""
+    assert _korrigert(
+        _setning("Overskrift", ["Overskrift"], True),
+        _setning(None, ["Hei!"], True),
+        _setning("Jeg søker.", ["Jeg søker."]),
+        _setning("Jeg kan begynne.", ["Jeg kan begynne."]),
+    ) == ["Overskrift", "Jeg søker. Jeg kan begynne."]
+
+
+def test_fr23_korrigert_brev_fjernet_setning_midt_i_et_avsnitt():
+    """FR-23 (story 5.2.1): en fjernet setning midt i et avsnitt deler ikke avsnittet, og den
+    første setningen begynner alltid et avsnitt."""
+    assert _korrigert(
+        _setning("En.", ["En."]),
+        _setning(None, ["To."]),
+        _setning("Tre.", ["Tre."]),
+    ) == ["En. Tre."]
+
+
+def test_fr23_korrigert_brev_legger_ikke_til_hilsen():
+    """FR-23 (story 5.2.1, bestemt av Kristine 15. november 2026): hilsen og navn står slik
+    brukeren skrev dem, og mangler de, legges ingenting til."""
+    assert _korrigert(_setning("Jeg søker.", ["Jeg søker."], True)) == ["Jeg søker."]
+    assert HILSEN not in _korrigert(_setning("Jeg søker.", ["Jeg søker."], True))
 
 
 def test_fr22_gyldig_brev_gis_tilbake():

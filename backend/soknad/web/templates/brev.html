@@ -6,8 +6,10 @@
 {% block innhold %}
 {#- Overskriften får fokus når siden åpnes, også etter ventetegnet på resultatsiden (UX-DR14).
     Ved «Filen kan ikke lages» får feilboksen fokus i stedet. Brevsiden har ingen «Tilbake».
-    Fyrverkeri, PDF og «Nytt forslag» kommer i Epic 7. #}
-<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil %} autofocus{% endif %}>{{ tekster.BREV_OVERSKRIFT }}</h1>
+    Overskriften er den for modusen (fra ruten): «Din oppdaterte søknad er ferdig!» i
+    Korrektur. Markeringene i Korrektur kommer i story 5.3. Fyrverkeri, PDF og «Nytt forslag»
+    kommer i Epic 7. #}
+<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
 {%- if fil_feil %}
 {#- Filen kunne ikke lages (FilFeil): som KI-feilboksen, men «Prøv på nytt» er en lenke som
     laster ned på nytt. Brevet under er ikke borte. #}

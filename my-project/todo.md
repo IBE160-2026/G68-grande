@@ -80,7 +80,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Holde omfanget stramt: 38 krav og bare helger igjen. Bruk nødlisten i PRD-en (del 4) tidlig heller enn sent (løst: sjekkpunkter 22. og 29. november i risikotabellen i PRD-en)
 - [ ] Suksesskriteriene (bekymringer fra gjennomgangen av brief og PRD 3. november)
   - [x] Bestemme på forhånd hva jeg gjør hvis et kriterium med ekte KI (1, 3, 11, 12) feiler én av tre ganger, og skrive det ærlig i testplanen (løst: plan B i innledningen til del 5 i PRD-en)
-  - [ ] Stories: når de ekte KI-svarene til testmodus lages (FR-38), kjøre hver prompt tre ganger og sjekke mot fasiten, så kriterium 1, 3, 11 og 12 testes tidlig (story 4.4, 4.5 og 5.2) (4.4 gjort 14. november for kriterium 1, 11 og 14. 4.5 gjort 14. november for case 2 og kriterium 3. Gjenstår: 5.2)
+  - [ ] Stories: når de ekte KI-svarene til testmodus lages (FR-38), kjøre hver prompt tre ganger og sjekke mot fasiten, så kriterium 1, 3, 11 og 12 testes tidlig (story 4.4, 4.5 og 5.2) (4.4 gjort 14. november for kriterium 1, 11 og 14. 4.5 gjort 14. november for case 2 og kriterium 3. Gjenstår: kriterium 12 i story 5.2.2)
   - [x] Testdata: lage CV-er med tydelige hull (for eksempel «førerkort» eller «SQL»), ikke grensetilfeller, særlig for gap-analysen (kriterium 1) (story 2.2 og 4.5) (case 2 laget 14. november: hull i Power BI, regnskapsprogram, lønnskjøring og Python)
   - [x] Skrive fasiten for gap-analysen nøye, med en kort begrunnelse per krav (om et krav er dekket, er en skjønnsvurdering) (løst: lagt inn som krav i NFR-3 i PRD-en)
   - [ ] Avtale med en kollega innen 20. november for kriterium 13 (testen gjøres etter 29. november, gjerne helgen 5.–6. desember, på Teams eller med skjermbilde)
@@ -160,7 +160,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
 - [ ] Hvis story 7.2 (PDF ut) kuttes: kriterium 5 sier at både .docx og PDF kan åpnes, så kriteriet må da endres, slik PRD-en allerede sier for punkt 5 på nødlisten
 - [ ] Story 6.1: prøve pypdf på en fiktiv CV med tabell (7. november ble bare CV-er med kolonner prøvd)
 - [x] Story 2.5 er den største: del den i to hvis den tar mer enn en helgedag (delt i 2.5.1 og 2.5.2 9. november, fordi spec-en var for lang)
-- [ ] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2) (4.4 gjort 14. november: `brev-1.json` og `brev-2.json`. Gjenstår: 5.2)
+- [x] Test som sjekker at ingen av KI-frasene i addendum står i brevene (story 4.4 og 5.2) (4.4 gjort 14. november: `brev-1.json` og `brev-2.json`. 5.2.1 gjort 15. november: `korrektur-1.json` og `korrektur-2.json`)
 - [x] Sjekkpunkt søndag 22. november: virker innloggingen, telleregelen med tester og innleggingssiden? Hvis ikke, kutt punkt 1–3 på nødlisten (PRD del 4 og 6) (nådd alt 12. november: epic 1 og 2 er ferdige)
 - [x] Sjekkpunkt søndag 29. november: virker hele flyten i testmodus? Hvis ikke, kutt punkt 4–5 på nødlisten (nådd alt 12. november: epic 1–3 er ferdige, ingenting kuttes)
 

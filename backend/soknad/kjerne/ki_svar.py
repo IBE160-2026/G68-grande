@@ -7,13 +7,18 @@ import unicodedata
 
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
+from soknad.kjerne.testdata_match import vask
 
 # Feltene hver oppgave skal ha, og nøyaktig disse (AD-4).
 FELT = {
     "nokkelord": {"nokkelord", "arbeidsgiver"},
     "gap": {"dekker", "mangler"},
     "brev": {"avsnitt", "navn"},
+    "korrektur": {"setninger"},
 }
+
+# Feltene i hver setning i Korrektur, og nøyaktig disse (story 5.2.1).
+SETNING_FELT = {"ny", "gammel", "nytt_avsnitt"}
 
 # Hilsenen til slutt i brevet. KI-en skriver den ikke selv, men hele_brevet() setter den inn
 # før navnet, både på siden og i Word-fila.
@@ -24,9 +29,29 @@ def _er_tekstliste(verdi) -> bool:
     return isinstance(verdi, list) and all(isinstance(element, str) for element in verdi)
 
 
+def _riktig_setning(setning) -> bool:
+    """Én setning i Korrektur: ny er tekst eller null, gammel er en liste med tekster, og
+    nytt_avsnitt er true eller false (ikke et tall)."""
+    if not isinstance(setning, dict) or set(setning) != SETNING_FELT:
+        return False
+    ny = setning["ny"]
+    return (
+        (ny is None or isinstance(ny, str))
+        and _er_tekstliste(setning["gammel"])
+        and isinstance(setning["nytt_avsnitt"], bool)
+    )
+
+
 def _riktig_form(oppgave: str, svar) -> bool:
     if not isinstance(svar, dict) or set(svar) != FELT[oppgave]:
         return False
+    if oppgave == "korrektur":
+        setninger = svar["setninger"]
+        return (
+            isinstance(setninger, list)
+            and len(setninger) > 0
+            and all(_riktig_setning(setning) for setning in setninger)
+        )
     if oppgave == "nokkelord":
         arbeidsgiver = svar["arbeidsgiver"]
         return _er_tekstliste(svar["nokkelord"]) and (
@@ -94,6 +119,26 @@ def hele_brevet(brev: dict) -> list[str]:
     return [*brev["avsnitt"], HILSEN, *([navn] if navn else [])]
 
 
+def korrigert_brev(korrektur: dict) -> list[str]:
+    """Brevet i Korrektur som vises og lastes ned: alle ny som ikke er None, i rekkefølge, satt
+    sammen til avsnitt. En setning begynner et nytt avsnitt når den selv, eller en fjernet
+    setning rett foran den, har nytt_avsnitt. Ellers legges den til i avsnittet med ett
+    mellomrom. Hilsen og navn står slik brukeren skrev dem, og ingenting legges til. Ruter og
+    fil_ut setter aldri sammen brevet selv. korrektur er i formen fra kontroller()."""
+    avsnitt: list[str] = []
+    nytt = False
+    for setning in korrektur["setninger"]:
+        nytt = nytt or setning["nytt_avsnitt"]
+        if setning["ny"] is None:
+            continue
+        if nytt or not avsnitt:
+            avsnitt.append(setning["ny"])
+        else:
+            avsnitt[-1] = f"{avsnitt[-1]} {setning['ny']}"
+        nytt = False
+    return avsnitt
+
+
 def _uten_tomme(liste: list[str]) -> list[str]:
     """Listen uten punkter som er tomme eller bare har mellomrom."""
     return [element for element in liste if element.strip()]
@@ -105,10 +150,22 @@ def _uten_surrogater(liste: list[str]) -> list[str]:
     return ["".join(t for t in element if unicodedata.category(t) != "Cs") for element in liste]
 
 
+def _rens_setning(setning: dict) -> dict:
+    ny = setning["ny"]
+    return {
+        "ny": None if ny is None else (_rens_avsnitt(ny) or None),
+        "gammel": [_rens_avsnitt(gammel) for gammel in setning["gammel"]],
+        "nytt_avsnitt": setning["nytt_avsnitt"],
+    }
+
+
 def _rens(oppgave: str, svar: dict) -> dict:
     """Svaret uten tomme punkter og uten enslige surrogater i listene. Tom arbeidsgiver blir
     None, og brevteksten renses. Ellers renses ikke arbeidsgiver før story 7.5. I brevet renses
-    navnet som avsnittene, tomt navn blir None, og hilsenen KI-en skrev selv, fjernes."""
+    navnet som avsnittene, tomt navn blir None, og hilsenen KI-en skrev selv, fjernes. I
+    Korrektur renses ny og hver gammel som avsnittene, og tom ny blir None."""
+    if oppgave == "korrektur":
+        return {"setninger": [_rens_setning(setning) for setning in svar["setninger"]]}
     if oppgave == "nokkelord":
         arbeidsgiver = svar["arbeidsgiver"]
         if arbeidsgiver is not None and not arbeidsgiver.strip():
@@ -133,6 +190,8 @@ def _bare_tomme(liste: list[str]) -> bool:
 
 
 def _tomt(oppgave: str, svar: dict) -> bool:
+    if oppgave == "korrektur":
+        return all(setning["ny"] is None for setning in svar["setninger"])
     if oppgave == "nokkelord":
         return _bare_tomme(svar["nokkelord"])
     if oppgave == "brev":
@@ -140,10 +199,30 @@ def _tomt(oppgave: str, svar: dict) -> bool:
     return _bare_tomme(svar["dekker"] + svar["mangler"])
 
 
-def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -> dict:
+def _stemmer_med(korrektur: dict, eget_brev: str) -> bool:
+    """Sann når alle gammel satt sammen er det egne brevet, med samme vask som testdataene
+    (AD-10): tegnsetting, mellomrom og linjeskift teller ikke, men et ord som mangler eller er
+    lagt til, gjør det."""
+    gammel = "".join(tekst for setning in korrektur["setninger"] for tekst in setning["gammel"])
+    return vask(gammel) == vask(eget_brev)
+
+
+def kontroller(
+    oppgave: str,
+    tekst: str,
+    stop_reason: str | None = "end_turn",
+    eget_brev: str | None = None,
+) -> dict:
     """Gir svaret i formen fra AD-4. Ugyldig JSON, feil form, tom nøkkelordliste, både
     dekker og mangler tomme eller et brev uten tekst gir KIFeil(ubrukelig_svar). Oppgavene er
-    nokkelord, gap og brev.
+    nokkelord, gap, brev og korrektur.
+
+    Korrektur (FR-23, FR-24) har formen {setninger: [{ny, gammel, nytt_avsnitt}]}, og
+    eget_brev er påkrevd (ellers ValueError, en feil i koden). Tom setninger, en setning med
+    feil felt eller feil type (nytt_avsnitt må være true eller false), alle ny null, eller
+    alle gammel satt sammen og vasket ulik det egne brevet vasket gir KIFeil(ubrukelig_svar).
+    ny og hver gammel renses som avsnittene i brevet, og tom ny blir None. eget_brev brukes
+    ikke for de andre oppgavene. hele_brevet og _uten_hilsen brukes ikke for Korrektur.
 
     Før tom-sjekken renses svaret (FR-28, FR-30), både for TestKI og EkteKI:
     - Punkter som er tomme eller bare har mellomrom, fjernes i nokkelord, dekker, mangler og
@@ -167,6 +246,8 @@ def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -
     JSON-en leses. TestKI sender den ikke, og da gjelder standarden end_turn."""
     if oppgave not in FELT:
         raise ValueError(f"Ukjent KI-oppgave: {oppgave}")
+    if oppgave == "korrektur" and eget_brev is None:
+        raise ValueError("Korrektur trenger det egne brevet for å kontrollere svaret.")
     if stop_reason != "end_turn":
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     try:
@@ -179,5 +260,7 @@ def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -
     if _tomt(oppgave, svar):
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     if oppgave == "nokkelord" and len(svar["nokkelord"]) > MAKS_NOKKELORD:
+        raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
+    if oppgave == "korrektur" and not _stemmer_med(svar, eget_brev):
         raise KIFeil(KIFeilType.UBRUKELIG_SVAR)
     return svar
