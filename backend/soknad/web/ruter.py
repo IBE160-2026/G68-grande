@@ -16,6 +16,7 @@ from soknad.kjerne.inndata import (
     sjekk_innlogging,
     sjekk_registrering,
 )
+from soknad.kjerne.ki_svar import korrektur_visning
 from soknad.kjerne.okt import (
     Modus,
     Soknad,
@@ -503,13 +504,17 @@ def _vis_brev(soknad, avsnitt, fil_feil=False):
     """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
     når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). avsnitt er
     brevet fra ferdig_brev, det samme som i Word-fila: i Full generering med hilsen og navn
-    til slutt, i Korrektur det forbedrede brevet uten markeringer. Overskriften er den for
-    modusen."""
+    til slutt, i Korrektur det forbedrede brevet. Overskriften er den for modusen.
+    I Korrektur får malen også visning (korrektur_visning): de samme avsnittene med hver
+    setning merket som endret eller uendret, og antallet fjernede setninger, til markeringene
+    (FR-23, story 5.3). Word-fila har ingen markeringer. I Full generering er visning None."""
     korrektur = soknad.modus == Modus.KORREKTUR
+    visning = korrektur_visning(soknad.korrektur) if korrektur else None
     return render_template(
         "brev.html",
         overskrift=tekster.BREV_OVERSKRIFT_KORREKTUR if korrektur else tekster.BREV_OVERSKRIFT,
         avsnitt=avsnitt,
+        visning=visning,
         lastet_ned=soknad.lastet_ned,
         filnavn=lag_filnavn(date.today(), "docx"),
         fil_feil=fil_feil,

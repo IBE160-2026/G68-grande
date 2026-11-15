@@ -25,6 +25,7 @@ from tests.web.hjelpere import (
     NOKKELORD_SVAR,
     STIL,
     FeilendeKI,
+    brevtekst,
     css_blokk,
     element,
     footer,
@@ -55,9 +56,57 @@ def feilboks(html):
 
 
 def avsnitt(html):
-    """Teksten i hvert <p> i brevarket, med HTML-escapingen fjernet."""
-    ark = re.search(r'<article class="brevark">(.*?)</article>', html, re.S).group(1)
-    return [html_modul.unescape(p) for p in re.findall(r"<p>(.*?)</p>", ark, re.S)]
+    """Teksten i hvert <p> i brevarket, med HTML-escapingen fjernet, uten de skjulte tekstene
+    og uten «Du skrev» i Korrektur (story 5.3)."""
+    return brevtekst(html)
+
+
+# Den første linjen i det egne brevet i case 1, som korrektur_svar(1) har endret.
+_LINJE_1 = "Søknad på jobb som junior utvikler"
+
+
+def forklaring(html):
+    """Den synlige teksten i hver forklaringsboks over brevet i Korrektur (story 5.3)."""
+    bokser = re.findall(r'<p class="korrektur-forklaring">(.*?)</p>', html, re.S)
+    return [
+        html_modul.unescape(re.sub(r'<span class="skjult">.*?</span>', "", boks)).strip()
+        for boks in bokser
+    ]
+
+
+def knapper(html):
+    """Attributtene til hver endrede setning (knapp) i brevet, i rekkefølge."""
+    return [a for t, a in tagger_i(html) if t == "button" and a.get("class") == "endret-setning"]
+
+
+def du_skrev(html, id_):
+    """De gamle setningene i «Du skrev» med denne id-en, én per linje. Overskriften må være
+    «Du skrev»."""
+    treff = re.search(
+        rf'<span class="du-skrev" id="{id_}" hidden>'
+        r'<span class="du-skrev-overskrift">(.*?)</span>((?:<span>.*?</span>)*)</span>',
+        html,
+    )
+    assert treff.group(1) == tekster.DU_SKREV
+    return [html_modul.unescape(s) for s in re.findall(r"<span>(.*?)</span>", treff.group(2))]
+
+
+def fjernet_linje(html):
+    """Teksten i linjen om fjernede setninger under brevet, eller None."""
+    treff = re.search(r'<p class="fjernet-linje">(.*?)</p>', html, re.S)
+    return None if treff is None else treff.group(1)
+
+
+def paa_brevsiden_med(app, client, *setninger):
+    """Brevsiden i Korrektur for et forbedret brev med disse setningene, i formen fra
+    kontroller()."""
+    korrektur = {"setninger": list(setninger)}
+    sett_soknad(app, client, Soknad(steg=Steg.BREV, modus=Modus.KORREKTUR, korrektur=korrektur))
+    return html_av(client.get("/brev"))
+
+
+def _setning(ny, gammel, nytt_avsnitt=False):
+    return {"ny": ny, "gammel": gammel, "nytt_avsnitt": nytt_avsnitt}
 
 
 class SpionKI:
@@ -562,13 +611,15 @@ def test_fr23_oppdater_gir_brevsiden_med_det_forbedrede_brevet(app, paa_brev_kor
     assert paa_brev_korrektur.get("/brev").status_code == 200
 
 
-def test_fr23_brevsiden_i_korrektur_har_overskriften_og_brevet_uten_markeringer(
+def test_fr23_brevsiden_i_korrektur_har_overskriften_brevet_og_markeringene(
     paa_brev_korrektur,
 ):
-    """FR-23/FR-30 (story 5.2.1): brevsiden i Korrektur har h1 «Din oppdaterte søknad er
+    """FR-23/FR-30 (story 5.2.1 og 5.3): brevsiden i Korrektur har h1 «Din oppdaterte søknad er
     ferdig!» med fokus, og brevet er alle ny som ikke er null, ett avsnitt per avsnitt. «Hei!»
-    er fjernet, hilsenen og navnet står én gang, slik brukeren skrev dem, og det er ingen
-    markeringer, «Du skrev», forklaringsboks eller «(Ny setning)» (story 5.3)."""
+    er fjernet, og hilsenen og navnet står én gang, slik brukeren skrev dem. Den første linjen
+    i brevet («Søknad på …») er endret: forklaringen står over brevet, den første linjen er en
+    lukket knapp med «Du skrev» og den gamle linjen, og «1 setning er fjernet.» står under
+    brevet. De uendrede setningene er vanlig tekst, og endringer.js lastes."""
     html = html_av(paa_brev_korrektur.get("/brev"))
     h1 = [a for t, a in tagger_i(html) if t == "h1"]
     assert h1 == [{"class": "brev-overskrift", "tabindex": "-1", "autofocus": None}]
@@ -579,8 +630,28 @@ def test_fr23_brevsiden_i_korrektur_har_overskriften_og_brevet_uten_markeringer(
     assert "Hei!" not in vist
     assert vist[-2:] == ["Med vennlig hilsen", "Sara Eksempel"]
     assert vist.count("Med vennlig hilsen") == 1
-    for tekst in ("Du skrev", "Ny setning", "fjernet", "<button", "<mark"):
-        assert tekst not in re.search(r'<article class="brevark">(.*?)</article>', html, re.S)[1]
+    assert forklaring(html) == [tekster.KORREKTUR_FORKLARING]
+    assert (
+        f'<p class="korrektur-forklaring">{tekster.KORREKTUR_FORKLARING} '
+        f'<span class="skjult">{tekster.KORREKTUR_FORKLARING_SKJERMLESER}</span></p>'
+    ) in html
+    assert html.index('class="korrektur-forklaring"') < html.index('<article class="brevark">')
+    assert (
+        f'<span class="skjult">{tekster.ENDRET_SETNING_SKJERMLESER} </span>'
+        f"{korrektur_brev(1)[0]}</button>"
+    ) in html
+    assert knapper(html) == [
+        {
+            "type": "button",
+            "class": "endret-setning",
+            "aria-expanded": "false",
+            "aria-controls": "du-skrev-1-1",
+        }
+    ]
+    assert du_skrev(html, "du-skrev-1-1") == [_LINJE_1]
+    assert "hidden" in element(html, "du-skrev-1-1")
+    assert fjernet_linje(html) == "1 setning er fjernet."
+    assert "js/endringer.js" in html
 
 
 def test_fr23_korrektur_uten_hilsen_legger_ikke_til_hilsen(app, innlogget_client):
@@ -744,6 +815,277 @@ def test_fr23_tekstene_i_korrektur_ligger_i_tekster_py():
         innhold = re.sub(r"\{#.*?#\}", "", (maler / mal).read_text(encoding="utf-8"), flags=re.S)
         for tekst in ("Oppdater søknadsbrevet", "oppdaterte søknad"):
             assert tekst not in innhold, (mal, tekst)
+
+
+# --- Markeringene i Korrektur (story 5.3) ---
+
+
+def test_fr23_endret_setning_er_en_knapp_med_lukket_du_skrev(app, innlogget_client):
+    """FR-23/UX-DR15: en endret setning (gammel != [ny]) er en knapp med den skjulte teksten
+    «Endret setning» først og aria-expanded="false". Rett etter står «Du skrev» skjult (hidden)
+    med den gamle setningen, og knappen peker på den med aria-controls."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("Søknad", ["Søknad"], True),
+        _setning("Jeg ønsker å jobbe her.", ["Jeg vil jobbe her"], True),
+        _setning("Jeg kan begynne.", ["Jeg kan begynne."]),
+    )
+    assert knapper(html) == [
+        {
+            "type": "button",
+            "class": "endret-setning",
+            "aria-expanded": "false",
+            "aria-controls": "du-skrev-2-1",
+        }
+    ]
+    assert (
+        '<p><button type="button" class="endret-setning" aria-expanded="false" '
+        'aria-controls="du-skrev-2-1"><span class="skjult">Endret setning </span>'
+        "Jeg ønsker å jobbe her.</button>"
+        '<span class="du-skrev" id="du-skrev-2-1" hidden>'
+        '<span class="du-skrev-overskrift">Du skrev</span><span>Jeg vil jobbe her</span></span>'
+        " Jeg kan begynne.</p>"
+    ) in html
+    assert du_skrev(html, "du-skrev-2-1") == ["Jeg vil jobbe her"]
+    assert avsnitt(html) == ["Søknad", "Jeg ønsker å jobbe her. Jeg kan begynne."]
+
+
+def test_fr23_sammenslaatt_setning_viser_begge_de_gamle(app, innlogget_client):
+    """FR-23/UX-DR15: er to setninger slått sammen, viser «Du skrev» begge, hver på sin linje
+    (hver i sin span)."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning(
+            "Det var lærerikt, og jeg fikk ansvar.", ["Det var lærerikt.", "Jeg fikk ansvar."]
+        ),
+    )
+    assert du_skrev(html, "du-skrev-1-1") == ["Det var lærerikt.", "Jeg fikk ansvar."]
+
+
+def test_fr23_ny_setning_viser_ny_setning_i_du_skrev(app, innlogget_client):
+    """FR-23/UX-DR15: en ny setning (gammel == []) er en grønn knapp, og «Du skrev» viser
+    «(Ny setning)»."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("Jeg søker.", ["Jeg søker."], True),
+        _setning("Jeg kommer gjerne på intervju.", []),
+    )
+    assert [k["aria-controls"] for k in knapper(html)] == ["du-skrev-1-2"]
+    assert du_skrev(html, "du-skrev-1-2") == [tekster.NY_SETNING]
+    assert avsnitt(html) == ["Jeg søker. Jeg kommer gjerne på intervju."]
+
+
+def test_fr23_uendret_setning_er_vanlig_tekst(app, innlogget_client):
+    """FR-23: en uendret setning (gammel == [ny]) er vanlig tekst, uten knapp og uten «Du
+    skrev». Er ingenting endret og ingenting fjernet, står «Vi fant ingenting å endre. Brevet
+    ditt er bra som det er.» i stedet for forklaringen, og ingen linje om fjernede setninger."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("Søknad", ["Søknad"], True),
+        _setning("Jeg søker.", ["Jeg søker."], True),
+    )
+    assert knapper(html) == []
+    assert "du-skrev" not in main(html)
+    assert forklaring(html) == [tekster.INGENTING_ENDRET]
+    assert tekster.KORREKTUR_FORKLARING not in html
+    assert tekster.KORREKTUR_FORKLARING_SKJERMLESER not in html
+    assert fjernet_linje(html) is None
+    assert re.search(r'<article class="brevark">\s*<p>Søknad</p>\s*<p>Jeg søker\.</p>', html)
+
+
+@pytest.mark.parametrize(
+    ("antall", "tekst"), [(1, "1 setning er fjernet."), (2, "2 setninger er fjernet.")]
+)
+def test_fr23_fjernede_setninger_vises_ikke_men_telles_under_brevet(
+    app, innlogget_client, antall, tekst
+):
+    """FR-23/UX-DR15: setninger med ny null vises ikke i brevet. Under brevet står «1 setning
+    er fjernet.» eller «2 setninger er fjernet.». Er en annen setning endret, står
+    forklaringen over brevet som vanlig."""
+    fjernet = [_setning(None, [f"Fjernet {nr}."]) for nr in range(antall)]
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("Jeg ønsker å jobbe her.", ["Jeg vil jobbe her"], True),
+        *fjernet,
+        _setning("Jeg kan begynne.", ["Jeg kan begynne."]),
+    )
+    assert fjernet_linje(html) == tekst
+    assert "Fjernet" not in main(html).replace(tekst, "")
+    assert avsnitt(html) == ["Jeg ønsker å jobbe her. Jeg kan begynne."]
+    assert forklaring(html) == [tekster.KORREKTUR_FORKLARING]
+    assert html.index("</article>") < html.index('class="fjernet-linje"')
+
+
+def test_fr23_bare_fjernet_gir_ingen_forklaring(app, innlogget_client):
+    """FR-23 (bestemt av Kristine 15. november 2026): er ingen setning endret, men én fjernet,
+    står ingen forklaring over brevet (heller ikke «Vi fant ingenting å endre»), bare «1
+    setning er fjernet.» under brevet."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("Søknad", ["Søknad"], True),
+        _setning(None, ["Hei!"], True),
+        _setning("Jeg søker.", ["Jeg søker."]),
+    )
+    assert forklaring(html) == []
+    assert tekster.INGENTING_ENDRET not in html
+    assert knapper(html) == []
+    assert fjernet_linje(html) == "1 setning er fjernet."
+    assert avsnitt(html) == ["Søknad", "Jeg søker."]
+
+
+def test_fr23_flere_endrede_setninger_har_unike_id_er(app, innlogget_client):
+    """FR-23/UX-DR15: hver endrede setning har sin egen «Du skrev» med en unik id
+    (du-skrev-avsnitt-setning), og aria-controls på hver knapp peker på nettopp den. Så kan
+    flere være åpne samtidig."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("En ny.", ["En."], True),
+        _setning("To ny.", ["To."]),
+        _setning("Tre.", ["Tre."], True),
+        _setning("Fire ny.", ["Fire."]),
+        _setning("Fem ny.", [], True),
+    )
+    styrer = [k["aria-controls"] for k in knapper(html)]
+    assert styrer == ["du-skrev-1-1", "du-skrev-1-2", "du-skrev-2-2", "du-skrev-3-1"]
+    bokser = [a for _, a in tagger_i(html) if a.get("class") == "du-skrev"]
+    assert [b["id"] for b in bokser] == styrer
+    assert all("hidden" in b for b in bokser)
+    alle_id = [a["id"] for _, a in tagger_i(html) if "id" in a]
+    assert len(alle_id) == len(set(alle_id))
+    assert du_skrev(html, "du-skrev-2-2") == ["Fire."]
+    assert avsnitt(html) == ["En ny. To ny.", "Tre. Fire ny.", "Fem ny."]
+
+
+def test_fr23_ny_og_gammel_escapes(app, innlogget_client):
+    """FR-23/NFR-6: <script> i ny eller gammel vises som tekst og escapes, både i knappen, i
+    «Du skrev» og i vanlig tekst."""
+    html = paa_brevsiden_med(
+        app,
+        innlogget_client,
+        _setning("<script>ny()</script>", ["<script>gammel()</script>"], True),
+        _setning("<b>uendret</b>", ["<b>uendret</b>"]),
+    )
+    assert "<script>ny()" not in html
+    assert "<script>gammel()" not in html
+    assert "<b>uendret" not in html
+    assert "&lt;script&gt;ny()&lt;/script&gt;</button>" in html
+    assert du_skrev(html, "du-skrev-1-1") == ["<script>gammel()</script>"]
+    assert avsnitt(html) == ["<script>ny()</script> <b>uendret</b>"]
+
+
+def test_fr23_full_generering_har_ingen_markeringer(paa_brev):
+    """FR-22/FR-23: i Full generering er brevsiden som før: ingen forklaring, ingen knapper i
+    brevet, ingen «Du skrev», ingen linje om fjernede setninger, og endringer.js lastes ikke."""
+    html = html_av(paa_brev.get("/brev"))
+    assert forklaring(html) == []
+    assert tekster.INGENTING_ENDRET not in html
+    assert knapper(html) == []
+    assert "du-skrev" not in html
+    assert fjernet_linje(html) is None
+    assert "js/endringer.js" not in html
+    assert "js/nedlasting.js" in html
+
+
+def test_fr23_endringer_js_lastes_bare_paa_brevsiden_i_korrektur(paa_brev_korrektur):
+    """FR-23/AD-1: endringer.js lastes på brevsiden i Korrektur, ikke på resultatsiden."""
+    assert "js/endringer.js" in html_av(paa_brev_korrektur.get("/brev"))
+    assert "js/endringer.js" not in html_av(paa_brev_korrektur.get("/resultat"))
+
+
+def test_fr23_endringer_skriptet():
+    """FR-23/UX-DR15/AD-1: endringer.js bytter aria-expanded og hidden på boksen i
+    aria-controls for hver endrede setning ved trykk (click, som også gjelder Enter og
+    mellomrom på en <button>). Det lukker ikke de andre (flere kan være åpne), har ingen Esc,
+    åpner ikke ved hover eller fokus og sender ingenting til serveren."""
+    js = (STIL.parents[1] / "js" / "endringer.js").read_text(encoding="utf-8")
+    assert '".endret-setning"' in js
+    assert '"aria-controls"' in js
+    assert '"aria-expanded"' in js
+    assert ".hidden" in js
+    assert 'addEventListener("click"' in js
+    assert "Escape" not in js
+    assert not re.search(r'addEventListener\("(focus|focusin|pointerenter|mouseenter)"', js)
+    assert 'document.addEventListener("click"' not in js
+    for forbudt in ("fetch(", "XMLHttpRequest", ".submit(", "sendBeacon", "location", "innerHTML"):
+        assert forbudt not in js
+
+
+def test_fr23_tekstene_for_markeringene_ligger_i_tekster_py():
+    """FR-23/UX-DR15: tekstene for markeringene står i web/tekster.py, ordrett fra EXPERIENCE,
+    og ikke i brev.html."""
+    assert tekster.KORREKTUR_FORKLARING == (
+        "Grønn og understreket = endret. Trykk på setningen for å se det du skrev."
+    )
+    assert tekster.KORREKTUR_FORKLARING_SKJERMLESER == "Endrede setninger er knapper."
+    assert tekster.ENDRET_SETNING_SKJERMLESER == "Endret setning"
+    assert tekster.DU_SKREV == "Du skrev"
+    assert tekster.NY_SETNING == "(Ny setning)"
+    assert tekster.INGENTING_ENDRET == "Vi fant ingenting å endre. Brevet ditt er bra som det er."
+    assert tekster.fjernet(1) == "1 setning er fjernet."
+    assert tekster.fjernet(2) == "2 setninger er fjernet."
+    assert tekster.fjernet(5) == "5 setninger er fjernet."
+    mal = STIL.parents[2] / "templates" / "brev.html"
+    innhold = re.sub(r"\{#.*?#\}", "", mal.read_text(encoding="utf-8"), flags=re.S)
+    for tekst in ("Grønn og", "Endrede setninger", "Endret setning", "Du skrev", "Ny setning"):
+        assert tekst not in innhold, tekst
+    for tekst in ("ingenting å endre", "er fjernet", "style="):
+        assert tekst not in innhold, tekst
+
+
+def test_fr23_css_for_markeringene():
+    """FR-23/UX-DR15/NFR-7: forklaringsboksen er hvit og høyst 720 px. Den endrede setningen
+    har vanlig tekstfarge, lys grønn bakgrunn, 2 px grønn understreking og ingen ramme, og
+    changed-active ved hover og når den er åpen, og fokusringen. «Du skrev» er dempet med 4 px
+    strek til venstre, og [hidden] skjuler den. I høykontrast har setningene, «Du skrev» og
+    forklaringsboksen en ramme i CanvasText, og en åpen setning en tykkere ramme. Ingen faste
+    høyder."""
+    css = STIL.read_text(encoding="utf-8")
+    boks = css_blokk(css, ".korrektur-forklaring")
+    assert "max-width: var(--letter-max);" in boks
+    assert "background: var(--surface);" in boks
+    assert "margin: 0 auto" in boks
+    setning = css_blokk(css, ".endret-setning")
+    for regel in (
+        "font: inherit;",
+        "color: var(--text);",
+        "background: var(--success-tint);",
+        "text-decoration-color: var(--success);",
+        "text-decoration-thickness: 2px;",
+        "border: none;",
+        "text-align: left;",
+    ):
+        assert regel in setning, regel
+    aktiv = css_blokk(css, '.endret-setning:hover,\n.endret-setning[aria-expanded="true"]')
+    assert "background: var(--changed-active);" in aktiv
+    assert "outline: 3px solid var(--focus-ring);" in css_blokk(
+        css, ".endret-setning:focus-visible"
+    )
+    # Den skjulte «Endret setning» blir ikke med når brevteksten kopieres fra siden.
+    assert "user-select: none;" in css_blokk(css, ".endret-setning .skjult")
+    gammel = css_blokk(css, ".du-skrev")
+    assert "display: block;" in gammel
+    assert "color: var(--text-muted);" in gammel
+    assert "background: var(--background);" in gammel
+    assert "border-left: 4px solid var(--text-muted);" in gammel
+    assert "display: none;" in css_blokk(css, ".du-skrev[hidden]")
+    assert "text-transform: uppercase;" in css_blokk(css, ".du-skrev-overskrift")
+    for blokk in (boks, setning, gammel, css_blokk(css, ".fjernet-linje")):
+        assert "height" not in blokk
+    hoykontrast = re.search(r"@media \(forced-colors: active\) \{(.*?)\n\}", css, re.S).group(1)
+    for velger in (".endret-setning", ".du-skrev", ".korrektur-forklaring"):
+        regel = re.search(rf"^\s*{re.escape(velger)}\s*\{{(.*?)\}}", hoykontrast, re.S | re.M)
+        assert "border: 1px solid CanvasText;" in regel.group(1), velger
+    apen = re.search(
+        r'^\s*\.endret-setning\[aria-expanded="true"\]\s*\{(.*?)\}', hoykontrast, re.S | re.M
+    )
+    assert "border-width: 3px;" in apen.group(1)
 
 
 # --- Tekster og CSS ---

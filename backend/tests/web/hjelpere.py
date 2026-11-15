@@ -91,6 +91,51 @@ def tagger_i(html):
     return leser.tagger
 
 
+class Brevtekst(HTMLParser):
+    """Samler teksten i hvert <p> i brevarket slik den står på skjermen, uten de skjulte
+    tekstene (.skjult) og uten «Du skrev» (.du-skrev) i Korrektur (story 5.3). Teksten er
+    unescapet."""
+
+    _HOPP_OVER = {"skjult", "du-skrev"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.avsnitt = []
+        self._i_ark = False
+        self._i_p = False
+        # Antall åpne <span> inne i en span som hoppes over (0 = teksten tas med).
+        self._hopp = 0
+
+    def handle_starttag(self, tag, attrs):
+        klasser = set((dict(attrs).get("class") or "").split())
+        if tag == "article" and "brevark" in klasser:
+            self._i_ark = True
+        elif self._i_ark and tag == "p":
+            self._i_p = True
+            self.avsnitt.append("")
+        elif self._i_p and tag == "span" and (self._hopp or klasser & self._HOPP_OVER):
+            self._hopp += 1
+
+    def handle_endtag(self, tag):
+        if tag == "article":
+            self._i_ark = False
+        elif tag == "p":
+            self._i_p = False
+        elif tag == "span" and self._hopp:
+            self._hopp -= 1
+
+    def handle_data(self, data):
+        if self._i_p and not self._hopp:
+            self.avsnitt[-1] += data
+
+
+def brevtekst(html):
+    """Teksten i hvert avsnitt i brevarket, uten de skjulte tekstene og «Du skrev»."""
+    leser = Brevtekst()
+    leser.feed(html)
+    return leser.avsnitt
+
+
 def html_av(svar):
     """Svaret som tekst."""
     return svar.get_data(as_text=True)

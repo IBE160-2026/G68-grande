@@ -119,24 +119,64 @@ def hele_brevet(brev: dict) -> list[str]:
     return [*brev["avsnitt"], HILSEN, *([navn] if navn else [])]
 
 
-def korrigert_brev(korrektur: dict) -> list[str]:
-    """Brevet i Korrektur som vises og lastes ned: alle ny som ikke er None, i rekkefølge, satt
-    sammen til avsnitt. En setning begynner et nytt avsnitt når den selv, eller en fjernet
-    setning rett foran den, har nytt_avsnitt. Ellers legges den til i avsnittet med ett
-    mellomrom. Hilsen og navn står slik brukeren skrev dem, og ingenting legges til. Ruter og
-    fil_ut setter aldri sammen brevet selv. korrektur er i formen fra kontroller()."""
-    avsnitt: list[str] = []
+def _korrektur_avsnitt(korrektur: dict) -> list[list[dict]]:
+    """Setningene i Korrektur som har ny (ikke None), i rekkefølge, gruppert i avsnitt. En
+    setning begynner et nytt avsnitt når den selv, eller en fjernet setning rett foran den, har
+    nytt_avsnitt. Den første setningen begynner alltid et avsnitt. Både korrigert_brev og
+    korrektur_visning bruker denne, så siden og Word-fila har de samme avsnittene."""
+    avsnitt: list[list[dict]] = []
     nytt = False
     for setning in korrektur["setninger"]:
         nytt = nytt or setning["nytt_avsnitt"]
         if setning["ny"] is None:
             continue
         if nytt or not avsnitt:
-            avsnitt.append(setning["ny"])
+            avsnitt.append([setning])
         else:
-            avsnitt[-1] = f"{avsnitt[-1]} {setning['ny']}"
+            avsnitt[-1].append(setning)
         nytt = False
     return avsnitt
+
+
+def korrigert_brev(korrektur: dict) -> list[str]:
+    """Brevet i Korrektur som vises og lastes ned: alle ny som ikke er None, i rekkefølge, satt
+    sammen til avsnitt (se _korrektur_avsnitt), med ett mellomrom mellom setningene i hvert
+    avsnitt. Hilsen og navn står slik brukeren skrev dem, og ingenting legges til. Ruter og
+    fil_ut setter aldri sammen brevet selv. korrektur er i formen fra kontroller()."""
+    return [
+        " ".join(setning["ny"] for setning in avsnitt) for avsnitt in _korrektur_avsnitt(korrektur)
+    ]
+
+
+def korrektur_visning(korrektur: dict) -> dict:
+    """Markeringene på brevsiden i Korrektur (FR-23, AD-5). Dette er det eneste stedet som
+    avgjør hva som er endret. Malen og skriptet regner aldri ut det selv. Gir:
+    - avsnitt: de samme avsnittene som korrigert_brev, som lister av {ny, gammel, endret}. Bare
+      setninger med ny er med. endret er sann når gammel != [ny], også for en ny setning
+      (gammel == []).
+    - fjernet: antall gamle setninger som er fjernet, altså alle gammel i oppføringene der ny
+      er None. To gamle setninger i én slik oppføring er to fjernede, og en oppføring med
+      tom gammel er ingen. De vises ikke.
+    - antall_endret: antall setninger som er markert som endret (endret over).
+    korrektur er i formen fra kontroller()."""
+    avsnitt = [
+        [
+            {
+                "ny": setning["ny"],
+                "gammel": list(setning["gammel"]),
+                "endret": setning["gammel"] != [setning["ny"]],
+            }
+            for setning in gruppe
+        ]
+        for gruppe in _korrektur_avsnitt(korrektur)
+    ]
+    return {
+        "avsnitt": avsnitt,
+        "fjernet": sum(
+            len(setning["gammel"]) for setning in korrektur["setninger"] if setning["ny"] is None
+        ),
+        "antall_endret": sum(1 for gruppe in avsnitt for setning in gruppe if setning["endret"]),
+    }
 
 
 def _uten_tomme(liste: list[str]) -> list[str]:
