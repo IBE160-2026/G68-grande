@@ -7,7 +7,6 @@ import unicodedata
 
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
-from soknad.kjerne.testdata_match import vask
 
 # Feltene hver oppgave skal ha, og nøyaktig disse (AD-4).
 FELT = {
@@ -78,8 +77,10 @@ def _word_taler(tegn: str) -> bool:
 
 def _rens_avsnitt(avsnitt: str) -> str:
     """Fjerner tegnene Word ikke tåler, og gjør alt mellomrom (også linjeskift og tab) om til
-    ett mellomrom. Nettleseren viser flere mellomrom som ett, så da blir Word-fila lik siden."""
-    return " ".join("".join(tegn for tegn in avsnitt if _word_taler(tegn)).split())
+    ett mellomrom. Nettleseren viser flere mellomrom som ett, så da blir Word-fila lik siden.
+    Teksten får Unicode NFC, så «å» skrevet som a + ring blir samme tegn som «å» (retro 5)."""
+    tekst = unicodedata.normalize("NFC", avsnitt)
+    return " ".join("".join(tegn for tegn in tekst if _word_taler(tegn)).split())
 
 
 # En hilsen først i et avsnitt: «(Med) vennlig hilsen», «Mvh» eller nynorsk «(Med) venleg
@@ -239,12 +240,28 @@ def _tomt(oppgave: str, svar: dict) -> bool:
     return _bare_tomme(svar["dekker"] + svar["mangler"])
 
 
+def _uten_mellomrom(tekst: str) -> str:
+    """Teksten renset (_rens_avsnitt, med NFC) og uten mellomrom og usynlige formattegn
+    (kategori Cf, for eksempel myk bindestrek, nullbreddemellomrom og BOM fra Word eller PDF).
+    Alt annet beholdes, også store bokstaver og tegnsetting."""
+    return "".join(
+        tegn
+        for tegn in _rens_avsnitt(tekst)
+        if not tegn.isspace() and unicodedata.category(tegn) != "Cf"
+    )
+
+
 def _stemmer_med(korrektur: dict, eget_brev: str) -> bool:
-    """Sann når alle gammel satt sammen er det egne brevet, med samme vask som testdataene
-    (AD-10): tegnsetting, mellomrom og linjeskift teller ikke, men et ord som mangler eller er
-    lagt til, gjør det."""
-    gammel = "".join(tekst for setning in korrektur["setninger"] for tekst in setning["gammel"])
-    return vask(gammel) == vask(eget_brev)
+    """Sann når alle gammel satt sammen er det egne brevet ordrett (AD-4, retro 5). Store
+    bokstaver og tegnsetting teller, så «Du skrev» viser teksten slik den sto i brevet KI-en
+    fikk, og en endring bare i tegnsetting blir markert. Mellomrom (også mellom setninger, så
+    «butikk.Det» i brevet stemmer med «butikk.» og «Det»), linjeskift, usynlige formattegn og
+    tegn Word ikke tåler teller ikke (_uten_mellomrom). En tom gammel stemmer aldri, fordi den
+    ville gitt en tom linje i «Du skrev»."""
+    gammel = [tekst for setning in korrektur["setninger"] for tekst in setning["gammel"]]
+    if any(not tekst for tekst in gammel):
+        return False
+    return _uten_mellomrom("".join(gammel)) == _uten_mellomrom(eget_brev)
 
 
 def kontroller(
@@ -260,9 +277,10 @@ def kontroller(
     Korrektur (FR-23, FR-24) har formen {setninger: [{ny, gammel, nytt_avsnitt}]}, og
     eget_brev er påkrevd (ellers ValueError, en feil i koden). Tom setninger, en setning med
     feil felt eller feil type (nytt_avsnitt må være true eller false), alle ny null, eller
-    alle gammel satt sammen og vasket ulik det egne brevet vasket gir KIFeil(ubrukelig_svar).
-    ny og hver gammel renses som avsnittene i brevet, og tom ny blir None. eget_brev brukes
-    ikke for de andre oppgavene. hele_brevet og _uten_hilsen brukes ikke for Korrektur.
+    alle gammel satt sammen ulik det egne brevet ordrett, eller en tom gammel (se _stemmer_med),
+    gir KIFeil(ubrukelig_svar). ny og hver gammel renses som avsnittene i brevet før sjekken, og
+    tom ny blir None. eget_brev brukes ikke for de andre oppgavene. hele_brevet og _uten_hilsen
+    brukes ikke for Korrektur.
 
     Før tom-sjekken renses svaret (FR-28, FR-30), både for TestKI og EkteKI:
     - Punkter som er tomme eller bare har mellomrom, fjernes i nokkelord, dekker, mangler og

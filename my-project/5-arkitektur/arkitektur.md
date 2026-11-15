@@ -97,7 +97,7 @@ flowchart TD
     - `nokkelord` er tom
     - både `dekker` og `mangler` er tomme
     - brevet er uten tekst (også når alle `ny` er `null`, og når avsnittene bare er hilsen og navn)
-    - i Korrektur: alle `gammel`, satt sammen og vasket (AD-10), er ikke lik det opprinnelige brevet, også vasket
+    - i Korrektur: alle `gammel` satt sammen er ikke lik det opprinnelige brevet ordrett, eller en `gammel` er tom. Store bokstaver og tegnsetting teller, så «Du skrev» viser teksten slik den sto i brevet (retro 5). Mellomrom (også mellom setninger), linjeskift, usynlige formattegn (som myk bindestrek og BOM) og tegn Word ikke tåler teller ikke, og begge sider får Unicode NFC. I testmodus sjekkes svaret mot casets egen `eget-brev.txt`, så «Du skrev» viser teksten i fila.
   - **Testsvar:** `testdata/<case>/ki-svar/*.json` inneholder bare objektet over. De lages av `scripts/lag_testsvar.py`, som kjører `EkteKI` på hvert testcase (FR-38).
   - **Grunn ved endring:** et felt `grunn` kan legges til i `korrektur` senere (står under «Gjøres hvis det blir tid»).
 
@@ -186,7 +186,7 @@ flowchart TD
   2. `casefold()`
   3. beholder bare bokstaver og tall
 
-  Den samme `vask` brukes også i AD-4 og AD-8. Sjekken gjøres felt for felt. CV-en avgjør hvilket testcase det gjelder. Annonse og eget brev som ikke matcher samme case, får `ikke_testdata` på sitt eget felt. Er annonsen annonsen i et annet case enn CV-en, får den `annen_case` i stedet, med en egen tekst (story 4.5). CV-ene og annonsene er unike på tvers av casene, ellers starter ikke nettsiden. En test per case sjekker at `.pdf` og `.txt` gjenkjennes som samme case. Mangler `ANTHROPIC_API_KEY`, er testmodus låst på.
+  Den samme `vask` brukes også i AD-8 (men ikke i kontrollen av Korrektur i AD-4, fra retro 5). Sjekken gjøres felt for felt. CV-en avgjør hvilket testcase det gjelder. Annonse og eget brev som ikke matcher samme case, får `ikke_testdata` på sitt eget felt. Er annonsen annonsen i et annet case enn CV-en, får den `annen_case` i stedet, med en egen tekst (story 4.5). CV-ene og annonsene er unike på tvers av casene, ellers starter ikke nettsiden. En test per case sjekker at `.pdf` og `.txt` gjenkjennes som samme case. Mangler `ANTHROPIC_API_KEY`, er testmodus låst på.
 
 ### AD-11 — Inndata og utdata gjennom faste adaptere
 

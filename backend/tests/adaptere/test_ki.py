@@ -236,8 +236,10 @@ def test_fr28_svarfil_som_ikke_er_utf8_gir_ubrukelig_svar(kopi):
 
 
 def test_fr38_korrektur_oddetall_gir_korrektur_1_og_partall_korrektur_2(tmp_path):
-    """FR-23/FR-38: TestKI.korrektur leser korrektur-1.json ved oddetall og korrektur-2.json
-    ved partall forslag, også med rotete tekst, og svaret går gjennom kontroller()."""
+    """FR-23/FR-38 (retro 5): TestKI.korrektur leser korrektur-1.json ved oddetall og
+    korrektur-2.json ved partall forslag, og svaret går gjennom kontroller(). Med rotete tekst
+    (store bokstaver, mellomrom) virker det også, fordi svaret kontrolleres mot casets egen
+    eget-brev.txt, ikke mot den innlimte teksten."""
     ki = korrektur_testki(tmp_path)
     cv, annonse, brev = _les("cv.txt"), _les("annonse.txt"), _les("eget-brev.txt")
     assert ki.korrektur(cv, annonse, brev, forslag=1) == korrektur_svar(1)
@@ -247,13 +249,24 @@ def test_fr38_korrektur_oddetall_gir_korrektur_1_og_partall_korrektur_2(tmp_path
 
 
 def test_fr28_korrektur_som_ikke_stemmer_med_brevet_gir_ubrukelig_svar(tmp_path):
-    """FR-28 (story 5.2.1): TestKI kontrollerer svaret mot det egne brevet, så en svarfil der
-    en setning mangler i gammel, gir KIFeil(ubrukelig_svar)."""
+    """FR-28 (story 5.2.1, retro 5): TestKI kontrollerer svaret mot casets egen eget-brev.txt,
+    så en svarfil der en setning mangler i gammel, gir KIFeil(ubrukelig_svar)."""
     svar = korrektur_svar(1)
     ki = korrektur_testki(tmp_path, svar1={"setninger": svar["setninger"][1:]})
     with pytest.raises(KIFeil) as feil:
         ki.korrektur(_les("cv.txt"), _les("annonse.txt"), _les("eget-brev.txt"), forslag=1)
     assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def test_fr28_eget_brev_som_ikke_kan_leses_gir_kifeil_annet(tmp_path):
+    """FR-28 (retro 5): kan casets eget-brev.txt ikke leses når svaret skal kontrolleres (her
+    slettet etter at TestKI startet), gis KIFeil(annet), som for svarfilene."""
+    ki = korrektur_testki(tmp_path)
+    brev = _les("eget-brev.txt")
+    (tmp_path / "testdata" / "case-1-utvikler" / "eget-brev.txt").unlink()
+    with pytest.raises(KIFeil) as feil:
+        ki.korrektur(_les("cv.txt"), _les("annonse.txt"), brev, forslag=1)
+    assert feil.value.type == KIFeilType.ANNET
 
 
 def test_fr28_korrekturfil_som_mangler_gir_kifeil_annet(kopi):

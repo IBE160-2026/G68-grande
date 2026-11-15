@@ -186,10 +186,21 @@ class TestKI:
     def korrektur(self, cv: str, annonse: str, eget_brev: str, forslag: int) -> dict:
         """Caset finnes ut fra CV-en, og annonsen og det egne brevet må høre til samme case.
         Oddetall for forslag gir korrektur-1.json, partall korrektur-2.json («Nytt forslag» i
-        Epic 7). Svaret kontrolleres mot det egne brevet."""
+        Epic 7). Svaret kontrolleres mot casets egen eget-brev.txt, ikke mot det brukeren limte
+        inn. Caset er funnet med vasken, så den innlimte teksten kan ha andre store bokstaver
+        eller mellomrom (eller komme fra en PDF, Epic 6), mens gammel i svarfila er ordrett fra
+        fila (retro 5). I testmodus viser «Du skrev» derfor teksten i fila. Kan fila ikke
+        leses, gis KIFeil(annet), som for svarfilene."""
         case, _ = finn_case(cv, annonse, self.caser, eget_brev=eget_brev)
+        # Inndataene sjekkes før KI-en kalles (story 2.5). Dette er bare en sikring.
+        if case is None:
+            raise KIFeil(KIFeilType.ANNET)
+        try:
+            original = (self.mappe / case / "eget-brev.txt").read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as feil:
+            raise KIFeil(KIFeilType.ANNET) from feil
         return self._svar(
-            case, "korrektur", f"korrektur-{1 if forslag % 2 else 2}", eget_brev=eget_brev
+            case, "korrektur", f"korrektur-{1 if forslag % 2 else 2}", eget_brev=original
         )
 
     def _svar(
