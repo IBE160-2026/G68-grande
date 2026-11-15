@@ -88,6 +88,7 @@ context:
 - Runde 1 og runde 2 (etter plan B) i `retro-5/runde-1/` og `runde-2/`. Kjøring 1 i runde 2 er svarene i testmodus. Alle 12 svarene besto `kontroller`. Kristine godkjente runde 2 for kriterium 12, og godtok det feilaktige «Derfor» i kjøring 3, `korrektur-2`, som et kjent svakt punkt.
 - Kostnad i alt: ca. 18 kr.
 - 1038 tester består, og ruff er uten feil.
+- Etter nettlesertesten: Kristine så at brevsiden viste én setning per linje, mens Word-fila hadde vanlige avsnitt. Årsaken var at en endret setning var en `<button>`, som ikke kan brytes over to linjer. Nå er den et `<span>` med `role="button"` og `tabindex="0"`, `endringer.js` åpner også med Enter og mellomrom, og stilarket har `box-decoration-break: clone`. Kristine prøvde det i nettleseren (avsnitt, klikk, tastatur og smalt vindu). 1038 tester består (commit `b9ecd7e`).
 
 ## Spec Change Log
 
