@@ -22,3 +22,6 @@ Kristine startet story 5.1 med `/bmad-build 5.1`. Målet er at en student som ha
 - Kristine prøver Korrektur i nettleseren før PR-en flettes: modusvalget ved 375 og 1280 px, testdataene fra case 1, tomt brev, case 2 i Korrektur, «Tilbake», og at Full generering ser ut som før. Se særlig om tre felt på ca. 300 px hver ved 1000 px blir for trangt
 - Kristine leser teksten i `eget-brev.txt` og «Sjekkliste for Korrektur» i `fasit.md` før PR-en flettes
 - Story 5.2: testbrevet slutter med «Med vennlig hilsen» og «Sara Eksempel». Bestemme hvordan Korrektur behandler hilsen og navn (de må stå i `gammel`), og om tittellinjen og «Hei!» skal skrives om
+
+### Tillegg kl. 15:10
+Kristine prøvde Korrektur i nettleseren (modusvalget, case 1, tomt og feil brev, case 2, «Tilbake» og bredden) og sa «alt fungerer bra». Punktet om nettleserprøven i `issues.md` er lukket.
