@@ -56,3 +56,20 @@ Kristine prøvde brevsiden i nettleseren («det ser bra ut») og sa at brevet ik
 ### Åpne punkter
 - Flette PR #37. Etter flettingen: 5.3 og epic 5 til ferdig, og retrospektiv for epic 5.
 - Etter 5.3: bedre flyt i brevet fra Korrektur (står allerede i `issues.md`).
+
+## 2026-11-15 kl. 20:02 — Kristine
+
+### Oppgave
+«merget»: PR #37 er flettet. Oppdatere sprint-status, TO DO og logg.
+
+### Plan
+- Hente `main`, ta med loggcommiten som kom etter flettingen, og sette 5.3 og epic 5 til ferdig.
+
+### Resultat
+- `main` hentet (fletting `73e7873`). Den siste loggcommiten på branchen (`02f8aa1`) ble pushet etter flettingen, så den ble tatt med i `main` med cherry-pick.
+- Sprint-status: 5.3 og epic 5 er ferdige (også kopien i `my-project/7-sprint-planning/`). TO DO: story 5.3 og risikopunktet om markerte endringer er krysset av. README har lenke til PR #37, og prompt-loggen har to nye rader.
+- Ikke pushet: push til `main` ble stoppet av tillatelsene i Claude Code.
+
+### Åpne punkter
+- Retrospektiv for epic 5 (`bmad-retrospective`).
+- Etter 5.3: bedre flyt i brevet fra Korrektur (står allerede i `issues.md`).
