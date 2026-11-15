@@ -27,7 +27,7 @@ Kristine spurte hvor Docker kommer inn i prosjektet, og ba meg se på `my-projec
   - Plan B: regelen mot rangering ble utvidet (ikke «sentral», «viktig» eller «en stor del av»), med en test. Runde 2 besto kriterium 1, 3, 11 og 14, og alle 38 brevene har hilsen og riktig navn. Ingrid-CV-en: plan B-regelen holder, og merknad 4 og 5 er rettet. Kristine godtok «hver arbeidsdag» og fem andre setninger som slutninger.
   - Case 2 fikk «lønn» som 17. nøkkelord, så `fasit.md` ble oppdatert (7 av 17 = 41 %).
   - Kostnad: ca. 34 kr for begge rundene. 860 tester grønne, ruff grønn.
-  - Commit `8bf90a5` på branchen. Den er ikke pushet, og det finnes ingen PR ennå.
+  - Commit `8bf90a5` på branchen. Kristine prøvde brevsiden, Word-fila og «Nytt forslag» i testmodus med case 1 og 2 («ja alt ser bra ut!»). Pushet, og [PR #33](https://github.com/IBE160-2026/G68-grande/pull/33) er laget med merknad om KI-feilene og en kommentar om prøven. CI er grønn på Linux og Windows.
 
 ### Åpne punkter
-- PR for `brev-hilsen-og-regler`: pushe, PR med merknad om KI-feil, grønn CI og flette. Før det: prøve brevsiden i testmodus (375 og 1280 px) og Word-fila (hilsen og navn til slutt, ikke to ganger).
+- Flette PR #33. Deretter: krysse av punktet i TO DO, og starte epic 5 (story 5.1).
