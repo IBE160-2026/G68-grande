@@ -19,9 +19,10 @@ class Innlogging:
 
 
 class Modus(StrEnum):
-    """Modusene på modusvalget. Korrektur kommer i Epic 5."""
+    """Modusene på modusvalget, i den rekkefølgen kortene står i (FR-20)."""
 
     FULL_GENERERING = "full_generering"
+    KORREKTUR = "korrektur"
 
 
 @dataclass(frozen=True)
@@ -36,7 +37,9 @@ class Tekstfelt:
 class Soknad:
     """Varer én søknad. Å komme til startsiden lager alltid en ny.
 
-    korrektur og forslag legges til i Epic 5 og Epic 7, med de navnene."""
+    eget_brev er brevet brukeren har skrevet selv, og brukes bare i Korrektur (FR-8). Det
+    beholdes også i Full generering, så det ikke er borte når brukeren bytter modus.
+    korrektur og forslag legges til i story 5.2 og Epic 7, med de navnene."""
 
     steg: Steg = Steg.START
     modus: Modus | None = None
@@ -69,22 +72,29 @@ def begynn(soknad: Soknad, samtykke: bool = False) -> Soknad:
 def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
     """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen og brevet (og om det
     er lastet ned) gjelder ikke lenger, fordi analysen kjøres på nytt før resultatsiden. CV,
-    annonse og nøkkelordlisten beholdes."""
+    annonse, eget brev og nøkkelordlisten beholdes."""
     return replace(soknad, modus=modus, steg=Steg.INNLEGGING, gap=None, brev=None, lastet_ned=False)
 
 
-def sett_inndata(soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt) -> Soknad:
-    """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). Er begge feltene
-    like som før, er søknaden uendret. Ellers gjelder ikke resultatene lenger: nøkkelordlisten,
-    arbeidsgiveren, gap-analysen, brevet og lastet_ned nullstilles, og steget blir høyst
-    innlegging, så resultatsiden ikke vises før analysen har lyktes igjen (AD-8). Gjenbruk av
-    nøkkelordlisten når bare CV-en er endret, kommer i Epic 7."""
-    if soknad.cv == cv and soknad.annonse == annonse:
+def sett_inndata(
+    soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt, eget_brev: Tekstfelt | None = None
+) -> Soknad:
+    """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). eget_brev er None i
+    Full generering, og da er brevet i søknaden uendret. Er alle feltene like som før, er
+    søknaden uendret. Er ett av dem endret, også bare det egne brevet (FR-8), gjelder ikke
+    resultatene lenger: nøkkelordlisten, arbeidsgiveren, gap-analysen, brevet og lastet_ned
+    nullstilles, og steget blir høyst innlegging, så resultatsiden ikke vises før analysen
+    har lyktes igjen med et brev som har bestått sjekken (AD-8). Gjenbruk av nøkkelordlisten
+    når bare CV-en er endret, kommer i Epic 7."""
+    if eget_brev is None:
+        eget_brev = soknad.eget_brev
+    if soknad.cv == cv and soknad.annonse == annonse and soknad.eget_brev == eget_brev:
         return soknad
     return replace(
         soknad,
         cv=cv,
         annonse=annonse,
+        eget_brev=eget_brev,
         nokkelord=None,
         nokkelord_annonse=None,
         arbeidsgiver=None,
@@ -136,6 +146,6 @@ def har_plass_til(soknad: Soknad, antall: int) -> bool:
 def tell_ki_kall(soknad: Soknad, antall: int) -> Soknad:
     """Legger antall KI-kall til telleren (NFR-11). Hvert kall telles når det startes, også
     når det feiler. Resten av søknaden er uendret. har_plass_til må kalles først. Begge brukes
-    av hjelperen for KI-kallet i web/ruter.py (_med_ki), og Korrektur (Epic 5) og «Nytt
+    av hjelperen for KI-kallet i web/ruter.py (_med_ki), og Korrektur (story 5.2) og «Nytt
     forslag» (Epic 7) skal bruke den hjelperen."""
     return replace(soknad, ki_kall=soknad.ki_kall + antall)

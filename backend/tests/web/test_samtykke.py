@@ -318,8 +318,8 @@ def test_fr36_testmodus_av_etter_feltsjekken_gir_ikke_ekte_ki_i_analysen(med_nok
     id_, test_kalt = i_testmodus_til_innleggingen(app, client)
     ekte_sjekk = ruter.sjekk_innlegging
 
-    def sjekk_og_slaa_av(cv, annonse, caser):
-        feil = ekte_sjekk(cv, annonse, caser)
+    def sjekk_og_slaa_av(cv, annonse, caser, eget_brev=None):
+        feil = ekte_sjekk(cv, annonse, caser, eget_brev=eget_brev)
         lager.bytt_innlogging(id_, Innlogging(lager.hent(id_).bruker_id, testmodus=False))
         return feil
 

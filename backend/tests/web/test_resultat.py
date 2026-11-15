@@ -1,6 +1,6 @@
 """Tester for resultatsiden: gap-analysen, nøkkelordtreffet, forklaringene og «Tilbake»
 (FR-6, FR-14–FR-20, NFR-4, NFR-6, NFR-7, AD-1, AD-6, AD-7, AD-8, suksesskriterium 2 og 8).
-Story 2.5.2 og 2.6."""
+Story 2.5.2 og 2.6. Resultatsiden i Korrektur kom i story 5.1."""
 
 import html as html_modul
 import json
@@ -16,6 +16,7 @@ from tests.web.hjelpere import (
     ANNONSE,
     CASE,
     CV,
+    EGET_BREV,
     GAP_SVAR,
     NOKKELORD_SVAR,
     STIL,
@@ -602,3 +603,64 @@ def test_ux_dr21_pynteikonene_ligger_i_tekster_py():
     mal = (STIL.parents[2] / "templates" / "resultat.html").read_text(encoding="utf-8")
     for ikon in ("✓", "→", "○"):
         assert ikon not in mal
+
+
+# --- Korrektur (story 5.1) ---
+
+
+def test_fr20_korrektur_viser_gap_og_treff_uten_brevknapp(paa_resultat_korrektur):
+    """FR-14/FR-15/FR-20 (story 5.1): resultatsiden i Korrektur viser gap-analysen og
+    nøkkelordtreffet som i Full generering, med «Tilbake», men uten «Lag søknadsbrevet mitt»
+    (knappen videre kommer i story 5.2)."""
+    html = html_av(paa_resultat_korrektur.get("/resultat"))
+    assert liste(html, "gap-dekker") == GAP_SVAR["dekker"]
+    assert liste(html, "gap-mangler") == GAP_SVAR["mangler"]
+    assert f"{TREFF} av {ANTALL} = {PROSENT} %" in html
+    knapperad = re.search(r'<div class="knapperad mellomrom">(.*?)</div>', main(html), re.S)
+    assert '<a class="sekundaerknapp" href="/innlegging">Tilbake</a>' in knapperad.group(1)
+    assert tekster.LAG_BREV_KNAPP not in html
+    assert [a for t, a in tagger_i(main(html)) if t == "button" and a.get("value") == "brev"] == []
+
+
+def test_fr20_full_generering_har_fortsatt_brevknappen(paa_resultat):
+    """FR-21 (story 5.1): i Full generering står «Lag søknadsbrevet mitt» som før."""
+    assert tekster.LAG_BREV_KNAPP in html_av(paa_resultat.get("/resultat"))
+
+
+def test_fr20_brevknappen_i_korrektur_gir_400(app, paa_resultat_korrektur):
+    """FR-20 (story 5.1): POST handling=brev på resultatsiden i Korrektur blir avvist med 400.
+    KI-en kalles ikke, og søknaden er uendret."""
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    for_ = soknaden(app, paa_resultat_korrektur)
+    svar = paa_resultat_korrektur.post("/resultat", data={"handling": "brev"})
+    assert svar.status_code == 400
+    assert tekster.RESULTAT_OVERSKRIFT in html_av(svar)
+    assert kalt == []
+    assert soknaden(app, paa_resultat_korrektur) == for_
+
+
+@pytest.mark.parametrize("brev", ["", "a" * 15_001, "Mitt eget brev"])
+def test_fr8_nytt_brev_som_feiler_stenger_resultatsiden(app, paa_resultat_korrektur, brev):
+    """FR-8/FR-9/AD-8 (story 5.1): endres bare brevet til et brev som ikke består sjekken
+    (tomt, for langt eller ikke testdata), er analysen nullstilt, og /resultat sender
+    tilbake til innleggingen. Resultatsiden kan ikke åpnes med et brev som ikke er sjekket."""
+    data = {"cv": CV, "eget_brev": brev, "annonse": ANNONSE, "handling": "sjekk"}
+    assert paa_resultat_korrektur.post("/innlegging", data=data).status_code == 200
+    soknad = soknaden(app, paa_resultat_korrektur)
+    assert (soknad.steg, soknad.gap, soknad.nokkelord) == (Steg.INNLEGGING, None, None)
+    svar = paa_resultat_korrektur.get("/resultat")
+    assert svar.status_code == 302
+    assert svar.location == "/innlegging"
+
+
+def test_fr8_nytt_brev_som_bestar_kjorer_analysen_pa_nytt(app, paa_resultat_korrektur):
+    """FR-8/AD-8 (story 5.1): endres bare brevet og sjekken består, kjøres analysen på nytt
+    og resultatsiden vises igjen med det nye brevet lagret."""
+    nytt = EGET_BREV.replace("Hei!", "Hei!!")
+    data = {"cv": CV, "eget_brev": nytt, "annonse": ANNONSE, "handling": "sjekk"}
+    assert paa_resultat_korrektur.post("/innlegging", data=data).location == "/resultat"
+    soknad = soknaden(app, paa_resultat_korrektur)
+    assert soknad.steg == Steg.RESULTAT
+    assert soknad.gap == GAP_SVAR
+    assert soknad.eget_brev == Tekstfelt(nytt)

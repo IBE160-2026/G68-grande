@@ -1,7 +1,8 @@
 """Tester for innleggingssiden: feltene, sjekken av det som er lagt inn, feilboksen og
 «Tilbake» (FR-8, FR-9, FR-13, FR-19, FR-34, NFR-4, NFR-6, NFR-7, AD-1, AD-8, AD-9,
 UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1. Analysen og KI-feilen (FR-15, FR-21,
-FR-28) kom i story 2.5.2."""
+FR-28) kom i story 2.5.2. Brevfeltet i Korrektur (FR-8, FR-9, FR-20, FR-34) kom i story
+5.1."""
 
 import html as html_modul
 import re
@@ -19,6 +20,7 @@ from soknad.web.innlogging import OKT_ID
 from tests.web.hjelpere import (
     ANNONSE,
     CV,
+    EGET_BREV,
     GAP_SVAR,
     NOKKELORD_SVAR,
     STIL,
@@ -340,9 +342,13 @@ def test_fr20_post_for_tidlig_endrer_ingenting(app, innlogget_client):
 
 
 def test_fr9_feltene_star_i_samme_rekkefolge_som_feilene():
-    """FR-9: feltene på siden (tekster.py) og rekkefølgen på feilene (inndata.py) er de samme,
-    så feilboksen og feltene ikke kommer i ulik rekkefølge når flere felt legges til."""
+    """FR-9 (story 5.1): feltene på siden (tekster.py) og rekkefølgen på feilene (inndata.py)
+    er de samme, så feilboksen og feltene ikke kommer i ulik rekkefølge. Feltene for hver
+    modus står i den samme rekkefølgen."""
     assert tuple(tekster.INNLEGGINGSFELT) == inndata.INNLEGGINGSFELT
+    for modus in Modus:
+        felter = inndata.felt_for_modus(modus)
+        assert felter == tuple(navn for navn in inndata.INNLEGGINGSFELT if navn in felter)
 
 
 def test_fr8_tomme_felt_viser_bare_lim_inn_tekst(paa_innlegging):
@@ -514,11 +520,11 @@ def test_ad1_skriptet_sender_ingenting_til_serveren():
         assert forbudt not in js
 
 
-@pytest.mark.parametrize("felt", ["cv", "annonse"])
-@pytest.mark.parametrize("type", [FeilType.TOM, FeilType.IKKE_TESTDATA])
+@pytest.mark.parametrize("felt", ["cv", "eget_brev", "annonse"])
+@pytest.mark.parametrize("type", [FeilType.TOM, FeilType.FOR_LANG, FeilType.IKKE_TESTDATA])
 def test_fr9_alle_feil_pa_innleggingen_har_tekst(felt, type):
-    """FR-9/FR-34/AD-9: hver feil kjernen kan gi på innleggingen, har en tekst som begynner
-    med feltnavnet."""
+    """FR-9/FR-34/AD-9 (story 5.1): hver feil kjernen kan gi på innleggingen, også på
+    brevfeltet, har en tekst som begynner med feltnavnet."""
     navn = tekster.INNLEGGINGSFELT[felt].navn
     assert tekster.feiltekst(InndataFeil(felt, type)).startswith(f"{navn}: ")
 
@@ -527,11 +533,13 @@ def test_fr9_alle_feil_pa_innleggingen_har_tekst(felt, type):
 
 
 def test_nfr7_feltene_side_om_side_fra_1000_px():
-    """NFR-7/UX-DR19: feltene står under hverandre og side om side først fra 1000 px."""
+    """NFR-7/UX-DR19 (story 5.1): feltene står under hverandre og side om side først fra
+    1000 px, i to kolonner, og i tre kolonner når det er tre felt (Korrektur)."""
     css = STIL.read_text(encoding="utf-8")
     bred = re.search(r"@media \(min-width: 1000px\)\s*\{(.*?)\n\}", css, re.S).group(1)
-    assert ".felt-rad" in bred
-    assert "grid-template-columns: repeat(2" in bred
+    assert "grid-template-columns: repeat(2" in css_blokk(bred.replace("\n  ", "\n"), ".felt-rad")
+    tre = css_blokk(bred.replace("\n  ", "\n"), ".felt-rad.tre-felt")
+    assert "grid-template-columns: repeat(3" in tre
     assert "grid-template-columns" not in css_blokk(css, ".felt-rad")
 
 
@@ -565,3 +573,198 @@ def test_ux_dr7_lim_inn_viser_fokusringen_ogsa_etter_museklikk():
     ikke bare :focus-visible, så den synes også når lenken ble trykket med musa."""
     blokk = css_blokk(STIL.read_text(encoding="utf-8"), ".lim-inn:focus")
     assert "outline: 3px solid var(--focus-ring)" in blokk
+
+
+# --- Korrektur: brevfeltet (story 5.1, FR-8, FR-9, FR-20, FR-34) ---
+
+TOM_BREV = "Ditt søknadsbrev: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
+FOR_LANG_BREV = "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 15 000 tegn."
+IKKE_TESTDATA_BREV = (
+    "Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
+)
+CASE_2 = TESTDATA_MAPPE / "case-2-okonomi"
+
+
+def send_korrektur(client, cv, eget_brev, annonse, handling="sjekk"):
+    data = {"cv": cv, "eget_brev": eget_brev, "annonse": annonse, "handling": handling}
+    return client.post("/innlegging", data=data)
+
+
+def brevfeltet(html):
+    """HTML-en for seksjonen med brevfeltet."""
+    return re.search(r'<section[^>]*id="eget_brev-felt".*?</section>', html, re.S).group(0)
+
+
+def test_fr8_korrektur_har_overskriften_og_tre_felt_i_rekkefolge(paa_korrektur):
+    """FR-8/FR-20 (story 5.1): innleggingen i Korrektur har overskriften og tittelen for
+    Korrektur, og feltene «📄 CV», «✉️ Ditt søknadsbrev» og «📢 Stillingsannonse» i den
+    rekkefølgen, i en rad med tre kolonner."""
+    html = html_av(paa_korrektur.get("/innlegging"))
+    assert re.search(
+        r"<h1[^>]*>\s*Legg inn CV-en din, brevet ditt og stillingsannonsen\s*</h1>", html
+    )
+    assert "<title>Legg inn CV, brev og annonse – Søknadsassistenten</title>" in html
+    assert re.findall(r'<h2 class="feltnavn"[^>]*>(.*?)</h2>', html, re.S) == [
+        '<span aria-hidden="true">📄</span> CV',
+        '<span aria-hidden="true">✉️</span> Ditt søknadsbrev',
+        '<span aria-hidden="true">📢</span> Stillingsannonse',
+    ]
+    seksjoner = [a["id"] for t, a in tagger_i(html) if t == "section"]
+    assert seksjoner == ["cv-felt", "eget_brev-felt", "annonse-felt"]
+    assert '<div class="felt-rad tre-felt">' in html
+
+
+def test_fr8_brevfeltet_har_samme_tilstander_og_knapper(app, paa_korrektur):
+    """FR-8/UX-DR8/NFR-6 (story 5.1): brevfeltet har samme tom tilstand, «Lim inn tekst»,
+    søppelbøtte og skjermlesertekster som de andre feltene. Tekstboksen heter eget_brev."""
+    html = html_av(paa_korrektur.get("/innlegging"))
+    felt = brevfeltet(html)
+    assert re.search(r'<div class="tom-tilstand">\s*<button[^>]*id="eget_brev-lim-inn"', felt)
+    assert '<div class="limeboks" hidden>' in felt
+    assert element(html, "eget_brev-tekst")["name"] == "eget_brev"
+    assert element(html, "eget_brev-lim-inn")["aria-label"] == "Lim inn tekst, Ditt søknadsbrev"
+    etikett = (
+        '<label for="eget_brev-tekst"><span class="skjult">Ditt søknadsbrev: </span>'
+        "Lim inn teksten her</label>"
+    )
+    assert etikett in felt
+    soppel = [a for t, a in tagger_i(felt) if a.get("class") == "soppelbotte"]
+    assert [(a["aria-label"], a["data-tomt"]) for a in soppel] == [
+        ("Tøm brevfeltet", "Brevfeltet er tømt")
+    ]
+    # Et fylt brevfelt viser tekstboksen med teksten, og «Lim inn tekst» er skjult.
+    sett_soknad(
+        app,
+        paa_korrektur,
+        Soknad(steg=Steg.INNLEGGING, modus=Modus.KORREKTUR, eget_brev=Tekstfelt("Mitt brev")),
+    )
+    html = html_av(paa_korrektur.get("/innlegging"))
+    assert '<div class="tom-tilstand" hidden>' in brevfeltet(html)
+    assert tekstboks(html, "eget_brev") == "Mitt brev"
+
+
+def test_fr8_full_generering_har_to_felt_og_den_gamle_overskriften(paa_innlegging):
+    """FR-8/FR-20 (story 5.1): i Full generering er det to felt og den gamle overskriften og
+    tittelen, akkurat som før. Ingen brevfelt og ingen tre kolonner."""
+    html = html_av(paa_innlegging.get("/innlegging"))
+    assert re.search(r"<h1[^>]*>\s*Legg inn CV-en din og stillingsannonsen\s*</h1>", html)
+    assert "<title>Legg inn CV og annonse – Søknadsassistenten</title>" in html
+    assert [a["id"] for t, a in tagger_i(html) if t == "section"] == ["cv-felt", "annonse-felt"]
+    assert "eget_brev" not in html
+    assert "Ditt søknadsbrev" not in html
+    assert '<div class="felt-rad">' in html
+
+
+def test_fr34_korrektur_med_testdata_gir_resultatsiden(app, paa_korrektur):
+    """FR-8/FR-34 (story 5.1): CV, eget brev og annonse fra case 1 i testmodus gir analysen og
+    resultatsiden. Brevet er lagret i søknaden."""
+    svar = send_korrektur(paa_korrektur, CV, EGET_BREV, ANNONSE)
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
+    soknad = soknaden(app, paa_korrektur)
+    assert soknad.eget_brev == Tekstfelt(EGET_BREV)
+    assert soknad.gap == GAP_SVAR
+    assert soknad.steg == Steg.RESULTAT
+
+
+def test_fr9_tomt_brev_gir_feil_og_ingen_ki_kall(app, paa_korrektur):
+    """FR-9 (story 5.1): CV og annonse fylt ut og brevet tomt gir feilen på brevfeltet, med
+    rød ramme og koblet feiltekst, og KI-en kalles ikke."""
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    svar = send_korrektur(paa_korrektur, CV, "  \n", ANNONSE)
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert feilboks_lenker(html) == [("#eget_brev-felt", TOM_BREV)]
+    assert element(html, "eget_brev-felt")["class"] == "innleggingsfelt har-feil"
+    assert element(html, "eget_brev-tekst")["aria-invalid"] == "true"
+    assert element(html, "eget_brev-tekst")["aria-describedby"] == "eget_brev-feil"
+    assert element(html, "eget_brev-lim-inn")["aria-describedby"] == "eget_brev-feil"
+    assert kalt == []
+    assert soknaden(app, paa_korrektur).steg == Steg.INNLEGGING
+
+
+def test_nfr11_for_langt_brev_gir_feil_og_ingen_ki_kall(app, paa_korrektur):
+    """NFR-11/FR-9 (story 5.1): et brev på over 15 000 tegn gir feilen på brevfeltet, og
+    KI-en kalles ikke."""
+    kalt = []
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    html = html_av(send_korrektur(paa_korrektur, CV, "a" * 15_001, ANNONSE))
+    assert feilboks_lenker(html) == [("#eget_brev-felt", FOR_LANG_BREV)]
+    assert kalt == []
+
+
+def test_fr34_ukjent_brev_gir_ikke_testdata_pa_brevet(app, paa_korrektur):
+    """FR-34 (story 5.1): i testmodus gir CV-en fra case 1 med en egen brevtekst
+    ikke_testdata på brevfeltet. Alle tre tekstene står igjen."""
+    html = html_av(send_korrektur(paa_korrektur, CV, "Mitt eget brev", ANNONSE))
+    assert feilboks_lenker(html) == [("#eget_brev-felt", IKKE_TESTDATA_BREV)]
+    assert tekstboks(html, "cv") == CV
+    assert tekstboks(html, "eget_brev") == "Mitt eget brev"
+    assert tekstboks(html, "annonse") == ANNONSE
+    assert soknaden(app, paa_korrektur).nokkelord is None
+
+
+def test_fr34_case_2_i_korrektur_gir_ikke_testdata_pa_brevet(app, paa_korrektur):
+    """FR-34 (story 5.1, bestemt av Kristine 15. november 2026): CV og annonse fra case 2,
+    som ikke har noe brev, gir den vanlige teksten på brevfeltet, også med brevet fra case 1."""
+    cv_2 = (CASE_2 / "cv.txt").read_text(encoding="utf-8")
+    annonse_2 = (CASE_2 / "annonse.txt").read_text(encoding="utf-8")
+    html = html_av(send_korrektur(paa_korrektur, cv_2, EGET_BREV, annonse_2))
+    assert feilboks_lenker(html) == [("#eget_brev-felt", IKKE_TESTDATA_BREV)]
+    assert soknaden(app, paa_korrektur).nokkelord is None
+
+
+def test_fr9_alle_tomme_i_korrektur_gir_feilene_i_rekkefolgen_cv_brev_annonse(paa_korrektur):
+    """FR-9 (story 5.1): alle feltene tomme gir tre feil i feilboksen, i rekkefølgen CV, brev,
+    annonse, som feltene på siden."""
+    html = html_av(send_korrektur(paa_korrektur, "", "", ""))
+    assert feilboks_lenker(html) == [
+        ("#cv-felt", TOM_CV),
+        ("#eget_brev-felt", TOM_BREV),
+        ("#annonse-felt", TOM_ANNONSE),
+    ]
+
+
+def test_fr8_korrektur_uten_testmodus_kjorer_analysen(med_nokkel):
+    """FR-8/FR-15 (story 5.1): uten testmodus, med samtykke og alle tre feltene fylt ut, kjøres
+    analysen som i Full generering (nøkkelord og gap), og brevet lagres."""
+    app, client, kalt = med_nokkel
+    sett_soknad(app, client, Soknad(steg=Steg.INNLEGGING, modus=Modus.KORREKTUR, samtykke=True))
+    svar = send_korrektur(client, CV, "Mitt eget brev", ANNONSE)
+    assert svar.location == "/resultat"
+    assert kalt == ["nokkelord", "gap"]
+    assert soknaden(app, client).eget_brev == Tekstfelt("Mitt eget brev")
+
+
+def test_fr8_full_generering_ignorerer_eget_brev_i_skjemaet(app, paa_innlegging):
+    """FR-8 (story 5.1): i Full generering ignoreres et eget_brev i skjemaet. Brevet i
+    søknaden er uendret, og analysen kjøres som før."""
+    lagret = Tekstfelt("Mitt lagrede brev")
+    sett_soknad(
+        app,
+        paa_innlegging,
+        Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING, eget_brev=lagret),
+    )
+    svar = send_korrektur(paa_innlegging, CV, "Et brev som ikke skal lagres", ANNONSE)
+    assert svar.location == "/resultat"
+    assert soknaden(app, paa_innlegging).eget_brev == lagret
+
+
+def test_fr20_tilbake_til_modusvalget_beholder_alle_tre_feltene(paa_korrektur):
+    """FR-20 (story 5.1): Korrektur → «Tilbake» → Full generering → Korrektur: CV, annonse og
+    brev står der fortsatt. Full generering viser CV og annonse, men ikke brevet."""
+    svar = send_korrektur(paa_korrektur, "Min CV", "Mitt brev", "Min annonse", "tilbake")
+    assert svar.location == "/modus"
+    svar = paa_korrektur.post("/modus", data={"modus": "full_generering"})
+    assert svar.location == "/innlegging"
+    html = html_av(paa_korrektur.get("/innlegging"))
+    assert tekstboks(html, "cv") == "Min CV"
+    assert tekstboks(html, "annonse") == "Min annonse"
+    assert "Mitt brev" not in html
+    assert send(paa_korrektur, "Min CV", "Min annonse", "tilbake").location == "/modus"
+    paa_korrektur.post("/modus", data={"modus": "korrektur"})
+    html = html_av(paa_korrektur.get("/innlegging"))
+    assert tekstboks(html, "cv") == "Min CV"
+    assert tekstboks(html, "eget_brev") == "Mitt brev"
+    assert tekstboks(html, "annonse") == "Min annonse"

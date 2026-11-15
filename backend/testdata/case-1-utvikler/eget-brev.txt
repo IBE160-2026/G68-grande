@@ -1,0 +1,14 @@
+Søknad på jobb som junior utvikler
+
+Hei!
+
+Jeg så annonsen deres og tenkte at dette er jo midt i blinken for meg. Jeg er lidenskapelig opptatt av å lage nettsider, og jeg vil veldig gjerne jobbe hos Testvik Utvikling AS. Jeg går tredje år på bachelor i IT og blir ferdig til våren 2027, så jeg kan begynne i august.
+
+På bachelorprosjektet lager vi en nettside der studenter kan booke grupperom. Vi er tre på gruppa og jeg har laget mye av det i Python med Flask og så HTML og CSS. Vi bruker Git og det har gått ganske greit stort sett. Dataene lagres i JSON-filer. Jeg har også laget et lite program i Python som henter værdata og viser dem som grafer, det var gøy.
+
+Sommeren 2025 jobbet jeg som IT-assistent på høgskolen. Der hjalp jeg studenter som ikke fikk logget på, og jeg satte opp PC-er med Linux. Jeg jobber også deltid i en dagligvarebutikk, der har jeg lært mye om kundeservice og å være blid selv om det er travelt, og det tror jeg er nyttig når jeg skal være med i møter med kunder.
+
+Jeg lærer nye ting fort og liker å jobbe sammen med andre. Jeg synes det er bra at dere har en fadder de første månedene, for jeg har mye å lære. Takk for at du tok deg tid til å lese søknaden min.
+
+Med vennlig hilsen
+Sara Eksempel

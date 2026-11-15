@@ -1,4 +1,5 @@
-"""Tester for de fiktive testdataene og fasitene i testdata/case-*/ (NFR-3, FR-17, FR-38).
+"""Tester for de fiktive testdataene og fasitene i testdata/case-*/ (NFR-3, FR-8, FR-17, FR-24,
+FR-34, FR-38). Brevet til Korrektur (eget-brev.txt i case 1) kom i story 5.1.
 Hver test kjøres for hvert testcase (story 4.5). Testene sjekker at filene henger sammen, også
 når KI-svarene lages på nytt med scripts/lag_testsvar.py. Ordlyden i gap.json sjekkes derfor
 ikke mot fasiten."""
@@ -290,6 +291,67 @@ def test_fr37_testbrevene_har_ingen_pastander_fra_sjekklisten(case):
         brev = kontroller("brev", _les(case, navn))
         tekst = " ".join(brev["avsnitt"]).casefold()
         assert [ord_ for ord_ in SJEKKLISTE_ORD[case.name] if ord_ in tekst] == [], navn
+
+
+# --- Brevet til Korrektur (story 5.1, FR-8, FR-24, FR-34, NFR-3) ---
+
+KORREKTUR_CASE = TESTDATA / "case-1-utvikler"
+
+
+def test_fr34_bare_case_1_har_et_eget_brev():
+    """FR-34 (story 5.1, bestemt av Kristine 15. november 2026): Korrektur testes bare med
+    case 1, så bare case 1 har eget-brev.txt."""
+    assert [case.name for case in CASER if (case / "eget-brev.txt").is_file()] == [
+        KORREKTUR_CASE.name
+    ]
+
+
+def test_nfr3_eget_brev_er_fiktivt_og_skrevet_til_annonsen():
+    """NFR-3 (story 5.1): brevet er fiktivt og hører til case 1: det har navnet fra CV-en og
+    arbeidsgiveren fra annonsen, og alle e-postadresser (om noen) slutter på @example.com.
+    Telefonnummer har det ikke."""
+    brev = _les(KORREKTUR_CASE, "eget-brev.txt")
+    navn = _les(KORREKTUR_CASE, "cv.txt").splitlines()[0]
+    arbeidsgiver = _les_json(KORREKTUR_CASE, "ki-svar/nokkelord.json")["arbeidsgiver"]
+    assert navn in brev
+    assert arbeidsgiver in brev
+    assert all(adresse.endswith("@example.com") for adresse in EPOST.findall(brev))
+    assert re.search(r"\d{3} ?\d{2} ?\d{3}", brev) is None
+
+
+def test_fr24_eget_brev_har_minst_en_ki_frase():
+    """FR-24 (story 5.1): brevet har minst én av de 17 KI-frasene, så Korrektur kan vise at
+    den skriver dem om."""
+    tekst = " ".join(_les(KORREKTUR_CASE, "eget-brev.txt").split()).casefold()
+    assert [frase for frase in KI_FRASER if frase in tekst]
+
+
+def test_fr37_eget_brev_har_ingenting_fra_sjekklisten():
+    """FR-37 (story 5.1): brevet påstår ingenting fra «Sjekkliste for brevet», så en påstand
+    i det forbedrede brevet alltid kommer fra KI-en."""
+    tekst = _les(KORREKTUR_CASE, "eget-brev.txt").casefold()
+    assert [ord_ for ord_ in SJEKKLISTE_ORD[KORREKTUR_CASE.name] if ord_ in tekst] == []
+
+
+def test_fr8_fasiten_har_sjekklisten_for_korrektur():
+    """FR-8 (story 5.1, suksesskriterium 4 og 12): fasit.md i case 1 har «## Sjekkliste for
+    Korrektur» med punkter."""
+    linjer = _les(KORREKTUR_CASE, "fasit.md").splitlines()
+    assert "## Sjekkliste for Korrektur" in linjer
+    etter = linjer[linjer.index("## Sjekkliste for Korrektur") + 1 :]
+    assert any(linje.startswith("- ") for linje in etter)
+
+
+def test_fr24_ki_frasene_i_fasiten_star_i_eget_brev():
+    """FR-24 (story 5.1): de to KI-frasene som «Sjekkliste for Korrektur» nevner, står i
+    eget-brev.txt og er blant de 17 frasene, så fasiten og brevet er i takt."""
+    fasit = _les(KORREKTUR_CASE, "fasit.md")
+    treff = re.search(r"KI-frasene \(«(.+?)» og «(.+?)»\)", fasit)
+    assert treff
+    brev = " ".join(_les(KORREKTUR_CASE, "eget-brev.txt").split()).casefold()
+    for frase in (frase.casefold() for frase in treff.groups()):
+        assert frase in KI_FRASER, frase
+        assert frase in brev, frase
 
 
 # Inndataene for kriterium 3 (story 4.5): CV-en fra case 1 og annonsen fra case 2.

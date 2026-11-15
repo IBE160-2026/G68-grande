@@ -75,7 +75,7 @@ class ModusKort(NamedTuple):
     forklaring: str
 
 
-# Kortene i rekkefølge. Korrektur kommer i Epic 5.
+# Kortene i rekkefølge.
 MODUS_KORT = {
     Modus.FULL_GENERERING: ModusKort(
         "✨",
@@ -83,10 +83,19 @@ MODUS_KORT = {
         "Skriv nytt brev",
         "Du legger inn CV-en og annonsen, så skriver vi et brev til deg.",
     ),
+    Modus.KORREKTUR: ModusKort(
+        "✏️",
+        "Korrektur",
+        "Forbedre mitt brev",
+        "Du har skrevet et brev selv. Vi forbedrer språket og beholder innholdet ditt.",
+    ),
 }
 
 INNLEGGING_TITTEL = "Legg inn CV og annonse"
 INNLEGGING_OVERSKRIFT = "Legg inn CV-en din og stillingsannonsen"
+# Tittelen og overskriften i Korrektur, med brevfeltet (FR-8).
+INNLEGGING_TITTEL_KORREKTUR = "Legg inn CV, brev og annonse"
+INNLEGGING_OVERSKRIFT_KORREKTUR = "Legg inn CV-en din, brevet ditt og stillingsannonsen"
 # Over feltene, bare i testmodus (FR-34).
 TESTDATA_HJELP = "Testmodus: bruk filene i mappen backend/testdata/ i prosjektet."
 LIM_INN_KNAPP = "Lim inn tekst"
@@ -104,9 +113,11 @@ class Innleggingsfelt(NamedTuple):
     tomt: str
 
 
-# Feltene i rekkefølge. Ditt søknadsbrev kommer i Epic 5.
+# Alle feltene i rekkefølge. Ditt søknadsbrev står bare på siden i Korrektur
+# (inndata.felt_for_modus).
 INNLEGGINGSFELT = {
     "cv": Innleggingsfelt("📄", "CV", "CV-feltet"),
+    "eget_brev": Innleggingsfelt("✉️", "Ditt søknadsbrev", "brevfeltet"),
     "annonse": Innleggingsfelt("📢", "Stillingsannonse", "annonsefeltet"),
 }
 
@@ -284,6 +295,16 @@ FEILTEKSTER = {
     ),
     ("annonse", FeilType.FOR_LANG): (
         f"Stillingsannonse: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
+    ),
+    # Brevfeltet i Korrektur (FR-8, FR-9, FR-34). Samme tekster som de andre feltene.
+    ("eget_brev", FeilType.TOM): (
+        "Ditt søknadsbrev: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
+    ),
+    ("eget_brev", FeilType.FOR_LANG): (
+        f"Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
+    ),
+    ("eget_brev", FeilType.IKKE_TESTDATA): (
+        "Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
 }
 

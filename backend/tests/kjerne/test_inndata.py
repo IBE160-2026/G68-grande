@@ -1,5 +1,5 @@
 """Tester for kjernen: feiltypene, økten og sjekken av innloggingen og registreringen
-(FR-1, FR-2, FR-3, FR-4, NFR-5, NFR-11)."""
+(FR-1, FR-2, FR-3, FR-4, FR-8, FR-9, FR-34, NFR-5, NFR-11)."""
 
 import ast
 import dataclasses
@@ -10,13 +10,15 @@ import pytest
 from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.inndata import (
+    INNLEGGINGSFELT,
     antall_tegn,
+    felt_for_modus,
     normaliser_epost,
     sjekk_innlegging,
     sjekk_innlogging,
     sjekk_registrering,
 )
-from soknad.kjerne.okt import Innlogging
+from soknad.kjerne.okt import Innlogging, Modus
 from soknad.kjerne.testdata_match import lag_testcase
 
 KJERNE = Path(__file__).resolve().parents[2] / "soknad" / "kjerne"
@@ -349,3 +351,68 @@ def test_nfr11_for_lang_gir_ikke_ogsaa_ikke_testdata():
     ]
     assert sjekk_innlegging(CV, lang, CASER) == [FOR_LANG_ANNONSE]
     assert sjekk_innlegging("Min egen CV", lang, CASER) == [IKKE_TESTDATA_CV, FOR_LANG_ANNONSE]
+
+
+# --- Brevfeltet i Korrektur (story 5.1) ---
+
+BREV = "Hei!\n\nJeg vil jobbe hos dere.\n\nMed vennlig hilsen\nSara"
+CASER_MED_BREV = [lag_testcase("case-1-utvikler", CV, ANNONSE, BREV)]
+TOM_BREV = InndataFeil("eget_brev", FeilType.TOM)
+FOR_LANG_BREV = InndataFeil("eget_brev", FeilType.FOR_LANG)
+IKKE_TESTDATA_BREV = InndataFeil("eget_brev", FeilType.IKKE_TESTDATA)
+
+
+def test_fr8_feltene_for_hver_modus():
+    """FR-8 (story 5.1): Full generering har CV og annonse, Korrektur har CV, brev og annonse,
+    i den rekkefølgen. Uten modus er feltene de i Full generering."""
+    assert felt_for_modus(Modus.FULL_GENERERING) == ("cv", "annonse")
+    assert felt_for_modus(Modus.KORREKTUR) == ("cv", "eget_brev", "annonse")
+    assert felt_for_modus(None) == ("cv", "annonse")
+    assert INNLEGGINGSFELT == felt_for_modus(Modus.KORREKTUR)
+
+
+def test_fr8_korrektur_med_testdata_gir_ingen_feil():
+    """FR-8/FR-34 (story 5.1): CV, eget brev og annonse fra samme testcase gir ingen feil."""
+    assert sjekk_innlegging(CV, ANNONSE, CASER_MED_BREV, eget_brev=BREV) == []
+    assert sjekk_innlegging("cv", "annonse", None, eget_brev="mitt brev") == []
+
+
+def test_fr9_tomt_brev_gir_tom_pa_brevet():
+    """FR-8/FR-9 (story 5.1): brevfeltet må fylles ut. Et brev med bare mellomrom er tomt,
+    både med og uten testmodus."""
+    assert sjekk_innlegging(CV, ANNONSE, CASER_MED_BREV, eget_brev="") == [TOM_BREV]
+    assert sjekk_innlegging(CV, ANNONSE, None, eget_brev=" \n\t") == [TOM_BREV]
+
+
+def test_fr9_alle_tomme_i_korrektur_gir_tre_feil_i_rekkefolgen_pa_siden():
+    """FR-9 (story 5.1): alle feilene kommer samtidig, i rekkefølgen CV, brev, annonse."""
+    assert sjekk_innlegging("", "", None, eget_brev="") == [TOM_CV, TOM_BREV, TOM_ANNONSE]
+    assert sjekk_innlegging("Min egen CV", "", CASER_MED_BREV, eget_brev="Mitt brev") == [
+        IKKE_TESTDATA_CV,
+        IKKE_TESTDATA_BREV,
+        TOM_ANNONSE,
+    ]
+
+
+def test_nfr11_brevet_har_grensen_paa_15_000_tegn():
+    """NFR-11 (story 5.1): brevfeltet godtar 15 000 tegn, og 15 001 gir for_lang, også i
+    testmodus uten ikke_testdata i tillegg."""
+    assert sjekk_innlegging("cv", "annonse", None, eget_brev="a" * MAKS_TEGN) == []
+    lang = "a" * (MAKS_TEGN + 1)
+    assert sjekk_innlegging("cv", "annonse", None, eget_brev=lang) == [FOR_LANG_BREV]
+    assert sjekk_innlegging(CV, ANNONSE, CASER_MED_BREV, eget_brev=lang) == [FOR_LANG_BREV]
+
+
+def test_fr34_ukjent_brev_gir_ikke_testdata_pa_brevet():
+    """FR-34 (story 5.1): i testmodus gir et eget brev som ikke er testdata, ikke_testdata på
+    brevfeltet."""
+    assert sjekk_innlegging(CV, ANNONSE, CASER_MED_BREV, eget_brev="Mitt eget brev") == [
+        IKKE_TESTDATA_BREV
+    ]
+
+
+def test_fr34_case_uten_brev_gir_ikke_testdata_pa_brevet():
+    """FR-34 (story 5.1, bestemt av Kristine 15. november 2026): et case uten eget brev gir
+    ikke_testdata på brevfeltet i Korrektur, men er som før i Full generering."""
+    assert sjekk_innlegging(CV, ANNONSE, CASER, eget_brev=BREV) == [IKKE_TESTDATA_BREV]
+    assert sjekk_innlegging(CV, ANNONSE, CASER) == []

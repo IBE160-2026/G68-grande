@@ -4,6 +4,7 @@ import re
 
 from soknad.innstillinger import MAKS_TEGN, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
+from soknad.kjerne.okt import Modus
 from soknad.kjerne.testdata_match import Testcase, finn_case
 
 # Gyldig form på e-post: noe@noe.noe, uten mellomrom og med bare én @.
@@ -48,8 +49,18 @@ def sjekk_registrering(epost: str, passord: str, gjenta: str) -> list[InndataFei
     return feil
 
 
-# Feltene på innleggingen, i den rekkefølgen de står på siden.
-INNLEGGINGSFELT = ("cv", "annonse")
+# Alle feltene på innleggingen, i den rekkefølgen de står på siden. eget_brev står bare på
+# siden i Korrektur (felt_for_modus).
+INNLEGGINGSFELT = ("cv", "eget_brev", "annonse")
+
+
+def felt_for_modus(modus: Modus | None) -> tuple[str, ...]:
+    """Feltene på innleggingen for modusen, i rekkefølgen på siden og i feilboksen: CV og
+    annonse i Full generering, og CV, eget brev og annonse i Korrektur (FR-8). Sjekken, ruten
+    og malen bruker alle denne, så rekkefølgen alltid er lik."""
+    if modus == Modus.KORREKTUR:
+        return INNLEGGINGSFELT
+    return tuple(navn for navn in INNLEGGINGSFELT if navn != "eget_brev")
 
 
 def antall_tegn(tekst: str) -> int:
@@ -58,20 +69,26 @@ def antall_tegn(tekst: str) -> int:
     return len(tekst.replace("\r\n", "\n"))
 
 
-def sjekk_innlegging(cv: str, annonse: str, caser: list[Testcase] | None) -> list[InndataFeil]:
-    """Finner feil i innleggingen. Alle feilene kommer samtidig, høyst én per felt og i
-    rekkefølgen cv, annonse. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så for
-    lang (mer enn MAKS_TEGN tegn, NFR-11), så testdata når caser ikke er None (testmodus,
+def sjekk_innlegging(
+    cv: str, annonse: str, caser: list[Testcase] | None, eget_brev: str | None = None
+) -> list[InndataFeil]:
+    """Finner feil i innleggingen. eget_brev er None i Full generering, og er teksten i
+    brevfeltet i Korrektur (FR-8). Alle feilene kommer samtidig, høyst én per felt og i
+    rekkefølgen fra felt_for_modus. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så
+    for lang (mer enn MAKS_TEGN tegn, NFR-11), så testdata når caser ikke er None (testmodus,
     FR-34). finn_case gir ikke ikke_testdata på et tomt felt (AD-9), og et felt med for lang
     tekst får heller ikke ikke_testdata."""
+    tekster = {"cv": cv, "annonse": annonse, "eget_brev": eget_brev}
+    felt = felt_for_modus(Modus.FULL_GENERERING if eget_brev is None else Modus.KORREKTUR)
     feil = []
-    for navn, tekst in zip(INNLEGGINGSFELT, (cv, annonse), strict=True):
+    for navn in felt:
+        tekst = tekster[navn]
         if not tekst.strip():
             feil.append(InndataFeil(navn, FeilType.TOM))
         elif antall_tegn(tekst) > MAKS_TEGN:
             feil.append(InndataFeil(navn, FeilType.FOR_LANG))
     if caser is not None:
-        _, testdatafeil = finn_case(cv, annonse, caser)
+        _, testdatafeil = finn_case(cv, annonse, caser, eget_brev=eget_brev)
         har_feil = {f.felt for f in feil}
         feil += [f for f in testdatafeil if f.felt not in har_feil]
-    return sorted(feil, key=lambda f: INNLEGGINGSFELT.index(f.felt))
+    return sorted(feil, key=lambda f: felt.index(f.felt))

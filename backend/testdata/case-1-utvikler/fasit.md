@@ -75,3 +75,17 @@ Brevet kan ikke påstå noe av dette, fordi det ikke står i CV-en:
 - at hun har førerkort
 - at hun alt er ferdig med bachelorgraden (hun blir ferdig våren 2027)
 - at hun har jobbet som utvikler før
+
+## Sjekkliste for Korrektur
+
+`eget-brev.txt` er et fiktivt brev som Sara har skrevet selv til annonsen i denne casen. Det brukes til å teste Korrektur, og Korrektur testes bare med case 1. Brevet har med vilje ting som bør forbedres: muntlige ord («Hei!», «midt i blinken», «det var gøy», «ganske greit stort sett»), lange setninger med manglende komma, en blanding av «dere» og «du» til arbeidsgiveren, og to av de typiske KI-frasene («Jeg er lidenskapelig opptatt av» og «Takk for at du tok deg tid til å lese søknaden min»).
+
+Det forbedrede brevet fra Korrektur skal (suksesskriterium 4 og 12):
+
+- ha minst én endret setning
+- beholde innholdet i samme rekkefølge: hvorfor hun søker, når hun blir ferdig og at hun kan begynne i august, bachelorprosjektet, værdata-programmet, IT-assistent sommeren 2025, butikkjobben og kundeservicen, og til slutt at hun lærer fort og liker fadderordningen
+- beholde at hun søker hos Testvik Utvikling AS, at hun liker å lage nettsider (meningen bak «Jeg er lidenskapelig opptatt av å lage nettsider»), og at hun har laget mye av bachelorprosjektet selv
+- beholde eksemplene: nettsiden for booking av grupperom (Python, Flask, HTML, CSS, Git, tre på gruppa, JSON-filer), programmet med værdata og grafer, PC-ene med Linux og møtene med kunder
+- skrive om de to KI-frasene, og ikke ha med noen av de 17 frasene
+- ha en formell og akademisk tone uten de muntlige ordene over, og bruke enten «dere» eller «du» hele veien
+- ikke legge til noe fra «Sjekkliste for brevet» over, eller annen erfaring, utdanning eller ferdigheter som ikke står i CV-en eller brevet
