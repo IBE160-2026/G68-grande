@@ -274,7 +274,7 @@ def test_ad1_ventetegnet_bare_pa_sider_med_ki_kall(app, innlogget_client, side):
             nokkelord=("Python",),
             nokkelord_annonse="annonse",
             gap={"dekker": ["Python"], "mangler": []},
-            brev={"avsnitt": ["Hei"]},
+            brev={"avsnitt": ["Hei"], "navn": None},
         ),
     )
     svar = innlogget_client.get(side)

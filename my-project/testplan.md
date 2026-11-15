@@ -10,11 +10,11 @@ Kjøringene gjøres med skriptet `backend/scripts/lag_testsvar.py` (se README). 
 
 | Kriterium | Hva | Hvordan det sjekkes | Status |
 | --- | --- | --- | --- |
-| 1 | Gap-analysen finner alle krav som mangler, og ingen dekkede krav står under «mangler» | `gap.json` mot tabellen «Krav» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4). Bestått for case 2 i begge rundene, og for case 1 på nytt i runde 2 (story 4.5) |
-| 3 | Samme CV med to annonser gir brev med krav som er spesifikke for hver annonse | Brevene for CV-en i case 1 mot annonsen i case 1 og case 2 | Bestått i begge rundene: brevene nevner krav som er spesifikke for hver annonse. Brevene i runde 1 hadde to påstander som ikke står i CV-en (et brudd på kriterium 11), så alt ble kjørt på nytt etter plan B, og runde 2 besto også kriterium 11 (story 4.5) |
-| 11 | Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i CV-en | `brev-1.json` mot CV-en og «Sjekkliste for brevet» i `fasit.md` | Case 1: ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.4), og bestått igjen i runde 2 i story 4.5 (runde 1 ble ikke kjørt for case 1). Case 2: bestått i begge rundene (story 4.5). CV-en fra case 1 mot annonsen fra case 2 (kriterium 3): ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.5). Slutningene under «Story 4.5» er godkjent av Kristine |
+| 1 | Gap-analysen finner alle krav som mangler, og ingen dekkede krav står under «mangler» | `gap.json` mot tabellen «Krav» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4). Bestått for case 2 i begge rundene, og for case 1 på nytt i runde 2 (story 4.5). Bestått i begge rundene for case 1 og 2 etter de nye reglene i brevet (15. november) |
+| 3 | Samme CV med to annonser gir brev med krav som er spesifikke for hver annonse | Brevene for CV-en i case 1 mot annonsen i case 1 og case 2 | Bestått i begge rundene: brevene nevner krav som er spesifikke for hver annonse. Brevene i runde 1 hadde to påstander som ikke står i CV-en (et brudd på kriterium 11), så alt ble kjørt på nytt etter plan B, og runde 2 besto også kriterium 11 (story 4.5). Bestått igjen i begge rundene etter de nye reglene i brevet (15. november) |
+| 11 | Brevet nevner ingen erfaring, utdanning eller ferdigheter som ikke står i CV-en | `brev-1.json` mot CV-en og «Sjekkliste for brevet» i `fasit.md` | Case 1: ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.4), og bestått igjen i runde 2 i story 4.5 (runde 1 ble ikke kjørt for case 1). Case 2: bestått i begge rundene (story 4.5). CV-en fra case 1 mot annonsen fra case 2 (kriterium 3): ikke bestått i runde 1, bestått i runde 2 etter plan B (story 4.5). Slutningene under «Story 4.5» er godkjent av Kristine. Etter de nye reglene i brevet (15. november): case 1 og 2 bestått i begge rundene, kriterium 3 ikke bestått i runde 1 og bestått i runde 2 etter plan B. Slutningene er godkjent av Kristine |
 | 12 | Korrektur beholder brukerens innhold, eksempler og rekkefølge | Korrektur-svarene mot det opprinnelige brevet | Testes i Epic 5 (trenger Korrektur) |
-| 14 | Nøkkelordlisten har alle nøkkelordene fasiten markerer som viktige | `nokkelord.json` mot «Viktige nøkkelord» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4) og i runde 2 i story 4.5. Bestått for case 2 i begge rundene (story 4.5) |
+| 14 | Nøkkelordlisten har alle nøkkelordene fasiten markerer som viktige | `nokkelord.json` mot «Viktige nøkkelord» i `fasit.md` | Bestått for case 1 i begge rundene (story 4.4) og i runde 2 i story 4.5. Bestått for case 2 i begge rundene (story 4.5). Bestått for case 1 og 2 i begge rundene etter de nye reglene i brevet (15. november) |
 
 ## Story 4.4: ekte KI-svar for case 1 (14. november 2026)
 
@@ -51,7 +51,7 @@ Ingen av brevene påsto noe fra sjekklisten i `fasit.md`, men Kristine gikk gjen
 
 **Kriterium 11:** ingen av de seks brevene i runde 2 sier hvor eller hvor ofte en ferdighet er brukt uten at CV-en sier det. Linux knyttes bare til jobben som IT-assistent, og GitHub nevnes som noe hun kan («jeg kan også GitHub»). Ingen brev nevner krav som CV-en ikke dekker, og ingen påstår noe fra sjekklisten (SQL eller databaser, Docker, Scrum eller smidig utvikling, førerkort, at Sara alt er ferdig med graden, eller at hun har jobbet som utvikler før). Egenskaper lest ut av jobbene finnes fortsatt, for eksempel «løse konkrete problemer for brukere» om IT-assistent-jobben. Det er greit etter punkt 2 over. Alle brevene nevner stillingen og Testvik Utvikling AS, kobler minst to krav til CV-en, har «junior utvikler» med liten j i overskriften og bruker ingen av de 17 KI-frasene. De har 300–333 ord i 5 avsnitt, uten overskriften, hilsenen og navnet (regelen er 250–400 ord i 4–6 avsnitt), og ingen markdown.
 
-**Merknad om formen (ikke kriterium 11):** `brev-1` i kjøring 3 slutter uten «Med vennlig hilsen» og navnet, selv om prompten ber om det. De andre fem brevene har det, også `brev-1` i testmodus. Ingen automatisk sjekk fanger dette for brev fra ekte KI.
+**Merknad om formen (ikke kriterium 11):** `brev-1` i kjøring 3 slutter uten «Med vennlig hilsen» og navnet, selv om prompten ber om det. De andre fem brevene har det, også `brev-1` i testmodus. Ingen automatisk sjekk fanger dette for brev fra ekte KI. (Løst 15. november: nettsiden setter nå selv inn hilsenen og navnet, se «Hilsen, navn og to nye regler i brevet».)
 
 **Kriterium 14:** KI-en skrev «førerkort klasse B» i stedet for «førerkort». Det regnes som med, fordi «førerkort» står som eget ord i nøkkelordet (se `fasit.md`). I runde 2 tok KI-en også med «IT», som gir treff i CV-en.
 
@@ -221,3 +221,72 @@ Caset har ingen fasit, men disse feilene er sjekket mot CV-en og annonsen:
 - **4 og 5 rettes** med to nye regler i `backend/prompts/brev.md`: kall ikke noe et krav når annonsen sier at det er en fordel, og skriv om jobber og verv i nåtid bare når CV-en sier at de pågår, ellers i fortid. Kriteriene for brevet kjøres på nytt med ekte KI etterpå.
 - I samme kjøring prøves plan B-regelen (ikke ranger ferdigheter) på en annen CV enn testdataene.
 - «Med vennlig hilsen» og navnet skal alltid komme med i brevet. KI-en sender navnet fra CV-en i et eget felt, og nettsiden setter selv inn hilsenen og navnet til slutt, uten et nytt KI-kall. Står det ikke noe navn i CV-en, slutter brevet med «Med vennlig hilsen». De ferdige svarene i testmodus må få det nye feltet.
+
+## Hilsen, navn og to nye regler i brevet (15. november 2026)
+
+Modell: `claude-opus-5-5`. Branch `brev-hilsen-og-regler`. Brev-prompten fikk de to reglene fra «Bestemt 15. november» over, og KI-en gir navnet i et eget felt. Nettsiden setter alltid inn «Med vennlig hilsen» og navnet til slutt. Gap- og nøkkelordpromptene er ikke endret. Hver runde kjørte case 1, case 2 og kriterium 3 tre ganger hver, og den lange CV-en til Ingrid (`case-lang` fra retro 4) én gang. Svarene fra runde 2, kjøring 1, er de ferdige svarene i testmodus. Svarene og loggene ligger i `my-project/testkjoringer/brev-hilsen/runde-1/` og `runde-2/`.
+
+### Runde 1 (kl. 11.01–11.10)
+
+| Kriterium | Kjøring 1 | Kjøring 2 | Kjøring 3 |
+| --- | --- | --- | --- |
+| 1: gap-analysen, case 1 og 2 | Bestått: nøyaktig som fasiten | Bestått | Bestått |
+| 14: de viktige nøkkelordene, case 1 og 2 | Bestått | Bestått | Bestått |
+| 11: brevet, case 1 og 2 | Bestått | Bestått | Bestått |
+| 11: brevet, kriterium 3 | Bestått | Ikke bestått | Bestått |
+| Hilsen og riktig navn, alle 18 brevene | Ja | Ja | Ja |
+
+**Brudd (bestemt av Kristine):** «Python er en sentral del av utdanningen min» (kriterium 3, kjøring 2, `brev-2`). CV-en har Python under Ferdigheter og i to prosjekter, men sier ikke at Python er sentralt i studiet. Det er samme type påstand som «Python er språket jeg har jobbet mest med» i story 4.5.
+
+**Godkjent av Kristine som omformuleringer:** «ansvar for kundeservice, kasse og varepåfylling» (CV-en: «Kundeservice, kasse og varepåfylling»), «er ferdig med bachelorgraden våren 2027» (betyr at hun blir ferdig da), «bruker Visual Studio Code» (står under Verktøy), «samarbeide om et større prosjekt» og «kan begynne i august 2027» (datoen står i annonsen).
+
+**Ingrid-CV-en ble ikke kjørt ferdig:** det andre brevet feilte fordi kreditten på API-kontoen var brukt opp. Etter påfyll ble den kjørt i runde 2.
+
+**Plan B:** regelen mot rangering i `backend/prompts/brev.md` ble utvidet. Brevet skal heller ikke si at en ferdighet, et verktøy eller en erfaring er sentral, viktig eller en stor del av studiet, et prosjekt eller en jobb, når CV-en ikke sier det. Regelen har en test i `tests/adaptere/test_ekte_ki.py`.
+
+### Runde 2, etter plan B (kl. 11.22–11.32)
+
+| Kriterium | Kjøring 1 | Kjøring 2 | Kjøring 3 |
+| --- | --- | --- | --- |
+| 1: gap-analysen, case 1 | Bestått: 6 dekket og 4 mangler, nøyaktig som fasiten | Bestått | Bestått |
+| 1: gap-analysen, case 2 | Bestått: 5 dekket og 4 mangler, nøyaktig som fasiten | Bestått | Bestått |
+| 14: de viktige nøkkelordene, case 1 | Bestått: alle 8 (20 nøkkelord i alt) | Bestått: alle 8 (20 i alt) | Bestått: alle 8 (20 i alt) |
+| 14: de viktige nøkkelordene, case 2 | Bestått: alle 6 (17 i alt) | Bestått: alle 6 (17 i alt) | Bestått: alle 6 (16 i alt) |
+| Nøkkelordtreffet, case 1 | 10 av 20 = 50 % | 10 av 20 = 50 % | 10 av 20 = 50 % |
+| Nøkkelordtreffet, case 2 | 7 av 17 = 41 % | 7 av 17 = 41 % | 7 av 16 = 44 % |
+| 11: brevet, case 1 og 2 | Bestått | Bestått | Bestått |
+| 3 og 11: brevet, kriterium 3 | Bestått | Bestått | Bestått |
+| Hilsen og riktig navn, alle 18 brevene | Ja | Ja | Ja |
+
+Case 2 har nå «lønn» som 17. nøkkelord. Det står ikke i CV-en, så tabellen «Nøkkelord» i `fasit.md` og prosenten er oppdatert til 7 av 17 = 41 %.
+
+**Kriterium 3:** alle seks brevene for Saras CV mot annonsen fra case 2 nevner at firmaet automatiserer med Python, kundekontakt eller opplæringen i regnskapsprogrammene. Alle seks brevene mot annonsen fra case 1 nevner Linux og Flask. Brevene er tydelig ulike.
+
+**Kriterium 11:** ingen brev påstår noe fra sjekklistene, rangerer ferdighetene, kaller en fordel for et krav eller nevner krav som CV-en ikke dekker. Jobber som er ferdige (IT-assistent sommeren 2025, kasserer 2025–2026), står i fortid, og jobber som pågår, i nåtid.
+
+**Godkjent av Kristine som slutninger:** fire brev skriver at Sara møter kunder «hver arbeidsdag» eller «hver vakt» i butikkjobben. CV-en sier ikke hvor ofte, men det følger av at hun jobber med kundeservice i butikken. «Studiet er avsluttet før tiltredelsen i august 2027» stemmer med «fullføres våren 2027». «jeg lærer nye verktøy raskt» står ordrett i CV-en.
+
+**Ingrid-CV-en (`case-lang`), plan B-regelen og merknad 4 og 5:**
+- Plan B-regelen holder på en annen CV: CV-en har «I studiet har jeg jobbet mest med webutvikling, databaser og testing», men ingen av brevene tar med rangeringen. Begge beholder «min første faste jobb som utvikler», slik CV-en sier. Det svarer på svakheten ved plan B fra story 4.5.
+- Merknad 4 er rettet: begge brevene sier at universell utforming er nevnt som en fordel.
+- Merknad 5 er rettet: nåtid bare om det som pågår (kundeservice 2022–i dag, studentassistent i Python 2025–i dag). Jobben i databaser (våren 2026) er ikke nevnt.
+- Brevene har 443 og 456 ord. Det er over 250–400 ord i prompten, fordi CV-en og annonsen er svært lange.
+- Gap-analysen ga denne gangen bare «Tar sikkerhet og personvern på alvor» under `mangler`. React og TypeScript og «Tåler at ting endrer seg» ble regnet som dekket. Prompten er ikke endret, så det er variasjon fra KI-en mellom kjøringene (merknad 1–3 er godtatt over).
+
+**Merknaden om hilsenen fra story 4.4 og 4.5 er løst:** i alle 38 brevene som ble ferdige, kommer «Med vennlig hilsen» og riktig navn til slutt, én gang.
+
+### Kostnad og tid
+
+Tallene er fra loggen i terminalen. Kronene er regnet med 11 kr per dollar.
+
+| | Hele kjøringen |
+| --- | --- |
+| Runde 1, case 1 og 2 (kjøring 1, 2, 3) | 3,13 + 2,88 + 2,81 = 8,82 kr |
+| Runde 1, kriterium 3 (kjøring 1, 2, 3) | 1,40 + 1,43 + 1,38 = 4,21 kr |
+| Runde 1, Ingrid (stoppet etter tre kall) | 0,35 + 0,93 + 1,29 = 2,57 kr |
+| Runde 2, case 1 og 2 (kjøring 1, 2, 3) | 3,50 + 3,22 + 3,38 = 10,10 kr |
+| Runde 2, kriterium 3 (kjøring 1, 2, 3) | 1,46 + 1,59 + 1,62 = 4,67 kr |
+| Runde 2, Ingrid | 0,35 + 0,93 + 1,36 + 1,38 = 4,02 kr |
+| Alt | ca. 34 kr |
+
+Brev-prompten er litt lengre, så et brev har nå ca. 4 050–4 120 tokens inn for testdataene, mot 3 590–3 660 før. En fullført søknad med de lange tekstene til Ingrid (nøkkelord, gap og ett brev) kostet 0,35 + 0,93 + 1,36 = 2,64 kr, mot 2,60 kr i retro 4. Med det andre brevet blir det 4,02 kr. Det lengste brevkallet tok ca. 25 sekunder.

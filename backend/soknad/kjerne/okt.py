@@ -49,7 +49,8 @@ class Soknad:
     nokkelord_annonse: str | None = None
     arbeidsgiver: str | None = None
     gap: dict | None = None
-    # Søknadsbrevet fra KI-en, i formen fra AD-4 ({avsnitt: [str]}). Bare i minnet.
+    # Søknadsbrevet fra KI-en, i formen fra AD-4 ({avsnitt: [str], navn: str | None}), uten
+    # hilsen og navn i avsnittene. ki_svar.hele_brevet setter dem inn. Bare i minnet.
     brev: dict | None = None
     # Sann når brevet er lastet ned som Word (FR-29). Gjelder bare brevet som er der nå.
     lastet_ned: bool = False

@@ -56,9 +56,10 @@ Tabellen har nøkkelordene fra `ki-svar/nokkelord.json`, i samme rekkefølge. «
 | norsk | Ja |
 | engelsk | Ja |
 | avstemme kontoer | Nei |
+| lønn | Nei |
 | rapporter | Nei |
 
-7 av 16 = 44 %
+7 av 17 = 41 %
 
 ## Sjekkliste for brevet
 

@@ -10,8 +10,10 @@ Regler for innholdet:
 - Bygg bare på det som står i CV-en og annonsen. Legg aldri til erfaring, utdanning eller ferdigheter som ikke står i CV-en, og gjett ikke. Du får omformulere det som står i CV-en og koble det til kravene i annonsen, for eksempel et gruppeprosjekt til «erfaring med samarbeid og prosjektarbeid».
 - Skriv ikke at studenten oppfyller et krav som CV-en ikke viser.
 - Skriv ikke hvor, når eller hvor ofte studenten har brukt en ferdighet, et verktøy eller en erfaring, hvis CV-en ikke sier det. Står en ferdighet bare under ferdigheter, skriver du at studenten kan den, ikke at den er brukt i studiet, i et prosjekt eller «til daglig». Knytt et verktøy til et prosjekt eller en jobb bare når CV-en gjør det.
-- Ranger eller sammenlign ikke ferdighetene, verktøyene eller erfaringene til studenten når CV-en ikke gjør det. Skriv for eksempel ikke «Python er språket jeg har jobbet mest med» eller «min sterkeste side». Endre heller ikke det CV-en sier om hvilken jobb studenten ser etter: står det «min første jobb som utvikler», skriver du ikke «min første faste jobb».
+- Ranger eller sammenlign ikke ferdighetene, verktøyene eller erfaringene til studenten når CV-en ikke gjør det. Skriv for eksempel ikke «Python er språket jeg har jobbet mest med» eller «min sterkeste side». Skriv heller ikke at en ferdighet, et verktøy eller en erfaring er sentral, viktig eller en stor del av studiet, et prosjekt eller en jobb, når CV-en ikke sier det. Si heller hva den er brukt til. Endre heller ikke det CV-en sier om hvilken jobb studenten ser etter: står det «min første jobb som utvikler», skriver du ikke «min første faste jobb».
 - Nevn ikke krav fra annonsen som CV-en ikke dekker, og skriv ikke om hva studenten mangler eller ennå ikke har gjort. Brevet viser bare det CV-en dekker.
+- Kall ikke noe et krav når annonsen sier at det er en fordel. Står det for eksempel «erfaring med SQL er en fordel», skriver du ikke at dere krever SQL eller at SQL er et krav, men at annonsen nevner det som en fordel.
+- Skriv om jobber og verv i nåtid bare når CV-en sier at de pågår, for eksempel «2023–nå» eller «siden 2023». Ellers er de ferdige, og du skriver om dem i fortid.
 - Rett etter overskriften, før avsnittene om kravene og erfaringen, skriver du ett avsnitt som presenterer studenten som person, så arbeidsgiveren først får vite hvem studenten er: for eksempel alder, hva studenten studerer, hva studenten liker å gjøre og hvordan studenten jobber. Se etter dette i hele CV-en, for eksempel alder, «Om meg», hobbyer, interesser og frivillig arbeid. Avsnittet kan også si hvilken stilling studenten søker på. Bygg det bare på det som står i CV-en. Står det ikke noe om studenten som person i CV-en, begynner du rett på stillingen og kravene. Dikt aldri opp alder, egenskaper, hobbyer eller interesser.
 
 Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
@@ -42,8 +44,9 @@ Bruk ikke disse typiske KI-frasene, og heller ikke omskrivinger av dem:
 Regler for formen:
 
 - Det første avsnittet er overskriften «Søknad på stillingen som …», med stillingstittelen slik den står i annonsen, men med liten forbokstav slik det er vanlig midt i en setning på norsk, for eksempel «Søknad på stillingen som junior utvikler». Behold stor bokstav bare i navn og forkortelser. Overskriften er vanlig tekst, uten markdown. Skriv ingen dato, adresse eller tiltale.
-- Brevet er høyst én A4-side: omtrent 250–400 ord i 4–6 avsnitt. Overskriften, hilsenen og navnet regnes ikke med, verken i ordene eller i avsnittene.
-- Slutt med «Med vennlig hilsen» og studentens navn fra CV-en, som to egne avsnitt. Står det ikke noe navn i CV-en, slutter brevet med «Med vennlig hilsen».
+- Brevet er høyst én A4-side: omtrent 250–400 ord i 4–6 avsnitt. Overskriften regnes ikke med, verken i ordene eller i avsnittene.
+- Avslutt ikke brevet med hilsen og navn: skriv ikke «Med vennlig hilsen» eller studentens navn som hilsen til slutt i `avsnitt`. Nettsiden setter alltid inn «Med vennlig hilsen» og navnet til slutt i brevet. Det siste avsnittet i `avsnitt` er altså det siste avsnittet før hilsenen.
+- Gi studentens navn slik det står i CV-en, i `navn`. Står det ikke noe navn i CV-en, er `navn` null. Gjett aldri et navn.
 - Hvert avsnitt er ren tekst uten markdown, punktlister eller linjeskift.
 
-Svar bare med JSON i formen fra skjemaet: `avsnitt` er listen med avsnittene i brevet, i rekkefølge, ett avsnitt per element.
+Svar bare med JSON i formen fra skjemaet: `avsnitt` er listen med avsnittene i brevet, fra overskriften til det siste avsnittet før hilsenen, i rekkefølge, ett avsnitt per element. `navn` er studentens navn fra CV-en, eller null.

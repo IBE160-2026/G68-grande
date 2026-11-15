@@ -1,0 +1,2 @@
+2026-11-15 11:10:41,412 WARNING soknad.adaptere.ki: KI-kall nokkelord feilet: annet
+case-lang: et KI-kall feilet (annet). Ingenting er skrevet.

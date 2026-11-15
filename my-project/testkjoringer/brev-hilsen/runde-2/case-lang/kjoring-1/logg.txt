@@ -1,0 +1,5 @@
+2026-11-15 11:30:51,258 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 7389 tokens inn, 133 ut, stopp end_turn, anslått 0,0322 dollar (ca. 0,35 kr)
+2026-11-15 11:31:03,691 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 13866 tokens inn, 1437 ut, stopp end_turn, anslått 0,0842 dollar (ca. 0,93 kr)
+2026-11-15 11:31:28,678 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 15860 tokens inn, 3022 ut, stopp end_turn, anslått 0,1239 dollar (ca. 1,36 kr)
+2026-11-15 11:31:54,892 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 15860 tokens inn, 3121 ut, stopp end_turn, anslått 0,1259 dollar (ca. 1,38 kr)
+case-lang: svarene er skrevet i ..\my-project\testkjoringer\brev-hilsen\runde-2\case-lang\kjoring-1\case-lang

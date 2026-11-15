@@ -20,5 +20,14 @@ Kristine spurte hvor Docker kommer inn i prosjektet, og ba meg se på `my-projec
   - Plan B-regelen prøves på en annen CV i samme kjøring med ekte KI.
 - I `issues.md` er to punkter lukket (merknadene og hilsenen), og ett nytt er lagt til.
 
+- Rettingene ble bygd med `bmad-build` på branchen `brev-hilsen-og-regler`. Spec: `my-project/9-koding/spec-brev-hilsen-og-regler.md`.
+  - En hjelpeagent la til `navn` i brevskjemaet, `hele_brevet()` i `kjerne/ki_svar.py` (brukt på brevsiden og i Word-fila), fjerning av hilsen eller navn som KI-en likevel skriver til slutt, og de to nye reglene i `backend/prompts/brev.md`. AD-4 i arkitekturen er oppdatert.
+  - Tre gjennomgangsagenter fant 15 ulike ting. Fire små ting ble rettet: navnet alene til slutt, «Mvh» og lignende, at «navn» i prompten bare gjelder avslutningen, og en test. De andre elleve ble avvist med begrunnelse (Review Triage Log i spec-en).
+  - Ekte KI, runde 1: ett brudd på kriterium 11 («Python er en sentral del av utdanningen min»), bestemt av Kristine. Ingrid-kjøringen stoppet, og et lite prøvekall viste at kreditten på API-kontoen var brukt opp. Kristine fylte på.
+  - Plan B: regelen mot rangering ble utvidet (ikke «sentral», «viktig» eller «en stor del av»), med en test. Runde 2 besto kriterium 1, 3, 11 og 14, og alle 38 brevene har hilsen og riktig navn. Ingrid-CV-en: plan B-regelen holder, og merknad 4 og 5 er rettet. Kristine godtok «hver arbeidsdag» og fem andre setninger som slutninger.
+  - Case 2 fikk «lønn» som 17. nøkkelord, så `fasit.md` ble oppdatert (7 av 17 = 41 %).
+  - Kostnad: ca. 34 kr for begge rundene. 860 tester grønne, ruff grønn.
+  - Commit `8bf90a5` på branchen. Kristine prøvde brevsiden, Word-fila og «Nytt forslag» i testmodus med case 1 og 2 («ja alt ser bra ut!»). Pushet, og [PR #33](https://github.com/IBE160-2026/G68-grande/pull/33) er laget med merknad om KI-feilene og en kommentar om prøven. CI er grønn på Linux og Windows.
+
 ### Åpne punkter
-- Før epic 5: to nye regler i brev-prompten, navnet i et eget felt og hilsenen satt inn av nettsiden (også i testsvarene), og kriteriene for brevet kjørt på nytt med ekte KI, sammen med prøven av plan B på en annen CV.
+- Flette PR #33. Deretter: krysse av punktet i TO DO, og starte epic 5 (story 5.1).

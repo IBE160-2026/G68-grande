@@ -242,7 +242,7 @@ def test_fr27_sett_opptatt_endrer_bare_opptatt():
 
 # --- sett_brev (story 3.1) ---
 
-BREV_SVAR = {"avsnitt": ["Første avsnitt.", "Med vennlig hilsen"]}
+BREV_SVAR = {"avsnitt": ["Første avsnitt."], "navn": "Sara Eksempel"}
 
 
 @pytest.mark.parametrize(
@@ -367,7 +367,7 @@ def test_nfr11_telleren_folger_soknaden_gjennom_endringene():
         nokkelord={"nokkelord": ["Python"], "arbeidsgiver": None},
         gap={"dekker": [], "mangler": []},
     )
-    soknad = sett_brev(soknad, {"avsnitt": ["Hei"]})
+    soknad = sett_brev(soknad, {"avsnitt": ["Hei"], "navn": None})
     soknad = sett_lastet_ned(soknad)
     soknad = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonse"))
     assert soknad.ki_kall == 7

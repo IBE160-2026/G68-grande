@@ -118,14 +118,14 @@ def test_fr22_testki_gir_testbrevet():
 def test_fr22_brev_oddetall_gir_brev_1_og_partall_brev_2(kopi):
     """FR-22/FR-25: oddetall for forslag leser brev-1.json, partall brev-2.json."""
     svar = kopi / "case-1-utvikler" / "ki-svar"
-    (svar / "brev-2.json").write_text('{"avsnitt": ["Forslag to"]}', encoding="utf-8")
+    (svar / "brev-2.json").write_text('{"avsnitt": ["Forslag to"], "navn": null}', encoding="utf-8")
     ki = TestKI(kopi)
     cv, annonse = _les("cv.txt"), _les("annonse.txt")
     forste = json.loads(_les("ki-svar/brev-1.json"))
     assert ki.brev(cv, annonse, forslag=1) == forste
     assert ki.brev(cv, annonse, forslag=3) == forste
-    assert ki.brev(cv, annonse, forslag=2) == {"avsnitt": ["Forslag to"]}
-    assert ki.brev(cv, annonse, forslag=4) == {"avsnitt": ["Forslag to"]}
+    assert ki.brev(cv, annonse, forslag=2) == {"avsnitt": ["Forslag to"], "navn": None}
+    assert ki.brev(cv, annonse, forslag=4) == {"avsnitt": ["Forslag to"], "navn": None}
 
 
 def test_fr28_brevfil_som_mangler_gir_kifeil_annet(kopi):

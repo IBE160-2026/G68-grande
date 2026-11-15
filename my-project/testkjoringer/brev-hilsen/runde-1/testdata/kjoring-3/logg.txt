@@ -1,0 +1,10 @@
+2026-11-15 11:04:56,598 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1501 tokens inn, 141 ut, stopp end_turn, anslått 0,0088 dollar (ca. 0,10 kr)
+2026-11-15 11:04:58,990 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2060 tokens inn, 190 ut, stopp end_turn, anslått 0,0120 dollar (ca. 0,13 kr)
+2026-11-15 11:05:21,827 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3968 tokens inn, 2516 ut, stopp end_turn, anslått 0,0662 dollar (ca. 0,73 kr)
+2026-11-15 11:05:35,691 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3968 tokens inn, 1451 ut, stopp end_turn, anslått 0,0449 dollar (ca. 0,49 kr)
+2026-11-15 11:05:40,875 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1539 tokens inn, 478 ut, stopp end_turn, anslått 0,0157 dollar (ca. 0,17 kr)
+2026-11-15 11:05:43,444 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2129 tokens inn, 179 ut, stopp end_turn, anslått 0,0121 dollar (ca. 0,13 kr)
+2026-11-15 11:05:58,284 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 4037 tokens inn, 1606 ut, stopp end_turn, anslått 0,0483 dollar (ca. 0,53 kr)
+2026-11-15 11:06:13,335 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 4037 tokens inn, 1624 ut, stopp end_turn, anslått 0,0486 dollar (ca. 0,53 kr)
+case-1-utvikler: svarene er skrevet i ..\my-project\testkjoringer\brev-hilsen\runde-1\testdata\kjoring-3\case-1-utvikler
+case-2-okonomi: svarene er skrevet i ..\my-project\testkjoringer\brev-hilsen\runde-1\testdata\kjoring-3\case-2-okonomi

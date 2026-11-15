@@ -1,0 +1,10 @@
+2026-11-15 11:01:38,036 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1501 tokens inn, 141 ut, stopp end_turn, anslått 0,0088 dollar (ca. 0,10 kr)
+2026-11-15 11:01:40,741 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2060 tokens inn, 190 ut, stopp end_turn, anslått 0,0120 dollar (ca. 0,13 kr)
+2026-11-15 11:01:58,049 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3968 tokens inn, 1843 ut, stopp end_turn, anslått 0,0527 dollar (ca. 0,58 kr)
+2026-11-15 11:02:14,737 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 3968 tokens inn, 1840 ut, stopp end_turn, anslått 0,0527 dollar (ca. 0,58 kr)
+2026-11-15 11:02:19,041 INFO soknad.adaptere.ki: KI-kall nokkelord (claude-opus-5-5): 1539 tokens inn, 410 ut, stopp end_turn, anslått 0,0144 dollar (ca. 0,16 kr)
+2026-11-15 11:02:21,495 INFO soknad.adaptere.ki: KI-kall gap (claude-opus-5-5): 2129 tokens inn, 179 ut, stopp end_turn, anslått 0,0121 dollar (ca. 0,13 kr)
+2026-11-15 11:02:43,822 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 4037 tokens inn, 2523 ut, stopp end_turn, anslått 0,0666 dollar (ca. 0,73 kr)
+2026-11-15 11:03:05,119 INFO soknad.adaptere.ki: KI-kall brev (claude-opus-5-5): 4037 tokens inn, 2476 ut, stopp end_turn, anslått 0,0657 dollar (ca. 0,72 kr)
+case-1-utvikler: svarene er skrevet i C:\BMAD\G68-grande\backend\testdata\case-1-utvikler\ki-svar
+case-2-okonomi: svarene er skrevet i C:\BMAD\G68-grande\backend\testdata\case-2-okonomi\ki-svar

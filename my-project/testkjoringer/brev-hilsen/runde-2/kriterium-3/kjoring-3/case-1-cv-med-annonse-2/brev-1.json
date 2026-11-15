@@ -1,0 +1,11 @@
+{
+  "avsnitt": [
+    "Søknad på stillingen som junior økonomimedarbeider",
+    "Jeg heter Sara Eksempel og går tredje år på bachelor i IT ved Eksempelby høgskole. Jeg blir ferdig våren 2027. I studiet har jeg hatt emner i programmering, webutvikling, operativsystemer og datanettverk. Jeg liker å lage nettsider som er enkle å bruke, og jeg lærer nye verktøy raskt. Med dette brevet søker jeg på stillingen som junior økonomimedarbeider hos Prøvdal Regnskap AS.",
+    "Dere skriver i annonsen at dere ser etter en som har erfaring med Python, fordi dere automatiserer stadig flere oppgaver. Jeg har skrevet Python i to prosjekter. Bachelorprosjektet mitt er en nettside der studenter kan booke grupperom. Den er laget i Python med Flask, HTML og CSS, og dataene lagres i JSON-filer. Vi var tre på gruppa og brukte Git til versjonskontroll, så jeg har erfaring med å dele kode og arbeid med andre. I et emneprosjekt i 2025 laget jeg et lite program i Python som henter værdata og viser dem som grafer. Der jobbet jeg med å hente inn data og presentere dem slik at de er lette å lese.",
+    "Dere ser også etter en som liker kundekontakt. Siden 2022 jobber jeg deltid som butikkmedarbeider i en dagligvarebutikk i Eksempelby. Der har jeg ansvar for kundeservice, kasse og varepåfylling, og jeg møter mange ulike kunder hver vakt. Sommeren 2025 jobbet jeg som IT-assistent på høgskolen. Jeg hjalp studenter med pålogging og satte opp PC-er med Linux. I den jobben måtte jeg forklare tekniske ting på en enkel måte til folk som trengte hjelp der og da.",
+    "Annonsen nevner at dere ser etter en som snakker og skriver godt norsk og engelsk. Norsk er morsmålet mitt, og jeg snakker og skriver flytende engelsk.",
+    "Jeg er ferdig med bachelorgraden våren 2027 og kan derfor begynne i august 2027, slik dere ønsker. Dere tilbyr opplæring i regnskapsprogrammene dere bruker, og jeg lærer nye verktøy raskt. Jeg stiller gjerne til et intervju og kan vise frem prosjektene mine der. Dere når meg på telefon 876 54 321 eller på e-post sara.eksempel@example.com."
+  ],
+  "navn": "Sara Eksempel"
+}

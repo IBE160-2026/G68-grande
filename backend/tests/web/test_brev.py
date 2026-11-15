@@ -10,6 +10,7 @@ import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE, TestKI
 from soknad.kjerne.feil import KIFeil, KIFeilType
+from soknad.kjerne.ki_svar import kontroller
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import ruter, tekster
@@ -162,10 +163,17 @@ def test_ux_dr7_ki_feil_gir_fokus_til_feilboksen(app, paa_resultat):
     assert html.index('id="feilboks"') < html.index('id="gap-dekker"')
 
 
-@pytest.mark.parametrize("innhold", ['{"avsnitt": []}', '{"avsnitt": ["  "]}'])
+@pytest.mark.parametrize(
+    "innhold",
+    [
+        '{"avsnitt": [], "navn": "Sara"}',
+        '{"avsnitt": ["  "], "navn": null}',
+        '{"avsnitt": ["Med vennlig hilsen", "Sara Eksempel"], "navn": "Sara Eksempel"}',
+    ],
+)
 def test_fr28_tomt_brev_gir_feilboksen(app, paa_resultat, tmp_path, innhold):
-    """FR-28: et tomt brev (ingen avsnitt eller bare mellomrom) gir KIFeil(ubrukelig_svar) og
-    resultatsiden med feilboksen, aldri en tom brevside."""
+    """FR-28: et tomt brev (ingen avsnitt, bare mellomrom eller bare hilsen og navn) gir
+    KIFeil(ubrukelig_svar) og resultatsiden med feilboksen, aldri en tom brevside."""
     kopi = tmp_path / "testdata"
     shutil.copytree(TESTDATA_MAPPE, kopi)
     (kopi / "case-1-utvikler" / "ki-svar" / "brev-1.json").write_text(innhold, encoding="utf-8")
@@ -434,19 +442,46 @@ def test_fr22_brevsiden_har_overskrift_tittel_og_fokus(paa_brev):
 
 
 def test_fr22_ett_avsnitt_per_element(paa_brev):
-    """FR-22: brevarket har ett <p> per element i avsnitt, i samme rekkefølge."""
-    assert avsnitt(html_av(paa_brev.get("/brev"))) == BREV_SVAR["avsnitt"]
+    """FR-22: brevarket har ett <p> per element i avsnitt, i samme rekkefølge, og så
+    «Med vennlig hilsen» og navnet som to egne avsnitt."""
+    assert avsnitt(html_av(paa_brev.get("/brev"))) == [
+        *BREV_SVAR["avsnitt"],
+        "Med vennlig hilsen",
+        BREV_SVAR["navn"],
+    ]
+
+
+@pytest.mark.parametrize("case", sorted(TESTDATA_MAPPE.glob("case-*")), ids=lambda c: c.name)
+def test_fr22_brevet_i_testmodus_slutter_med_hilsen_og_navn(app, innlogget_client, case):
+    """FR-22: for hvert testcase viser brevsiden avsnittene fra brev-1.json og så «Med vennlig
+    hilsen» og navnet fra CV-en (den første linjen), slik brevet var før navnet fikk et eget
+    felt. Hilsenen står bare én gang."""
+    brev = kontroller("brev", (case / "ki-svar" / "brev-1.json").read_text(encoding="utf-8"))
+    navn = (case / "cv.txt").read_text(encoding="utf-8").splitlines()[0]
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.BREV, brev=brev))
+    vist = avsnitt(html_av(innlogget_client.get("/brev")))
+    assert vist == [*brev["avsnitt"], "Med vennlig hilsen", navn]
+    assert vist.count("Med vennlig hilsen") == 1
+
+
+def test_fr22_brevet_uten_navn_slutter_med_hilsenen(app, innlogget_client):
+    """FR-22: uten navn i CV-en slutter brevet på siden med «Med vennlig hilsen»."""
+    brev = {"avsnitt": ["Søknad på stillingen", "Jeg søker."], "navn": None}
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.BREV, brev=brev))
+    vist = avsnitt(html_av(innlogget_client.get("/brev")))
+    assert vist == ["Søknad på stillingen", "Jeg søker.", "Med vennlig hilsen"]
 
 
 def test_nfr6_brevteksten_escapes(app, innlogget_client):
-    """NFR-6: tekst fra KI-en escapes, så den aldri blir HTML."""
-    brev = {"avsnitt": ["<b>fet</b> & <script>x</script>", "Hilsen"]}
+    """NFR-6: tekst fra KI-en escapes, også navnet, så den aldri blir HTML."""
+    brev = {"avsnitt": ["<b>fet</b> & <script>x</script>"], "navn": "<i>Sara</i>"}
     sett_soknad(app, innlogget_client, Soknad(steg=Steg.BREV, brev=brev))
     html = main(html_av(innlogget_client.get("/brev")))
     assert "<b>" not in html
+    assert "<i>" not in html
     assert "<script>" not in html
     assert "&lt;b&gt;fet&lt;/b&gt; &amp; &lt;script&gt;" in html
-    assert avsnitt(html) == brev["avsnitt"]
+    assert avsnitt(html) == [*brev["avsnitt"], "Med vennlig hilsen", "<i>Sara</i>"]
 
 
 def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):

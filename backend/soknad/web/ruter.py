@@ -11,6 +11,7 @@ from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, FilFeil, InndataFeil, KIFeil
 from soknad.kjerne.filnavn import lag_filnavn
 from soknad.kjerne.inndata import sjekk_innlegging, sjekk_innlogging, sjekk_registrering
+from soknad.kjerne.ki_svar import hele_brevet
 from soknad.kjerne.okt import (
     Modus,
     Soknad,
@@ -270,7 +271,7 @@ def last_ned(format):
     if opptatt is not None:
         return opptatt
     try:
-        innhold = fil_ut.lag_docx(lagret.brev["avsnitt"])
+        innhold = fil_ut.lag_docx(hele_brevet(lagret.brev))
     except FilFeil:
         return _vis_brev(lagret, fil_feil=True), 500
     erstatt_soknad(lagret, sett_lastet_ned(lagret))
@@ -457,10 +458,11 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
 
 def _vis_brev(soknad, fil_feil=False):
     """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
-    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil)."""
+    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). Brevet er
+    avsnittene med hilsen og navn til slutt, som i Word-fila (hele_brevet)."""
     return render_template(
         "brev.html",
-        avsnitt=soknad.brev["avsnitt"],
+        avsnitt=hele_brevet(soknad.brev),
         lastet_ned=soknad.lastet_ned,
         filnavn=lag_filnavn(date.today(), "docx"),
         fil_feil=fil_feil,
