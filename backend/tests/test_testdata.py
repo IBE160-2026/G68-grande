@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from soknad.kjerne.ki_svar import kontroller
+from soknad.kjerne.ki_svar import kontroller, korrektur_visning
 from soknad.kjerne.telleregel import tell_treff
 from soknad.kjerne.testdata_match import vask
 
@@ -359,10 +359,14 @@ KRITERIUM_3 = TESTDATA.parents[1] / "my-project" / "testkjoringer" / "4-5" / "in
 
 
 def test_fr23_fr24_korrektur_svarene_bestaar_kontrollen_uten_ki_fraser():
-    """FR-23/FR-24/FR-28/FR-38 (story 5.2.1): korrektur-1.json og korrektur-2.json finnes bare i
-    case 1, begge består kontroller() mot eget-brev.txt, minst én setning er endret i hver, og
-    ingen ny har noen av de 17 KI-frasene (uten hensyn til store og små bokstaver), heller ikke
-    over to setninger."""
+    """FR-23/FR-24/FR-28/FR-37/FR-38 (story 5.2.1, retro 5): korrektur-1.json og
+    korrektur-2.json finnes bare i case 1, begge består kontroller() mot eget-brev.txt, minst
+    én setning er markert som endret i hver (korrektur_visning, ikke bare fjernet), ingen ny
+    har noen av de 17 KI-frasene (uten hensyn til store og små bokstaver), heller ikke over to
+    setninger, og ingen ny har ordene fra «Sjekkliste for brevet» (som brevene i Full
+    generering, se test_fr37_testbrevene_har_ingen_pastander_fra_sjekklisten). Det egne
+    brevet har ingen av ordene (test_fr37_eget_brev_har_ingenting_fra_sjekklisten), så et
+    treff kommer alltid fra KI-en."""
     filer = sorted(TESTDATA.glob("case-*/ki-svar/korrektur-*.json"))
     assert filer == [
         KORREKTUR_CASE / "ki-svar" / "korrektur-1.json",
@@ -372,8 +376,10 @@ def test_fr23_fr24_korrektur_svarene_bestaar_kontrollen_uten_ki_fraser():
     for fil in filer:
         svar = kontroller("korrektur", fil.read_text(encoding="utf-8"), eget_brev=brev)
         setninger = svar["setninger"]
-        assert any(s["gammel"] != [s["ny"]] for s in setninger), fil
+        assert korrektur_visning(svar)["antall_endret"] >= 1, fil
         nye = [s["ny"] for s in setninger if s["ny"] is not None]
+        alle = " ".join(nye).casefold()
+        assert [ord_ for ord_ in SJEKKLISTE_ORD[KORREKTUR_CASE.name] if ord_ in alle] == [], fil
         for tekst in (*nye, " ".join(nye)):
             tekst = " ".join(tekst.split()).casefold()
             assert [frase for frase in KI_FRASER if frase in tekst] == [], (fil, tekst)

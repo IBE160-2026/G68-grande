@@ -226,32 +226,85 @@ def test_fr28_korrektur_der_alle_ny_er_tomme_gir_kifeil(ny):
     ],
 )
 def test_fr24_korrektur_som_ikke_stemmer_med_brevet_gir_kifeil(gammel):
-    """FR-24/FR-28 (story 5.2.1): er alle gammel satt sammen og vasket ikke det egne brevet
-    vasket, gir det KIFeil(ubrukelig_svar)."""
+    """FR-24/FR-28 (story 5.2.1, retro 5): er alle gammel satt sammen ikke det egne brevet
+    ordrett, gir det KIFeil(ubrukelig_svar)."""
     setninger = [{**setning, "gammel": g} for setning, g in zip(GYLDIG, gammel, strict=True)]
     with pytest.raises(KIFeil) as feil:
         _korrektur(*setninger)
     assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
 
 
-def test_fr24_korrektur_sjekken_ser_bort_fra_tegnsetting_og_linjeskift():
-    """FR-24 (story 5.2.1): sjekken mot det egne brevet bruker samme vask som testdataene, så
-    tegnsetting, store bokstaver, mellomrom og linjeskift teller ikke. Sammenslåtte setninger
-    med to gammel stemmer også."""
+def test_fr24_korrektur_sjekken_ser_bort_fra_mellomrom_og_linjeskift():
+    """FR-24 (retro 5): gammel må være ordrett fra det egne brevet, men mellomrom, linjeskift og
+    tab teller ikke, og Unicode NFC gjelder på begge sider (her «å» skrevet som a + ring).
+    Sammenslåtte setninger med to gammel stemmer også."""
     setninger = [
-        _setning("Søknad på stillingen som utvikler", ["SØKNAD  på jobb:"], True),
-        _setning(None, ["Hei"], True),
+        _setning("Søknad på stillingen som utvikler", ["Søknad  på jobb"], True),
+        _setning(None, ["Hei!"], True),
         _setning(
             "Jeg har jobbet i butikk, og der lærte jeg mye.",
-            ["Jeg har jobbet\ni butikk", "Det var gøy!"],
+            ["Jeg har jobbet\ni butikk.", "Det var gøy."],
             True,
         ),
         _setning("Med vennlig hilsen Sara", ["Med vennlig hilsen", "Sara"], True),
     ]
-    assert _korrektur(*setninger)["setninger"][2]["gammel"] == [
-        "Jeg har jobbet i butikk",
-        "Det var gøy!",
+    brev = EGET_BREV.replace("på", "pa\u030a").replace("\n\n", "\r\n\t\r\n")
+    assert _korrektur(*setninger, eget_brev=brev)["setninger"][2]["gammel"] == [
+        "Jeg har jobbet i butikk.",
+        "Det var gøy.",
     ]
+
+
+@pytest.mark.parametrize(
+    ("indeks", "gammel"),
+    [
+        # Store bokstaver er endret i gammel
+        (0, ["SØKNAD på jobb"]),
+        # Tegnsettingen er endret i gammel
+        (2, ["Jeg har jobbet i butikk,"]),
+        (1, ["Hei"]),
+        # En tom gammel (ville gitt en tom linje i «Du skrev»)
+        (1, ["Hei!", ""]),
+        (1, ["Hei!", "  "]),
+    ],
+)
+def test_fr24_korrektur_med_gammel_som_ikke_er_ordrett_gir_kifeil(indeks, gammel):
+    """FR-24/FR-28 (retro 5): store bokstaver, tegnsetting og tomme gammel teller, så «Du
+    skrev» alltid viser nøyaktig det brukeren skrev, og en endring bare i tegnsetting ikke
+    blir skjult. Det gir KIFeil(ubrukelig_svar)."""
+    setninger = [dict(setning) for setning in GYLDIG]
+    setninger[indeks] = {**setninger[indeks], "gammel": gammel}
+    with pytest.raises(KIFeil) as feil:
+        _korrektur(*setninger)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+@pytest.mark.parametrize(
+    "brev",
+    [
+        # Mangler mellomrom etter punktum i brevet, men KI-en deler setningene
+        EGET_BREV.replace("butikk. Det", "butikk.Det"),
+        # Myk bindestrek, nullbreddemellomrom og BOM (fra Word eller PDF)
+        "﻿" + EGET_BREV.replace("butikk", "but­ikk").replace("gøy", "g​øy"),
+    ],
+)
+def test_fr24_korrektur_sjekken_ser_bort_fra_mellomrom_mellom_setninger_og_formattegn(brev):
+    """FR-24 (retro 5): mellomrom mellom setningene og usynlige formattegn (kategori Cf) teller
+    ikke, så et riktig svar ikke blir «ubrukelig» av et manglende mellomrom eller et tegn fra
+    Word eller PDF."""
+    assert _korrektur(*GYLDIG, eget_brev=brev)["setninger"][2]["gammel"] == [
+        "Jeg har jobbet i butikk."
+    ]
+
+
+def test_fr23_korrektur_med_nfd_i_gammel_er_uendret_naar_ny_er_lik():
+    """FR-23/AD-5 (retro 5): gammel og ny får Unicode NFC i rensingen, så en setning der KI-en
+    skrev «å» som a + ring i gammel og som ett tegn i ny, ikke blir markert som endret."""
+    setninger = [dict(setning) for setning in GYLDIG]
+    setninger[0] = _setning("Søknad på jobb", ["Søknad på jobb"], True)
+    svar = _korrektur(*setninger, eget_brev=EGET_BREV.replace("på", "på"))
+    assert svar["setninger"][0]["gammel"] == ["Søknad på jobb"]
+    assert korrektur_visning(svar)["avsnitt"][0][0]["endret"] is False
 
 
 def test_fr28_korrektur_renses_som_brevet():
