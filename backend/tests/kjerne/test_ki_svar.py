@@ -1,5 +1,5 @@
 """Tester for kontrollen av KI-svar (FR-28, AD-4). Hvert tilfelle av ubrukelig svar gir
-KIFeil(ubrukelig_svar)."""
+KIFeil(ubrukelig_svar). Visningen av Korrektur (korrektur_visning) kom i story 5.3 (FR-23)."""
 
 import copy
 import json
@@ -7,9 +7,21 @@ import pickle
 
 import pytest
 
+from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
-from soknad.kjerne.ki_svar import HILSEN, hele_brevet, kontroller, korrigert_brev
+from soknad.kjerne.ki_svar import (
+    HILSEN,
+    hele_brevet,
+    kontroller,
+    korrektur_visning,
+    korrigert_brev,
+)
+
+# De ekte testsvarene og det egne brevet i case 1 (story 5.2).
+CASE_1 = TESTDATA_MAPPE / "case-1-utvikler"
+KI_SVAR = CASE_1 / "ki-svar"
+EGET_BREV_CASE_1 = (CASE_1 / "eget-brev.txt").read_text(encoding="utf-8")
 
 
 def test_fr28_gyldig_nokkelordsvar_gis_tilbake():
@@ -306,6 +318,129 @@ def test_fr23_korrigert_brev_legger_ikke_til_hilsen():
     brukeren skrev dem, og mangler de, legges ingenting til."""
     assert _korrigert(_setning("Jeg søker.", ["Jeg søker."], True)) == ["Jeg søker."]
     assert HILSEN not in _korrigert(_setning("Jeg søker.", ["Jeg søker."], True))
+
+
+def _visning(*setninger):
+    return korrektur_visning({"setninger": list(setninger)})
+
+
+def _vist(ny, gammel, endret):
+    return {"ny": ny, "gammel": gammel, "endret": endret}
+
+
+def test_fr23_visning_endret_setning():
+    """FR-23/AD-5 (story 5.3): gammel != [ny] er endret, også når bare tegnsettingen er ulik.
+    Visningen sammenligner aldri vasket tekst."""
+    assert _visning(_setning("Jeg ønsker å jobbe her.", ["Jeg vil jobbe her"], True)) == {
+        "avsnitt": [[_vist("Jeg ønsker å jobbe her.", ["Jeg vil jobbe her"], True)]],
+        "fjernet": 0,
+        "antall_endret": 1,
+    }
+    assert _visning(_setning("Jeg søker.", ["Jeg søker"]))["antall_endret"] == 1
+
+
+def test_fr23_visning_sammenslaatt_setning():
+    """FR-23/AD-5 (story 5.3): to gamle setninger slått sammen til én er endret, og begge de
+    gamle er med."""
+    visning = _visning(_setning("En og to.", ["En.", "To."], True))
+    assert visning["avsnitt"] == [[_vist("En og to.", ["En.", "To."], True)]]
+    assert visning["antall_endret"] == 1
+
+
+def test_fr23_visning_ny_setning():
+    """FR-23/AD-5 (story 5.3): gammel == [] er en ny setning, og den er endret."""
+    visning = _visning(_setning("Jeg søker.", ["Jeg søker."], True), _setning("Ny.", []))
+    assert visning["avsnitt"] == [
+        [_vist("Jeg søker.", ["Jeg søker."], False), _vist("Ny.", [], True)]
+    ]
+    assert visning["antall_endret"] == 1
+
+
+def test_fr23_visning_uendret_setning():
+    """FR-23/AD-5 (story 5.3): gammel == [ny] er uendret. Er ingenting endret eller fjernet,
+    er begge antallene 0."""
+    visning = _visning(_setning("Søknad", ["Søknad"], True), _setning("Jeg søker.", ["Jeg søker."]))
+    assert visning == {
+        "avsnitt": [
+            [_vist("Søknad", ["Søknad"], False), _vist("Jeg søker.", ["Jeg søker."], False)]
+        ],
+        "fjernet": 0,
+        "antall_endret": 0,
+    }
+
+
+@pytest.mark.parametrize("antall", [1, 2])
+def test_fr23_visning_fjernede_setninger_telles_og_vises_ikke(antall):
+    """FR-23/AD-5 (story 5.3): ny null er fjernet. Setningen er ikke med i avsnittene, men
+    telles i fjernet. Bare fjernet (ingen endret) gir antall_endret 0."""
+    fjernet = [_setning(None, [f"Fjernet {nr}."]) for nr in range(antall)]
+    visning = _visning(_setning("Jeg søker.", ["Jeg søker."], True), *fjernet)
+    assert visning == {
+        "avsnitt": [[_vist("Jeg søker.", ["Jeg søker."], False)]],
+        "fjernet": antall,
+        "antall_endret": 0,
+    }
+
+
+def test_fr23_visning_fjernet_oppforing_med_to_gamle_er_to_fjernede():
+    """FR-23/AD-5 (story 5.3): fjernet teller gamle setninger, ikke oppføringer. Én oppføring
+    med ny null og to gamle setninger gir fjernet 2 («2 setninger er fjernet.»)."""
+    visning = _visning(_setning("Jeg søker.", ["Jeg søker."], True), _setning(None, ["A.", "B."]))
+    assert visning["fjernet"] == 2
+
+
+def test_fr23_visning_fjernet_oppforing_uten_gammel_er_ingen_fjernet():
+    """FR-23/AD-5 (story 5.3): en oppføring med ny null og tom gammel har ikke fjernet noe av
+    det brukeren skrev, så den gir fjernet 0."""
+    visning = _visning(_setning("Jeg søker.", ["Jeg søker."], True), _setning(None, []))
+    assert visning["fjernet"] == 0
+
+
+GRUPPERING = [
+    # Fjernet setning som begynte et avsnitt: den neste begynner avsnittet.
+    [
+        _setning("Overskrift", ["Overskrift"], True),
+        _setning(None, ["Hei!"], True),
+        _setning("Jeg søker.", ["Jeg søker"]),
+        _setning("Jeg kan begynne.", ["Jeg kan begynne."]),
+    ],
+    # Fjernet setning midt i et avsnitt, og første setning uten nytt_avsnitt.
+    [_setning("En.", ["En."]), _setning(None, ["To."]), _setning("Tre.", [])],
+    # Flere avsnitt med endrede, nye og sammenslåtte setninger.
+    [
+        _setning("En.", ["En"], True),
+        _setning("To.", ["To."]),
+        _setning("Tre og fire.", ["Tre.", "Fire."], True),
+        _setning("Fem.", [], True),
+    ],
+]
+
+
+@pytest.mark.parametrize("setninger", GRUPPERING)
+def test_fr23_fr30_visningen_har_de_samme_avsnittene_som_brevet(setninger):
+    """FR-23/FR-30 (story 5.3): ny i hvert avsnitt i visningen, satt sammen med ett mellomrom,
+    er avsnittene i korrigert_brev. Siden og Word-fila har altså den samme teksten.
+    antall_endret teller de markerte setningene, og fjernet de gamle setningene der ny er
+    null."""
+    visning = _visning(*setninger)
+    brev = _korrigert(*setninger)
+    assert [" ".join(s["ny"] for s in avsnitt) for avsnitt in visning["avsnitt"]] == brev
+    assert visning["fjernet"] == sum(len(s["gammel"]) for s in setninger if s["ny"] is None)
+    markert = [s for avsnitt in visning["avsnitt"] for s in avsnitt if s["endret"]]
+    assert visning["antall_endret"] == len(markert)
+    assert all(s["gammel"] != [s["ny"]] for s in markert)
+
+
+def test_fr23_visningen_av_de_ekte_testsvarene():
+    """FR-23/FR-38 (story 5.3): de ekte svarene i case 1 gir minst én endret setning
+    (kriterium 4), og visningen har de samme avsnittene som korrigert_brev."""
+    for navn in ("korrektur-1", "korrektur-2"):
+        tekst = (KI_SVAR / f"{navn}.json").read_text(encoding="utf-8")
+        svar = kontroller("korrektur", tekst, eget_brev=EGET_BREV_CASE_1)
+        visning = korrektur_visning(svar)
+        assert visning["antall_endret"] >= 1, navn
+        avsnitt = [" ".join(s["ny"] for s in a) for a in visning["avsnitt"]]
+        assert avsnitt == korrigert_brev(svar), navn
 
 
 def test_fr22_gyldig_brev_gis_tilbake():

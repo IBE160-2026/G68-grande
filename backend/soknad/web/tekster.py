@@ -203,6 +203,18 @@ BREV_TITTEL = "Søknadsbrev"
 BREV_OVERSKRIFT = "Din ferdigstilte søknad!"
 BREV_OVERSKRIFT_KORREKTUR = "Din oppdaterte søknad er ferdig!"
 
+# Markeringene på brevsiden i Korrektur (FR-23, UX-DR15). Forklaringen står i en liten hvit
+# boks over brevet, med en skjult tilleggstekst for skjermlesere. Hver endret setning er en
+# knapp med den skjulte teksten «Endret setning» først, og trykk viser «Du skrev» med den
+# gamle setningen, eller «(Ny setning)». Er ingenting endret eller fjernet, står
+# INGENTING_ENDRET i stedet for forklaringen. Antallet fjernede står under brevet (fjernet).
+KORREKTUR_FORKLARING = "Grønn og understreket = endret. Trykk på setningen for å se det du skrev."
+KORREKTUR_FORKLARING_SKJERMLESER = "Endrede setninger er knapper."
+ENDRET_SETNING_SKJERMLESER = "Endret setning"
+DU_SKREV = "Du skrev"
+NY_SETNING = "(Ny setning)"
+INGENTING_ENDRET = "Vi fant ingenting å endre. Brevet ditt er bra som det er."
+
 # Nedlastingen under brevet (FR-29, UX-DR16). Etter nedlasting blir knappen grønn med ✓ foran
 # «Lastet ned som Word». ✓ er bare pynt og skjules for skjermlesere.
 LAST_NED_WORD = "Last ned som Word"
@@ -222,6 +234,11 @@ BLI_HER_KNAPP = "Bli her"
 def filnavn_linje(filnavn: str) -> str:
     """Under knappen etter nedlasting: «Filnavn: Soknad_2026-11-11.docx»."""
     return f"Filnavn: {filnavn}"
+
+
+def fjernet(antall: int) -> str:
+    """Under brevet i Korrektur: «1 setning er fjernet.» eller «2 setninger er fjernet.»."""
+    return f"{antall} setning er fjernet." if antall == 1 else f"{antall} setninger er fjernet."
 
 
 def nokkelordtreff(antall_treff: int, antall: int, prosent: int) -> str:

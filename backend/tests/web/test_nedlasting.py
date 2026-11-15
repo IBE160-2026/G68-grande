@@ -8,7 +8,7 @@ import pytest
 from docx import Document
 
 from soknad.adaptere import fil_ut
-from soknad.kjerne.okt import Soknad, Tekstfelt, sett_lastet_ned
+from soknad.kjerne.okt import Modus, Soknad, Tekstfelt, sett_lastet_ned
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from tests.web.hjelpere import (
@@ -16,6 +16,7 @@ from tests.web.hjelpere import (
     CV,
     NEDLASTING,
     STIL,
+    brevtekst,
     css_blokk,
     element,
     filnavn_i_dag,
@@ -87,13 +88,49 @@ def test_fr30_korrektur_filen_er_lik_brevet_paa_siden(app, paa_brev_korrektur):
     tekst = [p.text for p in Document(BytesIO(svar.data)).paragraphs]
     assert tekst == korrektur_brev(1)
     assert len(tekst) == len(_avsnitt_paa_siden(html))
+    # Story 5.3: teksten i hvert avsnitt på siden, uten de skjulte tekstene og «Du skrev», er
+    # lik avsnittet i fila, og fila har ingen av markeringstekstene.
+    assert brevtekst(html) == tekst
+    assert tekster.KORREKTUR_FORKLARING in html
     assert tekst.count("Med vennlig hilsen") == 1
-    for ord_ in ("Du skrev", "Ny setning", "Hei!"):
+    for ord_ in ("Du skrev", "Ny setning", "Hei!", "Endret setning", "Grønn og", "fjernet"):
         assert all(ord_ not in avsnitt for avsnitt in tekst)
     assert soknaden(app, paa_brev_korrektur).lastet_ned is True
     html = html_av(paa_brev_korrektur.get("/brev"))
     assert 'id="vindu-nedlastet"' in html
     assert tekster.LASTET_NED_WORD in knapp_html(html)
+
+
+def test_fr30_korrektur_med_markeringer_filen_er_lik_teksten_paa_siden(app, innlogget_client):
+    """FR-23/FR-30 (story 5.3): med endrede, nye, sammenslåtte, uendrede og fjernede setninger
+    i flere avsnitt er teksten i hvert avsnitt på siden (uten de skjulte tekstene og «Du
+    skrev») lik avsnittet i Word-fila. Fila har ingen «Du skrev», «(Ny setning)», «Endret
+    setning», forklaring eller linje om fjernede setninger."""
+    korrektur = {
+        "setninger": [
+            {"ny": "Søknad", "gammel": ["Søknad på jobb"], "nytt_avsnitt": True},
+            {"ny": None, "gammel": ["Hei!"], "nytt_avsnitt": True},
+            {"ny": "Jeg søker.", "gammel": ["Jeg søker."], "nytt_avsnitt": False},
+            {"ny": "Det var lærerikt.", "gammel": ["Gøy.", "Lærte mye."], "nytt_avsnitt": False},
+            {"ny": "Jeg kommer gjerne.", "gammel": [], "nytt_avsnitt": True},
+        ]
+    }
+    soknad = Soknad(steg=Steg.BREV, modus=Modus.KORREKTUR, korrektur=korrektur)
+    sett_soknad(app, innlogget_client, soknad)
+    html = html_av(innlogget_client.get("/brev"))
+    tekst = [p.text for p in Document(BytesIO(innlogget_client.get(NEDLASTING).data)).paragraphs]
+    assert tekst == ["Søknad", "Jeg søker. Det var lærerikt.", "Jeg kommer gjerne."]
+    assert brevtekst(html) == tekst
+    alt = " ".join(tekst)
+    for markering in (
+        tekster.DU_SKREV,
+        tekster.NY_SETNING,
+        tekster.ENDRET_SETNING_SKJERMLESER,
+        tekster.KORREKTUR_FORKLARING,
+        tekster.fjernet(1),
+        "Hei!",
+    ):
+        assert markering not in alt
 
 
 def test_ad9_filfeil_i_korrektur_gir_brevsiden_med_feilboksen(app, paa_brev_korrektur, filfeil):

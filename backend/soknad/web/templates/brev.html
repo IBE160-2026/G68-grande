@@ -2,13 +2,17 @@
 {% block tittel %}{{ tekster.BREV_TITTEL }}{% endblock %}
 {% block skript %}
   <script src="{{ url_for('static', filename='js/nedlasting.js') }}" defer></script>
+  {%- if visning %}
+  <script src="{{ url_for('static', filename='js/endringer.js') }}" defer></script>
+  {%- endif %}
 {%- endblock %}
 {% block innhold %}
 {#- Overskriften får fokus når siden åpnes, også etter ventetegnet på resultatsiden (UX-DR14).
     Ved «Filen kan ikke lages» får feilboksen fokus i stedet. Brevsiden har ingen «Tilbake».
     Overskriften er den for modusen (fra ruten): «Din oppdaterte søknad er ferdig!» i
-    Korrektur. Markeringene i Korrektur kommer i story 5.3. Fyrverkeri, PDF og «Nytt forslag»
-    kommer i Epic 7. #}
+    Korrektur. Markeringene i Korrektur (story 5.3) står bare når ruten sender visning. Uten
+    visning (Full generering) er brevet som før. Fyrverkeri, PDF og «Nytt forslag» kommer i
+    Epic 7. #}
 <h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
 {%- if fil_feil %}
 {#- Filen kunne ikke lages (FilFeil): som KI-feilboksen, men «Prøv på nytt» er en lenke som
@@ -20,13 +24,57 @@
   </p>
 </div>
 {%- endif %}
+{%- if visning %}
+{#- Forklaringen over brevet i Korrektur (FR-23, UX-DR15), med en skjult tilleggstekst for
+    skjermlesere. Er ingenting endret og ingenting fjernet, står «Vi fant ingenting å endre»
+    i stedet. Er bare noe fjernet, står ingen boks (bestemt av Kristine 15. november 2026). #}
+{%- if visning.antall_endret %}
+<p class="korrektur-forklaring">{{ tekster.KORREKTUR_FORKLARING }} <span class="skjult">{{ tekster.KORREKTUR_FORKLARING_SKJERMLESER }}</span></p>
+{%- elif not visning.fjernet %}
+<p class="korrektur-forklaring">{{ tekster.INGENTING_ENDRET }}</p>
+{%- endif %}
+{%- endif %}
 {#- Brevet som et hvitt ark (letter-card), ett avsnitt per element. Det kan bare leses, ikke
-    redigeres (FR-26). #}
+    redigeres (FR-26). I Korrektur kommer avsnittene fra visning, med de samme avsnittene som
+    Word-fila, og setningene med ett mellomrom mellom. En endret setning (endret fra kjernen,
+    aldri regnet ut her) er en knapp med den skjulte teksten «Endret setning» først, og «Du
+    skrev» står skjult rett etter, med én linje per gammel setning, eller «(Ny setning)».
+    endringer.js åpner og lukker den. Uten JavaScript åpnes den ikke. Mellomrommene styres
+    med - i taggene, så teksten i hvert avsnitt (uten de skjulte tekstene og «Du skrev») er lik
+    avsnittet i Word-fila. #}
 <article class="brevark">
+  {%- if visning %}
+  {%- for gruppe in visning.avsnitt %}
+  {%- set avsnitt_nr = loop.index %}
+  <p>
+    {%- for setning in gruppe %}
+      {%- if not loop.first %} {% endif %}
+      {%- if setning.endret %}
+        {%- set boks = "du-skrev-" ~ avsnitt_nr ~ "-" ~ loop.index -%}
+        <button type="button" class="endret-setning" aria-expanded="false" aria-controls="{{ boks }}"><span class="skjult">{{ tekster.ENDRET_SETNING_SKJERMLESER }} </span>{{ setning.ny }}</button>
+        {#- #}<span class="du-skrev" id="{{ boks }}" hidden><span class="du-skrev-overskrift">{{ tekster.DU_SKREV }}</span>
+          {%- for gammel in setning.gammel -%}
+          <span>{{ gammel }}</span>
+          {%- else -%}
+          <span>{{ tekster.NY_SETNING }}</span>
+          {%- endfor -%}
+        </span>
+      {%- else %}
+        {{- setning.ny }}
+      {%- endif %}
+    {%- endfor -%}
+  </p>
+  {%- endfor %}
+  {%- else %}
   {%- for tekst in avsnitt %}
   <p>{{ tekst }}</p>
   {%- endfor %}
+  {%- endif %}
 </article>
+{%- if visning and visning.fjernet %}
+{#- Fjernede setninger vises ikke i brevet, bare antallet under det. #}
+<p class="fjernet-linje">{{ tekster.fjernet(visning.fjernet) }}</p>
+{%- endif %}
 {#- «Last ned som Word» er en lenke, fordi nedlastingen er en GET (AD-8). Svaret er et vedlegg,
     så siden blir stående. nedlasting.js gjør knappen grønn og viser filnavnet med en gang.
     Etter nedlasting viser serveren det samme (lastet_ned), også når siden lastes på nytt
