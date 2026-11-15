@@ -578,7 +578,7 @@ def test_ux_dr7_lim_inn_viser_fokusringen_ogsa_etter_museklikk():
 # --- Korrektur: brevfeltet (story 5.1, FR-8, FR-9, FR-20, FR-34) ---
 
 TOM_BREV = "Ditt søknadsbrev: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
-FOR_LANG_BREV = "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 15 000 tegn."
+FOR_LANG_BREV = "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn."
 IKKE_TESTDATA_BREV = (
     "Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
 )
@@ -685,11 +685,11 @@ def test_fr9_tomt_brev_gir_feil_og_ingen_ki_kall(app, paa_korrektur):
 
 
 def test_nfr11_for_langt_brev_gir_feil_og_ingen_ki_kall(app, paa_korrektur):
-    """NFR-11/FR-9 (story 5.1): et brev på over 15 000 tegn gir feilen på brevfeltet, og
-    KI-en kalles ikke."""
+    """NFR-11/FR-9 (story 5.1, retro 5 runde B): et brev på over 5 000 tegn gir feilen på
+    brevfeltet, og KI-en kalles ikke."""
     kalt = []
     app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
-    html = html_av(send_korrektur(paa_korrektur, CV, "a" * 15_001, ANNONSE))
+    html = html_av(send_korrektur(paa_korrektur, CV, "a" * 5_001, ANNONSE))
     assert feilboks_lenker(html) == [("#eget_brev-felt", FOR_LANG_BREV)]
     assert kalt == []
 

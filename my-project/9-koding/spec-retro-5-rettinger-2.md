@@ -1,0 +1,133 @@
+---
+title: 'Rettinger etter retro 5, runde B: langt eget brev og bedre flyt i Korrektur'
+type: 'feature'
+created: '2026-11-15'
+status: 'done'
+baseline_commit: '55b737e60dccac2fcad09b2cb5397ac77ae0ee39'
+route: 'dispatch'
+review_loop_iteration: 0
+context:
+  - '{project-root}/_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md'
+  - '{project-root}/_bmad-output/implementation-artifacts/epic-5-context.md'
+---
+
+<frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
+
+## Intent
+
+**Problem:** Brevet fra Korrektur leses som setninger på rad, fordi prompten retter hver setning for seg (retro 5, punkt 4). Et eget brev nær grensen på 15 000 tegn får trolig ikke plass i svaret (`KI_MAKS_TOKENS` = 16 000) og rekker kanskje ikke tidsgrensen på 90 s, så brukeren får «Noe gikk galt» hver gang (punkt 3). Prompten sier også at `gammel` er «ord for ord», som passet den gamle vasken, ikke den strenge sjekken fra runde A.
+
+**Approach:** Prompten får lov å bruke bindeord og slå sammen korte setninger i samme avsnitt, og sier at `gammel` kopieres nøyaktig. Deretter én måling med ekte KI og et langt fiktivt eget brev, så bestemmer Kristine grensen, og til slutt tre kjøringer og ny sjekk av kriterium 12 og 4.
+
+**Beslutning (Kristine, 2026-11-15):** runde B gjøres alene, med egen branch og PR. Runde C kommer etterpå. «Bedre flyt» betyr at brevet skal kunne leses mer naturlig: setningene og avsnittene henger bedre sammen.
+
+**Beslutning (Kristine, 2026-11-15, etter målingen):** brevfeltet i Korrektur får en egen grense på 5 000 tegn (valg A), med egen feilmelding. CV og annonse beholder 15 000.
+
+**Beslutning (Kristine, 2026-11-15, etter runde 1):** vage vurderinger som «det har stort sett gått greit» hører ikke hjemme i en søknad og fjernes, også når de er skrevet om til «fungert godt» eller «bra». Det erstatter godkjenningen av «det har stort sett fungert greit / godt / bra» i story 5.2.2. Bindeordene «derfor» og «samtidig» i runde 1 er godtatt. Plan B: regelen legges i prompten, og alle tre kjøringene kjøres på nytt.
+
+## Boundaries & Constraints
+
+**Always:**
+- Innholdet, eksemplene og rekkefølgen beholdes (kriterium 12). Setninger slås bare sammen innenfor samme avsnitt, og da står begge de gamle i `gammel`.
+- Hver betalt kjøring får Kristines ja først, med omtrentlig kostnad.
+- Kristine vurderer flyten og omformuleringene mot sjekklisten. KI-en foreslår, men bestemmer ikke (retro 5, C).
+- Resultatet står i `my-project/testplan.md`, også når noe feiler.
+
+**Never:**
+- Ingen nye setninger med innhold, og ingen setning flyttes til et annet avsnitt.
+- Ingen endring i kontrollen fra runde A, i visningen eller i Full generering.
+- Målingens midlertidige verdier (høyere `max_tokens` og tidsgrense) committes ikke i koden.
+- Runde C (avstemming av planene, sletting av brancher) gjøres ikke her.
+
+## I/O & Edge-Case Matrix
+
+| Scenario | Input / State | Expected Output / Behavior | Error Handling |
+|----------|--------------|---------------------------|----------------|
+| To korte setninger slås sammen | «Vi bruker Git. Det har gått greit.» i samme avsnitt | Én oppføring, `gammel` har begge, «Du skrev» viser begge | N/A |
+| Store bokstaver eller tegnsetting endret i `gammel` | KI-en retter et komma i `gammel` | Ubrukelig svar | KI-feilboksen (som i runde A) |
+| Brev over grensen (hvis A velges) | Brevfeltet over den nye grensen | Feilen «Ditt søknadsbrev: Teksten er for lang …» med det nye tallet | Feltet beholder teksten |
+
+</frozen-after-approval>
+
+## Code Map
+
+- `backend/prompts/korrektur.md` -- reglene for innholdet (linje «Rett bare språk og ordvalg»), reglene for formen («ord for ord») og eksempelet. Eksempelet må fortsatt ha én fjernet, én uendret og én endret setning.
+- `backend/tests/adaptere/test_ekte_ki.py:686-735` -- sjekker tekstbiter fra prompten og at eksempelet består `kontroller`.
+- `backend/soknad/innstillinger.py` -- `MAKS_TEGN`, `KI_MAKS_TOKENS`, `KI_TIDSGRENSE` og kommentaren med målingene.
+- `backend/soknad/kjerne/inndata.py:73-95` `sjekk_innlegging` -- én grense for alle felt i dag.
+- `backend/soknad/web/tekster.py:286,325` -- `MAKS_TEGN_TEKST` og feilteksten for `eget_brev`.
+- `backend/soknad/adaptere/ki.py:288` `EkteKI._kall` -- `max_tokens=KI_MAKS_TOKENS` for alle oppgaver, ikke strømmet. SDK-en (2.4.0) sjekker ikke 10-minuttersgrensen når klienten har egen `timeout`.
+- `backend/scripts/lag_testsvar.py` -- `--bare-korrektur`, `--case`, `--testdata`, `--ut`. Gjenbrukes til de tre kjøringene.
+- `my-project/testkjoringer/retro-4/inndata/case-lang/` -- Ingrids CV og annonse (ca. 14 600 tegn hver). Gjenbrukes til målingen.
+- `backend/testdata/case-1-utvikler/ki-svar/korrektur-{1,2}.json` -- svarene i testmodus, lages på nytt i kjøring 1.
+- `backend/tests/test_testdata.py` -- sjekker de ekte Korrektur-svarene (sjekklisten, frasene, `antall_endret`).
+
+## Tasks & Acceptance
+
+**Execution:**
+- [x] `backend/prompts/korrektur.md` -- la KI-en bruke bindeord og slå sammen korte setninger i samme avsnitt, så brevet leses naturlig. Si at `gammel` kopieres nøyaktig, med store og små bokstaver og tegnsetting. Eksempelet viser én sammenslåing -- retro 5, punkt 4 og runde A, funn 6
+- [x] `backend/tests/adaptere/test_ekte_ki.py` -- tekstbitene for de nye reglene, og at eksempelet har en sammenslåing (`len(gammel) == 2`)
+- [x] `my-project/testkjoringer/retro-5/inndata/case-lang/` -- Ingrids CV og annonse fra retro 4, og et fiktivt `eget-brev.txt` på 14 500–15 000 tegn (telt med `antall_tegn`) med vanlige feil. Ingen ekte personer
+- [x] **Måling (Kristine sier ja først, ca. 3–8 kr):** ett `korrektur`-kall med `max_tokens` 48 000 og tidsgrense 600 s satt bare i kommandoen. Tid, tokens inn og ut, `stop_reason` og om svaret består `kontroller` skrives i `testplan.md`, og svaret i `retro-5/maling/`
+- [x] **HALT: Kristine bestemmer** ut fra målingen: A) egen, lavere grense for brevfeltet (`MAKS_TEGN_EGET_BREV`, brukt i `sjekk_innlegging` og feilteksten), eller B) egen `max_tokens` og tidsgrense for Korrektur i `innstillinger.py` og `EkteKI._kall`. Med tester og oppdatert kommentar i `innstillinger.py`
+- [x] **Tre kjøringer (Kristine sier ja først, ca. 5–6 kr):** kjøring 1 i `testdata/` (svarene i testmodus), kjøring 2 og 3 i `my-project/testkjoringer/retro-5/kjoring-<n>/`. Sjekk mot «Sjekkliste for Korrektur». Plan B ved feil: prompten rettes én gang, og alle tre kjøres på nytt
+- [x] `my-project/testplan.md` -- ny seksjon «Retro 5: langt eget brev og flyt»: målingen, beslutningen, tabellen for kriterium 12 og 4, og kostnaden
+
+**Acceptance Criteria:**
+- Given den nye prompten, when tre kjøringer sjekkes, then alle seks brevene består kriterium 12 og 4 og `kontroller`, og Kristine har godkjent flyten.
+- Given målingen, when Kristine har valgt A eller B, then et brev på den største tillatte lengden kan ikke gi feil av `max_tokens` eller tidsgrensen ut fra målingen.
+- Given hele rettingen, when testene og ruff kjøres, then alt består.
+
+## Implementation Notes
+
+- Gjort i denne økten, ikke av en hjelpeagent, fordi spec-en har tre stopp der Kristine må si ja eller bestemme.
+- `prompts/korrektur.md`: flyten (bindeord, korte setninger slås sammen bare i samme avsnitt, «derfor» bare når det er en grunn), at `gammel` kopieres nøyaktig, og et eksempel der to setninger slås sammen. Etter runde 1 kom plan B: vage vurderinger fjernes og skrives ikke om til en annen vag vurdering (Kristines beslutning i den frosne blokken).
+- Målingen: `my-project/testkjoringer/retro-5/inndata/case-lang/eget-brev.txt` (14 585 tegn), ett kall med `max_tokens` 48 000 og `Anthropic(timeout=600, max_retries=0)` fra et engangsskript utenfor repoet. 28 686 tokens ut, 190 s, `end_turn`, `kontroller` bestått, ca. 7,31 kr. Tallene står i `my-project/testplan.md` og `retro-5/maling/`.
+- Valg A med 5 000 tegn: `MAKS_TEGN_EGET_BREV` i `innstillinger.py`, `inndata.maks_tegn(felt)` brukt i `sjekk_innlegging`, `MAKS_TEGN_EGET_BREV_TEKST` i feilteksten i `tekster.py`. Kommentarene ved grensene og `KI_TIDSGRENSE` viser målingen. README (grensene) er rettet, fordi den ellers ville sagt feil.
+- Testene: `test_inndata.py` (5 000 godtas, også med `\r\n`, 5 001 gir `for_lang`, CV og annonse har 15 000 i Korrektur), `test_innlegging.py` og `test_tekster.py` (den nye teksten), `test_grenser.py` (`eget-brev.txt` i testdataene er under grensen), `test_ekte_ki.py` (de nye reglene og sammenslåingen i eksempelet).
+- Runde 1 og runde 2 (etter plan B) i `retro-5/runde-1/` og `runde-2/`. Kjøring 1 i runde 2 er svarene i testmodus. Alle 12 svarene besto `kontroller`. Kristine godkjente runde 2 for kriterium 12, og godtok det feilaktige «Derfor» i kjøring 3, `korrektur-2`, som et kjent svakt punkt.
+- Kostnad i alt: ca. 18 kr.
+- 1038 tester består, og ruff er uten feil.
+
+## Spec Change Log
+
+## Review Triage Log
+
+| # | Kilde | Funn | Verdict | Begrunnelse |
+|---|-------|------|---------|-------------|
+| 1 | edge, verification-gap | «Slå aldri sammen setninger fra ulike avsnitt» sjekkes ikke i `kontroller`, så et avsnittsskift kan forsvinne uten melding | low | Kan skje, men ingen av de 13 svarene gjør det (sjekket mot avsnittene). Spec-en sa at kontrollen ikke endres → defer (deferred-work) |
+| 2 | edge, blind | Prompten sier «to korte setninger», men målingen slår sammen tre i én oppføring | low | Stemmer for én oppføring i målingen, og den leses greit. En retting i prompten krever nye betalte kjøringer for liten gevinst. Avvist |
+| 3 | edge | `test_resultat.py` bruker fortsatt `"a" * 15_001` som for langt brev | low | Stemmer. Bruker nå `MAKS_TEGN_EGET_BREV + 1` → patch |
+| 4 | edge, blind | Grensen på 5 000 tegn er regnet ut, ikke målt. Marginen til 90 s er ca. 15–20 s | maybe-false | Regnestykket (ca. 1,9 tokens per tegn og 136–151 tokens/s) gir 67–75 s, men tenkingen varierer. Avgjøres med én måling på ca. 5 000 tegn → defer (medium, ikke sjekket), Kristine spørres |
+| 5 | blind, edge | «ca. 3 kr for en hel søknad» stemmer ikke med lang CV og annonse (ca. 4,4 kr) | medium | Stemmer. Testplanen skiller nå testdataene (ca. 2,8 kr) fra lange tekster (ca. 4,4 kr, over målet) → patch |
+| 6 | edge | Oppgaven nevner `retro-5/kjoring-<n>/`, men kjøringene ligger i `runde-1/` og `runde-2/` | low | Rettingen er å endre spec-en. Den riktige stien står i Implementation Notes og testplanen. Avvist |
+| 7 | edge | Akseptansekriteriet om tidsgrensen er bare regnet ut | maybe-false | Samme som funn 4 → defer |
+| 8 | blind | Mindre tenking for Korrektur er ikke nevnt som et valg | low | Stemmer. Testplanen nevner det nå, og hvorfor det ikke ble lagt fram → patch |
+| 9 | blind | Listen over godkjente avslutninger mangler to av svarene | low | De to var godkjent i 5.2.2. Testplanen sier det nå → patch |
+| 10 | blind | Git og JSON-filer slås sammen selv om de handler om ulike ting | false | Begge handler om verktøyene i det samme prosjektet, og Kristine leste og godkjente brevene. Avvist |
+| 11 | blind | «Sjekkliste for Korrektur» i `fasit.md` har ikke de nye reglene | low | Stemmer. Vage vurderinger og sammenslåing i samme avsnitt står nå i sjekklisten → patch |
+| 12 | blind | «samtidig» har ingen vakt som «derfor» | false | I testmodus-brevene står «Samtidig» som motsetning til «har mye å lære», og Kristine godtok «samtidig». Avvist |
+| 13 | blind | Seksjonen for 5.2.2 i testplanen viser fortsatt den gamle godkjenningen | low | Stemmer. Har nå en merknad om at den er erstattet → patch |
+| 14 | blind | Spec-en er ikke oppdatert (Change Log, stier, status) | low | Rettingen er å endre spec-en. Beslutningene står i den frosne blokken, og status settes av arbeidsflyten. Avvist |
+| 15 | blind | `
+` i Implementation Notes ble et linjeskift | low | Stemmer. Rettet i Implementation Notes (agentens egen seksjon) |
+| 16 | blind | Loggfilene fra kjøringene er lagret i Windows-1252 | low | Stemmer (`file` viste ISO-8859, de gamle loggene er UTF-8). Gjort om til UTF-8 → patch |
+| 17 | blind | TO DO, deferred-work og README for my-project er ikke oppdatert | low | Stemmer → patch. `issues.md` oppdateres av sesjonsloggen |
+| 18 | blind | PRD-en og epics.md sier fortsatt 15 000 for alle felt | low | Stemmer. Runde C tar epics.md, og PRD-en er lagt til i TO DO → defer |
+| 19 | blind | Brukeren ser ikke grensen før hun sender | low | Åpent punkt fra 4.3.2 (hjelpeteksten «Høyst 15 000 tegn» i `issues.md`). Viktigere nå som feltene har ulike grenser. Kristine spørres, ikke endret her |
+| 20 | blind | `maks_tegn` gir 15 000 for et feilstavet feltnavn | false | Feltnavnet kommer bare fra `felt_for_modus` (`INNLEGGINGSFELT`), så et feilstavet navn kan ikke nå funksjonen. Avvist |
+
+## Design Notes
+
+Regnestykket bak målingen: i 5.2.2 ga testbrevet (1 276 tegn) ca. 3 000 tokens ut på ca. 22 s, altså ca. 140 tokens/s. Kallet strømmes ikke, så serveren sender ingenting før svaret er ferdig, og tidsgrensen på 90 s gjelder i praksis hele svaret. Med samme fart rekker et svar på 16 000 tokens ikke 90 s (ca. 115 s). Derfor kan tidsgrensen slå til før `max_tokens`, og målingen trenger midlertidig høyere verdier for å vise hvor stort og tregt svaret faktisk blir.
+
+Målingen kjøres uten å endre koden, for eksempel med `uv run python -c` som setter `soknad.adaptere.ki.KI_MAKS_TOKENS` og sender inn `Anthropic(timeout=600, max_retries=0)` som `klient`.
+
+## Verification
+
+**Commands:**
+- `cd backend && uv run pytest -q` -- expected: alle tester består
+- `cd backend && uv run ruff check . && uv run ruff format --check .` -- expected: ingen feil
+
+**Manual checks (if no CLI):**
+- Kristine leser brevene fra kjøring 1 i nettleseren (testmodus, Korrektur) og ser om de leses mer naturlig.

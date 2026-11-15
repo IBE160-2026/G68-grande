@@ -46,8 +46,9 @@ def test_fr8_fr20_tekstene_for_korrektur():
         "Ditt søknadsbrev: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
     )
     assert tekster.feiltekst(InndataFeil("eget_brev", FeilType.FOR_LANG)) == (
-        "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 15 000 tegn."
+        "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn."
     )
+    assert tekster.MAKS_TEGN_EGET_BREV_TEKST == "5 000"
 
 
 def test_fr34_annen_case_har_teksten_kristine_bestemte():

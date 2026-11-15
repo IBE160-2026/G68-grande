@@ -1,0 +1,3 @@
+2026-11-15 21:28:50,795 INFO soknad.adaptere.ki: KI-kall korrektur (claude-opus-5-5): 4923 tokens inn, 3166 ut, stopp end_turn, anslått 0,0830 dollar (ca. 0,91 kr)
+2026-11-15 21:29:14,793 INFO soknad.adaptere.ki: KI-kall korrektur (claude-opus-5-5): 4923 tokens inn, 3136 ut, stopp end_turn, anslått 0,0824 dollar (ca. 0,91 kr)
+case-1-utvikler: svarene er skrevet i ..\my-project\testkjoringer\retro-5\runde-1\kjoring-3\case-1-utvikler

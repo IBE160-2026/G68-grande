@@ -1,0 +1,124 @@
+{
+  "setninger": [
+    {
+      "ny": "Søknad på stillingen som junior utvikler",
+      "gammel": [
+        "Søknad på jobb som junior utvikler"
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": null,
+      "gammel": [
+        "Hei!"
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "Da jeg leste annonsen deres, fikk jeg inntrykk av at stillingen passer godt for meg.",
+      "gammel": [
+        "Jeg så annonsen deres og tenkte at dette er jo midt i blinken for meg."
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "Jeg liker å lage nettsider og ønsker derfor gjerne å jobbe hos Testvik Utvikling AS.",
+      "gammel": [
+        "Jeg er lidenskapelig opptatt av å lage nettsider, og jeg vil veldig gjerne jobbe hos Testvik Utvikling AS."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Jeg går tredje år på bachelor i IT og blir ferdig våren 2027, slik at jeg kan begynne i august.",
+      "gammel": [
+        "Jeg går tredje år på bachelor i IT og blir ferdig til våren 2027, så jeg kan begynne i august."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "I bachelorprosjektet lager vi en nettside der studenter kan booke grupperom.",
+      "gammel": [
+        "På bachelorprosjektet lager vi en nettside der studenter kan booke grupperom."
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "Vi er tre på gruppa, og jeg har laget mye av løsningen i Python med Flask, i tillegg til HTML og CSS.",
+      "gammel": [
+        "Vi er tre på gruppa og jeg har laget mye av det i Python med Flask og så HTML og CSS."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Vi bruker Git til versjonskontroll, og det har stort sett fungert greit.",
+      "gammel": [
+        "Vi bruker Git og det har gått ganske greit stort sett."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Dataene lagres i JSON-filer.",
+      "gammel": [
+        "Dataene lagres i JSON-filer."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Jeg har også laget et lite program i Python som henter værdata og viser dem som grafer.",
+      "gammel": [
+        "Jeg har også laget et lite program i Python som henter værdata og viser dem som grafer, det var gøy."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Sommeren 2025 jobbet jeg som IT-assistent på høgskolen, der jeg hjalp studenter som ikke fikk logget på, og satte opp PC-er med Linux.",
+      "gammel": [
+        "Sommeren 2025 jobbet jeg som IT-assistent på høgskolen.",
+        "Der hjalp jeg studenter som ikke fikk logget på, og jeg satte opp PC-er med Linux."
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "I tillegg jobber jeg deltid i en dagligvarebutikk, der jeg har lært mye om kundeservice og om å være blid selv om det er travelt. Denne erfaringen tror jeg blir nyttig i møter med kunder.",
+      "gammel": [
+        "Jeg jobber også deltid i en dagligvarebutikk, der har jeg lært mye om kundeservice og å være blid selv om det er travelt, og det tror jeg er nyttig når jeg skal være med i møter med kunder."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Jeg lærer nye ting raskt og liker å samarbeide med andre.",
+      "gammel": [
+        "Jeg lærer nye ting fort og liker å jobbe sammen med andre."
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "Samtidig setter jeg pris på at dere tilbyr en fadder de første månedene, siden jeg har mye å lære.",
+      "gammel": [
+        "Jeg synes det er bra at dere har en fadder de første månedene, for jeg har mye å lære."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Takk for at dere vurderer søknaden min.",
+      "gammel": [
+        "Takk for at du tok deg tid til å lese søknaden min."
+      ],
+      "nytt_avsnitt": false
+    },
+    {
+      "ny": "Med vennlig hilsen",
+      "gammel": [
+        "Med vennlig hilsen"
+      ],
+      "nytt_avsnitt": true
+    },
+    {
+      "ny": "Sara Eksempel",
+      "gammel": [
+        "Sara Eksempel"
+      ],
+      "nytt_avsnitt": true
+    }
+  ]
+}

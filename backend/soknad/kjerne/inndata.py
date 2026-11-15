@@ -2,7 +2,7 @@
 
 import re
 
-from soknad.innstillinger import MAKS_TEGN, MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.okt import Modus
 from soknad.kjerne.testdata_match import Testcase, finn_case
@@ -69,13 +69,19 @@ def antall_tegn(tekst: str) -> int:
     return len(tekst.replace("\r\n", "\n"))
 
 
+def maks_tegn(felt: str) -> int:
+    """Høyeste antall tegn feltet godtar (NFR-11). Brevfeltet i Korrektur har en lavere grense
+    enn CV og annonse (retro 5, runde B)."""
+    return MAKS_TEGN_EGET_BREV if felt == "eget_brev" else MAKS_TEGN
+
+
 def sjekk_innlegging(
     cv: str, annonse: str, caser: list[Testcase] | None, eget_brev: str | None = None
 ) -> list[InndataFeil]:
     """Finner feil i innleggingen. eget_brev er None i Full generering, og er teksten i
     brevfeltet i Korrektur (FR-8). Alle feilene kommer samtidig, høyst én per felt og i
     rekkefølgen fra felt_for_modus. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så
-    for lang (mer enn MAKS_TEGN tegn, NFR-11), så testdata når caser ikke er None (testmodus,
+    for lang (mer enn maks_tegn(felt) tegn, NFR-11), så testdata når caser ikke er None (testmodus,
     FR-34). finn_case gir ikke ikke_testdata på et tomt felt (AD-9), og et felt med for lang
     tekst får heller ikke ikke_testdata."""
     tekster = {"cv": cv, "annonse": annonse, "eget_brev": eget_brev}
@@ -85,7 +91,7 @@ def sjekk_innlegging(
         tekst = tekster[navn]
         if not tekst.strip():
             feil.append(InndataFeil(navn, FeilType.TOM))
-        elif antall_tegn(tekst) > MAKS_TEGN:
+        elif antall_tegn(tekst) > maks_tegn(navn):
             feil.append(InndataFeil(navn, FeilType.FOR_LANG))
     if caser is not None:
         _, testdatafeil = finn_case(cv, annonse, caser, eget_brev=eget_brev)
