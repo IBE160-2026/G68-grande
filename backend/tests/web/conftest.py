@@ -13,6 +13,7 @@ from tests.web.hjelpere import (
     EGET_BREV,
     TellendeKI,
     app_med_nokkel,
+    korrektur_testki,
     logg_inn,
     sett_soknad,
 )
@@ -51,6 +52,23 @@ def paa_resultat_korrektur(paa_korrektur):
     data = {"cv": CV, "eget_brev": EGET_BREV, "annonse": ANNONSE, "handling": "sjekk"}
     assert paa_korrektur.post("/innlegging", data=data).location == "/resultat"
     return paa_korrektur
+
+
+@pytest.fixture
+def korrektur_ki(app, tmp_path):
+    """TestKI byttes ut med en som har korrektur-1.json og korrektur-2.json i case 1
+    (korrektur_testki), så flyten i Korrektur kan testes uten de ekte svarfilene."""
+    app.extensions["test_ki"] = korrektur_testki(tmp_path)
+    return app.extensions["test_ki"]
+
+
+@pytest.fixture
+def paa_brev_korrektur(korrektur_ki, paa_resultat_korrektur):
+    """En innlogget klient i Korrektur som har trykket «Oppdater søknadsbrevet mitt» og fått
+    det forbedrede brevet (story 5.2.1)."""
+    svar = paa_resultat_korrektur.post("/resultat", data={"handling": "brev"})
+    assert svar.location == "/brev"
+    return paa_resultat_korrektur
 
 
 @pytest.fixture

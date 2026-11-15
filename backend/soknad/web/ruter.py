@@ -16,16 +16,17 @@ from soknad.kjerne.inndata import (
     sjekk_innlogging,
     sjekk_registrering,
 )
-from soknad.kjerne.ki_svar import hele_brevet
 from soknad.kjerne.okt import (
     Modus,
     Soknad,
     Tekstfelt,
     begynn,
+    ferdig_brev,
     har_plass_til,
     sett_analyse,
     sett_brev,
     sett_inndata,
+    sett_korrektur,
     sett_lastet_ned,
     sett_opptatt,
     tell_ki_kall,
@@ -54,7 +55,8 @@ from soknad.web.innlogging import (
     til_innloggingen,
 )
 
-# KI-kallene hver handling trenger (NFR-11): analysen er nøkkelord og gap, brevet er ett kall.
+# KI-kallene hver handling trenger (NFR-11): analysen er nøkkelord og gap, brevet er ett kall,
+# også det forbedrede brevet i Korrektur.
 ANALYSE_KALL = 2
 BREV_KALL = 1
 
@@ -233,8 +235,9 @@ def resultat():
     med meldingen om det, uten KI-kall (NFR-11). Er brukeren logget ut i en annen fane etter
     stegsjekken, sendes hen til innloggingen uten KI-kall (FR-7).
 
-    I Korrektur har resultatsiden ingen knapp videre ennå (den kommer i story 5.2), så
-    handling=brev gir 400 der, uten KI-kall."""
+    I Korrektur er POST «Oppdater søknadsbrevet mitt» (FR-23, FR-24), med samme handling=brev.
+    KI-en får CV-en, annonsen og det egne brevet og gir det forbedrede brevet, som lagres med
+    sett_korrektur. Alt annet er som over, også feilene og «Prøv på nytt»."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -243,12 +246,16 @@ def resultat():
     opptatt = til_steget_hvis_opptatt(lagret)
     if opptatt is not None:
         return opptatt
-    if request.form.get("handling") != "brev" or lagret.modus == Modus.KORREKTUR:
-        # Ukjent knapp, eller brevknappen i Korrektur: samme side på nytt, og søknaden er
-        # uendret.
+    if request.form.get("handling") != "brev":
+        # Ukjent knapp: samme side på nytt, og søknaden er uendret.
         return _vis_resultat(lagret), 400
 
     def brevet(valgt_ki):
+        if lagret.modus == Modus.KORREKTUR:
+            svar = valgt_ki.korrektur(
+                lagret.cv.tekst, lagret.annonse.tekst, lagret.eget_brev.tekst, forslag=1
+            )
+            return sett_korrektur(lagret, svar)
         svar = valgt_ki.brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
         return sett_brev(lagret, svar)
 
@@ -267,12 +274,13 @@ def resultat():
 @login_required
 @krever_steg(Steg.BREV)
 def brev():
-    """Brevsiden (FR-22, FR-26). Brevet vises bare og kan ikke redigeres. Uten brev sendes
-    brukeren til resultatsiden."""
+    """Brevsiden (FR-22, FR-26). Brevet vises bare og kan ikke redigeres. Uten brev (i
+    Korrektur: uten det forbedrede brevet) sendes brukeren til resultatsiden."""
     soknad = gjeldende_soknad()
-    if soknad.brev is None:
+    avsnitt = ferdig_brev(soknad)
+    if avsnitt is None:
         return redirect(url_for("web.resultat"))
-    return _vis_brev(soknad)
+    return _vis_brev(soknad, avsnitt)
 
 
 @web.route("/last-ned/<any(docx):format>")
@@ -280,21 +288,23 @@ def brev():
 @krever_steg(Steg.BREV)
 def last_ned(format):
     """«Last ned som Word» (FR-29, FR-30, AD-8). Filen lages i minnet, lastet_ned settes, og
-    filen sendes som vedlegg, så brevsiden blir stående. PDF kommer i Epic 7.
+    filen sendes som vedlegg, så brevsiden blir stående. PDF kommer i Epic 7. Fila har det samme
+    brevet som brevsiden (ferdig_brev), også i Korrektur, uten markeringer.
 
     Uten brev sendes brukeren til resultatsiden. Mens søknaden er opptatt, sendes brukeren til
     siden for steget uten fil. Kan filen ikke lages (FilFeil), vises brevsiden med feilboksen,
     og brevet er ikke borte. lastet_ned lagres bare når søknaden ikke er endret i mellomtiden."""
     lagret = gjeldende_soknad()
-    if lagret.brev is None:
+    avsnitt = ferdig_brev(lagret)
+    if avsnitt is None:
         return redirect(url_for("web.resultat"))
     opptatt = til_steget_hvis_opptatt(lagret)
     if opptatt is not None:
         return opptatt
     try:
-        innhold = fil_ut.lag_docx(hele_brevet(lagret.brev))
+        innhold = fil_ut.lag_docx(avsnitt)
     except FilFeil:
-        return _vis_brev(lagret, fil_feil=True), 500
+        return _vis_brev(lagret, avsnitt, fil_feil=True), 500
     erstatt_soknad(lagret, sett_lastet_ned(lagret))
     return send_file(
         BytesIO(innhold),
@@ -401,7 +411,7 @@ class _TelteKall:
 
 def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
     """KI-kallet for alle rutene som bruker KI-en (AD-8, AD-12, FR-27, FR-28, NFR-11).
-    Korrektur (story 5.2) og «Nytt forslag» (Epic 7) skal også bruke den.
+    Korrektur bruker den også, og «Nytt forslag» (Epic 7) skal bruke den.
 
     Ruten leser innloggingen én gang og gir den hit, så samtykket sjekkes for samme testmodus
     som velger KI-en. En annen fane som slår av testmodus i mellomtiden, endrer ingenting her.
@@ -470,14 +480,17 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
 def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     """Viser resultatsiden. Prosenten regnes med telleregelen fra den lagrede nøkkelordlisten
     og CV-en hver gang siden vises, så samme søknad alltid gir samme prosent (FR-15, FR-17).
-    ki_feil er teksten til en KI-feil fra «Lag søknadsbrevet mitt», som står øverst i
-    feilboksen over «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt».
+    ki_feil er teksten til en KI-feil fra knappen videre («Lag søknadsbrevet mitt» eller
+    «Oppdater søknadsbrevet mitt»), som står øverst i feilboksen over «Resultatet og det du har
+    lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
-    (NFR-11). lag_brev er usann i Korrektur, som ikke har knappen videre før story 5.2."""
+    (NFR-11). Knappen videre er «Oppdater søknadsbrevet mitt» i Korrektur og «Lag
+    søknadsbrevet mitt» ellers."""
     treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
+    korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
         "resultat.html",
-        lag_brev=soknad.modus != Modus.KORREKTUR,
+        brev_knapp=tekster.OPPDATER_BREV_KNAPP if korrektur else tekster.LAG_BREV_KNAPP,
         gap=soknad.gap,
         treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
@@ -486,13 +499,17 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     )
 
 
-def _vis_brev(soknad, fil_feil=False):
+def _vis_brev(soknad, avsnitt, fil_feil=False):
     """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
-    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). Brevet er
-    avsnittene med hilsen og navn til slutt, som i Word-fila (hele_brevet)."""
+    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). avsnitt er
+    brevet fra ferdig_brev, det samme som i Word-fila: i Full generering med hilsen og navn
+    til slutt, i Korrektur det forbedrede brevet uten markeringer. Overskriften er den for
+    modusen."""
+    korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
         "brev.html",
-        avsnitt=hele_brevet(soknad.brev),
+        overskrift=tekster.BREV_OVERSKRIFT_KORREKTUR if korrektur else tekster.BREV_OVERSKRIFT,
+        avsnitt=avsnitt,
         lastet_ned=soknad.lastet_ned,
         filnavn=lag_filnavn(date.today(), "docx"),
         fil_feil=fil_feil,

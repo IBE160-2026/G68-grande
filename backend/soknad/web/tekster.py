@@ -193,12 +193,15 @@ ATS_AVSNITT = (
 )
 
 
-# Hovedknappen nederst på resultatsiden, til høyre for «Tilbake» (FR-21).
+# Hovedknappen nederst på resultatsiden, til høyre for «Tilbake» (FR-21). I Korrektur heter
+# den «Oppdater søknadsbrevet mitt» (FR-23), med samme ventetekst.
 LAG_BREV_KNAPP = "Lag søknadsbrevet mitt"
+OPPDATER_BREV_KNAPP = "Oppdater søknadsbrevet mitt"
 VENTE_BREV = "Vi lager brevet ditt – det kan ta en liten stund."
 
 BREV_TITTEL = "Søknadsbrev"
 BREV_OVERSKRIFT = "Din ferdigstilte søknad!"
+BREV_OVERSKRIFT_KORREKTUR = "Din oppdaterte søknad er ferdig!"
 
 # Nedlastingen under brevet (FR-29, UX-DR16). Etter nedlasting blir knappen grønn med ✓ foran
 # «Lastet ned som Word». ✓ er bare pynt og skjules for skjermlesere.

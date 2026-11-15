@@ -1,4 +1,4 @@
-"""Tester for søknaden i økten (FR-5, FR-8, FR-20, FR-29, AD-7, AD-8, NFR-11)."""
+"""Tester for søknaden i økten (FR-5, FR-8, FR-20, FR-23, FR-29, AD-7, AD-8, NFR-11)."""
 
 import dataclasses
 
@@ -10,10 +10,12 @@ from soknad.kjerne.okt import (
     Soknad,
     Tekstfelt,
     begynn,
+    ferdig_brev,
     har_plass_til,
     sett_analyse,
     sett_brev,
     sett_inndata,
+    sett_korrektur,
     sett_lastet_ned,
     sett_opptatt,
     tell_ki_kall,
@@ -36,6 +38,7 @@ def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
     assert soknad.arbeidsgiver is None
     assert soknad.gap is None
     assert soknad.brev is None
+    assert soknad.korrektur is None
     assert soknad.lastet_ned is False
     assert soknad.opptatt is False
 
@@ -58,6 +61,7 @@ def test_fr5_soknaden_har_faste_felt_og_kan_ikke_endres_direkte():
         "arbeidsgiver",
         "gap",
         "brev",
+        "korrektur",
         "lastet_ned",
         "opptatt",
         "ki_kall",
@@ -353,6 +357,67 @@ def test_fr22_sett_inndata_med_like_tekster_beholder_brevet():
     """FR-19/FR-22: er tekstene like som før, er søknaden uendret, også brevet."""
     soknad = sett_brev(_med_resultater(), BREV_SVAR)
     assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
+
+
+# --- korrektur og ferdig_brev (story 5.2.1) ---
+
+KORREKTUR_SVAR = {
+    "setninger": [
+        {
+            "ny": "Søknad på stillingen som utvikler",
+            "gammel": ["Søknad på jobb"],
+            "nytt_avsnitt": True,
+        },
+        {"ny": "Med vennlig hilsen", "gammel": ["Med vennlig hilsen"], "nytt_avsnitt": True},
+    ]
+}
+
+
+@pytest.mark.parametrize(
+    ("steg", "forventet"), [(Steg.RESULTAT, Steg.BREV), (Steg.BREV, Steg.BREV)]
+)
+def test_fr23_sett_korrektur_lagrer_brevet_og_gir_steg_brev(steg, forventet):
+    """FR-23/AD-8: det forbedrede brevet lagres, steget blir minst brev, og det er ikke lastet
+    ned. Resten er uendret."""
+    soknad = dataclasses.replace(_korrektur_med_resultater(), steg=steg, lastet_ned=True)
+    ny = sett_korrektur(soknad, KORREKTUR_SVAR)
+    assert ny == dataclasses.replace(
+        soknad, korrektur=KORREKTUR_SVAR, lastet_ned=False, steg=forventet
+    )
+    assert soknad.korrektur is None
+
+
+def test_fr23_velg_modus_nullstiller_korrektur():
+    """FR-23/AD-8: velges modus på nytt, er det forbedrede brevet borte."""
+    ny = velg_modus(sett_korrektur(_korrektur_med_resultater(), KORREKTUR_SVAR), Modus.KORREKTUR)
+    assert ny.korrektur is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr23_sett_inndata_med_nytt_eget_brev_nullstiller_korrektur():
+    """FR-8/FR-23/AD-8: endres det egne brevet, er det forbedrede brevet borte. Er alt likt,
+    er det der fortsatt."""
+    soknad = sett_korrektur(_korrektur_med_resultater(), KORREKTUR_SVAR)
+    likt = dict(cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen"))
+    assert sett_inndata(soknad, **likt, eget_brev=Tekstfelt("mitt brev")) is soknad
+    ny = sett_inndata(soknad, **likt, eget_brev=Tekstfelt("nytt brev"))
+    assert ny.korrektur is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr23_ferdig_brev_velger_etter_modus():
+    """FR-23/FR-30: ferdig_brev gir det forbedrede brevet i Korrektur og brevet med hilsen og
+    navn i Full generering, og None uten brev. Brevet fra den andre modusen brukes aldri."""
+    full = sett_brev(_med_resultater(), BREV_SVAR)
+    assert ferdig_brev(full) == ["Første avsnitt.", "Med vennlig hilsen", "Sara Eksempel"]
+    assert ferdig_brev(_med_resultater()) is None
+
+    korrektur = sett_korrektur(_korrektur_med_resultater(), KORREKTUR_SVAR)
+    assert ferdig_brev(korrektur) == ["Søknad på stillingen som utvikler", "Med vennlig hilsen"]
+    assert ferdig_brev(_korrektur_med_resultater()) is None
+    # Et brev fra Full generering vises ikke i Korrektur, og omvendt.
+    assert ferdig_brev(dataclasses.replace(full, modus=Modus.KORREKTUR)) is None
+    assert ferdig_brev(dataclasses.replace(korrektur, modus=Modus.FULL_GENERERING)) is None
 
 
 # --- lastet_ned (story 3.2) ---

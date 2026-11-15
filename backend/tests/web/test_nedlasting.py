@@ -1,5 +1,5 @@
 """Tester for «Last ned som Word» på brevsiden (FR-29, FR-30, NFR-4, NFR-7, NFR-9, AD-8, AD-9,
-AD-11, UX-DR16). Story 3.2."""
+AD-11, UX-DR16). Story 3.2. Nedlastingen i Korrektur kom i story 5.2.1 (FR-23)."""
 
 import re
 from io import BytesIO
@@ -20,6 +20,7 @@ from tests.web.hjelpere import (
     element,
     filnavn_i_dag,
     html_av,
+    korrektur_brev,
     main,
     med_autofocus,
     sett_soknad,
@@ -68,6 +69,43 @@ def test_fr30_nedlastet_fil_er_lik_brevet_uten_topp_og_bunntekst(app, paa_brev):
         assert seksjon.header.is_linked_to_previous
         assert seksjon.footer.is_linked_to_previous
         assert all(not p.text for p in seksjon.header.paragraphs + seksjon.footer.paragraphs)
+
+
+def _avsnitt_paa_siden(html):
+    ark = re.search(r'<article class="brevark">(.*?)</article>', html, re.S).group(1)
+    return [p for p in re.findall(r"<p>(.*?)</p>", ark, re.S)]
+
+
+def test_fr30_korrektur_filen_er_lik_brevet_paa_siden(app, paa_brev_korrektur):
+    """FR-23/FR-30 (story 5.2.1): i Korrektur har Word-fila det samme brevet som brevsiden,
+    uten markeringer, «Du skrev» eller «(Ny setning)», og hilsenen og navnet står én gang.
+    lastet_ned blir sann, og knappen og vinduet etter nedlasting er som i Epic 3."""
+    html = html_av(paa_brev_korrektur.get("/brev"))
+    svar = paa_brev_korrektur.get(NEDLASTING)
+    assert svar.status_code == 200
+    assert svar.headers["Content-Disposition"] == f"attachment; filename={filnavn_i_dag()}"
+    tekst = [p.text for p in Document(BytesIO(svar.data)).paragraphs]
+    assert tekst == korrektur_brev(1)
+    assert len(tekst) == len(_avsnitt_paa_siden(html))
+    assert tekst.count("Med vennlig hilsen") == 1
+    for ord_ in ("Du skrev", "Ny setning", "Hei!"):
+        assert all(ord_ not in avsnitt for avsnitt in tekst)
+    assert soknaden(app, paa_brev_korrektur).lastet_ned is True
+    html = html_av(paa_brev_korrektur.get("/brev"))
+    assert 'id="vindu-nedlastet"' in html
+    assert tekster.LASTET_NED_WORD in knapp_html(html)
+
+
+def test_ad9_filfeil_i_korrektur_gir_brevsiden_med_feilboksen(app, paa_brev_korrektur, filfeil):
+    """FR-29/AD-9 (story 5.2.1): kan fila ikke lages i Korrektur, vises brevsiden (500) med
+    feilboksen, overskriften for Korrektur og det forbedrede brevet under."""
+    svar = paa_brev_korrektur.get(NEDLASTING)
+    assert svar.status_code == 500
+    html = html_av(svar)
+    assert tekster.FIL_FEIL in html
+    assert tekster.BREV_OVERSKRIFT_KORREKTUR in html
+    assert len(_avsnitt_paa_siden(html)) == len(korrektur_brev(1))
+    assert soknaden(app, paa_brev_korrektur).lastet_ned is False
 
 
 def test_ad9_filfeil_gir_brevsiden_med_feilboksen(app, paa_brev, filfeil):

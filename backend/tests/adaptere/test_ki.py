@@ -1,4 +1,5 @@
-"""Tester for TestKI, som gir de ferdige KI-svarene i testmodus (FR-28, FR-32, FR-34, AD-3).
+"""Tester for TestKI, som gir de ferdige KI-svarene i testmodus (FR-23, FR-28, FR-32, FR-34,
+FR-38, AD-3).
 Testene bruker de ekte testdataene i testdata/, eller en kopi i tmp_path når et svar skal
 ødelegges."""
 
@@ -11,6 +12,7 @@ import soknad
 from soknad.adaptere.ki import TESTDATA_MAPPE, TestdataFeil, TestKI, les_testcaser
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.testdata_match import vask
+from tests.web.hjelpere import korrektur_svar, korrektur_testki
 
 CASE = TESTDATA_MAPPE / "case-1-utvikler"
 
@@ -228,6 +230,50 @@ def test_fr28_svarfil_som_ikke_er_utf8_gir_ubrukelig_svar(kopi):
     with pytest.raises(KIFeil) as feil:
         TestKI(kopi).gap(_les("cv.txt"), _les("annonse.txt"))
     assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+# --- korrektur (story 5.2.1) ---
+
+
+def test_fr38_korrektur_oddetall_gir_korrektur_1_og_partall_korrektur_2(tmp_path):
+    """FR-23/FR-38: TestKI.korrektur leser korrektur-1.json ved oddetall og korrektur-2.json
+    ved partall forslag, også med rotete tekst, og svaret går gjennom kontroller()."""
+    ki = korrektur_testki(tmp_path)
+    cv, annonse, brev = _les("cv.txt"), _les("annonse.txt"), _les("eget-brev.txt")
+    assert ki.korrektur(cv, annonse, brev, forslag=1) == korrektur_svar(1)
+    assert ki.korrektur(cv, annonse, brev, forslag=3) == korrektur_svar(1)
+    assert ki.korrektur(cv, annonse, brev, forslag=2) == korrektur_svar(2)
+    assert ki.korrektur(_rotete(cv), _rotete(annonse), _rotete(brev), 4) == korrektur_svar(2)
+
+
+def test_fr28_korrektur_som_ikke_stemmer_med_brevet_gir_ubrukelig_svar(tmp_path):
+    """FR-28 (story 5.2.1): TestKI kontrollerer svaret mot det egne brevet, så en svarfil der
+    en setning mangler i gammel, gir KIFeil(ubrukelig_svar)."""
+    svar = korrektur_svar(1)
+    ki = korrektur_testki(tmp_path, svar1={"setninger": svar["setninger"][1:]})
+    with pytest.raises(KIFeil) as feil:
+        ki.korrektur(_les("cv.txt"), _les("annonse.txt"), _les("eget-brev.txt"), forslag=1)
+    assert feil.value.type == KIFeilType.UBRUKELIG_SVAR
+
+
+def test_fr28_korrekturfil_som_mangler_gir_kifeil_annet(kopi):
+    """FR-28 (story 5.2.1): mangler korrektur-1.json, gir det KIFeil(annet)."""
+    (kopi / "case-1-utvikler" / "ki-svar" / "korrektur-1.json").unlink(missing_ok=True)
+    with pytest.raises(KIFeil) as feil:
+        TestKI(kopi).korrektur(
+            _les("cv.txt"), _les("annonse.txt"), _les("eget-brev.txt"), forslag=1
+        )
+    assert feil.value.type == KIFeilType.ANNET
+
+
+@pytest.mark.parametrize("brev", ["Et annet brev", ""])
+def test_fr34_korrektur_uten_testdata_gir_kifeil_annet(tmp_path, brev):
+    """FR-34 (story 5.2.1): et eget brev som ikke er brevet i caset, gir KIFeil(annet), som i
+    brev. Inndataene sjekkes før KI-en kalles, så dette er bare en sikring."""
+    ki = korrektur_testki(tmp_path)
+    with pytest.raises(KIFeil) as feil:
+        ki.korrektur(_les("cv.txt"), _les("annonse.txt"), brev, forslag=1)
+    assert feil.value.type == KIFeilType.ANNET
 
 
 def test_fr28_svarfil_som_mangler_gir_kifeil_annet(kopi):

@@ -35,7 +35,7 @@ _TEKSTLISTE = {"type": "array", "items": {"type": "string"}}
 
 # JSON-skjemaet for hver oppgave, sendt med output_config.format (AD-4). Alle felt er påkrevd,
 # og ingen andre felt er lov. arbeidsgiver er null når annonsen ikke har noe navn, og navn i
-# brevet er null når CV-en ikke har noe navn.
+# brevet er null når CV-en ikke har noe navn. I korrektur er ny null når setningen er fjernet.
 SKJEMA = {
     "nokkelord": {
         "type": "object",
@@ -61,17 +61,39 @@ SKJEMA = {
         "required": ["avsnitt", "navn"],
         "additionalProperties": False,
     },
+    "korrektur": {
+        "type": "object",
+        "properties": {
+            "setninger": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "ny": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+                        "gammel": _TEKSTLISTE,
+                        "nytt_avsnitt": {"type": "boolean"},
+                    },
+                    "required": ["ny", "gammel", "nytt_avsnitt"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["setninger"],
+        "additionalProperties": False,
+    },
 }
 
 
 class KI(Protocol):
-    """Faste signaturer. korrektur kommer i story 5.2."""
+    """Faste signaturer."""
 
     def nokkelord(self, annonse: str) -> dict: ...
 
     def gap(self, cv: str, annonse: str) -> dict: ...
 
     def brev(self, cv: str, annonse: str, forslag: int) -> dict: ...
+
+    def korrektur(self, cv: str, annonse: str, eget_brev: str, forslag: int) -> dict: ...
 
 
 class TestdataFeil(Exception):
@@ -161,9 +183,24 @@ class TestKI:
         case, _ = finn_case(cv, annonse, self.caser)
         return self._svar(case, "brev", f"brev-{1 if forslag % 2 else 2}")
 
-    def _svar(self, case: str | None, oppgave: str, filnavn: str | None = None) -> dict:
+    def korrektur(self, cv: str, annonse: str, eget_brev: str, forslag: int) -> dict:
+        """Caset finnes ut fra CV-en, og annonsen og det egne brevet må høre til samme case.
+        Oddetall for forslag gir korrektur-1.json, partall korrektur-2.json («Nytt forslag» i
+        Epic 7). Svaret kontrolleres mot det egne brevet."""
+        case, _ = finn_case(cv, annonse, self.caser, eget_brev=eget_brev)
+        return self._svar(
+            case, "korrektur", f"korrektur-{1 if forslag % 2 else 2}", eget_brev=eget_brev
+        )
+
+    def _svar(
+        self,
+        case: str | None,
+        oppgave: str,
+        filnavn: str | None = None,
+        eget_brev: str | None = None,
+    ) -> dict:
         """Leser ki-svar/<filnavn>.json i caset. Uten filnavn heter fila det samme som
-        oppgaven."""
+        oppgaven. eget_brev gis videre til kontroller() (bare korrektur)."""
         # Inndataene sjekkes før KI-en kalles (story 2.5). Dette er bare en sikring.
         if case is None:
             raise KIFeil(KIFeilType.ANNET)
@@ -175,7 +212,7 @@ class TestKI:
             raise KIFeil(KIFeilType.ANNET) from feil
         except UnicodeDecodeError as feil:
             raise KIFeil(KIFeilType.UBRUKELIG_SVAR) from feil
-        return kontroller(oppgave, tekst)
+        return kontroller(oppgave, tekst, eget_brev=eget_brev)
 
 
 def _anslatt_pris(tokens_inn: int, tokens_ut: int) -> float:
@@ -198,7 +235,7 @@ def _kifeil(oppgave: str, type: KIFeilType) -> KIFeil:
 
 
 def _cv_og_annonse(cv: str, annonse: str) -> str:
-    """Brukermeldingen med CV-en og annonsen i merker, for gap og brev."""
+    """Brukermeldingen med CV-en og annonsen i merker, for gap, brev og korrektur."""
     return f"<cv>\n{cv}\n</cv>\n\n<annonse>\n{annonse}\n</annonse>"
 
 
@@ -231,9 +268,16 @@ class EkteKI:
         nytt brev. Parameteren er med for at signaturen skal være lik den i TestKI."""
         return self._kall("brev", _cv_og_annonse(cv, annonse))
 
-    def _kall(self, oppgave: str, brukermelding: str) -> dict:
+    def korrektur(self, cv: str, annonse: str, eget_brev: str, forslag: int) -> dict:
+        """Bare CV-en, annonsen og det egne brevet sendes (FR-37). forslag sendes ikke, som i
+        brev. Svaret kontrolleres mot det egne brevet."""
+        brukermelding = f"{_cv_og_annonse(cv, annonse)}\n\n<eget_brev>\n{eget_brev}\n</eget_brev>"
+        return self._kall("korrektur", brukermelding, eget_brev=eget_brev)
+
+    def _kall(self, oppgave: str, brukermelding: str, eget_brev: str | None = None) -> dict:
         """Sender ett kall til Claude og gir det kontrollerte svaret. Ingen temperature og
-        ingen thinking-parameter: Claude Opus 5.5 tenker alltid, og effort styrer hvor mye."""
+        ingen thinking-parameter: Claude Opus 5.5 tenker alltid, og effort styrer hvor mye.
+        eget_brev gis videre til kontroller() (bare korrektur)."""
         try:
             svar = self.klient.messages.create(
                 model=self.modell,
@@ -270,7 +314,7 @@ class EkteKI:
         # Svaret kan ha tomme thinking-blokker før teksten, så bare tekstblokkene tas med.
         tekst = "".join(blokk.text for blokk in svar.content if blokk.type == "text")
         try:
-            return kontroller(oppgave, tekst, svar.stop_reason)
+            return kontroller(oppgave, tekst, svar.stop_reason, eget_brev=eget_brev)
         except KIFeil as feil:
             _logg_feil(oppgave, feil.type)
             raise

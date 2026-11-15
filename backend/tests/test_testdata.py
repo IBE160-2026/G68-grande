@@ -358,6 +358,27 @@ def test_fr24_ki_frasene_i_fasiten_star_i_eget_brev():
 KRITERIUM_3 = TESTDATA.parents[1] / "my-project" / "testkjoringer" / "4-5" / "inndata"
 
 
+def test_fr23_fr24_korrektur_svarene_bestaar_kontrollen_uten_ki_fraser():
+    """FR-23/FR-24/FR-28/FR-38 (story 5.2.1): korrektur-1.json og korrektur-2.json finnes bare i
+    case 1, begge består kontroller() mot eget-brev.txt, minst én setning er endret i hver, og
+    ingen ny har noen av de 17 KI-frasene (uten hensyn til store og små bokstaver), heller ikke
+    over to setninger."""
+    filer = sorted(TESTDATA.glob("case-*/ki-svar/korrektur-*.json"))
+    assert filer == [
+        KORREKTUR_CASE / "ki-svar" / "korrektur-1.json",
+        KORREKTUR_CASE / "ki-svar" / "korrektur-2.json",
+    ]
+    brev = _les(KORREKTUR_CASE, "eget-brev.txt")
+    for fil in filer:
+        svar = kontroller("korrektur", fil.read_text(encoding="utf-8"), eget_brev=brev)
+        setninger = svar["setninger"]
+        assert any(s["gammel"] != [s["ny"]] for s in setninger), fil
+        nye = [s["ny"] for s in setninger if s["ny"] is not None]
+        for tekst in (*nye, " ".join(nye)):
+            tekst = " ".join(tekst.split()).casefold()
+            assert [frase for frase in KI_FRASER if frase in tekst] == [], (fil, tekst)
+
+
 def test_fr22_inndataene_for_kriterium_3_er_like_testdataene():
     """FR-22 (suksesskriterium 3, story 4.5): kopiene i my-project/testkjoringer/4-5/inndata/
     er nøyaktig CV-en fra case 1 og annonsen fra case 2. Endres testdataene, feiler testen,

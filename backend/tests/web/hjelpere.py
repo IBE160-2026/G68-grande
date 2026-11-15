@@ -4,12 +4,13 @@ conftest.py ved siden av."""
 
 import json
 import re
+import shutil
 from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 
 from soknad import create_app
-from soknad.adaptere.ki import TESTDATA_MAPPE
+from soknad.adaptere.ki import TESTDATA_MAPPE, TestKI
 from soknad.innstillinger import TESTBRUKER_EPOST, TESTBRUKER_PASSORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
 from soknad.kjerne.filnavn import lag_filnavn
@@ -30,6 +31,47 @@ GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"
 
 # Adressen til nedlastingen av brevet som Word.
 NEDLASTING = "/last-ned/docx"
+
+# Linjene med tekst i det egne brevet. Hver linje er ett avsnitt (eller hilsen og navn).
+_LINJER = [linje for linje in EGET_BREV.splitlines() if linje.strip()]
+KORREKTUR_OVERSKRIFT = "Søknad på stillingen som junior utvikler"
+
+
+def korrektur_svar(forslag=1):
+    """Et gyldig svar fra Korrektur for det egne brevet i case 1, til testene av flyten (story
+    5.2.1): overskriften er rettet, «Hei!» er fjernet, og resten er uendret, én linje per
+    oppføring. I forslag 2 er også den første setningen etter tiltalen endret. De ekte
+    svarene (korrektur-1.json og korrektur-2.json) lages med skriptet."""
+    assert _LINJER[:2] == ["Søknad på jobb som junior utvikler", "Hei!"]
+    setninger = [
+        {"ny": KORREKTUR_OVERSKRIFT, "gammel": [_LINJER[0]], "nytt_avsnitt": True},
+        {"ny": None, "gammel": [_LINJER[1]], "nytt_avsnitt": True},
+        *({"ny": linje, "gammel": [linje], "nytt_avsnitt": True} for linje in _LINJER[2:]),
+    ]
+    if forslag % 2 == 0:
+        setninger[2] = {**setninger[2], "ny": "Forslag to."}
+    return {"setninger": setninger}
+
+
+def korrektur_brev(forslag=1):
+    """Brevet som skal vises og lastes ned for korrektur_svar(forslag): overskriften, så resten
+    av linjene uten «Hei!». Hilsenen og navnet er de brukeren skrev, og ingenting er lagt til."""
+    resten = _LINJER[2:] if forslag % 2 else ["Forslag to.", *_LINJER[3:]]
+    return [KORREKTUR_OVERSKRIFT, *resten]
+
+
+def korrektur_testki(mappe, svar1=None):
+    """En TestKI med en kopi av testdata/ i mappe, der case 1 har korrektur-1.json (svar1,
+    eller korrektur_svar(1)) og korrektur-2.json (korrektur_svar(2)). svar1 kan også være
+    tekst, for et ødelagt svar."""
+    kopi = mappe / "testdata"
+    shutil.copytree(TESTDATA_MAPPE, kopi)
+    svar = kopi / CASE.name / "ki-svar"
+    forste = korrektur_svar(1) if svar1 is None else svar1
+    for navn, innhold in (("korrektur-1", forste), ("korrektur-2", korrektur_svar(2))):
+        tekst = innhold if isinstance(innhold, str) else json.dumps(innhold, ensure_ascii=False)
+        (svar / f"{navn}.json").write_text(tekst, encoding="utf-8")
+    return TestKI(kopi)
 
 
 class Tagger(HTMLParser):
@@ -118,7 +160,7 @@ def sett_soknad(app, client, soknad):
 
 
 class FeilendeKI:
-    """Samme testcaser og svar som TestKI, men oppgaven (nokkelord, gap eller brev) gir
+    """Samme testcaser og svar som TestKI, men oppgaven (nokkelord, gap, brev eller korrektur) gir
     KIFeil(feiltype). oppgave=None gir ingen feil. Hver oppgave som kalles, skrives i kalt.
     Settes inn med app.extensions["test_ki"]."""
 
@@ -143,6 +185,9 @@ class FeilendeKI:
 
     def brev(self, cv, annonse, forslag):
         return self._kall("brev", cv, annonse, forslag)
+
+    def korrektur(self, cv, annonse, eget_brev, forslag):
+        return self._kall("korrektur", cv, annonse, eget_brev, forslag)
 
 
 def sett_testmodus(app, client, testmodus):
@@ -181,3 +226,7 @@ class TellendeKI:
     def brev(self, cv, annonse, forslag):
         self.kalt.append("brev")
         return self.test_ki.brev(cv, annonse, forslag)
+
+    def korrektur(self, cv, annonse, eget_brev, forslag):
+        self.kalt.append("korrektur")
+        return self.test_ki.korrektur(cv, annonse, eget_brev, forslag)

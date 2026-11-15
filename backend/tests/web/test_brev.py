@@ -1,5 +1,6 @@
 """Tester for «Lag søknadsbrevet mitt» og brevsiden (FR-21, FR-22, FR-26, FR-27, FR-28, NFR-4,
-NFR-6, NFR-7, AD-1, AD-8, UX-DR7, UX-DR14). Story 3.1."""
+NFR-6, NFR-7, AD-1, AD-8, UX-DR7, UX-DR14). Story 3.1. «Oppdater søknadsbrevet mitt» og
+brevsiden i Korrektur kom i story 5.2.1 (FR-23, FR-24, FR-36, FR-37)."""
 
 import html as html_modul
 import json
@@ -10,7 +11,7 @@ import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE, TestKI
 from soknad.kjerne.feil import KIFeil, KIFeilType
-from soknad.kjerne.ki_svar import kontroller
+from soknad.kjerne.ki_svar import kontroller, korrigert_brev
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import ruter, tekster
@@ -19,12 +20,18 @@ from tests.web.hjelpere import (
     ANNONSE,
     CASE,
     CV,
+    EGET_BREV,
+    GAP_SVAR,
+    NOKKELORD_SVAR,
     STIL,
     FeilendeKI,
     css_blokk,
     element,
     footer,
     html_av,
+    korrektur_brev,
+    korrektur_svar,
+    korrektur_testki,
     main,
     med_autofocus,
     okt_id,
@@ -538,6 +545,205 @@ def test_fr22_modus_paa_nytt_gjor_brevet_borte(app, paa_brev):
     soknad = soknaden(app, paa_brev)
     assert soknad.brev is None
     assert soknad.steg == Steg.INNLEGGING
+
+
+# --- Korrektur (story 5.2.1) ---
+
+
+def test_fr23_oppdater_gir_brevsiden_med_det_forbedrede_brevet(app, paa_brev_korrektur):
+    """FR-23/FR-24/AD-8: «Oppdater søknadsbrevet mitt» i Korrektur lagrer det forbedrede
+    brevet (korrektur-1.json) og sender til brevsiden. Brevet i Full generering er ikke laget,
+    steget er brev, og søknaden er ikke opptatt."""
+    soknad = soknaden(app, paa_brev_korrektur)
+    assert soknad.korrektur == korrektur_svar(1)
+    assert soknad.brev is None
+    assert soknad.steg == Steg.BREV
+    assert soknad.opptatt is False
+    assert paa_brev_korrektur.get("/brev").status_code == 200
+
+
+def test_fr23_brevsiden_i_korrektur_har_overskriften_og_brevet_uten_markeringer(
+    paa_brev_korrektur,
+):
+    """FR-23/FR-30 (story 5.2.1): brevsiden i Korrektur har h1 «Din oppdaterte søknad er
+    ferdig!» med fokus, og brevet er alle ny som ikke er null, ett avsnitt per avsnitt. «Hei!»
+    er fjernet, hilsenen og navnet står én gang, slik brukeren skrev dem, og det er ingen
+    markeringer, «Du skrev», forklaringsboks eller «(Ny setning)» (story 5.3)."""
+    html = html_av(paa_brev_korrektur.get("/brev"))
+    h1 = [a for t, a in tagger_i(html) if t == "h1"]
+    assert h1 == [{"class": "brev-overskrift", "tabindex": "-1", "autofocus": None}]
+    assert re.search(r"<h1[^>]*>Din oppdaterte søknad er ferdig!</h1>", html)
+    assert tekster.BREV_OVERSKRIFT not in html
+    vist = avsnitt(html)
+    assert vist == korrektur_brev(1)
+    assert "Hei!" not in vist
+    assert vist[-2:] == ["Med vennlig hilsen", "Sara Eksempel"]
+    assert vist.count("Med vennlig hilsen") == 1
+    for tekst in ("Du skrev", "Ny setning", "fjernet", "<button", "<mark"):
+        assert tekst not in re.search(r'<article class="brevark">(.*?)</article>', html, re.S)[1]
+
+
+def test_fr23_korrektur_uten_hilsen_legger_ikke_til_hilsen(app, innlogget_client):
+    """FR-23 (bestemt av Kristine 15. november 2026): mangler hilsenen og navnet i det egne
+    brevet, legger nettsiden ikke til noe i Korrektur."""
+    korrektur = {
+        "setninger": [
+            {"ny": "Søknad på stillingen", "gammel": ["Søknad på jobb"], "nytt_avsnitt": True},
+            {"ny": "Jeg søker.", "gammel": ["Jeg søker"], "nytt_avsnitt": True},
+        ]
+    }
+    soknad = Soknad(steg=Steg.BREV, modus=Modus.KORREKTUR, korrektur=korrektur)
+    sett_soknad(app, innlogget_client, soknad)
+    assert avsnitt(html_av(innlogget_client.get("/brev"))) == ["Søknad på stillingen", "Jeg søker."]
+
+
+def test_fr37_korrektur_far_cv_annonse_eget_brev_og_forslag_1(app, paa_resultat_korrektur):
+    """FR-23/FR-37: KI-en får CV-en, annonsen og det egne brevet fra søknaden og forslag 1, og
+    kalles én gang. brev kalles ikke."""
+    kall = []
+
+    class LoggendeKI:
+        caser = app.extensions["test_ki"].caser
+
+        def brev(self, cv, annonse, forslag):
+            raise AssertionError("brev skal ikke kalles i Korrektur")
+
+        def korrektur(self, cv, annonse, eget_brev, forslag):
+            kall.append((cv, annonse, eget_brev, forslag))
+            return korrektur_svar(1)
+
+    app.extensions["test_ki"] = LoggendeKI()
+    assert lag_brev(paa_resultat_korrektur).location == "/brev"
+    assert kall == [(CV, ANNONSE, EGET_BREV, 1)]
+
+
+@pytest.mark.parametrize(
+    "innhold",
+    [
+        # Alle ny er null
+        {"setninger": [{**s, "ny": None} for s in korrektur_svar(1)["setninger"]]},
+        # gammel stemmer ikke med det egne brevet: en setning mangler
+        {"setninger": korrektur_svar(1)["setninger"][:-1]},
+        # Feil form
+        {"setninger": []},
+        {"setninger": [{"ny": "Hei", "gammel": ["Hei"], "nytt_avsnitt": 1}]},
+        "ikke json",
+    ],
+)
+def test_fr28_ubrukelig_korrektur_gir_feilboksen(app, tmp_path, paa_resultat_korrektur, innhold):
+    """FR-28 (story 5.2.1): alle ny null, gammel som ikke stemmer med det egne brevet, eller
+    feil form gir KI-feilboksen på resultatsiden (200, ingen redirect), og resultatet og det
+    brukeren har lagt inn, er der fortsatt. Søknaden er uendret."""
+    app.extensions["test_ki"] = korrektur_testki(tmp_path, svar1=innhold)
+    for_ = soknaden(app, paa_resultat_korrektur)
+    svar = lag_brev(paa_resultat_korrektur)
+    assert svar.status_code == 200
+    assert svar.location is None
+    html = html_av(svar)
+    assert tekster.ki_feiltekst(KIFeil(KIFeilType.UBRUKELIG_SVAR)) in feilboks(html)
+    assert tekster.KI_FEIL_BEHOLDT_RESULTAT in feilboks(html)
+    assert 'id="gap-dekker"' in html
+    assert soknaden(app, paa_resultat_korrektur) == for_
+    assert soknaden(app, paa_resultat_korrektur).korrektur is None
+
+
+def test_fr28_prov_paa_nytt_i_korrektur_gir_brevsiden(app, paa_resultat_korrektur, korrektur_ki):
+    """FR-27/FR-28 (story 5.2.1): etter en KI-feil i Korrektur sender «Prøv på nytt» samme
+    skjema, og virker KI-en igjen, gir den brevsiden med det forbedrede brevet."""
+    app.extensions["test_ki"] = FeilendeKI(korrektur_ki, oppgave="korrektur")
+    html = html_av(lag_brev(paa_resultat_korrektur))
+    knapp = next(a for t, a in tagger_i(html) if t == "button" and a.get("form"))
+    assert (knapp["name"], knapp["value"]) == ("handling", "brev")
+    app.extensions["test_ki"] = korrektur_ki
+    svar = paa_resultat_korrektur.post("/resultat", data={knapp["name"]: knapp["value"]})
+    assert svar.location == "/brev"
+    assert soknaden(app, paa_resultat_korrektur).korrektur == korrektur_svar(1)
+
+
+def test_fr36_korrektur_uten_samtykke_gir_startsiden(med_nokkel):
+    """FR-36/AD-12 (story 5.2.1): testmodus av og samtykket mangler: «Oppdater søknadsbrevet
+    mitt» kaller ikke KI-en, og brukeren sendes til startsiden."""
+    app, client, kalt = med_nokkel
+    soknad = Soknad(
+        steg=Steg.RESULTAT,
+        modus=Modus.KORREKTUR,
+        cv=Tekstfelt(CV),
+        annonse=Tekstfelt(ANNONSE),
+        eget_brev=Tekstfelt(EGET_BREV),
+        nokkelord=tuple(NOKKELORD_SVAR["nokkelord"]),
+        gap=GAP_SVAR,
+    )
+    sett_soknad(app, client, soknad)
+    svar = lag_brev(client)
+    assert svar.location == "/"
+    assert kalt == []
+    assert soknaden(app, client) == soknad
+
+
+def test_nfr11_korrektur_med_ekte_ki_telles_som_ett_kall(med_nokkel, tmp_path):
+    """NFR-11 (story 5.2.1): med ekte KI og samtykke kaller «Oppdater søknadsbrevet mitt»
+    korrektur én gang, og kallet telles."""
+    app, client, kalt = med_nokkel
+    app.extensions["ekte_ki"].test_ki = korrektur_testki(tmp_path)
+    soknad = Soknad(
+        steg=Steg.RESULTAT,
+        modus=Modus.KORREKTUR,
+        samtykke=True,
+        cv=Tekstfelt(CV),
+        annonse=Tekstfelt(ANNONSE),
+        eget_brev=Tekstfelt(EGET_BREV),
+        nokkelord=tuple(NOKKELORD_SVAR["nokkelord"]),
+        gap=GAP_SVAR,
+    )
+    sett_soknad(app, client, soknad)
+    assert lag_brev(client).location == "/brev"
+    assert kalt == ["korrektur"]
+    assert soknaden(app, client).ki_kall == 1
+
+
+def test_fr22_korrektur_paa_nytt_fra_resultatsiden_gir_brevsiden(app, paa_brev_korrektur):
+    """FR-22/AD-8: tilbake til resultatsiden og «Oppdater søknadsbrevet mitt» igjen gir
+    brevsiden på nytt, og steget er fortsatt brev."""
+    assert paa_brev_korrektur.get("/resultat").status_code == 200
+    assert lag_brev(paa_brev_korrektur).location == "/brev"
+    assert soknaden(app, paa_brev_korrektur).steg == Steg.BREV
+    assert avsnitt(html_av(paa_brev_korrektur.get("/brev"))) == korrektur_brev(1)
+
+
+def test_fr23_brevsiden_i_korrektur_uten_forbedret_brev_sender_til_resultatsiden(
+    app, innlogget_client
+):
+    """FR-23/AD-8: i Korrektur uten det forbedrede brevet sendes brukeren til resultatsiden,
+    også når søknaden har et brev fra Full generering."""
+    brev = {"avsnitt": ["Søknad på stillingen"], "navn": None}
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.BREV, modus=Modus.KORREKTUR, brev=brev))
+    svar = innlogget_client.get("/brev")
+    assert svar.status_code == 302
+    assert svar.location == "/resultat"
+
+
+def test_fr38_korrektur_i_testmodus_med_de_ekte_svarene_gir_brevsiden(app, paa_resultat_korrektur):
+    """FR-23/FR-38 (story 5.2.1): i testmodus med case 1 og de ekte svarfilene gir «Oppdater
+    søknadsbrevet mitt» brevsiden med «Din oppdaterte søknad er ferdig!» og brevet fra
+    korrektur-1.json."""
+    assert lag_brev(paa_resultat_korrektur).location == "/brev"
+    html = html_av(paa_resultat_korrektur.get("/brev"))
+    assert tekster.BREV_OVERSKRIFT_KORREKTUR in html
+    tekst = (CASE / "ki-svar" / "korrektur-1.json").read_text(encoding="utf-8")
+    svar = kontroller("korrektur", tekst, eget_brev=EGET_BREV)
+    assert avsnitt(html) == korrigert_brev(svar)
+
+
+def test_fr23_tekstene_i_korrektur_ligger_i_tekster_py():
+    """FR-23 (story 5.2.1): knappen og overskriften i Korrektur står i web/tekster.py, ordrett
+    fra EXPERIENCE, og ikke i malene."""
+    assert tekster.OPPDATER_BREV_KNAPP == "Oppdater søknadsbrevet mitt"
+    assert tekster.BREV_OVERSKRIFT_KORREKTUR == "Din oppdaterte søknad er ferdig!"
+    maler = STIL.parents[2] / "templates"
+    for mal in ("resultat.html", "brev.html"):
+        innhold = re.sub(r"\{#.*?#\}", "", (maler / mal).read_text(encoding="utf-8"), flags=re.S)
+        for tekst in ("Oppdater søknadsbrevet", "oppdaterte søknad"):
+            assert tekst not in innhold, (mal, tekst)
 
 
 # --- Tekster og CSS ---

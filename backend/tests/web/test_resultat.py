@@ -1,6 +1,7 @@
 """Tester for resultatsiden: gap-analysen, nøkkelordtreffet, forklaringene og «Tilbake»
 (FR-6, FR-14–FR-20, NFR-4, NFR-6, NFR-7, AD-1, AD-6, AD-7, AD-8, suksesskriterium 2 og 8).
-Story 2.5.2 og 2.6. Resultatsiden i Korrektur kom i story 5.1."""
+Story 2.5.2 og 2.6. Resultatsiden i Korrektur kom i story 5.1, og knappen «Oppdater
+søknadsbrevet mitt» i story 5.2.1 (FR-23)."""
 
 import html as html_modul
 import json
@@ -608,35 +609,61 @@ def test_ux_dr21_pynteikonene_ligger_i_tekster_py():
 # --- Korrektur (story 5.1) ---
 
 
-def test_fr20_korrektur_viser_gap_og_treff_uten_brevknapp(paa_resultat_korrektur):
-    """FR-14/FR-15/FR-20 (story 5.1): resultatsiden i Korrektur viser gap-analysen og
-    nøkkelordtreffet som i Full generering, med «Tilbake», men uten «Lag søknadsbrevet mitt»
-    (knappen videre kommer i story 5.2)."""
+def _knapperad(html):
+    return re.search(r'<div class="knapperad mellomrom">(.*?)</div>', main(html), re.S).group(1)
+
+
+def _brevknapper(html):
+    return [a for t, a in tagger_i(main(html)) if t == "button" and a.get("value") == "brev"]
+
+
+def test_fr23_korrektur_viser_gap_treff_og_oppdater_brevet(paa_resultat_korrektur):
+    """FR-14/FR-15/FR-20/FR-23 (story 5.1, 5.2.1): resultatsiden i Korrektur viser
+    gap-analysen og nøkkelordtreffet som i Full generering, og nederst «Tilbake» og «Oppdater
+    søknadsbrevet mitt», med samme ventetekst som «Lag søknadsbrevet mitt»."""
     html = html_av(paa_resultat_korrektur.get("/resultat"))
     assert liste(html, "gap-dekker") == GAP_SVAR["dekker"]
     assert liste(html, "gap-mangler") == GAP_SVAR["mangler"]
     assert f"{TREFF} av {ANTALL} = {PROSENT} %" in html
-    knapperad = re.search(r'<div class="knapperad mellomrom">(.*?)</div>', main(html), re.S)
-    assert '<a class="sekundaerknapp" href="/innlegging">Tilbake</a>' in knapperad.group(1)
+    assert re.search(
+        r'<a class="sekundaerknapp" href="/innlegging">Tilbake</a>\s*<button class="hovedknapp"'
+        r"[^>]*>Oppdater søknadsbrevet mitt</button>",
+        _knapperad(html),
+    )
     assert tekster.LAG_BREV_KNAPP not in html
-    assert [a for t, a in tagger_i(main(html)) if t == "button" and a.get("value") == "brev"] == []
+    assert _brevknapper(html) == [
+        {
+            "class": "hovedknapp",
+            "type": "submit",
+            "name": "handling",
+            "value": "brev",
+            "data-vente": tekster.VENTE_BREV,
+        }
+    ]
 
 
-def test_fr20_full_generering_har_fortsatt_brevknappen(paa_resultat):
-    """FR-21 (story 5.1): i Full generering står «Lag søknadsbrevet mitt» som før."""
-    assert tekster.LAG_BREV_KNAPP in html_av(paa_resultat.get("/resultat"))
+def test_fr21_full_generering_har_fortsatt_brevknappen(paa_resultat):
+    """FR-21 (story 5.1, 5.2.1): i Full generering står «Lag søknadsbrevet mitt» som før, og
+    ikke «Oppdater søknadsbrevet mitt»."""
+    html = html_av(paa_resultat.get("/resultat"))
+    assert re.search(r">Lag søknadsbrevet mitt</button>", _knapperad(html))
+    assert tekster.OPPDATER_BREV_KNAPP not in html
+    assert len(_brevknapper(html)) == 1
 
 
-def test_fr20_brevknappen_i_korrektur_gir_400(app, paa_resultat_korrektur):
-    """FR-20 (story 5.1): POST handling=brev på resultatsiden i Korrektur blir avvist med 400.
-    KI-en kalles ikke, og søknaden er uendret."""
+def test_fr23_brevknappen_i_korrektur_kaller_korrektur(app, paa_resultat_korrektur):
+    """FR-23 (story 5.2.1): POST handling=brev på resultatsiden i Korrektur kaller korrektur,
+    aldri brev. Uten svarfil gir det KI-feilboksen, og resultatet er der fortsatt."""
     kalt = []
-    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave=None, kalt=kalt)
+    app.extensions["test_ki"] = FeilendeKI(
+        app.extensions["test_ki"], oppgave="korrektur", kalt=kalt
+    )
     for_ = soknaden(app, paa_resultat_korrektur)
     svar = paa_resultat_korrektur.post("/resultat", data={"handling": "brev"})
-    assert svar.status_code == 400
-    assert tekster.RESULTAT_OVERSKRIFT in html_av(svar)
-    assert kalt == []
+    assert svar.status_code == 200
+    assert tekster.KI_FEIL_BEHOLDT_RESULTAT in html_av(svar)
+    assert 'id="gap-dekker"' in html_av(svar)
+    assert kalt == ["korrektur"]
     assert soknaden(app, paa_resultat_korrektur) == for_
 
 
