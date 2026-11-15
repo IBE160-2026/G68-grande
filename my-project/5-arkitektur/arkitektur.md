@@ -87,15 +87,16 @@ flowchart TD
 | --- | --- |
 | `nokkelord` | `{nokkelord: [str], arbeidsgiver: str \| null}` |
 | `gap` | `{dekker: [str], mangler: [str]}` |
-| `brev` | `{avsnitt: [str]}` |
+| `brev` | `{avsnitt: [str], navn: str \| null}` |
 | `korrektur` | `{setninger: [{ny: str \| null, gammel: [str], nytt_avsnitt: bool}]}` i brevets rekkefølge |
 
+  - **Hilsen og navn i brevet:** `avsnitt` har ikke «Med vennlig hilsen» eller navnet. `navn` er navnet fra CV-en, eller `null`. Kjernen setter inn hilsenen og navnet til slutt med `ki_svar.hele_brevet()`, så brevet på siden og i Word-fila (og senere PDF og «Nytt forslag») er avsnittene, så «Med vennlig hilsen» og navnet som to egne avsnitt. Uten navn kommer bare hilsenen. Ruter og `fil_ut` setter aldri sammen brevet selv. Har KI-en likevel skrevet hilsenen og eventuelt navnet til slutt, fjerner `kontroller()` dem, så hilsenen ikke kommer to ganger. Tomt `navn` blir `null` (bestemt av Kristine 15. november 2026).
   - **Ubrukelig svar:** `kontroller()` gir `KIFeil(ubrukelig_svar)` når ett av disse gjelder:
     - `stop_reason` er noe annet enn `end_turn`
     - JSON-en er ugyldig
     - `nokkelord` er tom
     - både `dekker` og `mangler` er tomme
-    - brevet er uten tekst (også når alle `ny` er `null`)
+    - brevet er uten tekst (også når alle `ny` er `null`, og når avsnittene bare er hilsen og navn)
     - i Korrektur: alle `gammel`, satt sammen og vasket (AD-10), er ikke lik det opprinnelige brevet, også vasket
   - **Testsvar:** `testdata/<case>/ki-svar/*.json` inneholder bare objektet over. De lages av `scripts/lag_testsvar.py`, som kjører `EkteKI` på hvert testcase (FR-38).
   - **Grunn ved endring:** et felt `grunn` kan legges til i `korrektur` senere (står under «Gjøres hvis det blir tid»).

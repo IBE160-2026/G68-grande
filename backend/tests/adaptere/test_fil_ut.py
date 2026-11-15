@@ -10,7 +10,7 @@ from docx.oxml.ns import qn
 
 from soknad.adaptere.fil_ut import lag_docx
 from soknad.kjerne.feil import FilFeil
-from soknad.kjerne.ki_svar import kontroller
+from soknad.kjerne.ki_svar import hele_brevet, kontroller
 
 AVSNITT = [
     "Jeg søker stillingen som junior utvikler.",
@@ -105,19 +105,19 @@ def test_fr29_tegn_word_ikke_taler_gir_filfeil(tekst):
 
 def test_fr30_brev_med_kontrolltegn_gar_gjennom_kontroller_og_lag_docx():
     """FR-30/FR-28 (story 4.2): et brev med \\u000b, \\n og \\t går gjennom kontroller() og
-    så lag_docx() uten FilFeil, og avsnittene i fila er like avsnittene fra kontroller()."""
+    så lag_docx() uten FilFeil, og avsnittene i fila er like hele_brevet(), med hilsenen og det
+    rensede navnet til slutt."""
     tekst = json.dumps(
         {
             "avsnitt": [
                 "Jeg søker\nstillingen\tsom junior utvikler.",
                 "Jeg kan Python\u000b og Flask.\r\n",
                 "\u0000",
-                "Med vennlig hilsen",
-                "Sara Eksempel",
-            ]
+            ],
+            "navn": "Sara\u000b Eksempel\n",
         }
     )
-    avsnitt = kontroller("brev", tekst)["avsnitt"]
+    avsnitt = hele_brevet(kontroller("brev", tekst))
     assert avsnitt == [
         "Jeg søker stillingen som junior utvikler.",
         "Jeg kan Python og Flask.",

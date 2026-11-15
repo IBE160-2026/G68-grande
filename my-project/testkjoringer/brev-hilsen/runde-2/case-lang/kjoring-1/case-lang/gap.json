@@ -1,0 +1,27 @@
+{
+  "dekker": [
+    "Har eller fullfører en bachelorgrad i informatikk, IT eller tilsvarende innen sommeren 2027",
+    "Har erfaring med Python, gjerne med Flask eller et annet rammeverk for web",
+    "Kan HTML, CSS og JavaScript",
+    "Har erfaring med SQL og relasjonsdatabaser, gjerne PostgreSQL",
+    "Bruker Git til versjonskontroll og kjenner til pull requests",
+    "Har skrevet automatiske tester, for eksempel med pytest",
+    "Kjenner smidig utvikling, gjerne Scrum",
+    "Snakker og skriver godt norsk og engelsk",
+    "Har erfaring med Docker eller andre verktøy for containere (fordel)",
+    "Har jobbet med Linux (fordel)",
+    "Har erfaring med React eller TypeScript (fordel)",
+    "Kjenner til universell utforming og WCAG (fordel)",
+    "Har erfaring med kundeservice eller brukerstøtte, eller annen erfaring med å forstå hva brukerne trenger (fordel)",
+    "Har vært med i frivillig arbeid, verv eller annet der du har tatt ansvar (fordel)",
+    "Er nysgjerrig og liker å lære nye ting",
+    "Liker å jobbe i team, og deler gjerne det du kan med andre",
+    "Tar ansvar for oppgavene dine og sier fra når du står fast",
+    "Er ryddig og nøyaktig, og bryr deg om at koden er lett å lese for andre",
+    "Tåler at ting endrer seg, og ser på tilbakemeldinger som en hjelp",
+    "Kommuniserer godt, både muntlig og skriftlig, også med folk som ikke er tekniske"
+  ],
+  "mangler": [
+    "Tar sikkerhet og personvern på alvor"
+  ]
+}

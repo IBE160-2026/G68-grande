@@ -34,7 +34,8 @@ logger = logging.getLogger(__name__)
 _TEKSTLISTE = {"type": "array", "items": {"type": "string"}}
 
 # JSON-skjemaet for hver oppgave, sendt med output_config.format (AD-4). Alle felt er påkrevd,
-# og ingen andre felt er lov. arbeidsgiver er null når annonsen ikke har noe navn.
+# og ingen andre felt er lov. arbeidsgiver er null når annonsen ikke har noe navn, og navn i
+# brevet er null når CV-en ikke har noe navn.
 SKJEMA = {
     "nokkelord": {
         "type": "object",
@@ -53,8 +54,11 @@ SKJEMA = {
     },
     "brev": {
         "type": "object",
-        "properties": {"avsnitt": _TEKSTLISTE},
-        "required": ["avsnitt"],
+        "properties": {
+            "avsnitt": _TEKSTLISTE,
+            "navn": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        },
+        "required": ["avsnitt", "navn"],
         "additionalProperties": False,
     },
 }

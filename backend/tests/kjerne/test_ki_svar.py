@@ -9,7 +9,7 @@ import pytest
 
 from soknad.innstillinger import MAKS_NOKKELORD
 from soknad.kjerne.feil import KIFeil, KIFeilType
-from soknad.kjerne.ki_svar import kontroller
+from soknad.kjerne.ki_svar import HILSEN, hele_brevet, kontroller
 
 
 def test_fr28_gyldig_nokkelordsvar_gis_tilbake():
@@ -63,17 +63,26 @@ def test_fr28_gyldig_gapsvar_med_en_tom_liste():
         ("gap", '{"dekker": ["Python"], "mangler": [null]}'),
         ("gap", "null"),
         # Brev uten tekst (story 3.1)
-        ("brev", '{"avsnitt": []}'),
-        ("brev", '{"avsnitt": ["  "]}'),
-        ("brev", '{"avsnitt": ["", " \\n"]}'),
+        ("brev", '{"avsnitt": [], "navn": "Sara"}'),
+        ("brev", '{"avsnitt": ["  "], "navn": "Sara"}'),
+        ("brev", '{"avsnitt": ["", " \\n"], "navn": null}'),
         # Brev med bare kontrolltegn, som blir tomt etter rensingen (story 4.2)
-        ("brev", '{"avsnitt": ["\\u000b", "\\u0000\\n\\u0001", "\\ud800\\uffff"]}'),
+        ("brev", '{"avsnitt": ["\\u000b", "\\u0000\\n\\u0001", "\\ud800\\uffff"], "navn": null}'),
+        # Brev med bare hilsen og navn, som blir tomt når hilsenen er fjernet
+        ("brev", '{"avsnitt": ["Med vennlig hilsen", "Sara"], "navn": "Sara"}'),
+        ("brev", '{"avsnitt": ["Med vennlig hilsen,"], "navn": null}'),
+        ("brev", '{"avsnitt": ["Med vennlig hilsen Sara Eksempel"], "navn": "Sara"}'),
         # Brev med feil form
-        ("brev", '{"avsnitt": "Hei"}'),
-        ("brev", '{"avsnitt": ["Hei", 3]}'),
-        ("brev", '{"avsnitt": ["Hei"], "forslag": 1}'),
+        ("brev", '{"avsnitt": "Hei", "navn": null}'),
+        ("brev", '{"avsnitt": ["Hei", 3], "navn": null}'),
+        ("brev", '{"avsnitt": ["Hei"], "navn": null, "forslag": 1}'),
         ("brev", '{"tekst": "Hei"}'),
         ("brev", '["Hei"]'),
+        # navn mangler, er et tall eller en liste
+        ("brev", '{"avsnitt": ["Hei"]}'),
+        ("brev", '{"avsnitt": ["Hei"], "navn": 3}'),
+        ("brev", '{"avsnitt": ["Hei"], "navn": ["Sara"]}'),
+        ("brev", '{"avsnitt": ["Hei"], "navn": true}'),
     ],
 )
 def test_fr28_ubrukelig_svar_gir_kifeil(oppgave, tekst):
@@ -94,33 +103,154 @@ def test_fr28_kifeil_beholder_typen_ved_kopi():
 def test_fr28_ukjent_oppgave_er_en_programfeil():
     """FR-28: korrektur kommer i Epic 5. En ukjent oppgave er en feil i koden."""
     with pytest.raises(ValueError):
-        kontroller("korrektur", '{"avsnitt": ["Hei"]}')
+        kontroller("korrektur", '{"avsnitt": ["Hei"], "navn": null}')
 
 
 def test_fr22_gyldig_brev_gis_tilbake():
-    """FR-22/FR-28: et brev med minst ett avsnitt med tekst gis tilbake i formen fra AD-4."""
-    tekst = '{"avsnitt": ["Jeg søker stillingen.", "Med vennlig hilsen", "Sara"]}'
+    """FR-22/FR-28: et brev med minst ett avsnitt med tekst gis tilbake i formen fra AD-4,
+    {avsnitt, navn}."""
+    tekst = '{"avsnitt": ["Søknad på stillingen", "Jeg søker stillingen."], "navn": "Sara"}'
     assert kontroller("brev", tekst) == {
-        "avsnitt": ["Jeg søker stillingen.", "Med vennlig hilsen", "Sara"]
+        "avsnitt": ["Søknad på stillingen", "Jeg søker stillingen."],
+        "navn": "Sara",
     }
 
 
 def test_fr22_tomme_avsnitt_i_brevet_fjernes():
     """FR-22/FR-28: avsnitt som er tomme eller bare har mellomrom, fjernes fra brevet."""
-    assert kontroller("brev", '{"avsnitt": ["Hei", "", "  "]}') == {"avsnitt": ["Hei"]}
+    svar = kontroller("brev", '{"avsnitt": ["Hei", "", "  "], "navn": null}')
+    assert svar == {"avsnitt": ["Hei"], "navn": None}
 
 
-def _brev(*avsnitt: str) -> list[str]:
+def _brev(*avsnitt: str, navn: str | None = "Sara") -> list[str]:
     """Avsnittene etter kontroller() for et brev med disse avsnittene."""
-    return kontroller("brev", json.dumps({"avsnitt": list(avsnitt)}))["avsnitt"]
+    return kontroller("brev", json.dumps({"avsnitt": list(avsnitt), "navn": navn}))["avsnitt"]
 
 
 def test_fr28_linjeskift_og_tab_i_brevet_blir_ett_mellomrom():
     """FR-28/FR-30: \\n, \\r og \\t blir mellomrom, og flere mellomrom på rad blir ett, også
     først og sist i avsnittet."""
-    assert _brev("Jeg søker\nstillingen\r\nsom\tutvikler.   Hei", "  Med vennlig\n\nhilsen ") == [
+    assert _brev("Jeg søker\nstillingen\r\nsom\tutvikler.   Hei", "  Jeg kan\n\nbegynne ") == [
         "Jeg søker stillingen som utvikler. Hei",
+        "Jeg kan begynne",
+    ]
+
+
+@pytest.mark.parametrize("navn", [None, "", "  ", "\\n\\t", "\\u000b"])
+def test_fr22_tomt_navn_blir_none(navn):
+    """FR-22/FR-28: et navn som er null, tomt, bare mellomrom eller bare kontrolltegn, blir
+    None, slik arbeidsgiver gjør."""
+    verdi = "null" if navn is None else f'"{navn}"'
+    svar = kontroller("brev", f'{{"avsnitt": ["Hei"], "navn": {verdi}}}')
+    assert svar == {"avsnitt": ["Hei"], "navn": None}
+
+
+def test_fr28_navnet_renses_som_avsnittene():
+    """FR-28/FR-30: i navnet fjernes kontrolltegn, og linjeskift, tab og mellomrom først og
+    sist blir som i avsnittene, så Word-fila blir lik siden."""
+    svar = kontroller("brev", '{"avsnitt": ["Hei"], "navn": "  Sara\\n\\tEks\\u000bempel "}')
+    assert svar["navn"] == "Sara Eksempel"
+
+
+@pytest.mark.parametrize(
+    "slutt",
+    [
+        ["Med vennlig hilsen", "Sara Eksempel"],
+        ["Med vennlig hilsen,", "Sara Eksempel"],
+        ["med vennlig hilsen", "Sara Eksempel"],
+        ["MED VENNLIG HILSEN", "Sara Eksempel"],
+        ["Med vennlig hilsen"],
+        ["Med vennlig hilsen,"],
+        ["Med vennlig hilsen."],
+        ["Med vennlig hilsen Sara Eksempel"],
+        ["Med vennlig hilsen, Sara Eksempel"],
+        ["Med vennlig\nhilsen", "Sara\nEksempel"],
+        ["Med vennlig hilsen", "  ", "Sara Eksempel", ""],
+        # Andre hilsener: uten «Med», «Mvh» og nynorsk.
+        ["Vennlig hilsen", "Sara Eksempel"],
+        ["vennlig hilsen, Sara Eksempel"],
+        ["Mvh", "Sara Eksempel"],
+        ["Mvh."],
+        ["MVH Sara Eksempel"],
+        ["Med venleg helsing", "Sara Eksempel"],
+        ["Venleg helsing,"],
+        ["venleg helsing Sara Eksempel"],
+    ],
+)
+def test_fr22_hilsenen_ki_en_skrev_selv_fjernes(slutt):
+    """FR-22/FR-28: har KI-en likevel skrevet hilsenen og eventuelt navnet til slutt (også med
+    komma, annen stor eller liten bokstav, navnet i samme avsnitt, «Vennlig hilsen», «Mvh» eller
+    nynorsk «Med venleg helsing»), fjernes de, så hilsenen ikke kommer to ganger når
+    hele_brevet() setter den inn."""
+    assert _brev("Søknad på stillingen", "Jeg søker.", *slutt) == [
+        "Søknad på stillingen",
+        "Jeg søker.",
+    ]
+
+
+@pytest.mark.parametrize(
+    "avsnitt",
+    [
+        # Hilsenen står ikke til slutt.
+        ["Med vennlig hilsen", "Jeg søker.", "Jeg kan begynne i august."],
+        # Hilsenen med noe etter i samme avsnitt er ikke nest siste avsnitt bare med hilsen.
+        ["Jeg søker.", "Med vennlig hilsen Sara", "Jeg kan begynne i august."],
+        # Ordet er ikke hilsenen.
+        ["Jeg søker.", "Med vennlig hilsenen fra Sara"],
+        ["Jeg søker.", "Jeg sender med vennlig hilsen"],
+        # Bare «Hilsen» regnes ikke som hilsenen.
+        ["Jeg søker.", "Hilsen Sara"],
+    ],
+)
+def test_fr22_avsnitt_som_ikke_er_hilsenen_til_slutt_beholdes(avsnitt):
+    """FR-22: bare hilsenen (og navnet) til slutt fjernes. Andre avsnitt står igjen."""
+    assert _brev(*avsnitt) == avsnitt
+
+
+@pytest.mark.parametrize("slutt", ["Sara Eksempel", "sara eksempel", "Sara\nEksempel "])
+def test_fr22_navnet_alene_til_slutt_fjernes(slutt):
+    """FR-22: slutter avsnittene med bare navnet (uten hilsen), fjernes det, så navnet ikke
+    kommer to ganger når hele_brevet() setter det inn."""
+    assert _brev("Jeg søker.", slutt, navn="Sara Eksempel") == ["Jeg søker."]
+
+
+@pytest.mark.parametrize("navn", ["Sara Eksempel", None])
+def test_fr22_siste_avsnitt_som_ikke_er_navnet_beholdes(navn):
+    """FR-22: et siste avsnitt som ikke er lik navnet, står igjen. Uten navn fjernes ingenting."""
+    avsnitt = ["Jeg søker.", "Sara"] if navn is None else ["Jeg søker.", "Jeg kan begynne."]
+    assert _brev(*avsnitt, navn=navn) == avsnitt
+
+
+def test_fr22_hele_brevet_har_hilsen_og_navn_til_slutt():
+    """FR-22/FR-30: hele_brevet() gir avsnittene, så «Med vennlig hilsen» og navnet som to egne
+    avsnitt. Det er dette som vises og lastes ned."""
+    brev = {"avsnitt": ["Søknad på stillingen", "Jeg søker."], "navn": "Sara Eksempel"}
+    assert hele_brevet(brev) == [
+        "Søknad på stillingen",
+        "Jeg søker.",
         "Med vennlig hilsen",
+        "Sara Eksempel",
+    ]
+    assert HILSEN == "Med vennlig hilsen"
+
+
+@pytest.mark.parametrize("navn", ["null", '""', '"  "'])
+def test_fr22_hele_brevet_uten_navn_slutter_med_hilsenen(navn):
+    """FR-22: uten navn (null, tomt eller bare mellomrom) slutter brevet med «Med vennlig
+    hilsen»."""
+    brev = kontroller("brev", f'{{"avsnitt": ["Jeg søker."], "navn": {navn}}}')
+    assert hele_brevet(brev) == ["Jeg søker.", "Med vennlig hilsen"]
+
+
+def test_fr22_hilsenen_kommer_ikke_to_ganger():
+    """FR-22: skrev KI-en hilsenen og navnet selv, har hele brevet dem likevel bare én gang."""
+    tekst = json.dumps(
+        {"avsnitt": ["Jeg søker.", "Med vennlig hilsen,", "Sara Eksempel"], "navn": "Sara Eksempel"}
+    )
+    assert hele_brevet(kontroller("brev", tekst)) == [
+        "Jeg søker.",
+        "Med vennlig hilsen",
+        "Sara Eksempel",
     ]
 
 
@@ -132,7 +262,7 @@ def test_fr28_linjeskift_og_tab_i_brevet_blir_ett_mellomrom():
 def test_fr28_kontrolltegn_i_brevet_fjernes(tegn):
     """FR-28/FR-30: kontrolltegn (Cc), enslige surrogater (Cs) og U+FFFE/U+FFFF fjernes fra
     avsnittet, og teksten rundt står igjen uten mellomrom der tegnet var."""
-    assert _brev(f"kontroll{tegn}tegn", "Sara") == ["kontrolltegn", "Sara"]
+    assert _brev(f"kontroll{tegn}tegn", "Jeg søker.") == ["kontrolltegn", "Jeg søker."]
 
 
 def test_fr28_vanlige_tegn_i_brevet_beholdes():
@@ -143,7 +273,8 @@ def test_fr28_vanlige_tegn_i_brevet_beholdes():
 
 def test_fr28_kontrolltegn_fjernes_ogsa_fra_json_escape():
     """FR-28: et kontrolltegn skrevet som \\u000b i JSON-en fjernes på samme måte."""
-    assert kontroller("brev", '{"avsnitt": ["a\\u000bb\\u0000c"]}') == {"avsnitt": ["abc"]}
+    svar = kontroller("brev", '{"avsnitt": ["a\\u000bb\\u0000c"], "navn": null}')
+    assert svar == {"avsnitt": ["abc"], "navn": None}
 
 
 @pytest.mark.parametrize(

@@ -243,7 +243,9 @@ def test_fr24_ki_fraselisten_har_17_fraser():
 
 def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
     """FR-22/FR-24/FR-28: hver ki-svar/brev-*.json i hvert testcase består kontroller(), og
-    ingen avsnitt bruker frasene fra addendum (uten hensyn til store og små bokstaver)."""
+    ingen avsnitt bruker frasene fra addendum (uten hensyn til store og små bokstaver). navn er
+    navnet fra CV-en (den første linjen), og KI-en har ikke skrevet hilsenen eller navnet til
+    slutt i avsnittene, så kontroller() ikke har måttet fjerne dem."""
     filer = sorted(TESTDATA.glob("case-*/ki-svar/brev-*.json"))
     for case in CASER:
         assert case / "ki-svar" / "brev-1.json" in filer
@@ -251,6 +253,11 @@ def test_fr22_fr24_alle_testbrev_bestaar_kontrollen_uten_ki_fraser():
     for fil in filer:
         brev = kontroller("brev", fil.read_text(encoding="utf-8"))
         assert len(brev["avsnitt"]) >= 2, fil
+        cv = (fil.parents[1] / "cv.txt").read_text(encoding="utf-8")
+        assert brev["navn"] == cv.splitlines()[0], fil
+        avsnitt = json.loads(fil.read_text(encoding="utf-8"))["avsnitt"]
+        assert "med vennlig hilsen" not in " ".join(avsnitt).casefold(), fil
+        assert avsnitt[-1].casefold() != brev["navn"].casefold(), fil
         assert brev["avsnitt"][0].startswith("Søknad på stillingen som "), fil
         tekst = " ".join(" ".join(brev["avsnitt"]).split()).casefold()
         assert [frase for frase in KI_FRASER if frase in tekst] == [], fil

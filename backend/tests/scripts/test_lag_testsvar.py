@@ -15,7 +15,7 @@ GAP = {"dekker": ["Kan Python"], "mangler": ["Har førerkort klasse B"]}
 
 
 def _brev(forslag):
-    return {"avsnitt": ["Søknad på stillingen som utvikler", f"Forslag {forslag}", "Sara"]}
+    return {"avsnitt": ["Søknad på stillingen som utvikler", f"Forslag {forslag}"], "navn": "Sara"}
 
 
 class FalskKI:

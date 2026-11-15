@@ -25,7 +25,7 @@ NOKKELORD = ["Zorbulator", "Kvasarmodul"]
 SVAR = {
     "nokkelord": {"nokkelord": [*NOKKELORD, " "], "arbeidsgiver": "Testvik AS"},
     "gap": {"dekker": ["Dekket fra falsk API"], "mangler": ["Mangler fra falsk API", ""]},
-    "brev": {"avsnitt": ["Første avsnitt\nfra falsk API.", "Med vennlig hilsen", "Sara"]},
+    "brev": {"avsnitt": ["Første avsnitt\nfra falsk API."], "navn": "Sara"},
 }
 
 

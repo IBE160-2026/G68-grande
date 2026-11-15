@@ -18,12 +18,12 @@ ANNONSE = "Junior utvikler hos Testvik Utvikling AS. Krav: Python, SQL og Docker
 SVAR = {
     "nokkelord": {"nokkelord": ["Python", " ", "SQL"], "arbeidsgiver": "Testvik Utvikling AS"},
     "gap": {"dekker": ["Python", ""], "mangler": ["SQL", "Docker"]},
-    "brev": {"avsnitt": ["Jeg søker\nstillingen.", "Med vennlig hilsen", "Sara Eksempel"]},
+    "brev": {"avsnitt": ["Søknad", "Jeg søker\nstillingen."], "navn": " Sara Eksempel"},
 }
 KONTROLLERT = {
     "nokkelord": {"nokkelord": ["Python", "SQL"], "arbeidsgiver": "Testvik Utvikling AS"},
     "gap": {"dekker": ["Python"], "mangler": ["SQL", "Docker"]},
-    "brev": {"avsnitt": ["Jeg søker stillingen.", "Med vennlig hilsen", "Sara Eksempel"]},
+    "brev": {"avsnitt": ["Søknad", "Jeg søker stillingen."], "navn": "Sara Eksempel"},
 }
 BRUKERMELDING = {
     "nokkelord": f"<annonse>\n{ANNONSE}\n</annonse>",

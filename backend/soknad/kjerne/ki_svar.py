@@ -2,6 +2,7 @@
 ubrukelig svar stoppes på samme sted uansett utgave."""
 
 import json
+import re
 import unicodedata
 
 from soknad.innstillinger import MAKS_NOKKELORD
@@ -11,8 +12,12 @@ from soknad.kjerne.feil import KIFeil, KIFeilType
 FELT = {
     "nokkelord": {"nokkelord", "arbeidsgiver"},
     "gap": {"dekker", "mangler"},
-    "brev": {"avsnitt"},
+    "brev": {"avsnitt", "navn"},
 }
+
+# Hilsenen til slutt i brevet. KI-en skriver den ikke selv, men hele_brevet() setter den inn
+# før navnet, både på siden og i Word-fila.
+HILSEN = "Med vennlig hilsen"
 
 
 def _er_tekstliste(verdi) -> bool:
@@ -28,7 +33,8 @@ def _riktig_form(oppgave: str, svar) -> bool:
             arbeidsgiver is None or isinstance(arbeidsgiver, str)
         )
     if oppgave == "brev":
-        return _er_tekstliste(svar["avsnitt"])
+        navn = svar["navn"]
+        return _er_tekstliste(svar["avsnitt"]) and (navn is None or isinstance(navn, str))
     return _er_tekstliste(svar["dekker"]) and _er_tekstliste(svar["mangler"])
 
 
@@ -51,6 +57,43 @@ def _rens_avsnitt(avsnitt: str) -> str:
     return " ".join("".join(tegn for tegn in avsnitt if _word_taler(tegn)).split())
 
 
+# En hilsen først i et avsnitt: «(Med) vennlig hilsen», «Mvh» eller nynorsk «(Med) venleg
+# helsing», uten hensyn til store og små bokstaver, med eventuelt komma eller punktum etter.
+# Bare «Hilsen» regnes ikke med. Gruppen er resten av avsnittet, for eksempel navnet.
+_HILSEN_MONSTER = re.compile(
+    r"(?:(?:med\s+)?vennlig\s+hilsen|mvh|(?:med\s+)?venleg\s+helsing)\b[\s,.!:;]*(.*)",
+    re.IGNORECASE,
+)
+
+
+def _uten_hilsen(avsnitt: list[str], navn: str | None) -> list[str]:
+    """Avsnittene uten hilsenen og navnet, hvis KI-en likevel skrev dem til slutt. Da kommer ikke
+    hilsenen eller navnet to ganger når hele_brevet() setter dem inn. Det fjernes:
+    - det siste avsnittet, når det er hilsenen, også med navnet etter («Med vennlig hilsen Sara
+      Eksempel»)
+    - de to siste avsnittene, når det nest siste er bare hilsenen. Da er det siste navnet.
+    - ellers det siste avsnittet, når det er lik navnet (renset, uten hensyn til store og små
+      bokstaver)
+    Avsnittene og navnet er alt renset, så det er ingen tomme avsnitt og ingen linjeskift."""
+    for fra in (len(avsnitt) - 1, len(avsnitt) - 2):
+        if fra < 0:
+            continue
+        treff = _HILSEN_MONSTER.fullmatch(avsnitt[fra])
+        if treff and (fra == len(avsnitt) - 1 or not treff.group(1)):
+            return avsnitt[:fra]
+    if navn is not None and avsnitt and avsnitt[-1].casefold() == navn.casefold():
+        return avsnitt[:-1]
+    return avsnitt
+
+
+def hele_brevet(brev: dict) -> list[str]:
+    """Brevet som vises og lastes ned: avsnittene, så «Med vennlig hilsen» og navnet som to egne
+    avsnitt. Uten navn kommer bare hilsenen. Ruter og fil_ut setter aldri sammen brevet selv, og
+    PDF og «Nytt forslag» (Epic 7) skal også bruke denne. brev er i formen fra kontroller()."""
+    navn = brev["navn"]
+    return [*brev["avsnitt"], HILSEN, *([navn] if navn else [])]
+
+
 def _uten_tomme(liste: list[str]) -> list[str]:
     """Listen uten punkter som er tomme eller bare har mellomrom."""
     return [element for element in liste if element.strip()]
@@ -64,7 +107,8 @@ def _uten_surrogater(liste: list[str]) -> list[str]:
 
 def _rens(oppgave: str, svar: dict) -> dict:
     """Svaret uten tomme punkter og uten enslige surrogater i listene. Tom arbeidsgiver blir
-    None, og brevteksten renses. Ellers renses ikke arbeidsgiver før story 7.5."""
+    None, og brevteksten renses. Ellers renses ikke arbeidsgiver før story 7.5. I brevet renses
+    navnet som avsnittene, tomt navn blir None, og hilsenen KI-en skrev selv, fjernes."""
     if oppgave == "nokkelord":
         arbeidsgiver = svar["arbeidsgiver"]
         if arbeidsgiver is not None and not arbeidsgiver.strip():
@@ -72,7 +116,11 @@ def _rens(oppgave: str, svar: dict) -> dict:
         nokkelord = _uten_tomme(_uten_surrogater(svar["nokkelord"]))
         return {"nokkelord": nokkelord, "arbeidsgiver": arbeidsgiver}
     if oppgave == "brev":
-        return {"avsnitt": _uten_tomme([_rens_avsnitt(avsnitt) for avsnitt in svar["avsnitt"]])}
+        avsnitt = _uten_tomme([_rens_avsnitt(avsnitt) for avsnitt in svar["avsnitt"]])
+        navn = svar["navn"]
+        if navn is not None:
+            navn = _rens_avsnitt(navn) or None
+        return {"avsnitt": _uten_hilsen(avsnitt, navn), "navn": navn}
     return {
         "dekker": _uten_tomme(_uten_surrogater(svar["dekker"])),
         "mangler": _uten_tomme(_uten_surrogater(svar["mangler"])),
@@ -103,9 +151,13 @@ def kontroller(oppgave: str, tekst: str, stop_reason: str | None = "end_turn") -
     - Enslige surrogater fjernes fra punktene i nokkelord, dekker og mangler, før de tomme
       punktene fjernes. Et punkt med bare surrogater blir altså borte.
     - Tom arbeidsgiver (eller bare mellomrom) blir None.
-    - I hvert avsnitt i brevet fjernes kontrolltegn og andre tegn Word ikke tåler, og alt
-      mellomrom (også linjeskift og tab) blir ett mellomrom, så Word-fila blir lik siden. Et
-      brev som blir tomt av dette, gir KIFeil(ubrukelig_svar).
+    - I hvert avsnitt i brevet og i navnet fjernes kontrolltegn og andre tegn Word ikke tåler,
+      og alt mellomrom (også linjeskift og tab) blir ett mellomrom, så Word-fila blir lik
+      siden. Tomt navn (eller bare mellomrom) blir None.
+    - Har KI-en likevel skrevet «Med vennlig hilsen» (eller for eksempel «Mvh») og eventuelt
+      navnet, eller bare navnet, til slutt i brevet, fjernes de (se _uten_hilsen), fordi
+      hele_brevet() setter dem inn. Et brev som blir tomt av dette eller av rensingen, gir
+      KIFeil(ubrukelig_svar).
 
     En nøkkelordliste med flere enn MAKS_NOKKELORD (30) nøkkelord (tomme punkter ikke
     medregnet) gir også KIFeil(ubrukelig_svar) (FR-15).

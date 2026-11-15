@@ -1,0 +1,11 @@
+{
+  "avsnitt": [
+    "Søknad på stillingen som junior økonomimedarbeider",
+    "Jeg er tredjeårsstudent på bachelor i IT ved Eksempelby høgskole og fullfører graden våren 2027. I studiet har jeg hatt emner i programmering, webutvikling, operativsystemer og datanettverk. Jeg liker å lage nettsider som er enkle å bruke, og jeg lærer nye verktøy raskt. Med dette brevet søker jeg på stillingen som junior økonomimedarbeider hos Prøvdal Regnskap AS, med tiltredelse i august 2027.",
+    "I annonsen skriver dere at dere ser etter en som har erfaring med Python, fordi dere automatiserer stadig flere oppgaver. I bachelorprosjektet mitt lager jeg sammen med to medstudenter en nettside der studenter kan booke grupperom. Nettsiden er laget i Python med Flask, HTML og CSS, dataene lagres i JSON-filer, og vi bruker Git til versjonskontroll. I et emneprosjekt i 2025 laget jeg et lite program i Python som henter værdata og viser dem som grafer. Prosjektene har gitt meg erfaring med å skrive Python-kode som henter, lagrer og presenterer data, og med å samarbeide om kode i en gruppe.",
+    "Dere ser også etter en som liker kundekontakt. Siden 2022 har jeg jobbet deltid som butikkmedarbeider i en dagligvarebutikk i Eksempelby, der jeg har ansvar for kundeservice, kasse og varepåfylling. Sommeren 2025 jobbet jeg som IT-assistent på høgskolen. Der hjalp jeg studenter med pålogging og satte opp PC-er med Linux. Begge jobbene har handlet om å møte folk med ulike spørsmål og hjelpe dem videre på en ryddig måte.",
+    "Annonsen nevner at medarbeideren skal snakke og skrive godt norsk og engelsk. Norsk er morsmålet mitt, og jeg snakker og skriver engelsk flytende. Det vil være nyttig når dere svarer kunder på telefon og e-post.",
+    "Jeg kommer gjerne til et intervju for å fortelle mer om prosjektene mine og om hvordan jeg kan bidra hos Prøvdal Regnskap AS. Dere når meg på telefon 876 54 321 eller på e-post sara.eksempel@example.com."
+  ],
+  "navn": "Sara Eksempel"
+}

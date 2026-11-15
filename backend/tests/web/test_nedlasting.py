@@ -54,11 +54,16 @@ def test_fr29_nedlastingen_sender_word_filen(app, paa_brev):
 
 
 def test_fr30_nedlastet_fil_er_lik_brevet_uten_topp_og_bunntekst(app, paa_brev):
-    """FR-30/NFR-9: den nedlastede filen åpnes med python-docx. Avsnittene er like brevet, og
-    det er ingen topp- eller bunntekst."""
+    """FR-30/NFR-9: den nedlastede filen åpnes med python-docx. Avsnittene er like brevet på
+    siden, med «Med vennlig hilsen» og navnet til slutt, og det er ingen topp- eller
+    bunntekst."""
     brev = soknaden(app, paa_brev).brev
     dokument = Document(BytesIO(paa_brev.get(NEDLASTING).data))
-    assert [p.text for p in dokument.paragraphs] == brev["avsnitt"]
+    assert [p.text for p in dokument.paragraphs] == [
+        *brev["avsnitt"],
+        "Med vennlig hilsen",
+        brev["navn"],
+    ]
     for seksjon in dokument.sections:
         assert seksjon.header.is_linked_to_previous
         assert seksjon.footer.is_linked_to_previous
@@ -97,10 +102,28 @@ def test_ux_dr7_filfeil_gir_fokus_til_feilboksen_og_prov_paa_nytt_laster_ned(paa
     assert "hovedknapp" in lenke["class"]
 
 
+@pytest.mark.parametrize(
+    ("navn", "slutt"),
+    [("Sara Eksempel", ["Med vennlig hilsen", "Sara Eksempel"]), (None, ["Med vennlig hilsen"])],
+)
+def test_fr30_filen_har_hilsen_og_navn_til_slutt(app, paa_brev, navn, slutt):
+    """FR-30/FR-22: Word-fila slutter med «Med vennlig hilsen» og navnet som to egne avsnitt,
+    og bare med hilsenen når navnet mangler. Den er lik brevet på siden."""
+    soknad = soknaden(app, paa_brev)
+    brev = {"avsnitt": ["Søknad på stillingen", "Jeg søker."], "navn": navn}
+    sett_soknad(app, paa_brev, Soknad(**{**soknad.__dict__, "brev": brev}))
+    dokument = Document(BytesIO(paa_brev.get(NEDLASTING).data))
+    tekst = [p.text for p in dokument.paragraphs]
+    assert tekst == ["Søknad på stillingen", "Jeg søker.", *slutt]
+    side = main(html_av(paa_brev.get("/brev")))
+    assert all(f"<p>{avsnitt}</p>" in side for avsnitt in tekst)
+
+
 def test_ad9_ekte_filfeil_fra_tegn_word_ikke_taler(app, paa_brev):
     """AD-9/FR-29: et brev med et tegn Word ikke tåler, gir feilboksen, ikke en feilside."""
     soknad = soknaden(app, paa_brev)
-    sett_soknad(app, paa_brev, Soknad(**{**soknad.__dict__, "brev": {"avsnitt": ["a\x00b"]}}))
+    brev = {"avsnitt": ["a\x00b"], "navn": None}
+    sett_soknad(app, paa_brev, Soknad(**{**soknad.__dict__, "brev": brev}))
     svar = paa_brev.get(NEDLASTING)
     assert svar.status_code == 500
     assert tekster.FIL_FEIL in html_av(svar)
