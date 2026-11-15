@@ -1226,22 +1226,23 @@ svg {
   border-radius: var(--rounded-sm);
 }
 
-/* Endret setning (changed-sentence): en ekte knapp som ser ut som tekst, med lys grønn
- * bakgrunn og 2 px grønn understreking. Teksten har vanlig tekstfarge, ikke grønn. Mørkere
- * grønn ved hover og når «Du skrev» er åpen. En lang setning brytes inne i knappen. */
+/* Endret setning (changed-sentence): tekst med role="button", lys grønn bakgrunn og 2 px grønn
+ * understreking. Teksten har vanlig tekstfarge, ikke grønn. Mørkere grønn ved hover og når
+ * «Du skrev» er åpen. Setningen er inline, så den brytes over linjer som resten av avsnittet
+ * (en <button> flyttet hele setningen ned på en ny linje). box-decoration-break gir hver
+ * linjebit bakgrunn, avrunding og ramme. */
 .endret-setning {
   padding: 0 2px;
-  font: inherit;
   color: var(--text);
-  text-align: left;
   text-decoration: underline;
   text-decoration-color: var(--success);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
   background: var(--success-tint);
-  border: none;
   border-radius: 4px;
   cursor: pointer;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .endret-setning:hover,

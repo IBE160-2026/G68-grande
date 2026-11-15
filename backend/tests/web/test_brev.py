@@ -75,8 +75,9 @@ def forklaring(html):
 
 
 def knapper(html):
-    """Attributtene til hver endrede setning (knapp) i brevet, i rekkefølge."""
-    return [a for t, a in tagger_i(html) if t == "button" and a.get("class") == "endret-setning"]
+    """Attributtene til hver endrede setning (et <span> med role="button") i brevet, i
+    rekkefølge."""
+    return [a for t, a in tagger_i(html) if t == "span" and a.get("class") == "endret-setning"]
 
 
 def du_skrev(html, id_):
@@ -638,12 +639,13 @@ def test_fr23_brevsiden_i_korrektur_har_overskriften_brevet_og_markeringene(
     assert html.index('class="korrektur-forklaring"') < html.index('<article class="brevark">')
     assert (
         f'<span class="skjult">{tekster.ENDRET_SETNING_SKJERMLESER} </span>'
-        f"{korrektur_brev(1)[0]}</button>"
+        f"{korrektur_brev(1)[0]}</span>"
     ) in html
     assert knapper(html) == [
         {
-            "type": "button",
             "class": "endret-setning",
+            "role": "button",
+            "tabindex": "0",
             "aria-expanded": "false",
             "aria-controls": "du-skrev-1-1",
         }
@@ -833,16 +835,17 @@ def test_fr23_endret_setning_er_en_knapp_med_lukket_du_skrev(app, innlogget_clie
     )
     assert knapper(html) == [
         {
-            "type": "button",
             "class": "endret-setning",
+            "role": "button",
+            "tabindex": "0",
             "aria-expanded": "false",
             "aria-controls": "du-skrev-2-1",
         }
     ]
     assert (
-        '<p><button type="button" class="endret-setning" aria-expanded="false" '
+        '<p><span class="endret-setning" role="button" tabindex="0" aria-expanded="false" '
         'aria-controls="du-skrev-2-1"><span class="skjult">Endret setning </span>'
-        "Jeg ønsker å jobbe her.</button>"
+        "Jeg ønsker å jobbe her.</span>"
         '<span class="du-skrev" id="du-skrev-2-1" hidden>'
         '<span class="du-skrev-overskrift">Du skrev</span><span>Jeg vil jobbe her</span></span>'
         " Jeg kan begynne.</p>"
@@ -975,7 +978,7 @@ def test_fr23_ny_og_gammel_escapes(app, innlogget_client):
     assert "<script>ny()" not in html
     assert "<script>gammel()" not in html
     assert "<b>uendret" not in html
-    assert "&lt;script&gt;ny()&lt;/script&gt;</button>" in html
+    assert "&lt;script&gt;ny()&lt;/script&gt;</span>" in html
     assert du_skrev(html, "du-skrev-1-1") == ["<script>gammel()</script>"]
     assert avsnitt(html) == ["<script>ny()</script> <b>uendret</b>"]
 
@@ -1001,15 +1004,20 @@ def test_fr23_endringer_js_lastes_bare_paa_brevsiden_i_korrektur(paa_brev_korrek
 
 def test_fr23_endringer_skriptet():
     """FR-23/UX-DR15/AD-1: endringer.js bytter aria-expanded og hidden på boksen i
-    aria-controls for hver endrede setning ved trykk (click, som også gjelder Enter og
-    mellomrom på en <button>). Det lukker ikke de andre (flere kan være åpne), har ingen Esc,
-    åpner ikke ved hover eller fokus og sender ingenting til serveren."""
+    aria-controls for hver endrede setning ved trykk (click) og med Enter og mellomrom
+    (keydown, siden setningen er et <span> med role="button"), og mellomrom ruller ikke siden.
+    Det lukker ikke de andre (flere kan være åpne), har ingen Esc, åpner ikke ved hover eller
+    fokus og sender ingenting til serveren."""
     js = (STIL.parents[1] / "js" / "endringer.js").read_text(encoding="utf-8")
     assert '".endret-setning"' in js
     assert '"aria-controls"' in js
     assert '"aria-expanded"' in js
     assert ".hidden" in js
     assert 'addEventListener("click"' in js
+    assert 'addEventListener("keydown"' in js
+    assert '"Enter"' in js
+    assert '" "' in js
+    assert "preventDefault()" in js
     assert "Escape" not in js
     assert not re.search(r'addEventListener\("(focus|focusin|pointerenter|mouseenter)"', js)
     assert 'document.addEventListener("click"' not in js
@@ -1053,15 +1061,17 @@ def test_fr23_css_for_markeringene():
     assert "margin: 0 auto" in boks
     setning = css_blokk(css, ".endret-setning")
     for regel in (
-        "font: inherit;",
         "color: var(--text);",
         "background: var(--success-tint);",
         "text-decoration-color: var(--success);",
         "text-decoration-thickness: 2px;",
-        "border: none;",
-        "text-align: left;",
+        "cursor: pointer;",
+        "box-decoration-break: clone;",
     ):
         assert regel in setning, regel
+    # Setningen skal brytes over linjer som resten av avsnittet (retro 5, runde B), så den
+    # får ingen display som gjør den til en boks.
+    assert "display" not in setning
     aktiv = css_blokk(css, '.endret-setning:hover,\n.endret-setning[aria-expanded="true"]')
     assert "background: var(--changed-active);" in aktiv
     assert "outline: 3px solid var(--focus-ring);" in css_blokk(
