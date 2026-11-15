@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block tittel %}{{ tekster.INNLEGGING_TITTEL }}{% endblock %}
+{% block tittel %}{{ tittel }}{% endblock %}
 {% block skript %}
   <script src="{{ url_for('static', filename='js/innlegging.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/vente.js') }}" defer></script>
@@ -8,7 +8,7 @@
 {% include "ventetegn.html" %}
 {%- endblock %}
 {% block innhold %}
-<h1 class="side-overskrift">{{ tekster.INNLEGGING_OVERSKRIFT }}</h1>
+<h1 class="side-overskrift">{{ overskrift }}</h1>
 {#- Feilboksen får fokus når siden kommer tilbake med feil, og da leser skjermlesere den opp.
     Den har ikke role="alert", så den ikke leses opp to ganger (UX-DR7). #}
 {%- if ki_feil %}
@@ -40,8 +40,11 @@
 <p class="testhjelp">{{ tekster.TESTDATA_HJELP }}</p>
 {%- endif %}
 <form method="post" action="{{ url_for('web.innlegging') }}" id="innlegging-skjema" novalidate>
-  <div class="felt-rad">
-    {%- for navn, felt in tekster.INNLEGGINGSFELT.items() %}
+  {#- felter er feltene for modusen, i rekkefølgen på siden: i Korrektur står brevfeltet mellom
+      CV og annonse (FR-8). Med tre felt står de side om side i tre kolonner fra 1000 px. #}
+  <div class="felt-rad{% if felter | length == 3 %} tre-felt{% endif %}">
+    {%- for navn in felter %}
+    {%- set felt = tekster.INNLEGGINGSFELT[navn] %}
     {%- set feil = feltfeil.get(navn) %}
     {%- set fylt = tekst[navn] != "" %}
     {#- Tomt felt: bare «Lim inn tekst». Fylt felt: tekstboksen med søppelbøtta.

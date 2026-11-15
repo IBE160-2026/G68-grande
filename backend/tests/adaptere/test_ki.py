@@ -10,6 +10,7 @@ import pytest
 import soknad
 from soknad.adaptere.ki import TESTDATA_MAPPE, TestdataFeil, TestKI, les_testcaser
 from soknad.kjerne.feil import KIFeil, KIFeilType
+from soknad.kjerne.testdata_match import vask
 
 CASE = TESTDATA_MAPPE / "case-1-utvikler"
 
@@ -75,6 +76,27 @@ def test_fr34_like_caser_gir_tydelig_feil(tmp_path, cv_b, annonse_b, navn):
     _case(tmp_path, "case-1-a", "CV a", "Annonse a")
     _case(tmp_path, "case-2-b", cv_b, annonse_b)
     with pytest.raises(TestdataFeil, match=f"case-1-a og case-2-b har samme {navn}"):
+        les_testcaser(tmp_path)
+
+
+def test_fr34_eget_brev_leses_bare_naar_det_finnes():
+    """FR-34 (story 5.1): eget-brev.txt er valgfri. Den leses (vasket) i case 1, og case 2,
+    som ikke har noe brev, får eget_brev None uten feil."""
+    caser = {case.navn: case for case in les_testcaser()}
+    assert caser["case-1-utvikler"].eget_brev == vask(_les("eget-brev.txt"))
+    assert caser["case-2-okonomi"].eget_brev is None
+
+
+def test_fr34_like_egne_brev_gir_tydelig_feil(tmp_path):
+    """FR-34 (story 5.1): to caser med samme vaskede eget brev gir TestdataFeil som nevner
+    begge casene. Caser uten brev telles ikke."""
+    _case(tmp_path, "case-1-a", "CV a", "Annonse a")
+    _case(tmp_path, "case-2-b", "CV b", "Annonse b")
+    _case(tmp_path, "case-3-c", "CV c", "Annonse c")
+    assert [case.eget_brev for case in les_testcaser(tmp_path)] == [None, None, None]
+    (tmp_path / "case-1-a" / "eget-brev.txt").write_text("Mitt brev", encoding="utf-8")
+    (tmp_path / "case-3-c" / "eget-brev.txt").write_text(" MITT\nbrev ", encoding="utf-8")
+    with pytest.raises(TestdataFeil, match="case-1-a og case-3-c har samme eget brev"):
         les_testcaser(tmp_path)
 
 

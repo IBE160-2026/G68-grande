@@ -1,4 +1,4 @@
-"""Tester for søknaden i økten (FR-5, FR-20, FR-29, AD-7, AD-8, NFR-11)."""
+"""Tester for søknaden i økten (FR-5, FR-8, FR-20, FR-29, AD-7, AD-8, NFR-11)."""
 
 import dataclasses
 
@@ -71,9 +71,10 @@ def test_fr5_to_nye_soknader_deler_ikke_tekstfelt():
 
 
 def test_fr20_modusene():
-    """FR-20: Full generering er den eneste modusen fram til Epic 5."""
-    assert list(Modus) == [Modus.FULL_GENERERING]
+    """FR-20 (story 5.1): modusene er Full generering og Korrektur, i den rekkefølgen."""
+    assert list(Modus) == [Modus.FULL_GENERERING, Modus.KORREKTUR]
     assert Modus("full_generering") is Modus.FULL_GENERERING
+    assert Modus("korrektur") is Modus.KORREKTUR
 
 
 def test_fr5_begynn_gir_steg_modus():
@@ -176,6 +177,82 @@ def test_fr13_sett_inndata_kan_tomme_feltene():
     ny = sett_inndata(_med_resultater(), cv=Tekstfelt(""), annonse=Tekstfelt(""))
     assert ny.cv == Tekstfelt("")
     assert ny.annonse == Tekstfelt("")
+
+
+# --- eget_brev i Korrektur (story 5.1) ---
+
+
+def _korrektur_med_resultater():
+    return dataclasses.replace(
+        _med_resultater(), modus=Modus.KORREKTUR, eget_brev=Tekstfelt("mitt brev")
+    )
+
+
+def test_fr8_sett_inndata_uten_eget_brev_beholder_brevet():
+    """FR-8 (story 5.1): i Full generering sendes ikke eget_brev med, og brevet i søknaden er
+    uendret, også når CV-en er endret."""
+    soknad = _korrektur_med_resultater()
+    assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
+    assert ny.eget_brev == Tekstfelt("mitt brev")
+    assert ny.gap is None
+
+
+def test_fr8_sett_inndata_med_likt_eget_brev_endrer_ingenting():
+    """FR-8 (story 5.1): er alle tre feltene like som før, er søknaden den samme."""
+    soknad = _korrektur_med_resultater()
+    ny = sett_inndata(
+        soknad,
+        cv=Tekstfelt("min cv"),
+        annonse=Tekstfelt("annonsen"),
+        eget_brev=Tekstfelt("mitt brev"),
+    )
+    assert ny is soknad
+
+
+def test_fr8_sett_inndata_med_bare_nytt_eget_brev_nullstiller_resultatene():
+    """FR-8 (story 5.1, AD-8): er bare brevet endret, nullstilles resultatene og steget blir
+    innlegging, så resultatsiden ikke kan åpnes med et brev som ikke har bestått sjekken."""
+    soknad = _korrektur_med_resultater()
+    ny = sett_inndata(
+        soknad,
+        cv=Tekstfelt("min cv"),
+        annonse=Tekstfelt("annonsen"),
+        eget_brev=Tekstfelt("nytt brev"),
+    )
+    assert ny == dataclasses.replace(
+        soknad,
+        eget_brev=Tekstfelt("nytt brev"),
+        nokkelord=None,
+        nokkelord_annonse=None,
+        arbeidsgiver=None,
+        gap=None,
+        brev=None,
+        lastet_ned=False,
+        steg=Steg.INNLEGGING,
+    )
+
+
+def test_fr8_sett_inndata_med_ny_cv_og_nytt_brev_nullstiller_resultatene():
+    """FR-8/FR-19 (story 5.1): er CV-en endret, nullstilles resultatene som før, og det nye
+    brevet lagres."""
+    soknad = _korrektur_med_resultater()
+    ny = sett_inndata(
+        soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"), eget_brev=Tekstfelt("")
+    )
+    assert ny.eget_brev == Tekstfelt("")
+    assert ny.cv == Tekstfelt("ny cv")
+    assert ny.nokkelord is None
+    assert ny.gap is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr20_velg_modus_beholder_eget_brev():
+    """FR-20 (story 5.1): byttes modus fram og tilbake, står CV, annonse og eget brev igjen."""
+    soknad = _korrektur_med_resultater()
+    ny = velg_modus(velg_modus(soknad, Modus.FULL_GENERERING), Modus.KORREKTUR)
+    assert ny.modus is Modus.KORREKTUR
+    assert (ny.cv, ny.annonse, ny.eget_brev) == (soknad.cv, soknad.annonse, soknad.eget_brev)
 
 
 # --- sett_analyse (story 2.5.2) ---

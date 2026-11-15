@@ -138,9 +138,10 @@ def test_fr20_modusvalget_har_overskrift_og_tittel(paa_modus):
     assert [t for t, _ in tagger_i(html)].count("h1") == 1
 
 
-def test_fr20_kortet_full_generering_er_en_knapp(paa_modus):
-    """FR-20/UX-DR12: kortet er én submit-knapp med modus=full_generering, med ikon (skjult
-    for skjermlesere), modusnavn, handling og forklaring. Ingen egen «Velg»-knapp."""
+def test_fr20_kortene_er_hver_sin_knapp_i_rekkefolge(paa_modus):
+    """FR-20/UX-DR12 (story 5.1): kortene Full generering og Korrektur står i den
+    rekkefølgen, og hvert kort er én submit-knapp med modusen som verdi, med ikon (skjult for
+    skjermlesere), modusnavn, handling og forklaring. Ingen egen «Velg»-knapp."""
     html = main(paa_modus.get("/modus").get_data(as_text=True))
     tagger = tagger_i(html)
     skjema = next(a for t, a in tagger if t == "form")
@@ -148,17 +149,34 @@ def test_fr20_kortet_full_generering_er_en_knapp(paa_modus):
     assert skjema["action"] == "/modus"
     knapper = [a for t, a in tagger if t == "button"]
     assert knapper == [
-        {"class": "modus-kort", "type": "submit", "name": "modus", "value": "full_generering"}
+        {"class": "modus-kort", "type": "submit", "name": "modus", "value": "full_generering"},
+        {"class": "modus-kort", "type": "submit", "name": "modus", "value": "korrektur"},
     ]
-    kort = re.search(r'<button class="modus-kort"[^>]*>(.*?)</button>', html, re.S).group(1)
-    assert re.search(r'<span class="ikon" aria-hidden="true">✨</span>', kort)
-    assert re.search(r'<span class="navn">Full generering</span>', kort)
-    assert re.search(r'<span class="handling">Skriv nytt brev</span>', kort)
+    full, korrektur = re.findall(r'<button class="modus-kort"[^>]*>(.*?)</button>', html, re.S)
+    assert re.search(r'<span class="ikon" aria-hidden="true">✨</span>', full)
+    assert re.search(r'<span class="navn">Full generering</span>', full)
+    assert re.search(r'<span class="handling">Skriv nytt brev</span>', full)
     assert re.search(
         r'<span class="forklaring">Du legger inn CV-en og annonsen, så skriver vi et brev '
         r"til deg\.</span>",
-        kort,
+        full,
     )
+    assert re.search(r'<span class="ikon" aria-hidden="true">✏️</span>', korrektur)
+    assert re.search(r'<span class="navn">Korrektur</span>', korrektur)
+    assert re.search(r'<span class="handling">Forbedre mitt brev</span>', korrektur)
+    assert re.search(
+        r'<span class="forklaring">Du har skrevet et brev selv\. Vi forbedrer språket og '
+        r"beholder innholdet ditt\.</span>",
+        korrektur,
+    )
+
+
+def test_fr20_velg_korrektur_gir_steg_innlegging(app, paa_modus):
+    """FR-20 (story 5.1): et trykk på Korrektur lagrer modusen og sender til innleggingen."""
+    svar = paa_modus.post("/modus", data={"modus": "korrektur"})
+    assert svar.location == "/innlegging"
+    assert soknaden(app, paa_modus) == Soknad(steg=Steg.INNLEGGING, modus=Modus.KORREKTUR)
+    assert paa_modus.get("/innlegging").status_code == 200
 
 
 def test_fr20_hver_modus_har_et_kort_med_tekst():

@@ -838,7 +838,8 @@ svg {
   color: var(--text-muted);
 }
 
-/* Feltene står under hverandre, og side om side først fra 1000 px */
+/* Feltene står under hverandre, og side om side først fra 1000 px. I Korrektur er det tre
+ * felt (CV, brev og annonse), og da tre kolonner (tre-felt). */
 .felt-rad {
   display: grid;
   gap: var(--space-5);
@@ -847,6 +848,10 @@ svg {
 @media (min-width: 1000px) {
   .felt-rad {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .felt-rad.tre-felt {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

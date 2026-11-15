@@ -10,7 +10,12 @@ from soknad.adaptere import fil_ut
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, FilFeil, InndataFeil, KIFeil
 from soknad.kjerne.filnavn import lag_filnavn
-from soknad.kjerne.inndata import sjekk_innlegging, sjekk_innlogging, sjekk_registrering
+from soknad.kjerne.inndata import (
+    felt_for_modus,
+    sjekk_innlegging,
+    sjekk_innlogging,
+    sjekk_registrering,
+)
 from soknad.kjerne.ki_svar import hele_brevet
 from soknad.kjerne.okt import (
     Modus,
@@ -153,7 +158,11 @@ def innlegging():
 
     Er testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12).
     Med ekte KI telles KI-kallene i søknaden. Er det ikke plass til begge kallene i analysen,
-    vises innleggingen med meldingen om det, uten KI-kall (NFR-11)."""
+    vises innleggingen med meldingen om det, uten KI-kall (NFR-11).
+
+    I Korrektur leses også brevfeltet (eget_brev), som må fylles ut og sjekkes som de andre
+    (FR-8, FR-9). I Full generering ignoreres et eget_brev i skjemaet, og brevet i søknaden er
+    uendret. Analysen bygger bare på CV og annonse i begge modusene."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
@@ -166,7 +175,15 @@ def innlegging():
         return _vis_innlegging(lagret, feil=[]), 400
     cv = request.form.get("cv", "")
     annonse = request.form.get("annonse", "")
-    soknad = sett_inndata(lagret, cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
+    eget_brev = (
+        request.form.get("eget_brev", "") if "eget_brev" in felt_for_modus(lagret.modus) else None
+    )
+    soknad = sett_inndata(
+        lagret,
+        cv=Tekstfelt(cv),
+        annonse=Tekstfelt(annonse),
+        eget_brev=None if eget_brev is None else Tekstfelt(eget_brev),
+    )
     lagre_soknad(soknad)
     if handling == "tilbake":
         return redirect(url_for("web.modus"))
@@ -178,7 +195,7 @@ def innlegging():
         return til_innloggingen()
     # Testcasene finnes bare i TestKI, så de hentes derfra, ikke fra KI-en som velges (AD-3).
     caser = current_app.extensions["test_ki"].caser if innlogging.testmodus else None
-    feil = sjekk_innlegging(cv, annonse, caser)
+    feil = sjekk_innlegging(cv, annonse, caser, eget_brev=eget_brev)
     if feil:
         return _vis_innlegging(soknad, feil=feil)
 
@@ -214,7 +231,10 @@ def resultat():
     nye stående, og brevet kastes. Er testmodus av og samtykket mangler, sendes brukeren til
     startsiden uten KI-kall (AD-12). Med ekte KI og alle KI-kallene brukt vises resultatsiden
     med meldingen om det, uten KI-kall (NFR-11). Er brukeren logget ut i en annen fane etter
-    stegsjekken, sendes hen til innloggingen uten KI-kall (FR-7)."""
+    stegsjekken, sendes hen til innloggingen uten KI-kall (FR-7).
+
+    I Korrektur har resultatsiden ingen knapp videre ennå (den kommer i story 5.2), så
+    handling=brev gir 400 der, uten KI-kall."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -223,8 +243,9 @@ def resultat():
     opptatt = til_steget_hvis_opptatt(lagret)
     if opptatt is not None:
         return opptatt
-    if request.form.get("handling") != "brev":
-        # Ukjent knapp: samme side på nytt, og søknaden er uendret.
+    if request.form.get("handling") != "brev" or lagret.modus == Modus.KORREKTUR:
+        # Ukjent knapp, eller brevknappen i Korrektur: samme side på nytt, og søknaden er
+        # uendret.
         return _vis_resultat(lagret), 400
 
     def brevet(valgt_ki):
@@ -380,7 +401,7 @@ class _TelteKall:
 
 def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
     """KI-kallet for alle rutene som bruker KI-en (AD-8, AD-12, FR-27, FR-28, NFR-11).
-    Korrektur (Epic 5) og «Nytt forslag» (Epic 7) skal også bruke den.
+    Korrektur (story 5.2) og «Nytt forslag» (Epic 7) skal også bruke den.
 
     Ruten leser innloggingen én gang og gir den hit, så samtykket sjekkes for samme testmodus
     som velger KI-en. En annen fane som slår av testmodus i mellomtiden, endrer ingenting her.
@@ -426,11 +447,19 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
     feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står øverst i
     feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
-    (NFR-11)."""
+    (NFR-11). Feltene, tittelen og overskriften er de for modusen (FR-8): i Korrektur står
+    brevfeltet mellom CV og annonse."""
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
-    tekst = {"cv": soknad.cv.tekst, "annonse": soknad.annonse.tekst}
+    felter = felt_for_modus(soknad.modus)
+    tekst = {navn: getattr(soknad, navn).tekst for navn in felter}
+    korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
         "innlegging.html",
+        felter=felter,
+        tittel=tekster.INNLEGGING_TITTEL_KORREKTUR if korrektur else tekster.INNLEGGING_TITTEL,
+        overskrift=(
+            tekster.INNLEGGING_OVERSKRIFT_KORREKTUR if korrektur else tekster.INNLEGGING_OVERSKRIFT
+        ),
         tekst=tekst,
         feltfeil=feltfeil,
         ki_feil=ki_feil,
@@ -444,10 +473,11 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     ki_feil er teksten til en KI-feil fra «Lag søknadsbrevet mitt», som står øverst i
     feilboksen over «Resultatet og det du har lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
-    (NFR-11)."""
+    (NFR-11). lag_brev er usann i Korrektur, som ikke har knappen videre før story 5.2."""
     treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
     return render_template(
         "resultat.html",
+        lag_brev=soknad.modus != Modus.KORREKTUR,
         gap=soknad.gap,
         treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),

@@ -23,6 +23,8 @@ STIL = WEB / "static" / "css" / "stil.css"
 CASE = TESTDATA_MAPPE / "case-1-utvikler"
 CV = (CASE / "cv.txt").read_text(encoding="utf-8")
 ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
+# Det fiktive brevet til Korrektur, bare i case 1 (story 5.1).
+EGET_BREV = (CASE / "eget-brev.txt").read_text(encoding="utf-8")
 NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
 GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
 

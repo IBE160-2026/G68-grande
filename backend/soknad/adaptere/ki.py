@@ -65,7 +65,7 @@ SKJEMA = {
 
 
 class KI(Protocol):
-    """Faste signaturer. korrektur kommer i Epic 5."""
+    """Faste signaturer. korrektur kommer i story 5.2."""
 
     def nokkelord(self, annonse: str) -> dict: ...
 
@@ -90,29 +90,45 @@ def _les_fil(case: Path, navn: str) -> str:
 
 
 def _sjekk_unike(caser: list[Testcase]) -> None:
-    """To caser med samme vaskede CV eller annonse gir TestdataFeil. CV-en avgjør caset, og
-    nokkelord finner caset ut fra annonsen, så begge må være unike. Da gir nokkelord og gap
-    alltid svar fra samme case."""
-    for felt, navn in (("cv", "CV"), ("annonse", "annonse")):
+    """To caser med samme vaskede CV, annonse eller eget brev gir TestdataFeil. CV-en avgjør
+    caset, og nokkelord finner caset ut fra annonsen, så begge må være unike. Da gir nokkelord
+    og gap alltid svar fra samme case. Caser uten eget brev telles ikke med for brevet."""
+    for felt, navn in (("cv", "CV"), ("annonse", "annonse"), ("eget_brev", "eget brev")):
         sett: dict[str, str] = {}
         for case in caser:
             tekst = getattr(case, felt)
+            if tekst is None:
+                continue
             if tekst in sett:
                 raise TestdataFeil(
                     f"Testcasene {sett[tekst]} og {case.navn} har samme {navn}. "
-                    "Hvert testcase må ha sin egen CV og annonse."
+                    "Hvert testcase må ha sin egen CV og annonse, "
+                    "og sitt eget brev hvis det har et."
                 )
             sett[tekst] = case.navn
 
 
+def _les_valgfri_fil(case: Path, navn: str) -> str | None:
+    """Teksten i fila, eller None når caset ikke har den."""
+    fil = case / navn
+    return fil.read_text(encoding="utf-8") if fil.is_file() else None
+
+
 def les_testcaser(mappe: Path = TESTDATA_MAPPE) -> list[Testcase]:
-    """Leser cv.txt og annonse.txt i hver case-mappe, sortert på navn. Mangler mappen, en
-    case-mappe eller en av filene, eller er to CV-er eller annonser like, gis TestdataFeil."""
+    """Leser cv.txt og annonse.txt i hver case-mappe, sortert på navn, og eget-brev.txt når
+    caset har den (brevet til Korrektur, bare i case 1, story 5.1). Mangler mappen, en
+    case-mappe, cv.txt eller annonse.txt, eller er to CV-er, annonser eller egne brev like,
+    gis TestdataFeil."""
     mapper = sorted(case for case in mappe.glob("case-*") if case.is_dir())
     if not mapper:
         raise TestdataFeil(f"Fant ingen testcaser (mapper som heter case-…) i {mappe}.")
     caser = [
-        lag_testcase(case.name, _les_fil(case, "cv.txt"), _les_fil(case, "annonse.txt"))
+        lag_testcase(
+            case.name,
+            _les_fil(case, "cv.txt"),
+            _les_fil(case, "annonse.txt"),
+            _les_valgfri_fil(case, "eget-brev.txt"),
+        )
         for case in mapper
     ]
     _sjekk_unike(caser)

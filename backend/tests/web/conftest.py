@@ -1,5 +1,5 @@
-"""Felles fiksturer for webtestene (FR-8, FR-21, FR-29). Testfilene henter fiksturene herfra
-og hjelperne fra hjelpere.py, aldri fra hverandre."""
+"""Felles fiksturer for webtestene (FR-8, FR-20, FR-21, FR-29). Testfilene henter fiksturene
+herfra og hjelperne fra hjelpere.py, aldri fra hverandre."""
 
 import pytest
 
@@ -7,7 +7,15 @@ from soknad.adaptere import fil_ut
 from soknad.kjerne.feil import FilFeil
 from soknad.kjerne.okt import Modus, Soknad
 from soknad.kjerne.steg import Steg
-from tests.web.hjelpere import ANNONSE, CV, TellendeKI, app_med_nokkel, logg_inn, sett_soknad
+from tests.web.hjelpere import (
+    ANNONSE,
+    CV,
+    EGET_BREV,
+    TellendeKI,
+    app_med_nokkel,
+    logg_inn,
+    sett_soknad,
+)
 
 
 @pytest.fixture
@@ -27,6 +35,22 @@ def paa_innlegging(app, innlogget_client):
     """En innlogget klient på innleggingen for Full generering."""
     sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING))
     return innlogget_client
+
+
+@pytest.fixture
+def paa_korrektur(app, innlogget_client):
+    """En innlogget klient på innleggingen for Korrektur, i testmodus (story 5.1)."""
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=Modus.KORREKTUR))
+    return innlogget_client
+
+
+@pytest.fixture
+def paa_resultat_korrektur(paa_korrektur):
+    """En innlogget klient i Korrektur som har lagt inn CV, eget brev og annonse fra case 1 og
+    fått analysen (story 5.1)."""
+    data = {"cv": CV, "eget_brev": EGET_BREV, "annonse": ANNONSE, "handling": "sjekk"}
+    assert paa_korrektur.post("/innlegging", data=data).location == "/resultat"
+    return paa_korrektur
 
 
 @pytest.fixture
