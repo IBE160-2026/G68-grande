@@ -9,6 +9,7 @@ import re
 
 import pytest
 
+from soknad.innstillinger import MAKS_TEGN_EGET_BREV
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
@@ -667,7 +668,7 @@ def test_fr23_brevknappen_i_korrektur_kaller_korrektur(app, paa_resultat_korrekt
     assert soknaden(app, paa_resultat_korrektur) == for_
 
 
-@pytest.mark.parametrize("brev", ["", "a" * 15_001, "Mitt eget brev"])
+@pytest.mark.parametrize("brev", ["", "a" * (MAKS_TEGN_EGET_BREV + 1), "Mitt eget brev"])
 def test_fr8_nytt_brev_som_feiler_stenger_resultatsiden(app, paa_resultat_korrektur, brev):
     """FR-8/FR-9/AD-8 (story 5.1): endres bare brevet til et brev som ikke består sjekken
     (tomt, for langt eller ikke testdata), er analysen nullstilt, og /resultat sender

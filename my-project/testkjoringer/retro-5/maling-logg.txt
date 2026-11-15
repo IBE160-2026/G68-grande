@@ -1,7 +1,7 @@
 2026-11-15 21:18:46,043 INFO httpx2: HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
-2026-11-15 21:18:46,152 INFO soknad.adaptere.ki: KI-kall korrektur (claude-opus-5-5): 22595 tokens inn, 28686 ut, stopp end_turn, anslått 0,6641 dollar (ca. 7,31 kr)
+2026-11-15 21:18:46,152 INFO soknad.adaptere.ki: KI-kall korrektur (claude-opus-5-5): 22595 tokens inn, 28686 ut, stopp end_turn, anslÃ¥tt 0,6641 dollar (ca. 7,31 kr)
 {
-  "kontroller": "bestått",
+  "kontroller": "bestÃ¥tt",
   "modell": "claude-opus-5-5",
   "sekunder": 190.2,
   "tokens_inn": 22595,

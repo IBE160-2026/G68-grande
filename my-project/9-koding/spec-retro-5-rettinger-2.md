@@ -2,7 +2,7 @@
 title: 'Rettinger etter retro 5, runde B: langt eget brev og bedre flyt i Korrektur'
 type: 'feature'
 created: '2026-11-15'
-status: 'in-progress'
+status: 'in-review'
 baseline_commit: '55b737e60dccac2fcad09b2cb5397ac77ae0ee39'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -84,8 +84,7 @@ context:
 - `prompts/korrektur.md`: flyten (bindeord, korte setninger slås sammen bare i samme avsnitt, «derfor» bare når det er en grunn), at `gammel` kopieres nøyaktig, og et eksempel der to setninger slås sammen. Etter runde 1 kom plan B: vage vurderinger fjernes og skrives ikke om til en annen vag vurdering (Kristines beslutning i den frosne blokken).
 - Målingen: `my-project/testkjoringer/retro-5/inndata/case-lang/eget-brev.txt` (14 585 tegn), ett kall med `max_tokens` 48 000 og `Anthropic(timeout=600, max_retries=0)` fra et engangsskript utenfor repoet. 28 686 tokens ut, 190 s, `end_turn`, `kontroller` bestått, ca. 7,31 kr. Tallene står i `my-project/testplan.md` og `retro-5/maling/`.
 - Valg A med 5 000 tegn: `MAKS_TEGN_EGET_BREV` i `innstillinger.py`, `inndata.maks_tegn(felt)` brukt i `sjekk_innlegging`, `MAKS_TEGN_EGET_BREV_TEKST` i feilteksten i `tekster.py`. Kommentarene ved grensene og `KI_TIDSGRENSE` viser målingen. README (grensene) er rettet, fordi den ellers ville sagt feil.
-- Testene: `test_inndata.py` (5 000 godtas, også med `
-`, 5 001 gir `for_lang`, CV og annonse har 15 000 i Korrektur), `test_innlegging.py` og `test_tekster.py` (den nye teksten), `test_grenser.py` (`eget-brev.txt` i testdataene er under grensen), `test_ekte_ki.py` (de nye reglene og sammenslåingen i eksempelet).
+- Testene: `test_inndata.py` (5 000 godtas, også med `\r\n`, 5 001 gir `for_lang`, CV og annonse har 15 000 i Korrektur), `test_innlegging.py` og `test_tekster.py` (den nye teksten), `test_grenser.py` (`eget-brev.txt` i testdataene er under grensen), `test_ekte_ki.py` (de nye reglene og sammenslåingen i eksempelet).
 - Runde 1 og runde 2 (etter plan B) i `retro-5/runde-1/` og `runde-2/`. Kjøring 1 i runde 2 er svarene i testmodus. Alle 12 svarene besto `kontroller`. Kristine godkjente runde 2 for kriterium 12, og godtok det feilaktige «Derfor» i kjøring 3, `korrektur-2`, som et kjent svakt punkt.
 - Kostnad i alt: ca. 18 kr.
 - 1038 tester består, og ruff er uten feil.
@@ -93,6 +92,30 @@ context:
 ## Spec Change Log
 
 ## Review Triage Log
+
+| # | Kilde | Funn | Verdict | Begrunnelse |
+|---|-------|------|---------|-------------|
+| 1 | edge, verification-gap | «Slå aldri sammen setninger fra ulike avsnitt» sjekkes ikke i `kontroller`, så et avsnittsskift kan forsvinne uten melding | low | Kan skje, men ingen av de 13 svarene gjør det (sjekket mot avsnittene). Spec-en sa at kontrollen ikke endres → defer (deferred-work) |
+| 2 | edge, blind | Prompten sier «to korte setninger», men målingen slår sammen tre i én oppføring | low | Stemmer for én oppføring i målingen, og den leses greit. En retting i prompten krever nye betalte kjøringer for liten gevinst. Avvist |
+| 3 | edge | `test_resultat.py` bruker fortsatt `"a" * 15_001` som for langt brev | low | Stemmer. Bruker nå `MAKS_TEGN_EGET_BREV + 1` → patch |
+| 4 | edge, blind | Grensen på 5 000 tegn er regnet ut, ikke målt. Marginen til 90 s er ca. 15–20 s | maybe-false | Regnestykket (ca. 1,9 tokens per tegn og 136–151 tokens/s) gir 67–75 s, men tenkingen varierer. Avgjøres med én måling på ca. 5 000 tegn → defer (medium, ikke sjekket), Kristine spørres |
+| 5 | blind, edge | «ca. 3 kr for en hel søknad» stemmer ikke med lang CV og annonse (ca. 4,4 kr) | medium | Stemmer. Testplanen skiller nå testdataene (ca. 2,8 kr) fra lange tekster (ca. 4,4 kr, over målet) → patch |
+| 6 | edge | Oppgaven nevner `retro-5/kjoring-<n>/`, men kjøringene ligger i `runde-1/` og `runde-2/` | low | Rettingen er å endre spec-en. Den riktige stien står i Implementation Notes og testplanen. Avvist |
+| 7 | edge | Akseptansekriteriet om tidsgrensen er bare regnet ut | maybe-false | Samme som funn 4 → defer |
+| 8 | blind | Mindre tenking for Korrektur er ikke nevnt som et valg | low | Stemmer. Testplanen nevner det nå, og hvorfor det ikke ble lagt fram → patch |
+| 9 | blind | Listen over godkjente avslutninger mangler to av svarene | low | De to var godkjent i 5.2.2. Testplanen sier det nå → patch |
+| 10 | blind | Git og JSON-filer slås sammen selv om de handler om ulike ting | false | Begge handler om verktøyene i det samme prosjektet, og Kristine leste og godkjente brevene. Avvist |
+| 11 | blind | «Sjekkliste for Korrektur» i `fasit.md` har ikke de nye reglene | low | Stemmer. Vage vurderinger og sammenslåing i samme avsnitt står nå i sjekklisten → patch |
+| 12 | blind | «samtidig» har ingen vakt som «derfor» | false | I testmodus-brevene står «Samtidig» som motsetning til «har mye å lære», og Kristine godtok «samtidig». Avvist |
+| 13 | blind | Seksjonen for 5.2.2 i testplanen viser fortsatt den gamle godkjenningen | low | Stemmer. Har nå en merknad om at den er erstattet → patch |
+| 14 | blind | Spec-en er ikke oppdatert (Change Log, stier, status) | low | Rettingen er å endre spec-en. Beslutningene står i den frosne blokken, og status settes av arbeidsflyten. Avvist |
+| 15 | blind | `
+` i Implementation Notes ble et linjeskift | low | Stemmer. Rettet i Implementation Notes (agentens egen seksjon) |
+| 16 | blind | Loggfilene fra kjøringene er lagret i Windows-1252 | low | Stemmer (`file` viste ISO-8859, de gamle loggene er UTF-8). Gjort om til UTF-8 → patch |
+| 17 | blind | TO DO, deferred-work og README for my-project er ikke oppdatert | low | Stemmer → patch. `issues.md` oppdateres av sesjonsloggen |
+| 18 | blind | PRD-en og epics.md sier fortsatt 15 000 for alle felt | low | Stemmer. Runde C tar epics.md, og PRD-en er lagt til i TO DO → defer |
+| 19 | blind | Brukeren ser ikke grensen før hun sender | low | Åpent punkt fra 4.3.2 (hjelpeteksten «Høyst 15 000 tegn» i `issues.md`). Viktigere nå som feltene har ulike grenser. Kristine spørres, ikke endret her |
+| 20 | blind | `maks_tegn` gir 15 000 for et feilstavet feltnavn | false | Feltnavnet kommer bare fra `felt_for_modus` (`INNLEGGINGSFELT`), så et feilstavet navn kan ikke nå funksjonen. Avvist |
 
 ## Design Notes
 

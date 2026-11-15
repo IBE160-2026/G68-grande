@@ -88,4 +88,6 @@ Det forbedrede brevet fra Korrektur skal (suksesskriterium 4 og 12):
 - beholde eksemplene: nettsiden for booking av grupperom (Python, Flask, HTML, CSS, Git, tre på gruppa, JSON-filer), programmet med værdata og grafer, PC-ene med Linux og møtene med kunder
 - skrive om de to KI-frasene, og ikke ha med noen av de 17 frasene
 - ha en formell og akademisk tone uten de muntlige ordene over, og bruke enten «dere» eller «du» hele veien
+- ikke ha vage vurderinger som «det har stort sett fungert greit» eller «det var morsomt», heller ikke skrevet om (bestemt av Kristine i retro 5)
+- bare slå sammen setninger i samme avsnitt
 - ikke legge til noe fra «Sjekkliste for brevet» over, eller annen erfaring, utdanning eller ferdigheter som ikke står i CV-en eller brevet
