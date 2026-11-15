@@ -211,3 +211,13 @@ Caset har ingen fasit, men disse feilene er sjekket mot CV-en og annonsen:
 3. **Gap-analysen sier at «Tåler at ting endrer seg, og ser på tilbakemeldinger som en hjelp» mangler.** CV-en sier «Jeg tar gjerne imot tilbakemeldinger på koden min» (under «Slik jeg jobber»), men ikke noe om at ting endrer seg.
 4. **`brev-2` kaller universell utforming «kravet deres».** I annonsen står «Kjenner til universell utforming og WCAG» under «Det er en fordel om du», ikke under kravene.
 5. **`brev-1` skriver «Som studentassistent i Python og i databaser leser jeg andres kode …» i presens.** I CV-en er jobben i databaser bare «Våren 2026». Jobben i Python er «2025–i dag».
+
+**Bestemt 15. november (Kristine):**
+
+- **1–3 godtas**, og prompten for gap-analysen endres ikke:
+  - 1: Annonsen spør om *erfaring*, og CV-en har React og TypeScript bare som «grunnleggende» under Ferdigheter, uten at de er brukt noe sted. Docker står også som «grunnleggende», men er brukt i et emneprosjekt, og der svarte gap-analysen «dekker». Gap-analysen fulgte regelen om at kravet hører til `mangler` ved tvil, og var konsekvent.
+  - 2: «Vi forventer at du tar det på alvor» er et krav, selv om det står i et avsnitt og ikke i en liste. Et emne med karakter viser ikke helt at studenten tar det på alvor.
+  - 3: Kravet har to deler, og CV-en dekker bare den ene. Ved tvil hører kravet til `mangler`.
+- **4 og 5 rettes** med to nye regler i `backend/prompts/brev.md`: kall ikke noe et krav når annonsen sier at det er en fordel, og skriv om jobber og verv i nåtid bare når CV-en sier at de pågår, ellers i fortid. Kriteriene for brevet kjøres på nytt med ekte KI etterpå.
+- I samme kjøring prøves plan B-regelen (ikke ranger ferdigheter) på en annen CV enn testdataene.
+- «Med vennlig hilsen» og navnet skal alltid komme med i brevet. KI-en sender navnet fra CV-en i et eget felt, og nettsiden setter selv inn hilsenen og navnet til slutt, uten et nytt KI-kall. Står det ikke noe navn i CV-en, slutter brevet med «Med vennlig hilsen». De ferdige svarene i testmodus må få det nye feltet.
