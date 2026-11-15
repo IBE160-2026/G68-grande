@@ -38,4 +38,21 @@ Kristine prøvde brevsiden i nettleseren («det ser bra ut») og sa at brevet ik
 
 ### Åpne punkter
 - Etter 5.3: bedre flyt i brevet fra Korrektur, med egen branch og PR. Tre kjøringer med ekte KI (ca. 5 kr, Kristine godkjenner først).
-- PR for story 5.3 når Kristine sier «push».
+- Flette [PR #37](https://github.com/IBE160-2026/G68-grande/pull/37). Etter flettingen: 5.3 og epic 5 til ferdig i sprint-status og TO DO, og retrospektiv for epic 5.
+
+## 2026-11-15 kl. 18:25 — Kristine
+
+### Oppgave
+«push»: pushe branchen og lage PR for story 5.3.
+
+### Plan
+- Pushe `story-5-3-se-hva-som-er-endret`, lage PR med merknad om KI-feil, og kommentere nettlesertesten på PR-en.
+
+### Resultat
+- [PR #37](https://github.com/IBE160-2026/G68-grande/pull/37) er laget. KI-feilene står i PR-teksten: misforstått tilbakemelding om flyt (angret), spec uten alle seksjoner fra malen, og flyten i brevet som egen oppgave.
+- Kommentar på PR-en om Kristines nettlesertest («det ser bra ut»).
+- CI er grønn: backend på Linux og Windows, frontend og prosjektsjekken.
+
+### Åpne punkter
+- Flette PR #37. Etter flettingen: 5.3 og epic 5 til ferdig, og retrospektiv for epic 5.
+- Etter 5.3: bedre flyt i brevet fra Korrektur (står allerede i `issues.md`).
