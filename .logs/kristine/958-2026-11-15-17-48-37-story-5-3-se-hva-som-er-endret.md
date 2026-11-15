@@ -20,3 +20,22 @@
 ### Åpne punkter
 - Prøve brevsiden i Korrektur i nettleseren: 375 og 1280 px, åpne og lukke «Du skrev» (også flere samtidig), tastatur (Tab, Enter, mellomrom), høykontrast, Word-fila og Full generering. Se særlig om lange grønne setninger som begynner på ny linje, ser greie ut.
 - Lage PR for story 5.3 med merknad om KI-feil, og kommentar etter nettlesertesten. Etter fletting: 5.3 og epic 5 til ferdig, og retrospektiv for epic 5.
+- Etter 5.3: bedre flyt i brevet fra Korrektur (bindeord, sammenslåtte korte setninger). Endring i prompten med egen branch og PR, tre kjøringer med ekte KI (ca. 5 kr) og ny sjekk av kriterium 12.
+
+## 2026-11-15 kl. 18:15 — Kristine
+
+### Oppgave
+Kristine prøvde brevsiden i nettleseren («det ser bra ut») og sa at brevet ikke har god flyt. Hun mente selve teksten fra KI-en.
+
+### Plan
+- KI-en misforsto først og trodde det var de grønne knappene som ikke fløt i avsnittet. Den gjorde dem om til `<span role="button">`, med Enter og mellomrom i `endringer.js`. Endringen ble ikke committet.
+- Etter Kristines forklaring: se på teksten i `korrektur-1.json` og spørre hva som skal gjøres.
+
+### Resultat
+- Årsaken: prompten for Korrektur retter hver setning for seg, fordi den bare skal rette språk og ordvalg og beholde rekkefølgen (beslutningen i 5.2.1). Overgangene mellom setningene blir derfor ikke bedre.
+- Kristine bestemte: flyten rettes i en egen oppgave etter 5.3 (prompt, tre kjøringer med ekte KI, ny sjekk av kriterium 12). Står i `my-project/todo.md` og `deferred-work.md`.
+- Kristine bestemte: endringen av knappene angres. Den ble angret med `git restore`, og koden er som i `5c5e2cd`.
+
+### Åpne punkter
+- Etter 5.3: bedre flyt i brevet fra Korrektur, med egen branch og PR. Tre kjøringer med ekte KI (ca. 5 kr, Kristine godkjenner først).
+- PR for story 5.3 når Kristine sier «push».
