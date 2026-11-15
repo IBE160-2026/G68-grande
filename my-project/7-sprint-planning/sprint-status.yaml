@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-15-2026 20:02
+last_updated: 11-15-2026 20:27
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -70,7 +70,7 @@ development_status:
   5-1-velge-korrektur-og-legge-inn-eget-brev: done
   5-2-forbedret-brev-fra-ki-en: done
   5-3-se-hva-som-er-endret-i-korrektur: done
-  epic-5-retrospective: optional
+  epic-5-retrospective: done
 
   epic-6: backlog
   6-1-laste-opp-pdf: backlog
@@ -305,7 +305,7 @@ action_items:
     action: "Prosess: utsatte punkter som peker på en story som deles, skrives inn
       i en av de nye storiene"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
   - id: "epic-4-retro-item-32-prosess-en-endring-i-prd-en-føres-inn-i"
     epic: 4
@@ -319,5 +319,56 @@ action_items:
     action: "Prosess: samle endringene i brev-prompten før kjøringene med ekte KI,
       fordi hver endring krever at alle kriteriene kjøres på nytt"
     owner: "KI (Claude) foreslår, Kristine bestemmer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
+  - id: "epic-5-retro-item-34-kontrollen-i-korrektur-sjekker-at-alle-g"
+    epic: 5
+    action: "Kontrollen i Korrektur sjekker at alle gammel satt sammen er lik det
+      egne brevet med bare mellomrommene slått sammen (ikke vasket), så «Du skrev»
+      viser nøyaktig det brukeren skrev, med test og sjekk av de åtte ekte svarene"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-35-testen-av-korrektur-svarene-sjekker-orde"
+    epic: 5
+    action: "Testen av Korrektur-svarene sjekker ordene i «Sjekkliste for brevet»
+      som testen for brevene, og «minst én endret» bruker korrektur_visning"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-36-én-måling-med-ekte-ki-med-et-fiktivt-ege"
+    epic: 5
+    action: "Én måling med ekte KI med et fiktivt eget brev nær 15 000 tegn, så egen
+      max_tokens for Korrektur eller lavere grense for brevfeltet, med tydelig feilmelding"
+    owner: "KI (Claude) forbereder, Kristine godkjenner kostnaden og bestemmer grensen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-37-bedre-flyt-i-brevet-fra-korrektur-prompt"
+    epic: 5
+    action: "Bedre flyt i brevet fra Korrektur: prompten får bruke bindeord og slå
+      sammen korte setninger i samme avsnitt, med tre nye kjøringer med ekte KI og
+      ny sjekk av kriterium 12 (gjerne sammen med målingen av et langt brev)"
+    owner: "KI (Claude), Kristine godkjenner kostnaden"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-38-kristines-beslutninger-i-epic-5-føres-in"
+    epic: 5
+    action: "Kristines beslutninger i epic 5 føres inn i epics.md (story 5.2 og 5.3)
+      og EXPERIENCE.md, og «Bestemmes i 5.2» i epic-5-context.md rettes"
+    owner: "KI (Claude), Kristine godkjenner teksten"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-39-prosess-når-kristine-beskriver-noe-hun-s"
+    epic: 5
+    action: "Prosess: når Kristine beskriver noe hun så i nettleseren, gjentar KI-en
+      hva den tror hun mener før den endrer kode"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-5-retro-item-40-prosess-spec-en-beholder-alle-seksjonene"
+    epic: 5
+    action: "Prosess: spec-en beholder alle seksjonene fra malen (Implementation Notes,
+      Spec Change Log, Review Triage Log) fra starten, også tomme"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
