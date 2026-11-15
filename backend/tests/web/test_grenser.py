@@ -6,7 +6,7 @@ import re
 import pytest
 
 from soknad.adaptere.ki import TESTDATA_MAPPE
-from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN
+from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MAKS_TEGN_EGET_BREV
 from soknad.kjerne.feil import FeilType, KIFeilType
 from soknad.kjerne.inndata import antall_tegn
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
@@ -112,6 +112,10 @@ def test_nfr11_testdataene_er_under_tegngrensen():
     assert filer
     for fil in filer:
         assert antall_tegn(fil.read_text(encoding="utf-8")) <= MAKS_TEGN, fil
+    brevene = sorted(TESTDATA_MAPPE.glob("case-*/eget-brev.txt"))
+    assert brevene
+    for fil in brevene:
+        assert antall_tegn(fil.read_text(encoding="utf-8")) <= MAKS_TEGN_EGET_BREV, fil
 
 
 # --- Tegngrensen ---

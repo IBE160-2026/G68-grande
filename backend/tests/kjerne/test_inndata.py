@@ -7,12 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.inndata import (
     INNLEGGINGSFELT,
     antall_tegn,
     felt_for_modus,
+    maks_tegn,
     normaliser_epost,
     sjekk_innlegging,
     sjekk_innlogging,
@@ -394,11 +395,19 @@ def test_fr9_alle_tomme_i_korrektur_gir_tre_feil_i_rekkefolgen_pa_siden():
     ]
 
 
-def test_nfr11_brevet_har_grensen_paa_15_000_tegn():
-    """NFR-11 (story 5.1): brevfeltet godtar 15 000 tegn, og 15 001 gir for_lang, også i
-    testmodus uten ikke_testdata i tillegg."""
-    assert sjekk_innlegging("cv", "annonse", None, eget_brev="a" * MAKS_TEGN) == []
-    lang = "a" * (MAKS_TEGN + 1)
+def test_nfr11_brevet_har_grensen_paa_5_000_tegn():
+    """NFR-11 (story 5.1, retro 5 runde B): brevfeltet godtar 5 000 tegn, og 5 001 gir
+    for_lang, også i testmodus uten ikke_testdata i tillegg. CV og annonse har fortsatt
+    15 000 i Korrektur. Grensen er bestemt av Kristine 15. november 2026, etter målingen."""
+    assert MAKS_TEGN_EGET_BREV == 5_000
+    assert maks_tegn("eget_brev") == MAKS_TEGN_EGET_BREV
+    assert maks_tegn("cv") == maks_tegn("annonse") == MAKS_TEGN
+    assert sjekk_innlegging("cv", "annonse", None, eget_brev="a" * MAKS_TEGN_EGET_BREV) == []
+    assert sjekk_innlegging("a" * MAKS_TEGN, "b" * MAKS_TEGN, None, eget_brev="brev") == []
+    brev = ("a" * 99 + "\r\n") * (MAKS_TEGN_EGET_BREV // 100)
+    assert len(brev) > MAKS_TEGN_EGET_BREV
+    assert sjekk_innlegging("cv", "annonse", None, eget_brev=brev) == []
+    lang = "a" * (MAKS_TEGN_EGET_BREV + 1)
     assert sjekk_innlegging("cv", "annonse", None, eget_brev=lang) == [FOR_LANG_BREV]
     assert sjekk_innlegging(CV, ANNONSE, CASER_MED_BREV, eget_brev=lang) == [FOR_LANG_BREV]
 

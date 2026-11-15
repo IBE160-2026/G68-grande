@@ -2,7 +2,7 @@
 
 from typing import NamedTuple
 
-from soknad.innstillinger import MAKS_TEGN, MIN_PASSORD_LENGDE
+from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus
 
@@ -282,8 +282,9 @@ LOGG_UT_KNAPP = "Logg ut"
 # Skjemafeil-boksen på innloggingen når man prøver en side uten å være logget inn.
 MA_LOGGE_INN = "Du må logge inn først"
 
-# Tegngrensen med mellomrom mellom tusenene: «15 000» (NFR-11).
+# Tegngrensene med mellomrom mellom tusenene: «15 000» og «5 000» for brevfeltet (NFR-11).
 MAKS_TEGN_TEKST = f"{MAKS_TEGN:,}".replace(",", " ")
+MAKS_TEGN_EGET_BREV_TEKST = f"{MAKS_TEGN_EGET_BREV:,}".replace(",", " ")
 
 # Feiltekstene slås opp med (felt, type). felt=None betyr hele skjemaet.
 FEILTEKSTER = {
@@ -316,12 +317,14 @@ FEILTEKSTER = {
     ("annonse", FeilType.FOR_LANG): (
         f"Stillingsannonse: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
     ),
-    # Brevfeltet i Korrektur (FR-8, FR-9, FR-34). Samme tekster som de andre feltene.
+    # Brevfeltet i Korrektur (FR-8, FR-9, FR-34). Samme tekster som de andre feltene, men
+    # grensen for lengden er lavere (retro 5, runde B).
     ("eget_brev", FeilType.TOM): (
         "Ditt søknadsbrev: Fyll inn feltet. Last opp en PDF eller lim inn tekst."
     ),
     ("eget_brev", FeilType.FOR_LANG): (
-        f"Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst {MAKS_TEGN_TEKST} tegn."
+        "Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst "
+        f"{MAKS_TEGN_EGET_BREV_TEKST} tegn."
     ),
     ("eget_brev", FeilType.IKKE_TESTDATA): (
         "Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/."

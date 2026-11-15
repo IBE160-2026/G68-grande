@@ -1,0 +1,8 @@
+{
+  "kontroller": "bestått",
+  "modell": "claude-opus-5-5",
+  "sekunder": 190.2,
+  "tokens_inn": 22595,
+  "tokens_ut": 28686,
+  "stop_reason": "end_turn"
+}

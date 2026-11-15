@@ -17,13 +17,20 @@ MIN_PASSORD_LENGDE = 8
 # dette regnes som ubrukelig.
 MAKS_NOKKELORD = 30
 
-# Grensene mot høy kostnad med ekte KI (NFR-11). Hvert innleggingsfelt godtar høyst MAKS_TEGN
-# tegn, og et linjeskift (\r\n fra nettleseren) telles som ett tegn. Hver søknad kan bruke
-# høyst MAKS_KI_KALL KI-kall (nøkkelord, gap og brev er ett kall hver). Grensen på KI-kall
-# gjelder bare med ekte KI, ikke i testmodus. Med KI_NYE_FORSOK = 1 kan ett telt kall bli opptil
-# to forespørsler til API-et. Grensen er en myk sperre per søknad (en ny søknad begynner på 0),
-# og taket på 250 kr i Claude Console er den siste sperren.
+# Grensene mot høy kostnad med ekte KI (NFR-11). CV og annonse godtar høyst MAKS_TEGN tegn hver
+# (brevfeltet i Korrektur MAKS_TEGN_EGET_BREV, se under), og et linjeskift (\r\n fra
+# nettleseren) telles som ett tegn. Hver søknad kan bruke høyst MAKS_KI_KALL KI-kall (nøkkelord,
+# gap og brev er ett kall hver). Grensen på KI-kall gjelder bare med ekte KI, ikke i testmodus.
+# Med KI_NYE_FORSOK = 1 kan ett telt kall bli opptil to forespørsler til API-et. Grensen er en
+# myk sperre per søknad (en ny søknad begynner på 0), og taket på 250 kr i Claude Console er den
+# siste sperren.
 MAKS_TEGN = 15_000
+# Brevfeltet i Korrektur har en lavere grense, fordi svaret har hver setning to ganger (gammel og
+# ny) og KI-en tenker lenge før den svarer. Målt i retro 5, runde B (my-project/testplan.md):
+# et eget brev på 14 585 tegn ga 28 686 tokens ut, tok 190 s og kostet ca. 7,31 kr, altså over
+# både KI_MAKS_TOKENS og KI_TIDSGRENSE. Regnet ut fra målingen gir 5 000 tegn ca. 10 000 tokens
+# og ca. 70–75 s. Bestemt av Kristine 15. november 2026.
+MAKS_TEGN_EGET_BREV = 5_000
 MAKS_KI_KALL = 10
 
 # KI-kallet til Claude (AD-13). Tidsgrensen gjelder hver del av kallet (tilkobling, lesing,
@@ -34,7 +41,9 @@ MAKS_KI_KALL = 10
 # ca. 12 s med oppstarten av skriptet, gap 14 s, og de to brevene 25 s og 21 s (retro 4 i
 # my-project/testplan.md). 90 s er beholdt også etter den målingen, fordi det lengste kallet
 # tok 25 s (bare én kjøring). Med ett nytt forsøk og ventetiden før det (opptil ca. 8 s, eller
-# det API-et ber om med retry-after) kan et kall ta lenger enn 2 x 90 s.
+# det API-et ber om med retry-after) kan et kall ta lenger enn 2 x 90 s. Korrektur med et eget
+# brev på 14 585 tegn tok 190 s og ga 28 686 tokens ut (retro 5, runde B). Derfor har brevfeltet
+# en egen, lavere grense (MAKS_TEGN_EGET_BREV), og 90 s og 16 000 tokens er beholdt.
 KI_TIDSGRENSE = 90  # sekunder
 KI_NYE_FORSOK = 1
 KI_MAKS_TOKENS = 16000
