@@ -93,16 +93,25 @@ def sett_inndata(
     soknad: Soknad, *, cv: Tekstfelt, annonse: Tekstfelt, eget_brev: Tekstfelt | None = None
 ) -> Soknad:
     """Lagrer det brukeren har lagt inn («Sjekk CV-en min» og «Tilbake»). eget_brev er None i
-    Full generering, og da er brevet i søknaden uendret. Er alle feltene like som før, er
-    søknaden uendret. Er ett av dem endret, også bare det egne brevet (FR-8), gjelder ikke
-    resultatene lenger: nøkkelordlisten, arbeidsgiveren, gap-analysen, brevet, det forbedrede
-    brevet i Korrektur og lastet_ned nullstilles, og steget blir høyst innlegging, så
-    resultatsiden ikke vises før analysen har lyktes igjen med et brev som har bestått sjekken
-    (AD-8). Gjenbruk av nøkkelordlisten når bare CV-en er endret, kommer i Epic 7."""
+    Full generering, og da er brevet i søknaden uendret. Bare teksten i feltene avgjør om noe
+    er endret, ikke filnavnet (retro 2, A9). Er teksten i alle feltene lik som før, lagres
+    feltene (med et nytt filnavn, hvis brukeren lastet opp samme tekst som PDF), og resten av
+    søknaden er uendret. Er teksten i ett av dem endret, også bare i det egne brevet (FR-8),
+    gjelder ikke resultatene lenger: nøkkelordlisten, arbeidsgiveren, gap-analysen, brevet,
+    det forbedrede brevet i Korrektur og lastet_ned nullstilles, og steget blir høyst
+    innlegging, så resultatsiden ikke vises før analysen har lyktes igjen med et brev som har
+    bestått sjekken (AD-8). Gjenbruk av nøkkelordlisten når bare CV-en er endret, kommer i
+    Epic 7."""
     if eget_brev is None:
         eget_brev = soknad.eget_brev
-    if soknad.cv == cv and soknad.annonse == annonse and soknad.eget_brev == eget_brev:
-        return soknad
+    if (soknad.cv.tekst, soknad.annonse.tekst, soknad.eget_brev.tekst) == (
+        cv.tekst,
+        annonse.tekst,
+        eget_brev.tekst,
+    ):
+        if (soknad.cv, soknad.annonse, soknad.eget_brev) == (cv, annonse, eget_brev):
+            return soknad
+        return replace(soknad, cv=cv, annonse=annonse, eget_brev=eget_brev)
     return replace(
         soknad,
         cv=cv,

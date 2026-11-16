@@ -160,7 +160,7 @@ def test_nfr11_for_lang_cv_og_tom_annonse_gir_begge_feilene(med_nokkel):
     assert boks.index(FOR_LANG_CV) < boks.index("Stillingsannonse")
     tekstboks = element(html, "cv-tekst")
     assert tekstboks["aria-invalid"] == "true"
-    assert tekstboks["aria-describedby"] == "cv-feil"
+    assert tekstboks["aria-describedby"] == "cv-feil cv-hjelp"
     assert f'<p class="feiltekst" id="cv-feil">{FOR_LANG_CV}</p>' in html
     assert med_autofocus(html) == ["feilboks"]
     assert cv in html

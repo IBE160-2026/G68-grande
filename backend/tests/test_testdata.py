@@ -1,5 +1,6 @@
 """Tester for de fiktive testdataene og fasitene i testdata/case-*/ (NFR-3, FR-8, FR-17, FR-24,
-FR-34, FR-38). Brevet til Korrektur (eget-brev.txt i case 1) kom i story 5.1.
+FR-34, FR-38). Brevet til Korrektur (eget-brev.txt i case 1) kom i story 5.1. PDF-ene og
+kriterium 5 (PDF og .txt gir samme case og samme treff) kom i story 6.1.
 Hver test kjøres for hvert testcase (story 4.5). Testene sjekker at filene henger sammen, også
 når KI-svarene lages på nytt med scripts/lag_testsvar.py. Ordlyden i gap.json sjekkes derfor
 ikke mot fasiten."""
@@ -10,9 +11,10 @@ from pathlib import Path
 
 import pytest
 
+from soknad.adaptere.pdf_inn import les_pdf
 from soknad.kjerne.ki_svar import kontroller, korrektur_visning
 from soknad.kjerne.telleregel import tell_treff
-from soknad.kjerne.testdata_match import vask
+from soknad.kjerne.testdata_match import finn_case, lag_testcase, vask
 
 TESTDATA = Path(__file__).parent.parent / "testdata"
 CASER = sorted(mappe for mappe in TESTDATA.glob("case-*") if mappe.is_dir())
@@ -392,3 +394,62 @@ def test_fr22_inndataene_for_kriterium_3_er_like_testdataene():
     mappe = KRITERIUM_3 / "case-1-cv-med-annonse-2"
     assert _les(mappe, "cv.txt") == _les(TESTDATA / "case-1-utvikler", "cv.txt")
     assert _les(mappe, "annonse.txt") == _les(TESTDATA / "case-2-okonomi", "annonse.txt")
+
+
+# --- PDF-ene i testdataene (FR-8, kriterium 5, story 6.1) ---
+
+
+def _pdf_tekst(case: Path, navn: str) -> str:
+    return les_pdf((case / navn).read_bytes())
+
+
+def _alle_caser() -> list:
+    """Testcasene slik TestKI leser dem, fra .txt-filene."""
+    return [
+        lag_testcase(
+            case.name,
+            _les(case, "cv.txt"),
+            _les(case, "annonse.txt"),
+            _les(case, "eget-brev.txt") if (case / "eget-brev.txt").exists() else None,
+        )
+        for case in CASER
+    ]
+
+
+@per_case
+def test_fr8_hver_txt_har_en_pdf_med_samme_tekst(case):
+    """FR-8 (kriterium 5): hver .txt i caset (cv, annonse og eget brev) har en .pdf lagret fra
+    Word med scripts/lag_testpdf.ps1, og teksten fra PDF-en er den samme etter vasken."""
+    txt = sorted(fil.name for fil in case.glob("*.txt"))
+    assert {"cv.txt", "annonse.txt"} <= set(txt)
+    for navn in txt:
+        pdf = navn.removesuffix(".txt") + ".pdf"
+        assert (case / pdf).is_file(), pdf
+        assert vask(_pdf_tekst(case, pdf)) == vask(_les(case, navn)), pdf
+
+
+@per_case
+def test_fr8_pdf_og_txt_gir_samme_nokkelordtreff(case):
+    """FR-8/FR-17 (kriterium 5): cv.pdf og cv.txt gir samme nøkkelordtreff og prosent med
+    nokkelord.json, og annonse.pdf og annonse.txt gir også samme nøkkelordtreff."""
+    nokkelord = _les_json(case, "ki-svar/nokkelord.json")["nokkelord"]
+    assert tell_treff(nokkelord, _pdf_tekst(case, "cv.pdf")) == tell_treff(
+        nokkelord, _les(case, "cv.txt")
+    )
+    assert tell_treff(nokkelord, _pdf_tekst(case, "annonse.pdf")) == tell_treff(
+        nokkelord, _les(case, "annonse.txt")
+    )
+
+
+@per_case
+def test_fr34_pdf_ene_gir_samme_testcase_som_txt(case):
+    """FR-8/FR-34 (kriterium 5): CV og annonse som PDF gir samme testcase som .txt, også blandet
+    (CV som PDF og annonse som tekst). I case 1 gjelder det også det egne brevet (Korrektur)."""
+    caser = _alle_caser()
+    cv_txt, annonse_txt = _les(case, "cv.txt"), _les(case, "annonse.txt")
+    cv_pdf, annonse_pdf = _pdf_tekst(case, "cv.pdf"), _pdf_tekst(case, "annonse.pdf")
+    for cv, annonse in ((cv_pdf, annonse_pdf), (cv_pdf, annonse_txt), (cv_txt, annonse_pdf)):
+        assert finn_case(cv, annonse, caser) == (case.name, [])
+    if (case / "eget-brev.pdf").exists():
+        brev = _pdf_tekst(case, "eget-brev.pdf")
+        assert finn_case(cv_pdf, annonse_pdf, caser, eget_brev=brev) == (case.name, [])

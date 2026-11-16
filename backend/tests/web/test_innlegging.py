@@ -2,14 +2,19 @@
 «Tilbake» (FR-8, FR-9, FR-13, FR-19, FR-34, NFR-4, NFR-6, NFR-7, AD-1, AD-8, AD-9,
 UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1. Analysen og KI-feilen (FR-15, FR-21,
 FR-28) kom i story 2.5.2. Brevfeltet i Korrektur (FR-8, FR-9, FR-20, FR-34) kom i story
-5.1."""
+5.1. Opplasting av PDF, filnavnet, PDF-tipset og hjelpeteksten om tegngrensen (FR-8, FR-13,
+NFR-4, NFR-11) kom i story 6.1."""
 
 import html as html_modul
 import re
+from io import BytesIO
 
 import pytest
 
+from soknad.adaptere import pdf_inn
 from soknad.adaptere.ki import TESTDATA_MAPPE
+from soknad.adaptere.pdf_inn import les_pdf
+from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV
 from soknad.kjerne import inndata
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
@@ -351,19 +356,23 @@ def test_fr9_feltene_star_i_samme_rekkefolge_som_feilene():
         assert felter == tuple(navn for navn in inndata.INNLEGGINGSFELT if navn in felter)
 
 
-def test_fr8_tomme_felt_viser_bare_lim_inn_tekst(paa_innlegging):
-    """FR-8/UX-DR8: tomme felt viser «Lim inn tekst», og tekstboksen er skjult, men står i
-    skjemaet med riktig navn."""
+def test_fr8_tomme_felt_viser_last_opp_og_lim_inn_tekst(paa_innlegging):
+    """FR-8/UX-DR8 (story 6.1): tomme felt viser «Last opp PDF» og så «Lim inn tekst», og
+    tekstboksen og filnavnet er skjult. Tekstboksen står i skjemaet med riktig navn."""
     html = html_av(paa_innlegging.get("/innlegging"))
     for navn in ("cv", "annonse"):
         felt = re.search(rf'<section[^>]*id="{navn}-felt".*?</section>', html, re.S).group(0)
         assert re.search(
-            r'<div class="tom-tilstand">\s*<button[^>]*id="' + navn + '-lim-inn"', felt
+            r'<div class="tom-tilstand">\s*<button[^>]*id="'
+            + navn
+            + r'-last-opp"[^>]*>Last opp PDF</button>\s*<button[^>]*id="'
+            + navn
+            + '-lim-inn"',
+            felt,
         )
         assert '<div class="limeboks" hidden>' in felt
+        assert '<div class="filboks" hidden>' in felt
         assert element(html, f"{navn}-tekst")["name"] == navn
-    # Ingen «Last opp PDF» før Epic 6.
-    assert "Last opp PDF" not in main(html)
 
 
 def test_fr8_fylt_felt_viser_tekstboksen(app, innlogget_client):
@@ -454,9 +463,12 @@ def test_nfr6_skjermlesertekstene(paa_innlegging):
     assert '<label for="cv-tekst"><span class="skjult">CV: </span>Lim inn teksten her</label>' in (
         html
     )
+    # To søppelbøtter per felt: ved filnavnet og ved tekstboksen (story 6.1).
     soppel = [a for t, a in tagger_i(html) if a.get("class") == "soppelbotte"]
     assert [(a["aria-label"], a["data-tomt"], a["type"]) for a in soppel] == [
         ("Tøm CV-feltet", "CV-feltet er tømt", "button"),
+        ("Tøm CV-feltet", "CV-feltet er tømt", "button"),
+        ("Tøm annonsefeltet", "Annonsefeltet er tømt", "button"),
         ("Tøm annonsefeltet", "Annonsefeltet er tømt", "button"),
     ]
     assert re.search(r'<button class="soppelbotte"[^>]*><span aria-hidden="true">🗑️</span>', html)
@@ -486,10 +498,10 @@ def test_ux_dr8_feltet_med_feil_er_merket_og_koblet(paa_innlegging):
     assert element(html, "cv-feil")["class"] == "feiltekst"
     assert re.search(r'id="cv-feil">CV: I testmodus fungerer bare testdataene', html)
     assert element(html, "cv-lim-inn")["aria-describedby"] == "cv-feil"
-    assert element(html, "cv-tekst")["aria-describedby"] == "cv-feil"
+    assert element(html, "cv-tekst")["aria-describedby"] == "cv-feil cv-hjelp"
     assert element(html, "cv-tekst")["aria-invalid"] == "true"
     assert element(html, "annonse-felt")["class"] == "innleggingsfelt"
-    assert "aria-describedby" not in element(html, "annonse-tekst")
+    assert element(html, "annonse-tekst")["aria-describedby"] == "annonse-hjelp"
     assert "aria-invalid" not in element(html, "annonse-tekst")
     assert 'id="annonse-feil"' not in html
 
@@ -619,7 +631,12 @@ def test_fr8_brevfeltet_har_samme_tilstander_og_knapper(app, paa_korrektur):
     søppelbøtte og skjermlesertekster som de andre feltene. Tekstboksen heter eget_brev."""
     html = html_av(paa_korrektur.get("/innlegging"))
     felt = brevfeltet(html)
-    assert re.search(r'<div class="tom-tilstand">\s*<button[^>]*id="eget_brev-lim-inn"', felt)
+    assert re.search(
+        r'<div class="tom-tilstand">\s*<button[^>]*id="eget_brev-last-opp".*?'
+        r'<button[^>]*id="eget_brev-lim-inn"',
+        felt,
+        re.S,
+    )
     assert '<div class="limeboks" hidden>' in felt
     assert element(html, "eget_brev-tekst")["name"] == "eget_brev"
     assert element(html, "eget_brev-lim-inn")["aria-label"] == "Lim inn tekst, Ditt søknadsbrev"
@@ -631,7 +648,7 @@ def test_fr8_brevfeltet_har_samme_tilstander_og_knapper(app, paa_korrektur):
     soppel = [a for t, a in tagger_i(felt) if a.get("class") == "soppelbotte"]
     assert [(a["aria-label"], a["data-tomt"]) for a in soppel] == [
         ("Tøm brevfeltet", "Brevfeltet er tømt")
-    ]
+    ] * 2
     # Et fylt brevfelt viser tekstboksen med teksten, og «Lim inn tekst» er skjult.
     sett_soknad(
         app,
@@ -678,7 +695,7 @@ def test_fr9_tomt_brev_gir_feil_og_ingen_ki_kall(app, paa_korrektur):
     assert feilboks_lenker(html) == [("#eget_brev-felt", TOM_BREV)]
     assert element(html, "eget_brev-felt")["class"] == "innleggingsfelt har-feil"
     assert element(html, "eget_brev-tekst")["aria-invalid"] == "true"
-    assert element(html, "eget_brev-tekst")["aria-describedby"] == "eget_brev-feil"
+    assert element(html, "eget_brev-tekst")["aria-describedby"] == "eget_brev-feil eget_brev-hjelp"
     assert element(html, "eget_brev-lim-inn")["aria-describedby"] == "eget_brev-feil"
     assert kalt == []
     assert soknaden(app, paa_korrektur).steg == Steg.INNLEGGING
@@ -768,3 +785,426 @@ def test_fr20_tilbake_til_modusvalget_beholder_alle_tre_feltene(paa_korrektur):
     assert tekstboks(html, "cv") == "Min CV"
     assert tekstboks(html, "eget_brev") == "Mitt brev"
     assert tekstboks(html, "annonse") == "Min annonse"
+
+
+# --- Laste opp PDF (story 6.1, FR-8, FR-13, FR-34, NFR-4, NFR-6, NFR-7, AD-1) ---
+
+PDF_CV = (TESTDATA_MAPPE / "case-1-utvikler" / "cv.pdf").read_bytes()
+PDF_ANNONSE = (TESTDATA_MAPPE / "case-1-utvikler" / "annonse.pdf").read_bytes()
+PDF_BREV = (TESTDATA_MAPPE / "case-1-utvikler" / "eget-brev.pdf").read_bytes()
+# Starten på en Word-fil (zip), som pypdf ikke kan lese.
+DOCX = b"PK\x03\x04\x14\x00\x06\x00ikke en pdf"
+
+
+def send_felt(client, handling="sjekk", **felt):
+    """Sender innleggingen med hvert felt som tekst (en str) eller som fil (bytes, filnavn).
+    En fil får <navn>_kilde=fil, en tekst <navn>_kilde=tekst. None gir kilde=fil uten ny fil
+    (filnavnet fra økten står på siden)."""
+    data = {"handling": handling}
+    for navn, verdi in felt.items():
+        if verdi is None:
+            data[f"{navn}_kilde"] = "fil"
+            data[navn] = ""
+        elif isinstance(verdi, tuple):
+            innhold, filnavn = verdi
+            data[f"{navn}_kilde"] = "fil"
+            data[f"{navn}_fil"] = (BytesIO(innhold), filnavn)
+            data[navn] = ""
+        else:
+            data[f"{navn}_kilde"] = "tekst"
+            data[navn] = verdi
+    return client.post("/innlegging", data=data, content_type="multipart/form-data")
+
+
+def felt_html(html, navn):
+    return re.search(rf'<section[^>]*id="{navn}-felt".*?</section>', html, re.S).group(0)
+
+
+def test_fr8_tomt_felt_har_last_opp_pdf_med_filvelger(paa_innlegging):
+    """FR-8/NFR-6 (story 6.1): «Last opp PDF» er en hovedknapp med feltnavnet for
+    skjermlesere og står før «Lim inn tekst». Filvelgeren er skjult, godtar .pdf og heter
+    <navn>_fil, og <navn>_kilde er tekst."""
+    html = html_av(paa_innlegging.get("/innlegging"))
+    for navn, feltnavn in (("cv", "CV"), ("annonse", "Stillingsannonse")):
+        knapp = element(html, f"{navn}-last-opp")
+        assert knapp["class"] == "hovedknapp last-opp"
+        assert knapp["type"] == "button"
+        assert knapp["aria-label"] == f"Last opp PDF, {feltnavn}"
+        assert "aria-describedby" not in knapp
+        fil = element(html, f"{navn}-fil")
+        assert (fil["type"], fil["name"], fil["accept"]) == ("file", f"{navn}_fil", ".pdf")
+        assert "hidden" in fil
+        assert fil["class"] == "filvelger"
+        assert fil["data-lastet-opp"] == f"{feltnavn} lastet opp: "
+        kilde = next(a for _, a in tagger_i(html) if a.get("name") == f"{navn}_kilde")
+        assert (kilde["type"], kilde["value"], kilde["class"]) == ("hidden", "tekst", "kilde")
+        assert html.index(f'id="{navn}-last-opp"') < html.index(f'id="{navn}-lim-inn"')
+
+
+def test_fr9_last_opp_er_koblet_til_feilteksten(paa_innlegging):
+    """FR-9/UX-DR8 (story 6.1): i et felt med feil er «Last opp PDF» koblet til feilteksten,
+    som «Lim inn tekst»."""
+    html = html_av(send(paa_innlegging, "", ANNONSE))
+    assert element(html, "cv-last-opp")["aria-describedby"] == "cv-feil"
+    assert "aria-describedby" not in element(html, "annonse-last-opp")
+
+
+@pytest.mark.parametrize("modus", list(Modus))
+def test_fr8_pdf_tipset_star_over_feltene_i_begge_modusene(app, innlogget_client, modus):
+    """FR-8 (story 6.1): PDF-tipset står over feltene i begge modusene, og skjemaet sender
+    filer (multipart/form-data)."""
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=modus))
+    html = html_av(innlogget_client.get("/innlegging"))
+    tips = (
+        '<p class="pdf-tips">Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller '
+        "et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.</p>"
+    )
+    assert tips in html
+    assert html.index(tips) < html.index('id="cv-felt"')
+    skjema = next(a for t, a in tagger_i(html) if t == "form" and a.get("id"))
+    assert skjema["enctype"] == "multipart/form-data"
+
+
+def test_fr8_pdf_tipset_ogsa_uten_testmodus(app, paa_innlegging):
+    """FR-8 (story 6.1): tipset står der også når testmodus er av."""
+    uten_testmodus(app, paa_innlegging)
+    assert tekster.PDF_TIPS in html_av(paa_innlegging.get("/innlegging"))
+
+
+def test_fr8_fr34_pdf_fra_case_1_gir_samme_resultat_som_tekst(app, paa_innlegging):
+    """FR-8/FR-34 (kriterium 5): cv.pdf og annonse.pdf fra case 1 i testmodus gir
+    resultatsiden, med det samme som cv.txt og annonse.txt gir. Teksten fra pdf_inn og
+    filnavnet ligger i økten."""
+    svar = send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=(PDF_ANNONSE, "annonse.pdf"))
+    assert svar.location == "/resultat"
+    soknad = soknaden(app, paa_innlegging)
+    assert soknad.cv == Tekstfelt(les_pdf(PDF_CV), "cv.pdf")
+    assert soknad.annonse == Tekstfelt(les_pdf(PDF_ANNONSE), "annonse.pdf")
+    assert soknad.gap == GAP_SVAR
+    pdf_resultat = html_av(paa_innlegging.get("/resultat"))
+    til_innlegging(app, paa_innlegging)
+    assert send(paa_innlegging, CV, ANNONSE).location == "/resultat"
+    assert html_av(paa_innlegging.get("/resultat")) == pdf_resultat
+
+
+def test_fr8_eget_brev_som_pdf_i_korrektur(app, paa_korrektur):
+    """FR-8 (story 6.1): i Korrektur kan også brevet lastes opp som PDF, og CV, brev og annonse
+    fra case 1 gir resultatsiden."""
+    svar = send_felt(
+        paa_korrektur,
+        cv=(PDF_CV, "cv.pdf"),
+        eget_brev=(PDF_BREV, "eget-brev.pdf"),
+        annonse=ANNONSE,
+    )
+    assert svar.location == "/resultat"
+    soknad = soknaden(app, paa_korrektur)
+    assert soknad.eget_brev == Tekstfelt(les_pdf(PDF_BREV), "eget-brev.pdf")
+    assert soknad.annonse == Tekstfelt(ANNONSE)
+
+
+@pytest.mark.parametrize("sendt", ["cv.pdf", "mappe/under/cv.pdf"])
+def test_fr8_filnavnet_lagres_uten_mappene(app, paa_innlegging, sendt):
+    """FR-8 (story 6.1): bare delen etter siste / lagres som filnavn."""
+    send_felt(paa_innlegging, cv=(PDF_CV, sendt), annonse=ANNONSE, handling="tilbake")
+    assert soknaden(app, paa_innlegging).cv.filnavn == "cv.pdf"
+
+
+@pytest.mark.parametrize(
+    ("sendt", "lagret"),
+    [
+        ("C:\\Users\\Sara\\Dokumenter\\cv.pdf", "cv.pdf"),
+        ("mappe/under\\min cv.pdf", "min cv.pdf"),
+        ("Søknad æøå.pdf", "Søknad æøå.pdf"),
+        ("mappe/", "mappe/"),
+    ],
+)
+def test_fr8_filnavnet_uten_mappe(sendt, lagret):
+    """FR-8 (story 6.1): bare delen etter siste / eller \\ lagres, og æøå og mellomrom står
+    igjen. (Werkzeug fjerner selv en \\ som ikke er escapet i forespørselen, så den delen
+    prøves her og ikke gjennom skjemaet.)"""
+    assert ruter._uten_mappe(sendt) == lagret
+
+
+def test_fr8_tilbake_og_inn_igjen_viser_filnavnet(app, paa_innlegging):
+    """FR-8/FR-19 (story 6.1): etter «Tilbake» med en PDF vises filnavnet fra økten med ✓ og
+    søppelbøtta. Tekstboksen er tom og skjult, og kilden er fil."""
+    svar = send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    assert svar.location == "/modus"
+    html = html_av(paa_innlegging.get("/innlegging"))
+    cv = felt_html(html, "cv")
+    assert '<div class="tom-tilstand" hidden>' in cv
+    assert '<div class="limeboks" hidden>' in cv
+    assert re.search(
+        r'<div class="filboks">\s*<span aria-hidden="true">✓</span>\s*'
+        r'<span class="filnavn" title="cv\.pdf">cv\.pdf</span>\s*<button class="soppelbotte"',
+        cv,
+    )
+    assert tekstboks(html, "cv") == ""
+    kilde = next(a for _, a in tagger_i(html) if a.get("name") == "cv_kilde")
+    assert kilde["value"] == "fil"
+    # Annonsen er limt inn og vises i tekstboksen, uten filnavn.
+    annonse = felt_html(html, "annonse")
+    assert '<div class="filboks" hidden>' in annonse
+    assert '<span class="filnavn" title=""></span>' in annonse
+
+
+def test_fr8_sjekk_uten_ny_fil_bruker_lagret_tekst(app, paa_innlegging):
+    """FR-8 (story 6.1): kilde=fil uten ny fil (siden etter «Tilbake») bruker teksten og
+    filnavnet fra økten, både ved «Tilbake» og ved «Sjekk CV-en min»."""
+    send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    lagret = soknaden(app, paa_innlegging).cv
+    send_felt(paa_innlegging, cv=None, annonse=ANNONSE, handling="tilbake")
+    assert soknaden(app, paa_innlegging).cv == lagret
+    assert send_felt(paa_innlegging, cv=None, annonse=ANNONSE).location == "/resultat"
+    assert soknaden(app, paa_innlegging).cv == lagret
+
+
+def test_fr8_kilde_tekst_ignorerer_en_fil(app, paa_innlegging):
+    """FR-8 (story 6.1): med kilde=tekst brukes tekstboksen, også om en fil er sendt med
+    (søppelbøtta, så «Lim inn tekst»)."""
+    data = {
+        "cv_kilde": "tekst",
+        "cv": "Min egen CV",
+        "cv_fil": (BytesIO(PDF_CV), "cv.pdf"),
+        "annonse": ANNONSE,
+        "handling": "tilbake",
+    }
+    paa_innlegging.post("/innlegging", data=data, content_type="multipart/form-data")
+    assert soknaden(app, paa_innlegging).cv == Tekstfelt("Min egen CV")
+
+
+def test_fr13_soppelbotta_pa_filnavnet_tommer_lagret_fil(app, paa_innlegging):
+    """FR-13 (story 6.1): søppelbøtta på filnavnet setter kilden til tekst med tom tekstboks,
+    så den lagrede PDF-en er borte etter neste innsending."""
+    send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    send_felt(paa_innlegging, cv="", annonse=ANNONSE, handling="tilbake")
+    assert soknaden(app, paa_innlegging).cv == Tekstfelt("")
+
+
+def test_fr9_feil_i_annet_felt_beholder_filnavnet(app, paa_innlegging):
+    """FR-9 (story 6.1): PDF i CV-feltet og tom annonse gir siden på nytt med filnavnet i
+    CV-feltet og feilen på annonsen. Et nytt forsøk uten ny fil bruker den lagrede CV-en."""
+    svar = send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse="")
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert feilboks_lenker(html) == [("#annonse-felt", TOM_ANNONSE)]
+    assert '<span class="filnavn" title="cv.pdf">cv.pdf</span>' in felt_html(html, "cv")
+    assert soknaden(app, paa_innlegging).cv.filnavn == "cv.pdf"
+    assert send_felt(paa_innlegging, cv=None, annonse=ANNONSE).location == "/resultat"
+
+
+@pytest.mark.parametrize(
+    ("innhold", "filnavn"), [(DOCX, "cv.docx"), (b"%PDF-1.7\n\xff\xfe odelagt", "odelagt.pdf")]
+)
+def test_fr9_fil_som_ikke_kan_leses_gir_feilen_tom(app, paa_innlegging, innhold, filnavn):
+    """FR-9 (story 6.1, til 6.2): en fil som ikke er en PDF eller ikke kan leses, gir tom tekst
+    og feilen «tom» på feltet, uten krasj. Filnavnet står igjen, og søppelbøtta ved det er
+    koblet til feilteksten."""
+    svar = send_felt(paa_innlegging, cv=(innhold, filnavn), annonse=ANNONSE)
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert feilboks_lenker(html) == [("#cv-felt", TOM_CV)]
+    assert soknaden(app, paa_innlegging).cv == Tekstfelt("", filnavn)
+    filboks = re.search(r'<div class="filboks">.*?</div>', felt_html(html, "cv"), re.S).group(0)
+    assert 'aria-describedby="cv-feil"' in filboks
+
+
+@pytest.mark.parametrize(
+    ("modus", "navn", "lengde"),
+    [
+        (Modus.FULL_GENERERING, "cv", MAKS_TEGN + 1),
+        (Modus.KORREKTUR, "eget_brev", MAKS_TEGN_EGET_BREV + 1),
+    ],
+)
+def test_nfr11_for_lang_tekst_fra_pdf_gir_for_lang(
+    app, innlogget_client, monkeypatch, modus, navn, lengde
+):
+    """NFR-11/FR-9 (story 6.1): en PDF med mer tekst enn grensen for feltet gir den vanlige
+    feilen for_lang. Filnavnet står i filboksen, og søppelbøtta ved det er koblet til
+    feilteksten."""
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=modus))
+    monkeypatch.setattr(pdf_inn, "les_pdf", lambda innhold: "a" * lengde)
+    felt = {"cv": CV, "annonse": ANNONSE}
+    if modus == Modus.KORREKTUR:
+        felt["eget_brev"] = EGET_BREV
+    felt[navn] = (b"%PDF", "lang.pdf")
+    svar = send_felt(innlogget_client, **felt)
+    assert svar.status_code == 200
+    html = html_av(svar)
+    tekst = tekster.feiltekst(InndataFeil(navn, FeilType.FOR_LANG))
+    assert feilboks_lenker(html) == [(f"#{navn}-felt", tekst)]
+    filboks = re.search(r'<div class="filboks">.*?</div>', felt_html(html, navn), re.S).group(0)
+    assert '<span class="filnavn" title="lang.pdf">lang.pdf</span>' in filboks
+    assert f'aria-describedby="{navn}-feil"' in filboks
+
+
+def test_fr8_samme_tekst_med_nytt_filnavn_beholder_analysen(app, innlogget_client):
+    """FR-8/FR-19 (story 6.1, retro 2 A9): er teksten fra PDF-en den samme som den lagrede,
+    lagres filnavnet, og analysen og steget beholdes."""
+    tekst = les_pdf(PDF_CV)
+    soknad = Soknad(
+        steg=Steg.RESULTAT,
+        modus=Modus.FULL_GENERERING,
+        cv=Tekstfelt(tekst),
+        annonse=Tekstfelt(ANNONSE),
+        nokkelord=("Python",),
+        nokkelord_annonse="annonse",
+        gap={"dekker": ["Python"], "mangler": []},
+    )
+    sett_soknad(app, innlogget_client, soknad)
+    send_felt(innlogget_client, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    ny = soknaden(app, innlogget_client)
+    assert ny.cv == Tekstfelt(tekst, "cv.pdf")
+    assert (ny.nokkelord, ny.gap, ny.steg) == (soknad.nokkelord, soknad.gap, Steg.RESULTAT)
+
+
+def test_nfr4_pdf_teksten_er_bare_i_okten(paa_innlegging, caplog):
+    """NFR-4 (story 6.1): teksten fra PDF-en ligger bare i øktlageret, aldri i cookien, og
+    verken teksten eller filnavnet logges."""
+    caplog.set_level("DEBUG")
+    send_felt(paa_innlegging, cv=(PDF_CV, "hemmelig-cv.pdf"), annonse=ANNONSE)
+    with paa_innlegging.session_transaction() as okt:
+        assert set(okt) == {OKT_ID}
+    linjer = [linje for linje in les_pdf(PDF_CV).splitlines() if len(linje.strip()) > 10]
+    assert linjer
+    assert [linje for linje in linjer if linje in caplog.text] == []
+    assert "hemmelig-cv.pdf" not in caplog.text
+
+
+def test_nfr11_hjelpeteksten_om_tegngrensen_under_tekstboksen(paa_korrektur):
+    """NFR-11/NFR-6 (story 6.1, bestemt av Kristine 16. november 2026): under hver tekstboks
+    står «Høyst 15 000 tegn.», i brevfeltet «Høyst 5 000 tegn.», med class="hjelpetekst",
+    koblet til tekstboksen med aria-describedby."""
+    html = html_av(paa_korrektur.get("/innlegging"))
+    for navn, tekst in (
+        ("cv", "Høyst 15 000 tegn."),
+        ("eget_brev", "Høyst 5 000 tegn."),
+        ("annonse", "Høyst 15 000 tegn."),
+    ):
+        assert tekster.maks_tegn_hjelp(navn) == tekst
+        assert f'<p class="hjelpetekst" id="{navn}-hjelp">{tekst}</p>' in felt_html(html, navn)
+        assert element(html, f"{navn}-tekst")["aria-describedby"] == f"{navn}-hjelp"
+        # Hjelpeteksten står under tekstboksen.
+        assert html.index(f'id="{navn}-tekst"') < html.index(f'id="{navn}-hjelp"')
+
+
+def test_fr8_tekstene_for_opplastingen():
+    """FR-8/NFR-6 (story 6.1): tekstene for knappen, skjermleserne og hjelpeteksten."""
+    assert tekster.LAST_OPP_KNAPP == "Last opp PDF"
+    assert tekster.last_opp_skjermleser("cv") == "Last opp PDF, CV"
+    assert tekster.last_opp_skjermleser("eget_brev") == "Last opp PDF, Ditt søknadsbrev"
+    assert tekster.lastet_opp_skjermleser("cv", "cv.pdf") == "CV lastet opp: cv.pdf"
+    assert tekster.lastet_opp_skjermleser("annonse", "a.pdf") == (
+        "Stillingsannonse lastet opp: a.pdf"
+    )
+    assert tekster.maks_tegn_hjelp("cv") == f"Høyst {tekster.MAKS_TEGN_TEKST} tegn."
+    assert tekster.maks_tegn_hjelp("eget_brev") == (
+        f"Høyst {tekster.MAKS_TEGN_EGET_BREV_TEKST} tegn."
+    )
+
+
+def test_nfr7_ingen_style_i_innleggingen(paa_korrektur):
+    """NFR-7 (story 6.1): ingen style= i innleggingen."""
+    assert "style=" not in main(html_av(paa_korrektur.get("/innlegging")))
+
+
+# --- Laste opp PDF: skriptet (story 6.1, FR-8, FR-13, AD-1) ---
+
+JS = (STIL.parents[1] / "js" / "innlegging.js").read_text(encoding="utf-8")
+
+
+def test_fr8_skriptet_apner_filvelgeren_og_viser_filnavnet():
+    """FR-8/NFR-6 (story 6.1): «Last opp PDF» åpner filvelgeren. Når en fil er valgt, vises
+    navnet med en gang, kilden blir fil, søppelbøtta får fokus, og statusområdet får «CV
+    lastet opp: <filnavn>» (samme ventende-mønster som søppelbøtta)."""
+    for tekst in (
+        "fil.click();",
+        'fil.addEventListener("change"',
+        "filnavn.textContent = navn;",
+        "filnavn.title = navn;",
+        'kilde.value = "fil";',
+        'filboks.querySelector(".soppelbotte").focus();',
+        "meld(fil.dataset.lastetOpp + navn);",
+    ):
+        assert tekst in JS, tekst
+
+
+def test_fr13_soppelbottene_gir_fokus_til_last_opp():
+    """FR-13/NFR-6 (story 6.1): begge søppelbøttene tømmer feltet (også filvelgeren), setter
+    kilden til tekst og gir fokus til «Last opp PDF» i samme felt. «Lim inn tekst» setter
+    kilden til tekst."""
+    tom = re.search(r"function tom\(soppelbotte\) \{(.*?)\n    \}", JS, re.S).group(1)
+    for tekst in (
+        'tekstboks.value = "";',
+        'fil.value = "";',
+        'kilde.value = "tekst";',
+        "lastOpp.focus();",
+        "meld(soppelbotte.dataset.tomt);",
+    ):
+        assert tekst in tom, tekst
+    assert 'felt.querySelectorAll(".soppelbotte")' in JS
+    assert "limInn.focus()" not in JS
+    lim_inn = re.search(r'limInn.addEventListener\("click", function \(\) \{(.*?)\}\);', JS, re.S)
+    assert 'kilde.value = "tekst";' in lim_inn.group(1)
+
+
+def test_ux_dr7_lenken_i_feilboksen_gir_fokus_etter_tilstanden():
+    """UX-DR7 (story 6.1): en lenke i feilboksen gir fokus til søppelbøtta når filnavnet vises,
+    til tekstboksen når den vises, og ellers til «Last opp PDF»."""
+    fokus = re.search(r"function fokusIFeltet\(felt, utenRulling\) \{(.*?)\n  \}", JS, re.S)
+    kropp = fokus.group(1)
+    assert 'felt.querySelector(".last-opp")' in kropp
+    assert 'filboks.querySelector(".soppelbotte")' in kropp
+    assert 'limeboks.querySelector("textarea")' in kropp
+
+
+# --- Laste opp PDF: CSS (story 6.1, NFR-7, UX-DR8) ---
+
+
+def test_nfr7_filboksen_er_gronn_og_kutter_lange_navn():
+    """NFR-7/UX-DR8 (story 6.1): filnavnet står i en grønn stripe med søppelbøtta til høyre. Et
+    langt navn kuttes på én linje med line-clamp og brytes hvor som helst, uten fast høyde og
+    uten nowrap, så det ikke gir rulling sidelengs."""
+    css = STIL.read_text(encoding="utf-8")
+    filboks = css_blokk(css, ".filboks")
+    for verdi in ("var(--success-tint)", "var(--success)", "var(--rounded-sm)", "display: flex"):
+        assert verdi in filboks
+    filnavn = css_blokk(css, ".filnavn")
+    for verdi in ("-webkit-line-clamp: 1", "overflow-wrap: anywhere", "overflow: hidden"):
+        assert verdi in filnavn
+    assert "min-width: 0" in filnavn
+    assert "margin-left: auto" in css_blokk(css, ".filboks .soppelbotte")
+    for blokk in (filboks, filnavn):
+        assert not re.search(r"(?<![-\w])height:", blokk)
+    assert "nowrap" not in css
+
+
+def test_nfr7_tom_tilstand_er_en_rad_og_last_opp_er_smal():
+    """NFR-7/UX-DR8 (story 6.1): «Last opp PDF» og «Lim inn tekst» står på en rad med luft
+    som kan brytes, og «Last opp PDF» er bare så bred som teksten."""
+    css = STIL.read_text(encoding="utf-8")
+    rad = css_blokk(css, ".tom-tilstand")
+    assert "display: flex" in rad
+    assert "flex-wrap: wrap" in rad
+    assert "gap: var(--space-3)" in rad
+    knapp = css_blokk(css, ".hovedknapp.last-opp")
+    assert "width: auto" in knapp
+    assert "margin-top: 0" in knapp
+    assert "var(--text-muted)" in css_blokk(css, ".pdf-tips")
+
+
+def test_ux_dr7_last_opp_og_soppelbotta_viser_fokusringen_etter_museklikk():
+    """UX-DR7 (story 6.1): skriptet gir fokus til «Last opp PDF» og søppelbøtta, også etter et
+    museklikk. Ringen vises derfor for :focus, ikke bare :focus-visible."""
+    css = STIL.read_text(encoding="utf-8")
+    for velger in (".last-opp:focus", ".soppelbotte:focus"):
+        assert "outline: 3px solid var(--focus-ring)" in css_blokk(css, velger)
+
+
+def test_nfr7_filboksen_har_ramme_i_hoykontrast():
+    """NFR-7 (story 6.1): i høykontrastmodus forsvinner den grønne bakgrunnen, så filboksen får
+    en ramme i CanvasText."""
+    css = STIL.read_text(encoding="utf-8")
+    hoykontrast = re.search(r"@media \(forced-colors: active\)\s*\{(.*?)\n\}", css, re.S).group(1)
+    blokk = css_blokk(hoykontrast.replace("\n  ", "\n"), ".filboks")
+    assert "border: 1px solid CanvasText" in blokk

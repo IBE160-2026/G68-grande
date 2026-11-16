@@ -1,12 +1,13 @@
 """Rutene på nettsiden."""
 
+import re
 from datetime import date
 from functools import partial
 from io import BytesIO
 
 from flask import current_app, redirect, render_template, request, send_file, url_for
 
-from soknad.adaptere import fil_ut
+from soknad.adaptere import fil_ut, pdf_inn
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, FilFeil, InndataFeil, KIFeil
 from soknad.kjerne.filnavn import lag_filnavn
@@ -165,7 +166,10 @@ def innlegging():
 
     I Korrektur leses også brevfeltet (eget_brev), som må fylles ut og sjekkes som de andre
     (FR-8, FR-9). I Full generering ignoreres et eget_brev i skjemaet, og brevet i søknaden er
-    uendret. Analysen bygger bare på CV og annonse i begge modusene."""
+    uendret. Analysen bygger bare på CV og annonse i begge modusene.
+
+    Hvert felt kan være en opplastet PDF i stedet for innlimt tekst (FR-8, story 6.1). Hvert
+    felt leses med _les_felt, både ved «Sjekk CV-en min» og ved «Tilbake»."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
@@ -176,17 +180,17 @@ def innlegging():
     if handling not in ("tilbake", "sjekk"):
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
         return _vis_innlegging(lagret, feil=[]), 400
-    cv = request.form.get("cv", "")
-    annonse = request.form.get("annonse", "")
-    eget_brev = (
-        request.form.get("eget_brev", "") if "eget_brev" in felt_for_modus(lagret.modus) else None
-    )
+    med_brev = "eget_brev" in felt_for_modus(lagret.modus)
     soknad = sett_inndata(
         lagret,
-        cv=Tekstfelt(cv),
-        annonse=Tekstfelt(annonse),
-        eget_brev=None if eget_brev is None else Tekstfelt(eget_brev),
+        cv=_les_felt("cv", lagret.cv),
+        annonse=_les_felt("annonse", lagret.annonse),
+        eget_brev=_les_felt("eget_brev", lagret.eget_brev) if med_brev else None,
     )
+    # Teksten som sjekkes og sendes til KI-en, også når den kom fra en PDF.
+    cv = soknad.cv.tekst
+    annonse = soknad.annonse.tekst
+    eget_brev = soknad.eget_brev.tekst if med_brev else None
     lagre_soknad(soknad)
     if handling == "tilbake":
         return redirect(url_for("web.modus"))
@@ -453,16 +457,44 @@ def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
     return redirect(url_for(neste))
 
 
+def _les_felt(navn, lagret_felt):
+    """Ett felt på innleggingen fra skjemaet (FR-8, story 6.1). Det skjulte feltet
+    <navn>_kilde avgjør hvor teksten kommer fra:
+    - fil med en ny fil i <navn>_fil: teksten leses fra PDF-en i pdf_inn, og filnavnet lagres
+      uten mappene foran (bare delen etter siste / eller \\).
+    - fil uten ny fil: feltet fra økten beholdes (lagret_felt), for eksempel etter en feil i et
+      annet felt eller etter «Tilbake».
+    - tekst (eller mangler): teksten i tekstboksen, uten filnavn.
+    Fila leses bare i minnet og lagres aldri på disk."""
+    if request.form.get(f"{navn}_kilde") == "fil":
+        fil = request.files.get(f"{navn}_fil")
+        if fil is None or not fil.filename:
+            return lagret_felt
+        return Tekstfelt(pdf_inn.les_pdf(fil.read()), _uten_mappe(fil.filename))
+    return Tekstfelt(request.form.get(navn, ""))
+
+
+def _uten_mappe(filnavn):
+    """Filnavnet uten mappene foran: bare delen etter siste / eller \\. Noen nettlesere sender
+    hele stien. Er det ingenting etter, beholdes navnet slik det er."""
+    return re.split(r"[/\\]", filnavn)[-1] or filnavn
+
+
 def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
     """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
     feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står øverst i
     feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
     (NFR-11). Feltene, tittelen og overskriften er de for modusen (FR-8): i Korrektur står
-    brevfeltet mellom CV og annonse."""
+    brevfeltet mellom CV og annonse.
+
+    Et felt med filnavn (en opplastet PDF, story 6.1) vises med filnavnet, og tekstboksen er
+    tom. Teksten fra PDF-en blir da bare i økten, og «Sjekk CV-en min» uten ny fil bruker den.
+    Et felt er altså tomt, har tekst eller har en fil."""
     feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
     felter = felt_for_modus(soknad.modus)
-    tekst = {navn: getattr(soknad, navn).tekst for navn in felter}
+    filnavn = {navn: getattr(soknad, navn).filnavn for navn in felter}
+    tekst = {navn: "" if filnavn[navn] else getattr(soknad, navn).tekst for navn in felter}
     korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
         "innlegging.html",
@@ -472,6 +504,7 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
             tekster.INNLEGGING_OVERSKRIFT_KORREKTUR if korrektur else tekster.INNLEGGING_OVERSKRIFT
         ),
         tekst=tekst,
+        filnavn=filnavn,
         feltfeil=feltfeil,
         ki_feil=ki_feil,
         prov_pa_nytt=prov_pa_nytt,

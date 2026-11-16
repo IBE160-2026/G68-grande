@@ -1,0 +1,13 @@
+Tobias Tabellsen 
+E-post: tobias.tabellsen@example.com 
+Om meg 
+Jeg er student i andre år på bachelor i IT og liker å lage nettsider. 
+Ferdigheter 
+Ferdighet Nivå Brukt i 
+Python God Bacheloroppgave og 
+deltidsjobb 
+JavaScript Middels Nettside for idrettslaget 
+SQL Middels Emnet databaser 
+Git God Alle prosjektene 
+Erfaring 
+2025–2026: Deltidsjobb som kundeservicemedarbeider, Eksempel AS 

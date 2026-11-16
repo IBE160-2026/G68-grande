@@ -3,10 +3,11 @@
 import logging
 import os
 import secrets
+from io import BytesIO
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, Request
 
 from soknad.adaptere.db import lag_database
 from soknad.adaptere.ki import EkteKI, TestKI
@@ -34,6 +35,17 @@ def sett_opp_logg() -> None:
         logger.addHandler(TERMINAL_LOGG)
 
 
+class MinneRequest(Request):
+    """En opplastet fil holdes bare i minnet, aldri på disk (NFR-4, story 6.1). Werkzeug
+    skriver ellers filer over 500 KB til en midlertidig fil. MAX_CONTENT_LENGTH (16 MB)
+    begrenser hvor mye minne én forespørsel kan bruke."""
+
+    def _get_file_stream(
+        self, total_content_length, content_type, filename=None, content_length=None
+    ):
+        return BytesIO()
+
+
 def create_app(test_config=None):
     """Lager Flask-appen. test_config vinner over miljøet og .env."""
     # override=False: verdier som alt står i miljøet, beholdes.
@@ -47,6 +59,8 @@ def create_app(test_config=None):
         template_folder="web/templates",
         static_folder="web/static",
     )
+    # Opplastede filer bare i minnet (NFR-4).
+    app.request_class = MinneRequest
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY") or secrets.token_hex(32),
         ANTHROPIC_MODEL=os.environ.get("ANTHROPIC_MODEL") or STANDARD_MODELL,
