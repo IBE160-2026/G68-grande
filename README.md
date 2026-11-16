@@ -73,6 +73,13 @@ uv run ruff format --check
 
 **Testdata og fasit:** de fiktive testdataene ligger i `backend/testdata/`, med én mappe per testcase: `case-1-utvikler/` (en IT-student som søker som junior utvikler) og `case-2-okonomi/` (en økonomistudent som søker som junior økonomimedarbeider i et regnskapsbyrå). Hver mappe har en CV (`cv.txt`) og en stillingsannonse (`annonse.txt`) som kan limes inn på innleggingssiden i testmodus, og fasiten ligger i `fasit.md` i samme mappe. Mappen `ki-svar/` har ekte KI-svar fra Claude, slik at nettsiden kan kjøres i testmodus uten API-nøkkel og likevel viser hvordan den virker med ekte KI. Fasiten viser hvilke krav CV-en dekker og mangler, hvilke nøkkelord som er viktige, og nøyaktig hvilken prosent nøkkelordtreffet skal gi. Alle personer, firmaer og skoler i testdataene er oppdiktet. CV-en og annonsen må være fra samme mappe. CV-en fra én mappe og annonsen fra en annen gir «Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i backend/testdata/.». Begge casene er for Full generering. Korrektur testes bare med case 1: der ligger også et fiktivt søknadsbrev som Sara har skrevet selv (`case-1-utvikler/eget-brev.txt`), og det limes inn i feltet «Ditt søknadsbrev» sammen med CV-en og annonsen fra samme mappe. Fasiten for Korrektur står under «Sjekkliste for Korrektur» i `fasit.md`. Et annet brev, eller CV og annonse fra case 2 i Korrektur, gir «Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/.». Mangler `backend/testdata/`, en case-mappe, `cv.txt` eller `annonse.txt`, eller har to caser samme CV, annonse eller eget brev, starter ikke nettsiden, og feilmeldingen sier hva som er galt. `eget-brev.txt` er valgfri, og bare case 1 har en. Mangler en fil i `ki-svar/`, starter nettsiden, men steget som trenger fila, gir «Noe gikk galt hos KI-tjenesten».
 
+**PDF-ene i testdataene:** hver `.txt` i testdataene har også en PDF med samme tekst, lagret fra Word: `cv.pdf` og `annonse.pdf` i begge mappene, og `eget-brev.pdf` i case 1. På innleggingssiden kan du trykke «Last opp PDF» i stedet for «Lim inn tekst», og i testmodus gir PDF-en samme testcase og samme nøkkelordtreff som `.txt`-fila (kriterium 5, testet i `backend/tests/test_testdata.py`). PDF-ene lages med skriptet `backend/scripts/lag_testpdf.ps1`, som trenger Microsoft Word på Windows. Det åpner hver `.txt` i Word og lagrer den som PDF ved siden av. Kjør det på nytt når en `.txt`-fil i testdataene endres:
+
+```powershell
+cd backend
+powershell -ExecutionPolicy Bypass -File scripts\lag_testpdf.ps1
+```
+
 **Lage testsvarene på nytt:** svarene i `ki-svar/` lages med skriptet `backend/scripts/lag_testsvar.py`, og bare med det. Skriptet trenger API-nøkkelen i `backend/.env`, sender CV-en og annonsen i hvert testcase til Claude og skriver `nokkelord.json`, `gap.json`, `brev-1.json` og `brev-2.json`. Har testcaset et eget brev (`eget-brev.txt`, bare case 1), sendes det også, og skriptet skriver i tillegg `korrektur-1.json` og `korrektur-2.json` (det forbedrede brevet i Korrektur). Feiler et KI-kall, skrives ingenting for det testcaset. Med `--ut` skrives svarene i en annen mappe, og `ki-svar/` er uendret:
 
 ```bash
@@ -101,6 +108,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **Et nøkkelord kan gi treff inne i et annet ord:** «Java» er et treff i «JavaScript». Korte nøkkelord på 1–3 tegn må stå som eget ord, men «C» kan likevel gi feil treff i en liste nummerert med bokstaver, og «C» gir også treff i «C#» og «C++».
 - **Gap-analysen og nøkkelordtreffet kan si hverandre imot,** fordi gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.
 - **I testmodus virker bare de fiktive testdataene i `backend/testdata/`,** og CV-en og annonsen må være fra samme testcase. I Korrektur virker bare brevet i case 1.
+- **PDF fra Canva og lignende programmer kan gi teksten i feil rekkefølge.** PDF lagret fra Word leses best, også med to kolonner eller en tabell (tabellprøven i `my-project/testplan.md`). Fra Canva kommer all teksten, men overskriftene kan havne på feil sted. Lim da heller inn teksten. En skannet PDF (bare et bilde) kan ikke leses.
 - **Grenser mot høy kostnad:** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver, og brevfeltet i Korrektur høyst 5 000 tegn (et langt brev gjør svaret fra KI-en for stort og tregt, se retro 5 i `my-project/testplan.md`). Med ekte KI kan hver søknad bruke høyst 10 KI-kall (en analyse er 2 kall, et brev 1, også «Prøv på nytt»). Deretter må du begynne på en ny søknad fra startsiden. I testmodus telles ingen kall. Grensen er en myk sperre mot mange trykk per søknad, og taket på 250 kr i Claude Console er den siste sperren. Grensene står i `backend/soknad/innstillinger.py`.
 - **Et svar fra Claude om å vente kan gjøre at det tar lenge:** ber API-et om å vente før neste forsøk (`retry-after`), venter nettsiden så lenge før det ene nye forsøket, uten noen øvre grense. Det gjelder alle KI-kallene: «Sjekk CV-en min», «Lag søknadsbrevet mitt» og «Prøv på nytt».
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
@@ -114,10 +122,10 @@ backend/                 Nettsiden (Python og Flask)
   soknad/
     web/                 Sidene: ruter, HTML-maler, tekstene på siden, CSS og JavaScript
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
-    adaptere/            Det som snakker med omverdenen: database, øktlager, KI og Word-fila
+    adaptere/            Det som snakker med omverdenen: database, øktlager, KI, PDF inn og Word-fila
   tests/                 De automatiske testene, delt på samme måte som soknad/
-  testdata/              Fiktive CV-er, annonser og et eget brev, med fasit og ekte KI-svar til testmodus
-  scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI
+  testdata/              Fiktive CV-er, annonser og et eget brev (.txt og .pdf), med fasit og ekte KI-svar til testmodus
+  scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI, og lag_testpdf.ps1, som lager PDF-ene
   .env.example           Eksempel på innstillinger, uten ekte nøkler
 my-project/              Alle plan- og prosessdokumentene (se oversikten der)
 .logs/kristine/          Sesjonslogger og åpne punkter

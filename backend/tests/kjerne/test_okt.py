@@ -176,6 +176,36 @@ def test_fr19_sett_inndata_gir_hoyst_steg_innlegging(steg):
     assert ny.steg == Steg.INNLEGGING
 
 
+def test_fr8_sett_inndata_med_samme_tekst_og_nytt_filnavn_beholder_analysen():
+    """FR-8 (story 6.1, retro 2 A9): lastes samme tekst opp som PDF, lagres filnavnet, men
+    analysen, brevet og steget beholdes, fordi bare teksten avgjør om feltet er endret."""
+    soknad = sett_brev(_med_resultater(Steg.BREV), BREV_SVAR)
+    ny = sett_inndata(soknad, cv=Tekstfelt("min cv", "cv.pdf"), annonse=Tekstfelt("annonsen"))
+    assert ny == dataclasses.replace(soknad, cv=Tekstfelt("min cv", "cv.pdf"))
+    # Og tilbake til innlimt tekst: filnavnet tas bort, og analysen står fortsatt.
+    igjen = sett_inndata(ny, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen"))
+    assert igjen == soknad
+
+
+def test_fr8_sett_inndata_med_nytt_filnavn_i_brevet_beholder_analysen():
+    """FR-8 (story 6.1, retro 2 A9): det samme gjelder brevfeltet i Korrektur."""
+    soknad = _korrektur_med_resultater()
+    brev = Tekstfelt("mitt brev", "brev.pdf")
+    ny = sett_inndata(soknad, cv=soknad.cv, annonse=soknad.annonse, eget_brev=brev)
+    assert ny == dataclasses.replace(soknad, eget_brev=brev)
+
+
+def test_fr8_sett_inndata_med_ny_tekst_fra_pdf_nullstiller_resultatene():
+    """FR-8/FR-19 (story 6.1): en PDF med en annen tekst er en endring som før, og teksten og
+    filnavnet lagres."""
+    ny = sett_inndata(
+        _med_resultater(), cv=Tekstfelt("ny cv", "cv.pdf"), annonse=Tekstfelt("annonsen")
+    )
+    assert ny.cv == Tekstfelt("ny cv", "cv.pdf")
+    assert ny.nokkelord is None
+    assert ny.steg == Steg.INNLEGGING
+
+
 def test_fr13_sett_inndata_kan_tomme_feltene():
     """FR-13: tomme felt lagres også (søppelbøtta, så «Tilbake»)."""
     ny = sett_inndata(_med_resultater(), cv=Tekstfelt(""), annonse=Tekstfelt(""))

@@ -39,27 +39,51 @@
 {%- if testmodus %}
 <p class="testhjelp">{{ tekster.TESTDATA_HJELP }}</p>
 {%- endif %}
-<form method="post" action="{{ url_for('web.innlegging') }}" id="innlegging-skjema" novalidate>
+<p class="pdf-tips">{{ tekster.PDF_TIPS }}</p>
+{#- multipart/form-data, så en valgt PDF sendes med (FR-8, story 6.1). #}
+<form method="post" action="{{ url_for('web.innlegging') }}" id="innlegging-skjema"
+  enctype="multipart/form-data" novalidate>
   {#- felter er feltene for modusen, i rekkefølgen på siden: i Korrektur står brevfeltet mellom
       CV og annonse (FR-8). Med tre felt står de side om side i tre kolonner fra 1000 px. #}
   <div class="felt-rad{% if felter | length == 3 %} tre-felt{% endif %}">
     {%- for navn in felter %}
     {%- set felt = tekster.INNLEGGINGSFELT[navn] %}
     {%- set feil = feltfeil.get(navn) %}
+    {%- set fil = filnavn[navn] %}
     {%- set fylt = tekst[navn] != "" %}
-    {#- Tomt felt: bare «Lim inn tekst». Fylt felt: tekstboksen med søppelbøtta.
-        Tekstboksen står alltid i skjemaet, så teksten sendes med også når den er skjult.
-        innlegging.js bytter mellom de to uten å spørre serveren (AD-1). #}
+    {#- Tre tilstander fra serveren. Tomt felt: «Last opp PDF» og «Lim inn tekst». Tekst:
+        tekstboksen med søppelbøtta. Fil: filnavnet med ✓ og søppelbøtta (story 6.1).
+        Tekstboksen og filvelgeren står alltid i skjemaet. <navn>_kilde sier om feltet er en
+        fil eller tekst: fil uten ny fil beholder det som er lagret i økten.
+        innlegging.js bytter mellom tilstandene uten å spørre serveren (AD-1). #}
     <section class="innleggingsfelt{% if feil %} har-feil{% endif %}" id="{{ navn }}-felt"
       tabindex="-1" aria-labelledby="{{ navn }}-navn">
       <h2 class="feltnavn" id="{{ navn }}-navn"><span aria-hidden="true">{{ felt.ikon }}</span> {{ felt.navn }}</h2>
       {%- if feil %}
       <p class="feiltekst" id="{{ navn }}-feil">{{ feil }}</p>
       {%- endif %}
-      <div class="tom-tilstand"{% if fylt %} hidden{% endif %}>
+      {#- autocomplete="off": nettleseren skal ikke hente fram en gammel kilde når siden lastes på
+          nytt, for da stemmer den ikke med tilstanden serveren viser. #}
+      <input class="kilde" type="hidden" name="{{ navn }}_kilde" value="{{ 'fil' if fil else 'tekst' }}"
+        autocomplete="off">
+      <input class="filvelger" type="file" id="{{ navn }}-fil" name="{{ navn }}_fil" accept=".pdf" hidden
+        data-lastet-opp="{{ tekster.lastet_opp_skjermleser(navn, '') }}">
+      <div class="tom-tilstand"{% if fylt or fil %} hidden{% endif %}>
+        <button class="hovedknapp last-opp" type="button" id="{{ navn }}-last-opp"
+          aria-label="{{ tekster.last_opp_skjermleser(navn) }}"
+          {%- if feil %} aria-describedby="{{ navn }}-feil"{% endif %}>{{ tekster.LAST_OPP_KNAPP }}</button>
         <button class="sekundaerknapp lim-inn" type="button" id="{{ navn }}-lim-inn"
           aria-label="{{ tekster.lim_inn_skjermleser(navn) }}"
           {%- if feil %} aria-describedby="{{ navn }}-feil"{% endif %}>{{ tekster.LIM_INN_KNAPP }}</button>
+      </div>
+      {#- Filnavnet (file-chip): ✓ er pynt og skjules for skjermlesere. Et langt navn kuttes med
+          «…», og hele navnet står i title. #}
+      <div class="filboks"{% if not fil %} hidden{% endif %}>
+        <span aria-hidden="true">{{ tekster.FERDIG_IKON }}</span>
+        <span class="filnavn" title="{{ fil or '' }}">{{ fil or "" }}</span>
+        <button class="soppelbotte" type="button" aria-label="{{ tekster.tom_skjermleser(navn) }}"
+          data-tomt="{{ tekster.er_tomt_skjermleser(navn) }}"
+          {%- if feil %} aria-describedby="{{ navn }}-feil"{% endif %}><span aria-hidden="true">🗑️</span></button>
       </div>
       <div class="limeboks"{% if not fylt %} hidden{% endif %}>
         <div class="limeboks-topp">
@@ -68,15 +92,19 @@
             data-tomt="{{ tekster.er_tomt_skjermleser(navn) }}"><span aria-hidden="true">🗑️</span></button>
         </div>
         {#- Linjeskiftet etter <textarea> fjernes av nettleseren, så et linjeskift først i
-            teksten blir ikke borte. #}
+            teksten blir ikke borte. Hjelpeteksten om tegngrensen står under, koblet med
+            aria-describedby sammen med feilteksten. #}
         <textarea id="{{ navn }}-tekst" name="{{ navn }}"
-          {%- if feil %} aria-invalid="true" aria-describedby="{{ navn }}-feil"{% endif %}>
+          {%- if feil %} aria-invalid="true" aria-describedby="{{ navn }}-feil {{ navn }}-hjelp"
+          {%- else %} aria-describedby="{{ navn }}-hjelp"{% endif %}>
 {{ tekst[navn] }}</textarea>
+        <p class="hjelpetekst" id="{{ navn }}-hjelp">{{ tekster.maks_tegn_hjelp(navn) }}</p>
       </div>
     </section>
     {%- endfor %}
   </div>
-  {#- Statusområdet finnes hele tiden. Søppelbøtta skriver «CV-feltet er tømt» i det. #}
+  {#- Statusområdet finnes hele tiden. Søppelbøtta skriver «CV-feltet er tømt» i det, og et
+      valgt filnavn «CV lastet opp: cv.pdf». #}
   <p class="skjult" id="innlegging-status" role="status"></p>
   <div class="knapperad mellomrom">
     <button class="sekundaerknapp" type="submit" name="handling" value="tilbake">{{ tekster.TILBAKE_KNAPP }}</button>

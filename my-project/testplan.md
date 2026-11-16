@@ -403,3 +403,21 @@ Tallene er fra loggen i terminalen. Kronene er regnet med 11 kr per dollar.
 | Alt | | | ca. 18,0 kr |
 
 Prompten er litt lengre, så et brev har nå ca. 5 100 tokens inn med testdataene, mot 4 686 i story 5.2.2. Et brev i Korrektur koster fortsatt ca. 0,85–0,94 kr med testbrevet, og en fullført søknad i Korrektur med testdataene ca. 1,15 kr. Det gikk ca. 24 sekunder mellom de to kallene i hver kjøring.
+
+## Story 6.1: PDF fra Word og tabellprøven (16. november 2026)
+
+### Unicode i PDF-ene fra Word
+
+PDF-ene i testdataene (`cv.pdf`, `annonse.pdf` og `eget-brev.pdf` i case 1, `cv.pdf` og `annonse.pdf` i case 2) er lagret fra Word med `backend/scripts/lag_testpdf.ps1`. Før normaliseringen i `pdf_inn.py` ble teksten fra pypdf målt: alle fem er NFC (og NFKC), og ingen har myk bindestrek (U+00AD), U+200B eller andre usynlige tegn. Teksten er lik `.txt`-fila etter vasken. Normaliseringen i `pdf_inn.py` er der for PDF-er fra andre programmer (Canva, Mac), som ikke er målt.
+
+### Kriterium 5
+
+Testes automatisk i `backend/tests/test_testdata.py`: for hvert testcase gir `cv.pdf` og `cv.txt` samme nøkkelordtreff med `nokkelord.json`, og PDF og `.txt` gir samme testcase, også blandet og med brevet i Korrektur. Bestått.
+
+### Tabellprøven
+
+En fiktiv CV (Tobias Tabellsen) med ferdighetene i en tabell med tre kolonner (ferdighet, nivå, brukt i) ble laget med python-docx og lagret som PDF i Word. Skriptet, PDF-en og teksten pypdf leste, ligger i `my-project/testkjoringer/6-1/` (`lag_tabellprove.py`, `tabell-cv.pdf`, `tabell-cv-lest.txt`).
+
+| Dato | Hva som ble lest | Resultat |
+| --- | --- | --- |
+| 16. november 2026 | All teksten kom med, i riktig rekkefølge: overskriften «Ferdigheter», så tabellen rad for rad med cellene fra venstre mot høyre («Python God Bacheloroppgave og deltidsjobb»), så «Erfaring». En celle med tekst på to linjer i PDF-en ble to linjer i teksten, men rekkefølgen er riktig, og telleregelen ser bort fra linjeskift. | Bestått. Tabeller fra Word blir ikke en kjent begrensning, og settes ikke på kuttlisten |

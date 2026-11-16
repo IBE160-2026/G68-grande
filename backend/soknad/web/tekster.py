@@ -4,6 +4,7 @@ from typing import NamedTuple
 
 from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
+from soknad.kjerne.inndata import maks_tegn
 from soknad.kjerne.okt import Modus
 
 LOGO = "Søknadsassistenten"
@@ -98,6 +99,13 @@ INNLEGGING_TITTEL_KORREKTUR = "Legg inn CV, brev og annonse"
 INNLEGGING_OVERSKRIFT_KORREKTUR = "Legg inn CV-en din, brevet ditt og stillingsannonsen"
 # Over feltene, bare i testmodus (FR-34).
 TESTDATA_HJELP = "Testmodus: bruk filene i mappen backend/testdata/ i prosjektet."
+# Over feltene i begge modusene (FR-8, story 6.1).
+PDF_TIPS = (
+    "Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, "
+    "kan teksten komme i feil rekkefølge. Lim den da heller inn."
+)
+# Hovedknappen i et tomt felt, foran «Lim inn tekst» (FR-8, story 6.1).
+LAST_OPP_KNAPP = "Last opp PDF"
 LIM_INN_KNAPP = "Lim inn tekst"
 LIM_INN_ETIKETT = "Lim inn teksten her"
 SJEKK_KNAPP = "Sjekk CV-en min"
@@ -125,6 +133,23 @@ INNLEGGINGSFELT = {
 def lim_inn_skjermleser(felt: str) -> str:
     """«Lim inn tekst, CV»"""
     return f"{LIM_INN_KNAPP}, {INNLEGGINGSFELT[felt].navn}"
+
+
+def last_opp_skjermleser(felt: str) -> str:
+    """«Last opp PDF, CV»"""
+    return f"{LAST_OPP_KNAPP}, {INNLEGGINGSFELT[felt].navn}"
+
+
+def lastet_opp_skjermleser(felt: str, filnavn: str) -> str:
+    """Etter at en fil er valgt: «CV lastet opp: cv.pdf». Med filnavn="" er det starten på
+    teksten, som innlegging.js setter filnavnet etter."""
+    return f"{INNLEGGINGSFELT[felt].navn} lastet opp: {filnavn}"
+
+
+def maks_tegn_hjelp(felt: str) -> str:
+    """Hjelpeteksten under tekstboksen: «Høyst 15 000 tegn.», og «Høyst 5 000 tegn.» for
+    brevfeltet i Korrektur (NFR-11, story 6.1)."""
+    return f"Høyst {_med_mellomrom(maks_tegn(felt))} tegn."
 
 
 def tom_skjermleser(felt: str) -> str:
@@ -282,9 +307,15 @@ LOGG_UT_KNAPP = "Logg ut"
 # Skjemafeil-boksen på innloggingen når man prøver en side uten å være logget inn.
 MA_LOGGE_INN = "Du må logge inn først"
 
+
+def _med_mellomrom(tall: int) -> str:
+    """Tallet med mellomrom mellom tusenene: «15 000»."""
+    return f"{tall:,}".replace(",", " ")
+
+
 # Tegngrensene med mellomrom mellom tusenene: «15 000» og «5 000» for brevfeltet (NFR-11).
-MAKS_TEGN_TEKST = f"{MAKS_TEGN:,}".replace(",", " ")
-MAKS_TEGN_EGET_BREV_TEKST = f"{MAKS_TEGN_EGET_BREV:,}".replace(",", " ")
+MAKS_TEGN_TEKST = _med_mellomrom(MAKS_TEGN)
+MAKS_TEGN_EGET_BREV_TEKST = _med_mellomrom(MAKS_TEGN_EGET_BREV)
 
 # Feiltekstene slås opp med (felt, type). felt=None betyr hele skjemaet.
 FEILTEKSTER = {

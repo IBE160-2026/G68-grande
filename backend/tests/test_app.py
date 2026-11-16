@@ -1,9 +1,12 @@
-"""Tester for create_app: oppstart uten .env og innstillinger (NFR-2, NFR-8)."""
+"""Tester for create_app: oppstart uten .env og innstillinger (NFR-2, NFR-8), og opplastede filer
+bare i minnet (NFR-4)."""
 
 import re
+from io import BytesIO
 from pathlib import Path
 
 import pytest
+from flask import request
 
 import soknad
 from soknad import create_app
@@ -140,3 +143,17 @@ def test_fr32_ekte_ki_bare_med_nokkel(nokkel, har_ekte_ki):
         assert ekte_ki.modell == app.config["ANTHROPIC_MODEL"]
     else:
         assert ekte_ki is None
+
+
+@pytest.mark.parametrize("storrelse", [10, 600 * 1024])
+def test_nfr4_opplastet_fil_er_bare_i_minnet(storrelse):
+    """NFR-4 (story 6.1): en opplastet fil holdes i minnet (BytesIO), også over 500 KB, der
+    Werkzeug ellers ville skrevet den til en midlertidig fil på disk."""
+    app = create_app({"TESTING": True, "SECRET_KEY": "test"})
+    data = {"cv_fil": (BytesIO(b"x" * storrelse), "cv.pdf")}
+    with app.test_request_context(
+        "/innlegging", method="POST", data=data, content_type="multipart/form-data"
+    ):
+        fil = request.files["cv_fil"]
+        assert isinstance(fil.stream, BytesIO)
+        assert len(fil.read()) == storrelse

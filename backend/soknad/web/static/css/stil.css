@@ -877,6 +877,62 @@ svg {
   margin: 0 0 var(--space-3);
 }
 
+/* PDF-tipset over feltene, i begge modusene (story 6.1) */
+.pdf-tips {
+  margin: 0 0 var(--space-5);
+  font-size: var(--size-small);
+  color: var(--text-muted);
+}
+
+/* Tomt felt: «Last opp PDF» og «Lim inn tekst» på en rad med luft mellom. Er det ikke plass,
+ * havner «Lim inn tekst» under. */
+.tom-tilstand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* «Last opp PDF» er en hovedknapp, men bare så bred som teksten */
+.hovedknapp.last-opp {
+  display: inline-block;
+  width: auto;
+  margin-top: 0;
+}
+
+/* Filnavnet (file-chip): grønn stripe med ✓, navnet og søppelbøtta til høyre */
+.filboks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-tint);
+  border-radius: var(--rounded-sm);
+}
+
+/* Et langt navn kuttes med «…» på én linje, uten rulling sidelengs. Hele navnet står i
+ * title. overflow-wrap: anywhere lar et navn uten mellomrom brytes, så line-clamp kan kutte
+ * det. */
+.filnavn {
+  display: -webkit-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.filboks .soppelbotte {
+  flex: none;
+  margin-left: auto;
+}
+
 /* Over tekstboksen: «Lim inn teksten her» til venstre, søppelbøtta til høyre */
 .limeboks-topp {
   display: flex;
@@ -938,6 +994,18 @@ svg {
  * :focus-visible etter et museklikk, så ringen vises for :focus. Knappen skjules uansett når
  * man trykker på den selv. */
 .lim-inn:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* «Last opp PDF» får fokus fra skriptet når feltet tømmes, og søppelbøtta når en fil er valgt
+ * (story 6.1). Begge kan komme etter et museklikk, så ringen vises for :focus. */
+.last-opp:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.soppelbotte:focus {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -1567,6 +1635,11 @@ a.hovedknapp {
   }
 
   .korrektur-forklaring {
+    border: 1px solid CanvasText;
+  }
+
+  /* Filnavnet skilles bare med den grønne bakgrunnen. Det får en ramme i stedet (story 6.1) */
+  .filboks {
     border: 1px solid CanvasText;
   }
 
