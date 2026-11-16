@@ -178,7 +178,7 @@ Word er valgt i stedet for Markdown, som faglærer foreslo, fordi studenter fles
 - **NFR-11:** Den eksterne KI-en er Claude fra Anthropic, brukt via API. Modell og kostnad avklares i arkitekturen.
   - **Kostnad i tokens:** KI-en tar betalt per token (ord og deler av ord) inn og ut. For hvert KI-kall leses antallet tokens inn og ut fra svaret. Bare antallet logges, aldri teksten. Testplanen (NFR-12) viser tokens og kroner per fullført søknad.
   - **Overslag (12. november):** Claude Opus 5.5 koster 4 dollar per million tokens inn og 20 dollar per million tokens ut. En søknad i Full generering bruker tre KI-kall (nøkkelord, gap-analyse og brev), omtrent 10 000 tokens inn og 6 000 tokens ut, medregnet KI-ens egen tenking. Det blir omtrent 0,16 dollar, om lag 2 kr. Målet er under 3 kr per fullført søknad.
-  - **Grenser:** Hvert innleggingsfelt godtar høyst 15 000 tegn. Hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Taket på 250 kr i Claude Console er den siste sperren.
+  - **Grenser:** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver, og brevfeltet i Korrektur høyst 5 000 tegn (endret 15. november etter en måling: et eget brev på nesten 15 000 tegn ga et svar som var for stort og tok 190 sekunder). Hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Taket på 250 kr i Claude Console er den siste sperren.
 
 ## 4. Omfang og kuttliste
 

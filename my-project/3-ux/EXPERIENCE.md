@@ -212,8 +212,8 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | Prosentlinje (del av Nøkkelordtreff, `score-meter`) | Resultatside | Fylles når siden åpnes. Bare pynt, tallet står alltid som tekst (FR-17). |
 | Nøkkelordlister (del av Nøkkelordtreff, `score-meter`) | Resultatside | Kan ikke endres (FR-16). |
 | Brevet | Brevside | Bare visning. Kan ikke redigeres (FR-26). |
-| Forklaring i Korrektur | Brevside (Korrektur) | Bare visning. Skjules når ingenting er endret. |
-| Endret setning | Brevside (Korrektur) | Er en knapp som åpner og lukker «Du skrev» med den gamle setningen rett under (se Interaction Primitives). Flere kan være åpne samtidig. Brevet kan ikke redigeres (FR-26). Se Endrede setninger i Korrektur under. |
+| Forklaring i Korrektur | Brevside (Korrektur) | Bare visning. Skjules når ingen setning er endret, også når setninger bare er fjernet. |
+| Endret setning | Brevside (Korrektur) | Kan trykkes på som en knapp, men brytes over linjer som resten av avsnittet, så brevet står i vanlige avsnitt. Åpner og lukker «Du skrev» med den gamle setningen rett under (se Interaction Primitives). Flere kan være åpne samtidig. Brevet kan ikke redigeres (FR-26). Se Endrede setninger i Korrektur under. |
 | Gammel setning | Brevside (Korrektur) | Bare visning. Vises bare når den endrede setningen er åpnet. |
 | Nedlastingsknapper | Brevside | Laster ned filen, blir grønne med «✓ Lastet ned som …», viser filnavn-linjen under, og åpner vinduet etter nedlasting. Vinduet kommer hver gang. Filen har ingen markeringer (FR-30). Se Filnavn ved nedlasting under. |
 | «Nytt forslag» | Brevside | Åpner bekreftelsesvinduet. «Ja, lag nytt forslag» → ventetegn → nytt brev med nytt fyrverkeri. Nedlastingsknappene og filnavnet nullstilles. I Korrektur lages det nye forslaget fra det opprinnelige brevet (FR-25). |
@@ -232,6 +232,8 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 - **To setninger slått sammen:** «Du skrev» viser begge de gamle.
 - **Fjernet setning:** vises ikke i brevet. Under brevet står én linje: «1 setning er fjernet.» / «2 setninger er fjernet.»
 - **Ingenting endret:** «Vi fant ingenting å endre. Brevet ditt er bra som det er.», og forklaringen om grønt skjules.
+- **Bare fjernede setninger:** forklaringen om grønt skjules, og bare linjen om fjernede setninger står under brevet.
+- **Hva KI-en endrer** (bestemt av Kristine i epic 5 og retro 5): språk, ordvalg og flyt, med bindeord og sammenslåtte korte setninger i samme avsnitt. Vage vurderinger som «det har stort sett gått greit» fjernes. Overskriften rettes til «Søknad på stillingen som …», og «Hei!» fjernes. Hilsen og navn står slik brukeren skrev dem. Blander brevet «dere» og «du», brukes «dere». Innholdet, eksemplene og rekkefølgen er de samme.
 - Blir det for vanskelig, gjelder nødlisten i PRD-en punkt 4: ingen markeringer i Korrektur, og forklaringen over brevet skjules.
 - **Spørsmål til arkitekturen:** formatet på KI-svaret (setningsparene).
 

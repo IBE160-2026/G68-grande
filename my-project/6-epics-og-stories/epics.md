@@ -742,7 +742,7 @@ slik at jeg bestemmer over mine egne opplysninger.
 
 **Og** i vanlig modus sendes tekst til Claude bare når `Soknad.samtykke` er sann (AD-12)
 **Og** tester sjekker: bryteren kan ikke endres etter startsiden, samtykke kreves når testmodus er av, ikke når den er på, og ingen KI-kall uten samtykke (FR-32, FR-36)
-**Og** hvert innleggingsfelt godtar høyst 15 000 tegn, med egen feilmelding, og hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Grensene ligger i `innstillinger.py` og har tester (NFR-11, endret i PRD-en 12. november)
+**Og** CV-feltet og annonsefeltet godtar høyst 15 000 tegn hver (brevfeltet i Korrektur 5 000, se story 5.1), med egen feilmelding, og hver søknad kan bruke høyst 10 KI-kall, medregnet «Prøv på nytt» og «Nytt forslag». Deretter får brukeren en melding. Grensene ligger i `innstillinger.py` og har tester (NFR-11, endret i PRD-en 12. november)
 **Og** Kristine prøver hele flyten én gang med ekte KI på testdataene: analysen, og brevet mot sjekklisten i `fasit.md` for kriterium 11 og 12 (AD-14). Hun noterer resultatet i PR-en, og hvor lang tid analysen og brevet tar, så 90 s kan justeres i `innstillinger.py` (arkitekturen, Utsatt)
 
 ### Story 4.4: Ekte KI-svar i testmodus
@@ -810,6 +810,8 @@ slik at jeg kan få det forbedret i stedet for å få et helt nytt.
 **Så** finnes feltene «📄 CV», «✉️ Ditt søknadsbrev» og «📢 Stillingsannonse», med de samme tilstandene, tekstene og feilene som i story 2.5 (FR-8, FR-9, FR-13, UX-DR8)
 **Og** et brev som ikke hører til samme testcase som CV-en, gir «Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» (FR-34, AD-10)
 **Og** «Tilbake» til modusvalget beholder CV og annonse. Feltet for eget brev finnes bare i Korrektur (EXPERIENCE)
+**Og** CV og annonse fra case 2, som ikke har noe testbrev, gir den samme teksten på brevfeltet (bestemt av Kristine i story 5.1)
+**Og** brevfeltet godtar høyst 5 000 tegn, med feilen «Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn.» (NFR-11, bestemt av Kristine etter målingen i retro 5, runde B)
 
 **Gitt** `testdata/case-1-<navn>/`
 **Så** finnes et fiktivt `eget-brev.txt` til samme annonse, med ting som bør forbedres og minst én av KI-frasene fra addendum, og `fasit.md` har en sjekkliste for Korrektur (innhold, eksempler og rekkefølge beholdt, og at KI-frasen er skrevet om) (FR-34, NFR-3, AD-14)
@@ -832,10 +834,17 @@ slik at brevet fortsatt er min egen stemme.
 **Så** inneholder den kravene i FR-24 og FR-37 og listen over de 17 KI-frasene, og sier at brukerens innhold, eksempler og rekkefølge beholdes (FR-24, AD-14)
 **Og** den sier at én setning aldri deles i to oppføringer. Blir en lang setning til to, står begge i samme `ny` (AD-5)
 **Og** den sier at KI-en skriver om typiske KI-fraser hvis brukeren har brukt dem selv (addendum)
+**Og** den sier hva KI-en endrer (bestemt av Kristine i story 5.2 og retro 5):
+- KI-en retter språk, ordvalg og flyt. Den bruker bindeord og kan slå sammen korte setninger i samme avsnitt, men legger ikke til nye setninger med innhold. Den kan gjøre en kobling til annonsen tydeligere i en setning som finnes
+- vage vurderinger som «det har stort sett gått greit» fjernes
+- overskriften rettes til «Søknad på stillingen som …» med liten forbokstav, og en muntlig tiltale som «Hei!» fjernes
+- hilsen og navn til slutt står slik brukeren skrev dem. Mangler de, legges ingenting til
+- blander brevet «dere» og «du», brukes «dere»
+- `gammel` kopieres nøyaktig, med store og små bokstaver og tegnsetting
 
 **Gitt** `korrektur(cv, annonse, eget_brev, forslag)` i `EkteKI` og `TestKI`
 **Så** er svaret `{setninger: [{ny, gammel, nytt_avsnitt}]}` i brevets rekkefølge, med skjema og structured outputs (AD-3, AD-4)
-**Og** `kontroller()` gir `KIFeil(ubrukelig_svar)` når alle `ny` er `null`, eller når alle `gammel` satt sammen og vasket ikke er lik det opprinnelige brevet, også vasket (AD-4, AD-10)
+**Og** `kontroller()` gir `KIFeil(ubrukelig_svar)` når alle `ny` er `null`, eller når alle `gammel` satt sammen ikke er lik det opprinnelige brevet ordrett, med store bokstaver og tegnsetting. Bare mellomrom, linjeskift og usynlige tegn teller ikke (AD-4, AD-10, endret i retro 5, runde A)
 
 **Gitt** resultatsiden i Korrektur
 **Så** står knappen «Oppdater søknadsbrevet mitt» nederst (EXPERIENCE)
@@ -862,7 +871,8 @@ slik at jeg kan bestemme om jeg er enig i endringene.
 **Gitt** brevsiden i Korrektur
 **Så** står «Grønn og understreket = endret. Trykk på setningen for å se det du skrev.» over brevet (UX-DR15)
 **Og** en setning er endret når `gammel != [ny]`, ny når `gammel == []` og fjernet når `ny == null`. Visningen sammenligner aldri tekst selv (AD-5)
-**Og** endrede og nye setninger er knapper med grønn bakgrunn og understreking og den skjulte teksten «Endret setning» for skjermlesere, så endringen ikke bare vises med farge (FR-23, UX-DR15)
+**Og** endrede og nye setninger kan trykkes på, har grønn bakgrunn og understreking og den skjulte teksten «Endret setning» for skjermlesere, så endringen ikke bare vises med farge (FR-23, UX-DR15)
+**Og** en endret setning brytes over linjer som resten av avsnittet, så brevet står i vanlige avsnitt (`role="button"`, ikke en `<button>`, endret etter nettlesertesten i retro 5, runde B)
 
 **Når** jeg trykker på en endret setning (eller Enter eller mellomrom)
 **Så** vises «Du skrev» med den gamle setningen rett under, og et nytt trykk lukker den. Flere kan være åpne samtidig (FR-23, UX-DR15)
@@ -873,6 +883,9 @@ slik at jeg kan bestemme om jeg er enig i endringene.
 
 **Gitt** at ingenting er endret
 **Så** står «Vi fant ingenting å endre. Brevet ditt er bra som det er.», og forklaringen over brevet er skjult (UX-DR15)
+
+**Gitt** at ingen setning er endret, men noen er fjernet
+**Så** er forklaringen over brevet skjult, og bare linjen om fjernede setninger står under brevet (bestemt av Kristine i story 5.3)
 
 **Og** tester (NFR-9, FR-30) sjekker at den nedlastede filen ikke har noen markeringer, «Du skrev» eller «(Ny setning)», og at endret, ny, fjernet og uendret vises riktig ut fra `ny` og `gammel` (FR-23)
 **Og** denne storyen er punkt 4 på nødlisten. Kuttes den, virker Korrektur som etter story 5.2
