@@ -1,8 +1,15 @@
 """Sjekk av det brukeren skriver inn i skjemaene."""
 
 import re
+from collections.abc import Iterable
 
-from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
+from soknad.innstillinger import (
+    MAKS_FILSTORRELSE,
+    MAKS_TEGN,
+    MAKS_TEGN_EGET_BREV,
+    MIN_BOKSTAVER_PDF,
+    MIN_PASSORD_LENGDE,
+)
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.okt import Modus
 from soknad.kjerne.testdata_match import Testcase, finn_case
@@ -75,21 +82,61 @@ def maks_tegn(felt: str) -> int:
     return MAKS_TEGN_EGET_BREV if felt == "eget_brev" else MAKS_TEGN
 
 
+# Starten på hver PDF-fil. Den må stå blant de første PDF_START_BYTES bytene.
+PDF_MERKE = b"%PDF-"
+PDF_START_BYTES = 1024
+
+
+def sjekk_fil(filnavn: str, innhold: bytes) -> FeilType | None:
+    """Sjekken av en ny opplastet fil før den leses (FR-10, FR-12, story 6.2). Først
+    feil_filtype når navnet ikke slutter på .pdf (uansett store og små bokstaver), eller når
+    %PDF- ikke står i de første 1 024 bytene (for eksempel en .docx som er omdøpt til .pdf).
+    Så for_stor når fila er over MAKS_FILSTORRELSE. Ellers None, og fila kan leses. Kjernen får
+    bare navnet og bytene og leser aldri filer selv."""
+    if not filnavn.lower().endswith(".pdf") or PDF_MERKE not in innhold[:PDF_START_BYTES]:
+        return FeilType.FEIL_FILTYPE
+    if len(innhold) > MAKS_FILSTORRELSE:
+        return FeilType.FOR_STOR
+    return None
+
+
+def er_uleselig(tekst: str) -> bool:
+    """Teksten fra en PDF har færre enn MIN_BOKSTAVER_PDF bokstaver, så PDF-en regnes som
+    uleselig, for eksempel skannet (FR-11, story 6.2). En PDF pypdf ikke klarer å lese, gir tom
+    tekst og dermed også uleselig."""
+    return sum(tegn.isalpha() for tegn in tekst) < MIN_BOKSTAVER_PDF
+
+
 def sjekk_innlegging(
-    cv: str, annonse: str, caser: list[Testcase] | None, eget_brev: str | None = None
+    cv: str,
+    annonse: str,
+    caser: list[Testcase] | None,
+    eget_brev: str | None = None,
+    filfeil: Iterable[InndataFeil] = (),
 ) -> list[InndataFeil]:
     """Finner feil i innleggingen. eget_brev er None i Full generering, og er teksten i
     brevfeltet i Korrektur (FR-8). Alle feilene kommer samtidig, høyst én per felt og i
-    rekkefølgen fra felt_for_modus. Et felt med bare mellomrom er tomt. Tomt sjekkes først, så
-    for lang (mer enn maks_tegn(felt) tegn, NFR-11), så testdata når caser ikke er None (testmodus,
-    FR-34). finn_case gir ikke ikke_testdata på et tomt felt (AD-9), og et felt med for lang
-    tekst får heller ikke ikke_testdata."""
+    rekkefølgen fra felt_for_modus.
+
+    Rekkefølgen per felt er tom → feil_filtype → for_stor → uleselig → for_lang →
+    ikke_testdata. Et felt med bare mellomrom er tomt. filfeil er feilene for nye filer, som
+    ruten har funnet med sjekk_fil og er_uleselig (story 6.2). Et felt med en filfeil er aldri
+    tomt (det kom en fil), selv om teksten er tom etter feilen, så filfeilen tas først. Feltet
+    får den feilen og ingen annen: det hoppes over i sjekken av tomt og for lang og i
+    testdatasjekken.
+    For lang (mer enn maks_tegn(felt) tegn, NFR-11) står etter filfeilene, siden den trenger
+    lesbar tekst. Testdata sjekkes når caser ikke er None (testmodus, FR-34). finn_case gir ikke
+    ikke_testdata på et tomt felt (AD-9), og et felt med for lang tekst får heller ikke
+    ikke_testdata."""
     tekster = {"cv": cv, "annonse": annonse, "eget_brev": eget_brev}
     felt = felt_for_modus(Modus.FULL_GENERERING if eget_brev is None else Modus.KORREKTUR)
+    med_filfeil = {f.felt: f for f in filfeil if f.felt in felt}
     feil = []
     for navn in felt:
         tekst = tekster[navn]
-        if not tekst.strip():
+        if navn in med_filfeil:
+            feil.append(med_filfeil[navn])
+        elif not tekst.strip():
             feil.append(InndataFeil(navn, FeilType.TOM))
         elif antall_tegn(tekst) > maks_tegn(navn):
             feil.append(InndataFeil(navn, FeilType.FOR_LANG))

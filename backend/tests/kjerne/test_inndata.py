@@ -1,5 +1,6 @@
 """Tester for kjernen: feiltypene, økten og sjekken av innloggingen og registreringen
-(FR-1, FR-2, FR-3, FR-4, FR-8, FR-9, FR-34, NFR-5, NFR-11)."""
+(FR-1, FR-2, FR-3, FR-4, FR-8, FR-9, FR-10, FR-11, FR-12, FR-34, NFR-5, NFR-11). Feilene for
+opplastede filer (sjekk_fil, er_uleselig og filfeil i sjekk_innlegging) kom i story 6.2."""
 
 import ast
 import dataclasses
@@ -7,14 +8,24 @@ from pathlib import Path
 
 import pytest
 
-from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
+from soknad.innstillinger import (
+    MAKS_FILSTORRELSE,
+    MAKS_FORESPORSEL,
+    MAKS_KI_KALL,
+    MAKS_TEGN,
+    MAKS_TEGN_EGET_BREV,
+    MIN_BOKSTAVER_PDF,
+    MIN_PASSORD_LENGDE,
+)
 from soknad.kjerne.feil import FeilType, InndataFeil
 from soknad.kjerne.inndata import (
     INNLEGGINGSFELT,
     antall_tegn,
+    er_uleselig,
     felt_for_modus,
     maks_tegn,
     normaliser_epost,
+    sjekk_fil,
     sjekk_innlegging,
     sjekk_innlogging,
     sjekk_registrering,
@@ -56,7 +67,7 @@ def test_fr3_utfylt_skjema_gir_ingen_feil():
 
 
 def test_fr3_feiltypene_er_lukket_liste():
-    """FR-3/FR-4/FR-34/NFR-11: feiltypene så langt er nøyaktig disse."""
+    """FR-3/FR-4/FR-10/FR-11/FR-12/FR-34/NFR-11: feiltypene så langt er nøyaktig disse."""
     assert [t.value for t in FeilType] == [
         "tom",
         "epost_finnes",
@@ -67,6 +78,9 @@ def test_fr3_feiltypene_er_lukket_liste():
         "ikke_testdata",
         "for_lang",
         "annen_case",
+        "feil_filtype",
+        "for_stor",
+        "uleselig",
     ]
     assert FeilType.FEIL_INNLOGGING == "feil_innlogging"
 
@@ -425,3 +439,117 @@ def test_fr34_case_uten_brev_gir_ikke_testdata_pa_brevet():
     ikke_testdata på brevfeltet i Korrektur, men er som før i Full generering."""
     assert sjekk_innlegging(CV, ANNONSE, CASER, eget_brev=BREV) == [IKKE_TESTDATA_BREV]
     assert sjekk_innlegging(CV, ANNONSE, CASER) == []
+
+
+# --- Feilene for filer (story 6.2) ---
+
+PDF = b"%PDF-1.7\n" + b"x" * 100
+FEIL_FILTYPE_CV = InndataFeil("cv", FeilType.FEIL_FILTYPE)
+FOR_STOR_CV = InndataFeil("cv", FeilType.FOR_STOR)
+ULESELIG_CV = InndataFeil("cv", FeilType.ULESELIG)
+ULESELIG_BREV = InndataFeil("eget_brev", FeilType.ULESELIG)
+FEIL_FILTYPE_ANNONSE = InndataFeil("annonse", FeilType.FEIL_FILTYPE)
+
+
+def test_fr10_fr11_fr12_grensene_ligger_i_innstillinger():
+    """FR-10/FR-11/FR-12 (story 6.2): hver fil kan være på høyst 5 MB, hele forespørselen på
+    høyst 16 MB, og en PDF må ha minst 50 bokstaver."""
+    assert MAKS_FILSTORRELSE == 5 * 1024 * 1024
+    assert MAKS_FORESPORSEL == 16 * 1024 * 1024
+    assert MIN_BOKSTAVER_PDF == 50
+
+
+@pytest.mark.parametrize("filnavn", ["cv.pdf", "CV.PDF", "min cv.Pdf", "a.b.pdf"])
+def test_fr10_pdf_med_riktig_navn_og_start_godtas(filnavn):
+    """FR-10: navnet slutter på .pdf (uansett store og små bokstaver), og fila begynner med
+    %PDF-."""
+    assert sjekk_fil(filnavn, PDF) is None
+
+
+@pytest.mark.parametrize("filnavn", ["cv.docx", "cv.txt", "cv", "cv.pdf.docx", "pdf", "cv.pd"])
+def test_fr10_feil_navn_gir_feil_filtype(filnavn):
+    """FR-10: et navn som ikke slutter på .pdf, gir feil_filtype, også når innholdet er en
+    PDF."""
+    assert sjekk_fil(filnavn, PDF) == FeilType.FEIL_FILTYPE
+
+
+@pytest.mark.parametrize(
+    "innhold", [b"", b"PK\x03\x04\x14\x00\x06\x00", b"ikke en pdf", b"%PDF", b"%pdf-1.7"]
+)
+def test_fr10_omdopt_fil_uten_pdf_start_gir_feil_filtype(innhold):
+    """FR-10: en fil som heter .pdf, men ikke har %PDF- i starten (for eksempel en .docx som
+    er omdøpt), gir feil_filtype."""
+    assert sjekk_fil("cv.pdf", innhold) == FeilType.FEIL_FILTYPE
+
+
+def test_fr10_pdf_start_maa_vaere_i_de_forste_1024_bytene():
+    """FR-10: %PDF- kan stå litt ut i fila (noen PDF-er har søppel foran), men bare innenfor de
+    første 1 024 bytene."""
+    assert sjekk_fil("cv.pdf", b" " * 1019 + PDF) is None
+    assert sjekk_fil("cv.pdf", b" " * 1020 + PDF) == FeilType.FEIL_FILTYPE
+
+
+def test_fr12_akkurat_5_mb_godtas_og_en_byte_til_er_for_stor():
+    """FR-12: en PDF på akkurat 5 MB godtas, og 5 MB + 1 byte gir for_stor."""
+    assert sjekk_fil("cv.pdf", PDF.ljust(MAKS_FILSTORRELSE, b"x")) is None
+    assert sjekk_fil("cv.pdf", PDF.ljust(MAKS_FILSTORRELSE + 1, b"x")) == FeilType.FOR_STOR
+
+
+def test_fr10_fr12_feil_filtype_sjekkes_for_storrelsen():
+    """FR-10/FR-12: en stor fil som ikke er PDF, gir feil_filtype, ikke for_stor."""
+    assert sjekk_fil("cv.docx", PDF.ljust(MAKS_FILSTORRELSE + 1, b"x")) == FeilType.FEIL_FILTYPE
+
+
+def test_fr11_under_50_bokstaver_er_uleselig():
+    """FR-11: 49 bokstaver er uleselig, 50 er nok. Tall, mellomrom og tegn telles ikke, men æøå
+    og andre bokstaver gjør det."""
+    assert er_uleselig("")
+    assert er_uleselig("a" * (MIN_BOKSTAVER_PDF - 1))
+    assert not er_uleselig("a" * MIN_BOKSTAVER_PDF)
+    assert er_uleselig("1 2 3 - . \n" * 100 + "a" * (MIN_BOKSTAVER_PDF - 1))
+    assert not er_uleselig("æøå" * 17)
+
+
+def test_fr10_filfeil_gir_bare_den_feilen_paa_feltet():
+    """FR-10/FR-9 (story 6.2): et felt med en filfeil får den feilen og ikke tom (teksten er tom
+    etter en filfeil). De andre feltene sjekkes som før, og feilene kommer i feltrekkefølgen."""
+    assert sjekk_innlegging("", ANNONSE, None, filfeil=[FEIL_FILTYPE_CV]) == [FEIL_FILTYPE_CV]
+    assert sjekk_innlegging("", "", None, filfeil=[FOR_STOR_CV]) == [FOR_STOR_CV, TOM_ANNONSE]
+    assert sjekk_innlegging("", "", None, filfeil=[FEIL_FILTYPE_ANNONSE]) == [
+        TOM_CV,
+        FEIL_FILTYPE_ANNONSE,
+    ]
+
+
+def test_fr11_filfeil_kommer_foran_for_lang():
+    """FR-11/NFR-11 (story 6.2): for_lang står etter filfeilene, så et felt med en filfeil får
+    ikke for_lang."""
+    lang = "a" * (MAKS_TEGN + 1)
+    assert sjekk_innlegging(lang, ANNONSE, None, filfeil=[ULESELIG_CV]) == [ULESELIG_CV]
+
+
+def test_fr11_fr34_filfeil_gir_ikke_ikke_testdata():
+    """FR-11/FR-34 (story 6.2): i testmodus får et felt med en filfeil ikke ikke_testdata, og
+    en testannonse gir ingen feil."""
+    assert sjekk_innlegging("", ANNONSE, CASER, filfeil=[ULESELIG_CV]) == [ULESELIG_CV]
+    assert sjekk_innlegging("Min egen CV", "", CASER, filfeil=[FEIL_FILTYPE_ANNONSE]) == [
+        IKKE_TESTDATA_CV,
+        FEIL_FILTYPE_ANNONSE,
+    ]
+
+
+def test_fr10_fr11_fr12_alle_filfeilene_samtidig_i_korrektur():
+    """FR-10/FR-11/FR-12 (story 6.2): filfeil i alle tre feltene i Korrektur kommer samtidig, i
+    rekkefølgen CV, brev, annonse, også når de er sendt i en annen rekkefølge."""
+    filfeil = [FEIL_FILTYPE_ANNONSE, ULESELIG_BREV, FOR_STOR_CV]
+    assert sjekk_innlegging("", "", CASER_MED_BREV, eget_brev="", filfeil=filfeil) == [
+        FOR_STOR_CV,
+        ULESELIG_BREV,
+        FEIL_FILTYPE_ANNONSE,
+    ]
+
+
+def test_fr10_filfeil_paa_brevet_i_full_generering_ignoreres():
+    """FR-8/FR-10: i Full generering er det ikke noe brevfelt, så en filfeil på brevet gir
+    ingenting."""
+    assert sjekk_innlegging(CV, ANNONSE, None, filfeil=[ULESELIG_BREV]) == []

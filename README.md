@@ -80,6 +80,13 @@ cd backend
 powershell -ExecutionPolicy Bypass -File scripts\lag_testpdf.ps1
 ```
 
+**Filer som gir feil:** mappen `backend/testdata/feil/` har to filer til å prøve feilmeldingene på innleggingssiden. Den er ikke et testcase. `skannet.pdf` er CV-en fra case 1 som et bilde uten tekst, som en skannet CV, og gir «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.». `feil-type.docx` er den samme CV-en som Word-fil og gir «CV: Feil filtype, prøv PDF.» (velg «Alle filer» i filvelgeren for å se den). En fil over 5 MB gir «CV: Filen er for stor. Den kan være på høyst 5 MB.», og er alle filene til sammen over 16 MB, står «Filene er for store. Hver fil kan være på høyst 5 MB.» øverst på siden. I de andre feltene står feltnavnet først i stedet for «CV». En PDF regnes som uleselig når den har under 50 bokstaver. Grensene står i `backend/soknad/innstillinger.py`. Filene lages med skriptet `backend/scripts/lag_feilfiler.ps1`, som også trenger Microsoft Word på Windows:
+
+```powershell
+cd backend
+powershell -ExecutionPolicy Bypass -File scripts\lag_feilfiler.ps1
+```
+
 **Lage testsvarene på nytt:** svarene i `ki-svar/` lages med skriptet `backend/scripts/lag_testsvar.py`, og bare med det. Skriptet trenger API-nøkkelen i `backend/.env`, sender CV-en og annonsen i hvert testcase til Claude og skriver `nokkelord.json`, `gap.json`, `brev-1.json` og `brev-2.json`. Har testcaset et eget brev (`eget-brev.txt`, bare case 1), sendes det også, og skriptet skriver i tillegg `korrektur-1.json` og `korrektur-2.json` (det forbedrede brevet i Korrektur). Feiler et KI-kall, skrives ingenting for det testcaset. Med `--ut` skrives svarene i en annen mappe, og `ki-svar/` er uendret:
 
 ```bash
@@ -124,8 +131,8 @@ backend/                 Nettsiden (Python og Flask)
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
     adaptere/            Det som snakker med omverdenen: database, øktlager, KI, PDF inn og Word-fila
   tests/                 De automatiske testene, delt på samme måte som soknad/
-  testdata/              Fiktive CV-er, annonser og et eget brev (.txt og .pdf), med fasit og ekte KI-svar til testmodus
-  scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI, og lag_testpdf.ps1, som lager PDF-ene
+  testdata/              Fiktive CV-er, annonser og et eget brev (.txt og .pdf), med fasit og ekte KI-svar til testmodus, og feil/ med filer som gir feilmeldinger
+  scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI, lag_testpdf.ps1, som lager PDF-ene, og lag_feilfiler.ps1, som lager filene i feil/
   .env.example           Eksempel på innstillinger, uten ekte nøkler
 my-project/              Alle plan- og prosessdokumentene (se oversikten der)
 .logs/kristine/          Sesjonslogger og åpne punkter

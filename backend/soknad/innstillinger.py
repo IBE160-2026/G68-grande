@@ -3,8 +3,14 @@
 # Claude-modellen som brukes når ANTHROPIC_MODEL ikke er satt.
 STANDARD_MODELL = "claude-opus-5-5"
 
-# Største forespørsel nettsiden tar imot (16 MB).
+# Største forespørsel nettsiden tar imot (16 MB). Over det viser innleggingen feilboksen med
+# for_stor (story 6.2).
 MAKS_FORESPORSEL = 16 * 1024 * 1024
+# Største fil som godtas i hvert felt på innleggingen (5 MB, FR-12). En større fil leses ikke.
+MAKS_FILSTORRELSE = 5 * 1024 * 1024
+# En PDF med færre bokstaver enn dette regnes som uleselig, for eksempel skannet (FR-11).
+# Prøvd med testdata/feil/skannet.pdf og PDF-ene i testdata/case-*/ (story 6.2).
+MIN_BOKSTAVER_PDF = 50
 
 # Testbrukeren fra README. Den lages ved første oppstart, og bare hvis e-posten ikke finnes.
 TESTBRUKER_EPOST = "test@example.com"

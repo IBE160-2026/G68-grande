@@ -17,6 +17,11 @@ class FeilType(StrEnum):
     FOR_LANG = "for_lang"
     # CV og annonse er begge testdata, men fra ulike testcaser (story 4.5).
     ANNEN_CASE = "annen_case"
+    # Feilene for en opplastet fil (story 6.2): ikke en PDF, over MAKS_FILSTORRELSE (eller hele
+    # forespørselen over MAKS_FORESPORSEL, da med felt=None), og en PDF uten lesbar tekst.
+    FEIL_FILTYPE = "feil_filtype"
+    FOR_STOR = "for_stor"
+    ULESELIG = "uleselig"
 
 
 @dataclass(frozen=True)

@@ -5,14 +5,24 @@ from datetime import date
 from functools import partial
 from io import BytesIO
 
-from flask import current_app, redirect, render_template, request, send_file, url_for
+from flask import (
+    current_app,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    url_for,
+)
 
 from soknad.adaptere import fil_ut, pdf_inn
 from soknad.adaptere.db import epost_finnes, finn_bruker, lag_bruker
 from soknad.kjerne.feil import FeilType, FilFeil, InndataFeil, KIFeil
 from soknad.kjerne.filnavn import lag_filnavn
 from soknad.kjerne.inndata import (
+    er_uleselig,
     felt_for_modus,
+    sjekk_fil,
     sjekk_innlegging,
     sjekk_innlogging,
     sjekk_registrering,
@@ -169,7 +179,10 @@ def innlegging():
     uendret. Analysen bygger bare på CV og annonse i begge modusene.
 
     Hvert felt kan være en opplastet PDF i stedet for innlimt tekst (FR-8, story 6.1). Hvert
-    felt leses med _les_felt, både ved «Sjekk CV-en min» og ved «Tilbake»."""
+    felt leses med _les_felt, både ved «Sjekk CV-en min» og ved «Tilbake». En ny fil med feil
+    type, over 5 MB eller uten lesbar tekst gir en filfeil, og feltet lagres tomt. Filfeilene
+    vises ved «Sjekk CV-en min» sammen med de andre feilene (story 6.2). Er hele forespørselen
+    over MAX_CONTENT_LENGTH, viser for_stor_foresporsel siden med feilboksen."""
     if request.method == "GET":
         return _vis_innlegging(gjeldende_soknad(), feil=[])
     lagret = gjeldende_soknad()
@@ -181,12 +194,11 @@ def innlegging():
         # Ukjent knapp: samme side på nytt, og søknaden er uendret.
         return _vis_innlegging(lagret, feil=[]), 400
     med_brev = "eget_brev" in felt_for_modus(lagret.modus)
-    soknad = sett_inndata(
-        lagret,
-        cv=_les_felt("cv", lagret.cv),
-        annonse=_les_felt("annonse", lagret.annonse),
-        eget_brev=_les_felt("eget_brev", lagret.eget_brev) if med_brev else None,
-    )
+    cv_felt, cv_feil = _les_felt("cv", lagret.cv)
+    annonse_felt, annonse_feil = _les_felt("annonse", lagret.annonse)
+    brev_felt, brev_feil = _les_felt("eget_brev", lagret.eget_brev) if med_brev else (None, None)
+    filfeil = [f for f in (cv_feil, brev_feil, annonse_feil) if f is not None]
+    soknad = sett_inndata(lagret, cv=cv_felt, annonse=annonse_felt, eget_brev=brev_felt)
     # Teksten som sjekkes og sendes til KI-en, også når den kom fra en PDF.
     cv = soknad.cv.tekst
     annonse = soknad.annonse.tekst
@@ -202,7 +214,7 @@ def innlegging():
         return til_innloggingen()
     # Testcasene finnes bare i TestKI, så de hentes derfra, ikke fra KI-en som velges (AD-3).
     caser = current_app.extensions["test_ki"].caser if innlogging.testmodus else None
-    feil = sjekk_innlegging(cv, annonse, caser, eget_brev=eget_brev)
+    feil = sjekk_innlegging(cv, annonse, caser, eget_brev=eget_brev, filfeil=filfeil)
     if feil:
         return _vis_innlegging(soknad, feil=feil)
 
@@ -222,6 +234,25 @@ def innlegging():
         vis_feil=partial(_vis_innlegging, soknad, feil=[]),
         neste="web.resultat",
     )
+
+
+@web.app_errorhandler(413)
+def for_stor_foresporsel(feil):
+    """Hele forespørselen er over MAX_CONTENT_LENGTH (16 MB, story 6.2). På innleggingen vises
+    siden med «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen og status
+    413, med det som var lagret i søknaden fra før. Ingenting fra forespørselen lagres. Alle
+    andre sider gir Werkzeugs vanlige 413-side.
+
+    Werkzeug kaster feilen først når skjemaet leses, altså etter login_required og krever_steg.
+    Er brukeren likevel ikke logget inn (en annen fane), gis den vanlige 413-siden."""
+    if request.endpoint != "web.innlegging" or gjeldende_innlogging() is None:
+        return feil
+    svar = make_response(
+        _vis_innlegging(gjeldende_soknad(), feil=[InndataFeil(None, FeilType.FOR_STOR)]), 413
+    )
+    # Som login_required: siden lagres ikke i nettleseren.
+    svar.headers["Cache-Control"] = "no-store"
+    return svar
 
 
 @web.route("/resultat", methods=["GET", "POST"])
@@ -458,20 +489,33 @@ def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
 
 
 def _les_felt(navn, lagret_felt):
-    """Ett felt på innleggingen fra skjemaet (FR-8, story 6.1). Det skjulte feltet
-    <navn>_kilde avgjør hvor teksten kommer fra:
-    - fil med en ny fil i <navn>_fil: teksten leses fra PDF-en i pdf_inn, og filnavnet lagres
-      uten mappene foran (bare delen etter siste / eller \\).
+    """Ett felt på innleggingen fra skjemaet (FR-8, story 6.1), som (Tekstfelt, filfeil).
+    Det skjulte feltet <navn>_kilde avgjør hvor teksten kommer fra:
+    - fil med en ny fil i <navn>_fil: fila sjekkes med sjekk_fil (filtype, så størrelse). Er
+      den i orden, leses teksten fra PDF-en i pdf_inn, og har teksten for få bokstaver
+      (er_uleselig), er PDF-en uleselig (FR-10, FR-11, FR-12, story 6.2). En fil med feil
+      type eller over 5 MB leses ikke. Med en filfeil blir feltet et tomt Tekstfelt, og den
+      avviste fila lagres ikke (bestemt av Kristine 16. november 2026). Ellers lagres teksten
+      med filnavnet uten mappene foran (bare delen etter siste / eller \\).
     - fil uten ny fil: feltet fra økten beholdes (lagret_felt), for eksempel etter en feil i et
-      annet felt eller etter «Tilbake».
+      annet felt eller etter «Tilbake». Den fila er alt sjekket.
     - tekst (eller mangler): teksten i tekstboksen, uten filnavn.
-    Fila leses bare i minnet og lagres aldri på disk."""
+    filfeil er None når det ikke er noen feil med fila. Fila leses bare i minnet og lagres
+    aldri på disk, og verken fila eller teksten logges (NFR-4)."""
     if request.form.get(f"{navn}_kilde") == "fil":
         fil = request.files.get(f"{navn}_fil")
         if fil is None or not fil.filename:
-            return lagret_felt
-        return Tekstfelt(pdf_inn.les_pdf(fil.read()), _uten_mappe(fil.filename))
-    return Tekstfelt(request.form.get(navn, ""))
+            return lagret_felt, None
+        innhold = fil.read()
+        feiltype = sjekk_fil(fil.filename, innhold)
+        if feiltype is None:
+            tekst = pdf_inn.les_pdf(innhold)
+            if er_uleselig(tekst):
+                feiltype = FeilType.ULESELIG
+        if feiltype is not None:
+            return Tekstfelt(), InndataFeil(navn, feiltype)
+        return Tekstfelt(tekst, _uten_mappe(fil.filename)), None
+    return Tekstfelt(request.form.get(navn, "")), None
 
 
 def _uten_mappe(filnavn):
@@ -490,8 +534,12 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
 
     Et felt med filnavn (en opplastet PDF, story 6.1) vises med filnavnet, og tekstboksen er
     tom. Teksten fra PDF-en blir da bare i økten, og «Sjekk CV-en min» uten ny fil bruker den.
-    Et felt er altså tomt, har tekst eller har en fil."""
-    feltfeil = {f.felt: tekster.feiltekst(f) for f in feil}
+    Et felt er altså tomt, har tekst eller har en fil.
+
+    En feil med felt=None (hele forespørselen over 16 MB, story 6.2) er en skjemafeil: den står
+    i feilboksen uten lenke, før feltfeilene, og ikke ved noe felt."""
+    feltfeil = {f.felt: tekster.feiltekst(f) for f in feil if f.felt is not None}
+    skjemafeil = [tekster.feiltekst(f) for f in feil if f.felt is None]
     felter = felt_for_modus(soknad.modus)
     filnavn = {navn: getattr(soknad, navn).filnavn for navn in felter}
     tekst = {navn: "" if filnavn[navn] else getattr(soknad, navn).tekst for navn in felter}
@@ -506,6 +554,7 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
         tekst=tekst,
         filnavn=filnavn,
         feltfeil=feltfeil,
+        skjemafeil=skjemafeil,
         ki_feil=ki_feil,
         prov_pa_nytt=prov_pa_nytt,
     )

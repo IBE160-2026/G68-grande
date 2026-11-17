@@ -1,5 +1,6 @@
-"""Tester for teksten fra en opplastet PDF (FR-8, kriterium 5, story 6.1). PDF-ene i testdataene
-er lagret fra Word med scripts/lag_testpdf.ps1."""
+"""Tester for teksten fra en opplastet PDF (FR-8, FR-11, kriterium 5, story 6.1). PDF-ene i
+testdataene er lagret fra Word med scripts/lag_testpdf.ps1. Prøven av grensen på 50 bokstaver med
+testdata/feil/skannet.pdf (laget med scripts/lag_feilfiler.ps1) kom i story 6.2."""
 
 import re
 from pathlib import Path
@@ -9,10 +10,13 @@ import pytest
 from soknad.adaptere import pdf_inn
 from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.adaptere.pdf_inn import les_pdf, normaliser
+from soknad.innstillinger import MIN_BOKSTAVER_PDF
+from soknad.kjerne.inndata import er_uleselig
 from soknad.kjerne.testdata_match import vask
 
 SOKNAD = Path(pdf_inn.__file__).resolve().parents[1]
 PDF_ER = sorted(TESTDATA_MAPPE.glob("case-*/*.pdf"))
+FEIL = TESTDATA_MAPPE / "feil"
 
 
 def test_fr8_testdataene_har_pdf_ene():
@@ -47,10 +51,24 @@ def test_fr8_pdf_fra_word_gir_samme_tekst_som_txt(pdf):
         b"%PDF-1.7\n%\xe2\xe3\xcf\xd3\nnoe som er \xff\xfe \xc3\xb8delagt",
     ],
 )
-def test_fr8_fil_som_ikke_kan_leses_gir_tom_tekst(innhold):
-    """FR-8 (story 6.1, til 6.2): en fil pypdf ikke kan lese, eller som ikke er en PDF, gir
-    tom tekst uten krasj, så feltet får feilen «tom»."""
+def test_fr11_fil_som_ikke_kan_leses_gir_tom_tekst_og_uleselig(innhold):
+    """FR-8/FR-11 (story 6.1 og 6.2): en fil pypdf ikke kan lese, eller som ikke er en PDF, gir
+    tom tekst uten krasj, og tom tekst er uleselig."""
     assert les_pdf(innhold) == ""
+    assert er_uleselig(les_pdf(innhold))
+
+
+def test_fr11_bare_skannet_pdf_er_under_grensen_paa_50_bokstaver():
+    """FR-11 (story 6.2): grensen på MIN_BOKSTAVER_PDF bokstaver skiller den skannede PDF-en fra
+    PDF-ene i testdataene. skannet.pdf er bare et bilde og har ingen bokstaver, og alle PDF-ene i
+    testdata/case-*/ har langt flere enn grensen (målt 16. november 2026: 0 og 896–1 038)."""
+    skannet = les_pdf((FEIL / "skannet.pdf").read_bytes())
+    assert sum(tegn.isalpha() for tegn in skannet) < MIN_BOKSTAVER_PDF
+    assert er_uleselig(skannet)
+    for pdf in PDF_ER:
+        tekst = les_pdf(pdf.read_bytes())
+        assert sum(tegn.isalpha() for tegn in tekst) >= MIN_BOKSTAVER_PDF, pdf
+        assert not er_uleselig(tekst), pdf
 
 
 def test_fr8_avkuttet_pdf_gir_ingen_krasj():

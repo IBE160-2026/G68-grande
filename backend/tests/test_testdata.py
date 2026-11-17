@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pytest
 
+from soknad.adaptere.ki import TestKI
 from soknad.adaptere.pdf_inn import les_pdf
 from soknad.kjerne.ki_svar import kontroller, korrektur_visning
 from soknad.kjerne.telleregel import tell_treff
@@ -453,3 +454,28 @@ def test_fr34_pdf_ene_gir_samme_testcase_som_txt(case):
     if (case / "eget-brev.pdf").exists():
         brev = _pdf_tekst(case, "eget-brev.pdf")
         assert finn_case(cv_pdf, annonse_pdf, caser, eget_brev=brev) == (case.name, [])
+
+
+# --- Feilfilene (FR-10, FR-11, story 6.2) ---
+
+FEIL = TESTDATA / "feil"
+
+
+def test_fr10_fr11_feilfilene_finnes():
+    """FR-10/FR-11 (story 6.2): testdata/feil/ har skannet.pdf og feil-type.docx, laget med
+    scripts/lag_feilfiler.ps1. feil-type.docx har et unntak fra *.docx i .gitignore, så testen
+    feiler på GitHub hvis unntaket ikke virker."""
+    assert (FEIL / "skannet.pdf").is_file()
+    assert (FEIL / "feil-type.docx").is_file()
+    assert (FEIL / "skannet.pdf").read_bytes().startswith(b"%PDF-")
+    # En Word-fil er en zip-fil.
+    assert (FEIL / "feil-type.docx").read_bytes().startswith(b"PK\x03\x04")
+
+
+def test_fr10_feil_er_ikke_et_testcase():
+    """FR-10/FR-34 (story 6.2): TestKI leser bare mappene som heter case-…, så feil/ (uten
+    cv.txt og annonse.txt) blir ikke et testcase og stopper ikke oppstarten."""
+    assert FEIL.is_dir()
+    navn = [case.navn for case in TestKI(TESTDATA).caser]
+    assert "feil" not in navn
+    assert len(navn) == len([mappe for mappe in TESTDATA.glob("case-*") if mappe.is_dir()])
