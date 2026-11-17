@@ -441,4 +441,4 @@ Grensen på 50 skiller dem godt, så `MIN_BOKSTAVER_PDF` i `innstillinger.py` er
 
 ### Over 16 MB med den ekte utviklingsserveren
 
-`flask --app soknad run`, innlogget med testbrukeren, og `POST /innlegging` med en fil på 17 MB fra Python `urllib`. Svaret var status 413 med innleggingssiden og «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen, og forbindelsen ble ikke brutt. Ikke prøvd i nettleseren ennå (Kristines sjekk i PR-en).
+`flask --app soknad run`, innlogget med testbrukeren, og `POST /innlegging` med en fil på 17 MB fra Python `urllib`. Svaret var status 413 med innleggingssiden og «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen, og forbindelsen ble ikke brutt. Prøvd i nettleseren av Kristine (PR #43): en fil på 17 MB ga siden med feilboksen.

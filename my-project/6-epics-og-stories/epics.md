@@ -905,6 +905,7 @@ slik at jeg slipper å kopiere teksten selv.
 **Gitt** et innleggingsfelt i tom tilstand
 **Så** står «Last opp PDF» ved siden av «Lim inn tekst», og filvelgeren har `accept=".pdf"`. Skjermlesere hører for eksempel «Last opp PDF, CV» (FR-8, UX-DR8)
 **Og** over feltene står i begge modusene: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» (UX-DR24)
+**Og** under tekstboksen står hjelpeteksten «Høyst 15 000 tegn.» for CV og annonse og «Høyst 5 000 tegn.» for brevfeltet, koblet til tekstboksen med `aria-describedby` (NFR-11, bestemt av Kristine i story 6.1)
 
 **Når** jeg velger en fil
 **Så** vises filnavnet med ✓ med en gang, et langt navn kuttes med «…», fokus går til søppelbøtta, og skjermlesere hører «CV lastet opp: <filnavn>» (UX-DR8)
@@ -912,6 +913,7 @@ slik at jeg slipper å kopiere teksten selv.
 
 **Når** jeg trykker søppelbøtta
 **Så** fjernes filen, feltet går tilbake til tom tilstand, og fokus går til «Last opp PDF» (FR-13, UX-DR8)
+**Og** det gjelder begge søppelbøttene, både den ved filnavnet og den i tekstboksen (bestemt av Kristine i story 6.1)
 
 **Når** jeg trykker «Sjekk CV-en min»
 **Så** leses teksten bare i `adaptere/pdf_inn.py` med pypdf og vanlig `extract_text()`, og teksten og filnavnet lagres i økten, ikke på disk (AD-11, NFR-4)
@@ -939,11 +941,14 @@ slik at jeg vet hva jeg skal gjøre i stedet.
 **Når** en fil er større enn 5 MB
 **Så** vises «CV: Filen er for stor. Den kan være på høyst 5 MB.» (FR-12)
 **Og** er hele forespørselen over `MAX_CONTENT_LENGTH` (16 MB), viser en egen 413-håndterer feilboksen med `for_stor` (AD-9, AD-11)
+**Og** teksten er da «Filene er for store. Hver fil kan være på høyst 5 MB.», uten feltnavn og uten lenke (bestemt av Kristine i story 6.2)
 
 **Når** pypdf gir færre enn 50 bokstaver, for eksempel fra en skannet PDF
 **Så** vises «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» (FR-11, AD-11)
 
-**Og** feltnavnet byttes ut («CV», «Ditt søknadsbrev», «Stillingsannonse»), alle feilene vises samtidig i feilboksen i rekkefølgen tom → feil filtype → for stor → uleselig → ikke testdata, og felt uten feil beholdes (AD-9, UX-DR7)
+**Og** feltnavnet byttes ut («CV», «Ditt søknadsbrev», «Stillingsannonse»), alle feilene vises samtidig i feilboksen i rekkefølgen tom → feil filtype → for stor → uleselig → for lang → ikke testdata, og felt uten feil beholdes (AD-9, UX-DR7, «for lang» lagt til i retro 6)
+**Og** et felt med en avvist fil blir tomt («Last opp PDF» og «Lim inn tekst») med den røde feilteksten, og den avviste fila lagres ikke i økten (bestemt av Kristine i story 6.2)
+**Og** en PDF med mer tekst enn tegngrensen gir den vanlige feilen «for lang». Filnavnet står igjen i feltet, og teksten kuttes rett over grensen og lagres i økten (NFR-11, retro 6)
 **Og** feilene virker også i testmodus (FR-34)
 **Og** grensene 5 MB, 16 MB og 50 bokstaver ligger i `innstillinger.py`
 

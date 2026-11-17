@@ -811,11 +811,14 @@ PDF_BREV = (TESTDATA_MAPPE / "case-1-utvikler" / "eget-brev.pdf").read_bytes()
 def send_felt(client, handling="sjekk", **felt):
     """Sender innleggingen med hvert felt som tekst (en str) eller som fil (bytes, filnavn).
     En fil får <navn>_kilde=fil, en tekst <navn>_kilde=tekst. None gir kilde=fil uten ny fil
-    (filnavnet fra økten står på siden)."""
+    (filnavnet fra økten står på siden).
+    Uten ny fil (None eller tekst) sendes <navn>_fil som en tom del med filename="", slik
+    nettleseren gjør når ingen fil er valgt i <input type="file"> (retro 6 A4)."""
     data = {"handling": handling}
     for navn, verdi in felt.items():
         if verdi is None:
             data[f"{navn}_kilde"] = "fil"
+            data[f"{navn}_fil"] = (BytesIO(b""), "")
             data[navn] = ""
         elif isinstance(verdi, tuple):
             innhold, filnavn = verdi
@@ -824,6 +827,7 @@ def send_felt(client, handling="sjekk", **felt):
             data[navn] = ""
         else:
             data[f"{navn}_kilde"] = "tekst"
+            data[f"{navn}_fil"] = (BytesIO(b""), "")
             data[navn] = verdi
     return client.post("/innlegging", data=data, content_type="multipart/form-data")
 
@@ -985,6 +989,17 @@ def test_fr8_kilde_tekst_ignorerer_en_fil(app, paa_innlegging):
     assert soknaden(app, paa_innlegging).cv == Tekstfelt("Min egen CV")
 
 
+def test_fr8_kilde_fil_uten_fildel_beholder_lagret_fil(app, paa_innlegging):
+    """FR-8 (retro 6 A4): kilde=fil uten noen <navn>_fil-del i skjemaet (fil er None i
+    _les_felt) beholder feltet fra økten, som når nettleseren sender en tom fildel."""
+    send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    lagret = soknaden(app, paa_innlegging).cv
+    assert lagret.filnavn == "cv.pdf"
+    data = {"cv_kilde": "fil", "cv": "", "annonse": ANNONSE, "handling": "tilbake"}
+    paa_innlegging.post("/innlegging", data=data, content_type="multipart/form-data")
+    assert soknaden(app, paa_innlegging).cv == lagret
+
+
 def test_fr13_soppelbotta_pa_filnavnet_tommer_lagret_fil(app, paa_innlegging):
     """FR-13 (story 6.1): søppelbøtta på filnavnet setter kilden til tekst med tom tekstboks,
     så den lagrede PDF-en er borte etter neste innsending."""
@@ -1019,7 +1034,7 @@ def test_nfr11_for_lang_tekst_fra_pdf_gir_for_lang(
     feilen for_lang. Filnavnet står i filboksen, og søppelbøtta ved det er koblet til
     feilteksten."""
     sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=modus))
-    monkeypatch.setattr(pdf_inn, "les_pdf", lambda innhold: "a" * lengde)
+    monkeypatch.setattr(pdf_inn, "les_pdf", lambda innhold, maks=None: "a" * lengde)
     felt = {"cv": CV, "annonse": ANNONSE}
     if modus == Modus.KORREKTUR:
         felt["eget_brev"] = EGET_BREV
@@ -1034,14 +1049,58 @@ def test_nfr11_for_lang_tekst_fra_pdf_gir_for_lang(
     assert f'aria-describedby="{navn}-feil"' in filboks
 
 
+@pytest.mark.parametrize(
+    ("modus", "navn", "grense", "sider_lest"),
+    [
+        (Modus.FULL_GENERERING, "cv", MAKS_TEGN, 3),
+        (Modus.KORREKTUR, "eget_brev", MAKS_TEGN_EGET_BREV, 1),
+    ],
+)
+def test_nfr11_lang_pdf_lagres_kuttet_rett_over_grensen(
+    app, innlogget_client, monkeypatch, modus, navn, grense, sider_lest
+):
+    """NFR-11/NFR-4 (retro 6 A1): en PDF med langt mer tekst enn grensen gir for_lang gjennom
+    ruten, og økten lagrer høyst grensen + 1 tegn. pypdf slutter å lese sider når grensen er
+    nådd: hver side er 6 999 tegn etter normaliseringen, så 3 sider for 15 000 og 1 side for
+    5 000."""
+    lest = []
+
+    class Side:
+        def extract_text(self):
+            lest.append(self)
+            return "Python " * 1000
+
+    class Leser:
+        def __init__(self, fil):
+            self.pages = [Side() for _ in range(20)]
+
+    monkeypatch.setattr(pdf_inn, "PdfReader", Leser)
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=modus))
+    felt = {"cv": CV, "annonse": ANNONSE}
+    if modus == Modus.KORREKTUR:
+        felt["eget_brev"] = EGET_BREV
+    felt[navn] = (b"%PDF-1.7", "lang.pdf")
+    svar = send_felt(innlogget_client, **felt)
+    assert svar.status_code == 200
+    tekst = tekster.feiltekst(InndataFeil(navn, FeilType.FOR_LANG))
+    assert feilboks_lenker(html_av(svar)) == [(f"#{navn}-felt", tekst)]
+    lagret = getattr(soknaden(app, innlogget_client), navn)
+    assert lagret.filnavn == "lang.pdf"
+    assert len(lagret.tekst) == grense + 1
+    assert len(lest) == sider_lest
+
+
 def test_fr8_samme_tekst_med_nytt_filnavn_beholder_analysen(app, innlogget_client):
-    """FR-8/FR-19 (story 6.1, retro 2 A9): er teksten fra PDF-en den samme som den lagrede,
-    lagres filnavnet, og analysen og steget beholdes."""
+    """FR-8/FR-19 (story 6.1, retro 2 A9): lastes den samme PDF-en opp på nytt under et nytt
+    filnavn, er teksten den samme som den lagrede. Da lagres filnavnet, og analysen og steget
+    beholdes. Det gjelder ikke innlimt tekst som byttes med en PDF: teksten fra en PDF er ikke
+    helt lik teksten fra .txt-fila, så analysen nullstilles (retro 6 A3, bestemt av Kristine
+    17. november 2026)."""
     tekst = les_pdf(PDF_CV)
     soknad = Soknad(
         steg=Steg.RESULTAT,
         modus=Modus.FULL_GENERERING,
-        cv=Tekstfelt(tekst),
+        cv=Tekstfelt(tekst, "gammel.pdf"),
         annonse=Tekstfelt(ANNONSE),
         nokkelord=("Python",),
         nokkelord_annonse="annonse",
@@ -1236,9 +1295,9 @@ def lest(monkeypatch):
     lest = []
     ekte = pdf_inn.les_pdf
 
-    def les(innhold):
+    def les(innhold, maks=None):
         lest.append(innhold)
-        return ekte(innhold)
+        return ekte(innhold, maks=maks)
 
     monkeypatch.setattr(pdf_inn, "les_pdf", les)
     return lest
@@ -1403,7 +1462,7 @@ def test_fr11_lagret_fil_sjekkes_ikke_paa_nytt(paa_innlegging, monkeypatch):
     send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
     paa_innlegging.post("/modus", data={"modus": "full_generering"})
 
-    def ikke_kall(*args):
+    def ikke_kall(*args, **kwargs):
         raise AssertionError("Den lagrede fila skal ikke sjekkes på nytt.")
 
     monkeypatch.setattr(ruter, "sjekk_fil", ikke_kall)

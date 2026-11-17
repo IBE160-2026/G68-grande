@@ -128,6 +128,7 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 - Overskrift Korrektur: «Legg inn CV-en din, brevet ditt og stillingsannonsen».
 - Felt: «📄 CV» (CV-en din) · «✉️ Ditt søknadsbrev» (Brevet du har skrevet selv, bare Korrektur) · «📢 Stillingsannonse» (Annonsen for jobben du søker på).
 - Knapper i hvert felt: «Last opp PDF», «Lim inn tekst». Over tekstboksen: «Lim inn teksten her».
+- Hjelpetekst under tekstboksen: «Høyst 15 000 tegn.» for CV og annonse, «Høyst 5 000 tegn.» for brevfeltet. Den er koblet til tekstboksen (bestemt av Kristine 16. november 2026, story 6.1).
 - Hjelpetekst over feltene, i begge modusene: «Tips: PDF lagret fra Word leses best. Er CV-en laget i Canva eller et lignende program, kan teksten komme i feil rekkefølge. Lim den da heller inn.» (prøve med pypdf 7. november 2026: fra Canva kom all teksten med, men overskriftene havnet på feil sted)
 - Knapper nederst: «Tilbake», «Sjekk CV-en min».
 - Bare i testmodus: «Testmodus: bruk filene i mappen backend/testdata/ i prosjektet.»
@@ -139,10 +140,14 @@ Vennlig, personlig og enkel tekst. Korte setninger. Siden snakker til brukeren s
 | Feil filtype | «CV: Feil filtype, prøv PDF.» | FR-10 |
 | Uleselig PDF | «CV: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. Lim inn teksten i stedet.» | FR-11 |
 | For stor fil | «CV: Filen er for stor. Den kan være på høyst 5 MB.» (tallet er bestemt i arkitekturen) | FR-12 |
+| Alle filene sammen over 16 MB | «Filene er for store. Hver fil kan være på høyst 5 MB.» Uten feltnavn og uten lenke (bestemt av Kristine 16. november 2026, story 6.2) | FR-12 |
+| For lang tekst | «CV: Teksten er for lang. Den kan være på høyst 15 000 tegn.» (brevfeltet: «Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn.») | NFR-11 |
 | Ikke testdata i testmodus | «CV: I testmodus fungerer bare testdataene fra mappen backend/testdata/.» | FR-34 |
 | CV og annonse fra ulike testcaser i testmodus | «Stillingsannonse: I testmodus må CV-en og annonsen være fra samme mappe i backend/testdata/.» (bestemt av Kristine 14. november 2026, story 4.5) | FR-34 |
 
 Feltnavnet byttes ut: «CV», «Ditt søknadsbrev», «Stillingsannonse». Den samme teksten står også med rødt under feltnavnet i feltet med feil.
+
+Et felt med en avvist fil (feil filtype, for stor eller uleselig) blir tomt igjen, med «Last opp PDF» og «Lim inn tekst» og den røde feilteksten. Den avviste fila lagres ikke (bestemt av Kristine 16. november 2026, story 6.2). En PDF med mer tekst enn tegngrensen er ikke avvist: filnavnet står igjen i feltet, feilen «for lang» vises, og teksten kuttes rett over grensen og lagres i økten (retro 6).
 
 **Resultatside** (FR-14–FR-19, FR-21)
 
@@ -199,8 +204,8 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | Skjemafeil | Innlogging | Bare visning. Fokus: se Accessibility Floor. |
 | Innleggingsfelt | Innlegging | Tom tilstand: «Last opp PDF» og «Lim inn tekst». «Last opp PDF» åpner filvelgeren, som bare viser PDF (`accept=".pdf"`). Etter opplasting vises filnavnet med ✓, fokus går til søppelbøtta ved filnavnet, og skjermlesere hører «CV lastet opp: `<filnavn>`». «Lim inn tekst» åpner en tekstboks i feltet, og markøren settes i den. Det man legger inn, sjekkes ikke før man trykker «Sjekk CV-en min» (se State Patterns). |
 | Filnavn (`file-chip`) | Innleggingsfelt | Bare visning. Et langt filnavn kuttes med «…». |
-| Tekstboks | Innleggingsfelt | Kan dras større. Søppelbøtta over den tømmer den. |
-| Søppelbøtte | Innleggingsfelt | Tømmer feltet med en gang, uten bekreftelse (FR-13). Feltet går tilbake til tom tilstand. Skjermlesertekst: «Tøm CV-feltet», «Tøm brevfeltet», «Tøm annonsefeltet». Etter tømming går fokus til «Last opp PDF» i samme felt, og skjermlesere hører «CV-feltet er tømt». |
+| Tekstboks | Innleggingsfelt | Kan dras større. Søppelbøtta over den tømmer den. Under den står hjelpeteksten om tegngrensen («Høyst 15 000 tegn.», i brevfeltet «Høyst 5 000 tegn.»). |
+| Søppelbøtte | Innleggingsfelt | Tømmer feltet med en gang, uten bekreftelse (FR-13). Feltet går tilbake til tom tilstand. Skjermlesertekst: «Tøm CV-feltet», «Tøm brevfeltet», «Tøm annonsefeltet». Etter tømming går fokus til «Last opp PDF» i samme felt, og skjermlesere hører «CV-feltet er tømt». Det gjelder begge søppelbøttene, ved filnavnet og over tekstboksen (bestemt av Kristine 16. november 2026, story 6.1). |
 | Hjelpetekst for testdata | Innlegging | Bare visning, bare i testmodus. |
 | Testmodus-bryter | Startside | Slår testmodus av og på (FR-32). Finnes bare på startsiden. Uten API-nøkkel er den låst på. Er en bryter (`role="switch"`) med synlig etikett «Testmodus». Låst bryter har `aria-disabled="true"`, så den fortsatt kan nås med Tab, og «Mangler API-nøkkel, se README» er koblet til den med `aria-describedby`. Husker valget så lenge man er logget inn (se State Patterns). |
 | Merkelapp «Testmodus» | Alle andre sider | Bare visning, kan ikke trykkes på (FR-33). |

@@ -167,9 +167,9 @@ flowchart TD
 - **Prevents:** at feil vises én om gangen, skrives ulikt på ulike sider, eller mangler en tekst.
 - **Rule:** Typene ligger i `kjerne/feil.py` som lukkede lister.
   - **Inndatafeil returneres som en liste**, så alle feilene vises samtidig (UX). Hver feil er `InndataFeil(felt, type)`, der `type` er en av:
-    - `tom`, `feil_filtype`, `for_stor`, `uleselig`, `ikke_testdata`
+    - `tom`, `feil_filtype`, `for_stor`, `uleselig`, `for_lang`, `ikke_testdata`, `annen_case`
     - `epost_finnes`, `epost_ugyldig`, `passord_kort`, `passord_ulike`, `feil_innlogging`
-  - **Rekkefølge per felt:** tom → feil_filtype → for_stor → uleselig → ikke_testdata.
+  - **Rekkefølge per felt:** tom → feil_filtype → for_stor → uleselig → for_lang → ikke_testdata (`for_lang` lagt til i retro 6, bestemt i story 6.2).
   - **Unntak brukes bare for to ting:**
     - `KIFeil(type)`, der `type` er `nettverk`, `annet` eller `ubrukelig_svar`
     - `FilFeil` («Vi klarte ikke å lage filen»)

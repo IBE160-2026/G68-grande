@@ -459,6 +459,14 @@ def test_fr10_fr11_fr12_grensene_ligger_i_innstillinger():
     assert MIN_BOKSTAVER_PDF == 50
 
 
+def test_fr12_foresporselen_har_plass_til_tre_filer_og_skjemaet():
+    """FR-12 (retro 6 A7): hele forespørselen har plass til tre filer på høyst
+    MAKS_FILSTORRELSE (CV, eget brev og annonse i Korrektur) og 1 MB til resten av skjemaet.
+    Heves grensen for én fil, må grensen for forespørselen heves også, ellers får tre gyldige
+    filer «Filene er for store»."""
+    assert MAKS_FORESPORSEL >= 3 * MAKS_FILSTORRELSE + 1024 * 1024
+
+
 @pytest.mark.parametrize("filnavn", ["cv.pdf", "CV.PDF", "min cv.Pdf", "a.b.pdf"])
 def test_fr10_pdf_med_riktig_navn_og_start_godtas(filnavn):
     """FR-10: navnet slutter på .pdf (uansett store og små bokstaver), og fila begynner med
