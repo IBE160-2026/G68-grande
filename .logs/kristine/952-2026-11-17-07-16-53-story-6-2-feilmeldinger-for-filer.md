@@ -20,7 +20,7 @@ Bygge story 6.2 med `bmad-build`: tydelige feilmeldinger når en fil ikke kan br
 - Sprint-status: 6.2 er `review`. Notat lagt til i `my-project/8-refleksjonsrapport/notater.md`.
 - Lukket i `issues.md`: de to punktene fra 6.1 om 6.2.
 - Pushet og [PR #43](https://github.com/IBE160-2026/G68-grande/pull/43) laget, med notat om KI-feilene. CI er grønn.
-- Kristine prøvde i nettleseren med filene i `C:/BMAD/test-6-2` (utenfor Git): tre filfeil samtidig i Korrektur, det samme i testmodus, et riktig felt står igjen, testdata-meldingen virker fortsatt, og over 16 MB gir siden med feilboksen. Alt virket, og kommentaren står i PR #43.
+- Kristine prøvde i nettleseren med filene i `C:/BMAD/test-6-2` (utenfor Git): tre filfeil samtidig i Korrektur, det samme i testmodus, et riktig felt står igjen, testdata-meldingen virker fortsatt, og over 16 MB gir siden med feilboksen. Alt virket, og kommentaren står i PR #43. Kristine flettet PR-en (merge `6372f77`), og story 6.2 og epic 6 er satt til ferdig i sprint-status.
 
 ### Åpne punkter
 Ingen.
