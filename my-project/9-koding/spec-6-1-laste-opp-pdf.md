@@ -36,7 +36,7 @@ context:
 | Tilbake og inn igjen | PDF lagret | filnavnet vises fra økten. «Sjekk» uten ny fil bruker lagret tekst | – |
 | Feil i et annet felt | PDF i CV, annonse tom | siden på nytt med filnavnet i CV og feilen på annonsen | som før |
 | Ulesbar fil | `.docx` eller ødelagt PDF | tom tekst, feilen «tom» | ingen krasj (til 6.2) |
-| Samme tekst, nytt navn | lagret `cv.txt`-tekst, laster opp `cv.pdf` med samme tekst | analysen beholdes, filnavnet lagres | – |
+| Samme tekst, nytt navn | lagret tekst fra en PDF, laster opp den samme PDF-en på nytt under et nytt navn (innlimt tekst byttet med en PDF gir ny analyse, retro 6 A3) | analysen beholdes, filnavnet lagres | – |
 | Langt filnavn | 120 tegn uten mellomrom | kuttes med «…» på én linje, ingen rulling sidelengs ved 320 px, hele navnet i `title` | – |
 
 **Beslutninger (Kristine, 2026-11-16):**

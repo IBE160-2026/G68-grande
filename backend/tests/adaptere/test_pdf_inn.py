@@ -2,6 +2,7 @@
 testdataene er lagret fra Word med scripts/lag_testpdf.ps1. Prøven av grensen på 50 bokstaver med
 testdata/feil/skannet.pdf (laget med scripts/lag_feilfiler.ps1) kom i story 6.2."""
 
+import logging
 import re
 from pathlib import Path
 
@@ -114,6 +115,112 @@ def test_fr8_les_pdf_normaliserer_teksten(monkeypatch):
 
     monkeypatch.setattr(pdf_inn, "PdfReader", Leser)
     assert les_pdf(b"%PDF") == "åkerbruk\n\nside tre"
+
+
+class Side:
+    """En side for den falske PdfReader: teksten, eller et unntak fra extract_text()."""
+
+    def __init__(self, tekst):
+        self.tekst = tekst
+
+    def extract_text(self):
+        if isinstance(self.tekst, Exception):
+            raise self.tekst
+        return self.tekst
+
+
+def falsk_leser(monkeypatch, *sider):
+    """Bytter PdfReader i pdf_inn med en leser som har sidene, og gir lista over sidene som er
+    lest."""
+    lest = []
+
+    class LestSide(Side):
+        def extract_text(self):
+            lest.append(self.tekst)
+            return super().extract_text()
+
+    class Leser:
+        def __init__(self, fil):
+            self.pages = [LestSide(tekst) for tekst in sider]
+
+    monkeypatch.setattr(pdf_inn, "PdfReader", Leser)
+    return lest
+
+
+def test_fr8_normaliser_fjerner_mellomrom_foran_linjeskift():
+    """FR-8/NFR-11 (retro 6 A2): mellomrom og tabulatorer foran et linjeskift fjernes (PDF-er
+    fra Word har ett på slutten av hver linje), så tegntellingen blir som for innlimt tekst.
+    Mellomrom inni linjene og innrykk står igjen."""
+    assert normaliser("Linje én \nLinje to\t \n  innrykk  her \n") == (
+        "Linje én\nLinje to\n  innrykk  her\n"
+    )
+    assert normaliser("Windows \r\nlinje") == "Windows\nlinje"
+
+
+@pytest.mark.parametrize("pdf", PDF_ER, ids=[f"{p.parent.name}/{p.name}" for p in PDF_ER])
+def test_fr8_pdf_fra_word_har_ikke_mellomrom_foran_linjeskift(pdf):
+    """FR-8 (retro 6 A2): teksten fra PDF-ene i testdataene har ingen " \\n" (cv.pdf fra case 1
+    hadde 39 før rettingen)."""
+    tekst = les_pdf(pdf.read_bytes())
+    assert " \n" not in tekst
+    assert "\t\n" not in tekst
+
+
+def test_fr8_mellomrom_paa_slutten_av_en_side_fjernes(monkeypatch):
+    """FR-8 (retro 6 A2): et mellomrom på slutten av en side står foran linjeskiftet mellom
+    sidene og fjernes også."""
+    falsk_leser(monkeypatch, "side en \n", "side to ", "side tre")
+    assert les_pdf(b"%PDF") == "side en\n\nside to\nside tre"
+
+
+def test_fr11_en_side_som_feiler_gir_teksten_fra_de_andre(monkeypatch):
+    """FR-11 (retro 6 A5): kaster extract_text() et unntak på én side, brukes teksten fra de
+    andre sidene. PDF-en er bare uleselig hvis den har for få bokstaver."""
+    falsk_leser(monkeypatch, "Side en med nok tekst. " * 3, ValueError("ødelagt"), "Side tre")
+    tekst = les_pdf(b"%PDF")
+    assert tekst == "Side en med nok tekst. " * 2 + "Side en med nok tekst.\n\nSide tre"
+    assert not er_uleselig(tekst)
+    falsk_leser(monkeypatch, "Bare litt", ValueError("ødelagt"))
+    assert er_uleselig(les_pdf(b"%PDF"))
+
+
+@pytest.mark.parametrize("maks", [0, 1, 5, 9, 10, 11, 25])
+def test_nfr11_les_pdf_kutter_rett_over_maks(monkeypatch, maks):
+    """NFR-11/NFR-4 (retro 6 A1): med maks kuttes teksten til høyst maks + 1 tegn, så feltet
+    fortsatt får for_lang, men økten aldri lagrer mer. Er teksten ikke lengre enn maks, er den
+    uendret."""
+    falsk_leser(monkeypatch, "0123456789", "abcdefghij")
+    hele = "0123456789\nabcdefghij"
+    tekst = les_pdf(b"%PDF", maks=maks)
+    assert tekst == hele[: maks + 1]
+    assert (len(tekst) > maks) == (len(hele) > maks)
+
+
+def test_nfr11_les_pdf_slutter_aa_lese_sider_over_maks(monkeypatch):
+    """NFR-11 (retro 6 A1): lesingen stopper når teksten er over maks, så resten av sidene ikke
+    pakkes ut."""
+    lest = falsk_leser(monkeypatch, *(f"side {nummer:02}" for nummer in range(10)))
+    assert les_pdf(b"%PDF", maks=14) == "side 00\nside 01"
+    assert lest == ["side 00", "side 01"]
+    lest.clear()
+    assert les_pdf(b"%PDF") == "\n".join(f"side {nummer:02}" for nummer in range(10))
+    assert len(lest) == 10
+
+
+def test_nfr11_les_pdf_kutter_pdf_ene_i_testdataene():
+    """NFR-11 (retro 6 A1): med maks under lengden gir en ekte PDF maks + 1 tegn, og med maks
+    over lengden er teksten den samme som uten maks."""
+    for pdf in PDF_ER:
+        hele = les_pdf(pdf.read_bytes())
+        assert les_pdf(pdf.read_bytes(), maks=100) == hele[:101]
+        assert les_pdf(pdf.read_bytes(), maks=len(hele)) == hele
+
+
+def test_nfr4_pypdf_logger_bare_feil():
+    """NFR-4 (retro 6 A6): pypdf logger advarsler med rå linjer fra fila. Loggeren til pypdf
+    viser bare feil, så advarslene ikke havner i loggen."""
+    assert logging.getLogger("pypdf").level == logging.ERROR
+    assert not logging.getLogger("pypdf").isEnabledFor(logging.WARNING)
 
 
 def test_fr8_bare_pdf_inn_importerer_pypdf():

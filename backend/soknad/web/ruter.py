@@ -22,6 +22,7 @@ from soknad.kjerne.filnavn import lag_filnavn
 from soknad.kjerne.inndata import (
     er_uleselig,
     felt_for_modus,
+    maks_tegn,
     sjekk_fil,
     sjekk_innlegging,
     sjekk_innlogging,
@@ -509,7 +510,9 @@ def _les_felt(navn, lagret_felt):
         innhold = fil.read()
         feiltype = sjekk_fil(fil.filename, innhold)
         if feiltype is None:
-            tekst = pdf_inn.les_pdf(innhold)
+            # Teksten kuttes rett over grensen for feltet, så for_lang fortsatt kommer, men
+            # økten aldri får mer enn maks_tegn(navn) + 1 tegn (retro 6 A1).
+            tekst = pdf_inn.les_pdf(innhold, maks=maks_tegn(navn))
             if er_uleselig(tekst):
                 feiltype = FeilType.ULESELIG
         if feiltype is not None:

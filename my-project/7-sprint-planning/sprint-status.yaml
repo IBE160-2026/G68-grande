@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-17-2026 18:47
+last_updated: 11-17-2026 19:33
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -378,21 +378,21 @@ action_items:
       lagres, mellomrom foran linjeskift fjernes, unntak fanges per side, og loggeren
       til pypdf viser bare feil, med tester"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
   - id: "epic-6-retro-item-42-testene-for-filfeltet-send_felt-sender-e"
     epic: 6
     action: "Testene for filfeltet: send_felt sender en tom fildel slik nettleseren
       gjør, og en test sikrer at MAKS_FORESPORSEL er større enn tre filer på MAKS_FILSTORRELSE"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
   - id: "epic-6-retro-item-43-a9-med-innlimt-tekst-regelen-beholdes-og"
     epic: 6
     action: "A9 med innlimt tekst: regelen beholdes, og raden «Samme tekst, nytt navn»
       i spec-6-1 og docstringen i testen rettes"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
   - id: "epic-6-retro-item-44-avstemming-for_lang-i-rekkefølgen-i-epic"
     epic: 6
@@ -401,7 +401,7 @@ action_items:
       i deferred-work.md og issues.md, og sletting av de flettede branchene for epic
       6"
     owner: "KI (Claude), Kristine godkjenner teksten og slettingen"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
   - id: "epic-6-retro-item-45-prosess-når-en-story-startes-søkes-det-i"
     epic: 6
@@ -409,5 +409,5 @@ action_items:
       etter punkter som nevner storyen, og et punkt som lukkes, får resolved samme
       dag"
     owner: "KI (Claude)"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
