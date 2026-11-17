@@ -167,7 +167,8 @@ def test_ux_dr7_filfeil_gir_fokus_til_feilboksen_og_prov_paa_nytt_laster_ned(paa
     """AD-9/UX-DR7: feilboksen har fokus (ikke overskriften), og «Prøv på nytt» er en lenke som
     laster ned på nytt."""
     html = html_av(paa_brev.get(NEDLASTING))
-    assert med_autofocus(html) == ["feilboks"]
+    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus bare for når vinduet åpnes.
+    assert med_autofocus(html) == ["feilboks", "nytt-forslag-avbryt"]
     boks = re.search(r'<div class="feilboks".*?</div>', html, re.S).group(0)
     prov = re.search(r"<a [^>]*>(.*?)</a>", boks, re.S)
     assert prov.group(1) == tekster.PROV_PA_NYTT_KNAPP
@@ -316,18 +317,22 @@ def test_fr29_knappen_last_ned_som_word_under_brevet(paa_brev):
     assert "hidden" in filnavn
     assert "aria-live" not in filnavn
     assert f">{tekster.filnavn_linje(filnavn_i_dag())}</p>" in html
-    assert med_autofocus(html) == [None]
+    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus bare for når vinduet åpnes.
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
     assert "feilboks" not in main(html)
 
 
 def test_fr29_brevsiden_laster_nedlastingsskriptet(paa_brev):
     """FR-29/UX-DR16: brevsiden laster nedlasting.js. Skriptet gjør knappen grønn, viser
-    filnavnet og skjuler feilboksen, men stopper ikke nedlastingen (AD-1)."""
+    filnavnet og skjuler feilboksen fra en nedlasting som feilet (bare når den har en
+    nedlastingslenke, så KI-feilboksen fra «Nytt forslag» blir stående, story 7.1), men stopper
+    ikke nedlastingen (AD-1)."""
     html = html_av(paa_brev.get("/brev"))
     assert '<script src="/static/js/nedlasting.js" defer></script>' in html
     skript = (STIL.parents[1] / "js" / "nedlasting.js").read_text(encoding="utf-8")
     for del_ in ('classList.add("ferdig")', "filnavn.hidden = false", "feilboks.hidden = true"):
         assert del_ in skript
+    assert 'if (feilboks && feilboks.querySelector("a[data-nedlasting]"))' in skript
     assert "preventDefault" not in skript
     assert "fetch" not in skript
 

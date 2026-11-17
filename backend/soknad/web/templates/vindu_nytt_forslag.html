@@ -1,0 +1,18 @@
+{#- Vinduet «Vil du ha et nytt forslag?» (FR-25, UX-DR17), på brevsiden og på resultatsiden når
+    et brev finnes (retro 3). bekreft.js åpner det med showModal() når en knapp med
+    data-bekreft="vindu-nytt-forslag" trykkes, og knappen sender ikke skjemaet før «Ja». Det er
+    aldri åpent når siden lastes (ingen open). autofocus på «Avbryt» gjelder bare når vinduet
+    åpnes: fokus går til det trygge valget. «Ja, lag nytt forslag» er type="button", og
+    skriptet sender skjemaet med knappen som åpnet vinduet, så ventetegnet vises. «Avbryt» og
+    Esc lukker vinduet, og skriptet sender fokus tilbake til knappen som åpnet det. Uten
+    JavaScript sendes skjemaet med en gang, uten vinduet. #}
+<dialog class="vindu" id="vindu-nytt-forslag" aria-labelledby="vindu-nytt-forslag-overskrift" aria-describedby="vindu-nytt-forslag-tekst">
+  <h2 id="vindu-nytt-forslag-overskrift">{{ tekster.VINDU_NYTT_FORSLAG_OVERSKRIFT }}</h2>
+  <p id="vindu-nytt-forslag-tekst">{{ tekster.VINDU_NYTT_FORSLAG_TEKST }}</p>
+  <div class="vindu-knapper">
+    <button class="hovedknapp" type="button" data-bekreft-ja>{{ tekster.JA_NYTT_FORSLAG_KNAPP }}</button>
+    <form method="dialog">
+      <button class="sekundaerknapp" id="nytt-forslag-avbryt" autofocus>{{ tekster.AVBRYT_KNAPP }}</button>
+    </form>
+  </div>
+</dialog>

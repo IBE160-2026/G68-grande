@@ -114,8 +114,9 @@ def _uten_hilsen(avsnitt: list[str], navn: str | None) -> list[str]:
 
 def hele_brevet(brev: dict) -> list[str]:
     """Brevet som vises og lastes ned: avsnittene, så «Med vennlig hilsen» og navnet som to egne
-    avsnitt. Uten navn kommer bare hilsenen. Ruter og fil_ut setter aldri sammen brevet selv, og
-    PDF og «Nytt forslag» (Epic 7) skal også bruke denne. brev er i formen fra kontroller()."""
+    avsnitt. Uten navn kommer bare hilsenen. Ruter og fil_ut setter aldri sammen brevet selv.
+    «Nytt forslag» (story 7.1) bruker den, og PDF (story 7.2) skal også bruke den. brev er i
+    formen fra kontroller()."""
     navn = brev["navn"]
     return [*brev["avsnitt"], HILSEN, *([navn] if navn else [])]
 

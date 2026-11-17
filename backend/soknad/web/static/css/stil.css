@@ -1372,12 +1372,20 @@ a.hovedknapp {
   text-decoration: none;
 }
 
-/* Nedlastingen under brevet (FR-29): knappen i midten, filnavnet under */
+/* Nedlastingen under brevet (FR-29): knappen i midten, filnavnet under. «Nytt forslag» står
+ * under den (FR-25) */
 .nedlasting {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+}
+
+/* «Nytt forslag» (FR-25): en lenkeknapp i midten under nedlastingen */
+.nytt-forslag {
+  display: flex;
+  justify-content: center;
   margin: 0 0 var(--space-7);
 }
 
@@ -1483,6 +1491,15 @@ a.hovedknapp {
  * vinduet ble åpnet med et museklikk, så ringen vises for :focus (som «Lim inn tekst»). Trykker
  * man på «Bli her», lukkes vinduet uansett. */
 #bli-her:focus {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* «Avbryt» i vinduet «Vil du ha et nytt forslag?» får fokus når vinduet åpnes, og knappen som
+ * åpnet det («Nytt forslag» eller «Lag søknadsbrevet mitt») får fokus tilbake når det lukkes
+ * (FR-25). Begge kan komme etter et museklikk, så ringen vises for :focus (som «Bli her») */
+#nytt-forslag-avbryt:focus,
+[data-bekreft]:focus {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
@@ -1613,7 +1630,8 @@ a.hovedknapp {
     border: 1px solid CanvasText;
   }
 
-  /* Vinduet etter nedlasting skilles bare med skygge og slør. Det får en ramme i stedet */
+  /* Vinduene (etter nedlasting og «Nytt forslag») skilles bare med skygge og slør. De får en
+   * ramme i stedet */
   .vindu {
     border: 1px solid CanvasText;
   }

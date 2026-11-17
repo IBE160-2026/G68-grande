@@ -260,6 +260,16 @@ VINDU_NEDLASTET_TEKST = "Vil du lage en ny søknad eller logge ut?"
 LAG_NY_SOKNAD_KNAPP = "Lag ny søknad"
 BLI_HER_KNAPP = "Bli her"
 
+# «Nytt forslag» under nedlastingen på brevsiden og vinduet som spør først (FR-25). Samme vindu
+# spør på resultatsiden når et brev finnes (retro 3). Etter «Ja» står VENTE_BREV i ventetegnet.
+NYTT_FORSLAG_KNAPP = "Nytt forslag"
+VINDU_NYTT_FORSLAG_OVERSKRIFT = "Vil du ha et nytt forslag?"
+VINDU_NYTT_FORSLAG_TEKST = (
+    "Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte."
+)
+JA_NYTT_FORSLAG_KNAPP = "Ja, lag nytt forslag"
+AVBRYT_KNAPP = "Avbryt"
+
 
 def filnavn_linje(filnavn: str) -> str:
     """Under knappen etter nedlasting: «Filnavn: Soknad_2026-11-11.docx»."""
@@ -396,6 +406,8 @@ KI_FEILTEKSTER = {
 # Under feilteksten i feilboksen, per side (FR-28, UX-DR7).
 KI_FEIL_BEHOLDT_INNLEGGING = "Det du har lagt inn, er ikke borte."
 KI_FEIL_BEHOLDT_RESULTAT = "Resultatet og det du har lagt inn, er ikke borte."
+# På brevsiden når «Nytt forslag» feiler (FR-25).
+KI_FEIL_BEHOLDT_BREV = "Brevet du hadde, er beholdt."
 # Knappen i feilboksen som prøver KI-kallet på nytt.
 PROV_PA_NYTT_KNAPP = "Prøv på nytt"
 # I feilboksen når søknaden har brukt alle KI-kallene (NFR-11), uten «Prøv på nytt».

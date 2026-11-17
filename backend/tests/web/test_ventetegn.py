@@ -259,10 +259,10 @@ def test_fr27_tekstene_ligger_i_tekster_py():
     assert "Prøv på nytt" not in innhold
 
 
-@pytest.mark.parametrize("side", ["/", "/modus", "/brev"])
+@pytest.mark.parametrize("side", ["/", "/modus"])
 def test_ad1_ventetegnet_bare_pa_sider_med_ki_kall(app, innlogget_client, side):
-    """AD-1: vente.js og ventetegnet finnes på innleggingen og resultatsiden (story 3.1), ikke
-    på sider uten KI-kall."""
+    """AD-1: vente.js og ventetegnet finnes på innleggingen, resultatsiden (story 3.1) og
+    brevsiden («Nytt forslag», story 7.1), ikke på sider uten KI-kall."""
     sett_soknad(
         app,
         innlogget_client,

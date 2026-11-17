@@ -178,15 +178,15 @@ class TestKI:
         return self._svar(case, "gap")
 
     def brev(self, cv: str, annonse: str, forslag: int) -> dict:
-        """Caset finnes som i gap. Oddetall for forslag gir brev-1.json, partall brev-2.json
-        (brukes først i Epic 7). I Epic 3 er forslag alltid 1."""
+        """Caset finnes som i gap. Oddetall for forslag gir brev-1.json, partall brev-2.json,
+        så «Nytt forslag» (story 7.1) gir et annet brev enn det forrige."""
         case, _ = finn_case(cv, annonse, self.caser)
         return self._svar(case, "brev", f"brev-{1 if forslag % 2 else 2}")
 
     def korrektur(self, cv: str, annonse: str, eget_brev: str, forslag: int) -> dict:
         """Caset finnes ut fra CV-en, og annonsen og det egne brevet må høre til samme case.
-        Oddetall for forslag gir korrektur-1.json, partall korrektur-2.json («Nytt forslag» i
-        Epic 7). Svaret kontrolleres mot casets egen eget-brev.txt, ikke mot det brukeren limte
+        Oddetall for forslag gir korrektur-1.json, partall korrektur-2.json («Nytt forslag»,
+        story 7.1). Svaret kontrolleres mot casets egen eget-brev.txt, ikke mot det brukeren limte
         inn. Caset er funnet med vasken, så den innlimte teksten kan ha andre store bokstaver
         eller mellomrom (eller komme fra en PDF, Epic 6), mens gammel i svarfila er ordrett fra
         fila (retro 5). I testmodus viser «Du skrev» derfor teksten i fila. Kan fila ikke
