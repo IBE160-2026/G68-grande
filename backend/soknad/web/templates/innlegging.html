@@ -26,10 +26,15 @@
   </p>
   {%- endif %}
 </div>
-{%- elif feltfeil %}
+{%- elif feltfeil or skjemafeil %}
+{#- skjemafeil gjelder ikke ett felt (hele forespørselen over 16 MB, story 6.2), og står derfor
+    uten lenke, før feltfeilene. #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
   <p class="feilboks-overskrift">{{ tekster.FEILBOKS_OVERSKRIFT }}</p>
   <ul>
+    {%- for feil in skjemafeil %}
+    <li>{{ feil }}</li>
+    {%- endfor %}
     {%- for navn, feil in feltfeil.items() %}
     <li><a href="#{{ navn }}-felt">{{ feil }}</a></li>
     {%- endfor %}

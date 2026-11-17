@@ -3,7 +3,8 @@
 UX-DR7, UX-DR8, UX-DR9, UX-DR21). Story 2.5.1. Analysen og KI-feilen (FR-15, FR-21,
 FR-28) kom i story 2.5.2. Brevfeltet i Korrektur (FR-8, FR-9, FR-20, FR-34) kom i story
 5.1. Opplasting av PDF, filnavnet, PDF-tipset og hjelpeteksten om tegngrensen (FR-8, FR-13,
-NFR-4, NFR-11) kom i story 6.1."""
+NFR-4, NFR-11) kom i story 6.1. Feilmeldingene for filer og 413-håndtereren (FR-10, FR-11,
+FR-12) kom i story 6.2."""
 
 import html as html_modul
 import re
@@ -11,10 +12,11 @@ from io import BytesIO
 
 import pytest
 
+from soknad import create_app
 from soknad.adaptere import pdf_inn
 from soknad.adaptere.ki import TESTDATA_MAPPE
 from soknad.adaptere.pdf_inn import les_pdf
-from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV
+from soknad.innstillinger import MAKS_FILSTORRELSE, MAKS_TEGN, MAKS_TEGN_EGET_BREV
 from soknad.kjerne import inndata
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
@@ -33,6 +35,7 @@ from tests.web.hjelpere import (
     css_blokk,
     element,
     html_av,
+    logg_inn,
     main,
     okt_id,
     sett_soknad,
@@ -533,10 +536,21 @@ def test_ad1_skriptet_sender_ingenting_til_serveren():
 
 
 @pytest.mark.parametrize("felt", ["cv", "eget_brev", "annonse"])
-@pytest.mark.parametrize("type", [FeilType.TOM, FeilType.FOR_LANG, FeilType.IKKE_TESTDATA])
+@pytest.mark.parametrize(
+    "type",
+    [
+        FeilType.TOM,
+        FeilType.FEIL_FILTYPE,
+        FeilType.FOR_STOR,
+        FeilType.ULESELIG,
+        FeilType.FOR_LANG,
+        FeilType.IKKE_TESTDATA,
+    ],
+)
 def test_fr9_alle_feil_pa_innleggingen_har_tekst(felt, type):
-    """FR-9/FR-34/AD-9 (story 5.1): hver feil kjernen kan gi på innleggingen, også på
-    brevfeltet, har en tekst som begynner med feltnavnet."""
+    """FR-9/FR-10/FR-11/FR-12/FR-34/AD-9 (story 5.1 og 6.2): hver feil kjernen kan gi på
+    innleggingen, også filfeilene og feilene på brevfeltet, har en tekst som begynner med
+    feltnavnet."""
     navn = tekster.INNLEGGINGSFELT[felt].navn
     assert tekster.feiltekst(InndataFeil(felt, type)).startswith(f"{navn}: ")
 
@@ -792,8 +806,6 @@ def test_fr20_tilbake_til_modusvalget_beholder_alle_tre_feltene(paa_korrektur):
 PDF_CV = (TESTDATA_MAPPE / "case-1-utvikler" / "cv.pdf").read_bytes()
 PDF_ANNONSE = (TESTDATA_MAPPE / "case-1-utvikler" / "annonse.pdf").read_bytes()
 PDF_BREV = (TESTDATA_MAPPE / "case-1-utvikler" / "eget-brev.pdf").read_bytes()
-# Starten på en Word-fil (zip), som pypdf ikke kan lese.
-DOCX = b"PK\x03\x04\x14\x00\x06\x00ikke en pdf"
 
 
 def send_felt(client, handling="sjekk", **felt):
@@ -994,22 +1006,6 @@ def test_fr9_feil_i_annet_felt_beholder_filnavnet(app, paa_innlegging):
 
 
 @pytest.mark.parametrize(
-    ("innhold", "filnavn"), [(DOCX, "cv.docx"), (b"%PDF-1.7\n\xff\xfe odelagt", "odelagt.pdf")]
-)
-def test_fr9_fil_som_ikke_kan_leses_gir_feilen_tom(app, paa_innlegging, innhold, filnavn):
-    """FR-9 (story 6.1, til 6.2): en fil som ikke er en PDF eller ikke kan leses, gir tom tekst
-    og feilen «tom» på feltet, uten krasj. Filnavnet står igjen, og søppelbøtta ved det er
-    koblet til feilteksten."""
-    svar = send_felt(paa_innlegging, cv=(innhold, filnavn), annonse=ANNONSE)
-    assert svar.status_code == 200
-    html = html_av(svar)
-    assert feilboks_lenker(html) == [("#cv-felt", TOM_CV)]
-    assert soknaden(app, paa_innlegging).cv == Tekstfelt("", filnavn)
-    filboks = re.search(r'<div class="filboks">.*?</div>', felt_html(html, "cv"), re.S).group(0)
-    assert 'aria-describedby="cv-feil"' in filboks
-
-
-@pytest.mark.parametrize(
     ("modus", "navn", "lengde"),
     [
         (Modus.FULL_GENERERING, "cv", MAKS_TEGN + 1),
@@ -1027,7 +1023,7 @@ def test_nfr11_for_lang_tekst_fra_pdf_gir_for_lang(
     felt = {"cv": CV, "annonse": ANNONSE}
     if modus == Modus.KORREKTUR:
         felt["eget_brev"] = EGET_BREV
-    felt[navn] = (b"%PDF", "lang.pdf")
+    felt[navn] = (b"%PDF-1.7", "lang.pdf")
     svar = send_felt(innlogget_client, **felt)
     assert svar.status_code == 200
     html = html_av(svar)
@@ -1208,3 +1204,282 @@ def test_nfr7_filboksen_har_ramme_i_hoykontrast():
     hoykontrast = re.search(r"@media \(forced-colors: active\)\s*\{(.*?)\n\}", css, re.S).group(1)
     blokk = css_blokk(hoykontrast.replace("\n  ", "\n"), ".filboks")
     assert "border: 1px solid CanvasText" in blokk
+
+
+# --- Feilmeldinger for filer (story 6.2, FR-10, FR-11, FR-12, NFR-4, UX-DR7, UX-DR8) ---
+
+FEILFILER = TESTDATA_MAPPE / "feil"
+FEIL_TYPE_DOCX = (FEILFILER / "feil-type.docx").read_bytes()
+SKANNET = (FEILFILER / "skannet.pdf").read_bytes()
+# En ekte PDF fylt opp til 5 MB + 1 byte (for_stor, fila leses ikke).
+FOR_STOR_PDF = PDF_CV.ljust(MAKS_FILSTORRELSE + 1, b" ")
+FOR_STORE = "Filene er for store. Hver fil kan være på høyst 5 MB."
+
+# Fila som gir hver feil, og navnet den sendes med.
+FILFEIL = {
+    FeilType.FEIL_FILTYPE: (FEIL_TYPE_DOCX, "feil-type.docx"),
+    FeilType.FOR_STOR: (FOR_STOR_PDF, "stor.pdf"),
+    FeilType.ULESELIG: (SKANNET, "skannet.pdf"),
+}
+
+# Gyldige tekster til feltene, fra case 1 (testdata, så de gir ingen feil i testmodus).
+GYLDIG = {"cv": CV, "eget_brev": EGET_BREV, "annonse": ANNONSE}
+
+
+def feiltekst(navn, type):
+    return tekster.feiltekst(InndataFeil(navn, type))
+
+
+@pytest.fixture
+def lest(monkeypatch):
+    """Lista over hvert innhold pdf_inn.les_pdf har fått, så testene ser om fila ble lest."""
+    lest = []
+    ekte = pdf_inn.les_pdf
+
+    def les(innhold):
+        lest.append(innhold)
+        return ekte(innhold)
+
+    monkeypatch.setattr(pdf_inn, "les_pdf", les)
+    return lest
+
+
+def test_fr10_fr11_fr12_tekstene_for_filfeilene():
+    """FR-10/FR-11/FR-12 (story 6.2): tekstene fra UX, med feltnavnet først, og 5 MB fra
+    MAKS_FILSTORRELSE. Feilen for hele forespørselen har ikke feltnavn."""
+    assert feiltekst("cv", FeilType.FEIL_FILTYPE) == "CV: Feil filtype, prøv PDF."
+    assert (
+        feiltekst("annonse", FeilType.FOR_STOR)
+        == "Stillingsannonse: Filen er for stor. Den kan være på høyst 5 MB."
+    )
+    assert feiltekst("eget_brev", FeilType.ULESELIG) == (
+        "Ditt søknadsbrev: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. "
+        "Lim inn teksten i stedet."
+    )
+    assert feiltekst(None, FeilType.FOR_STOR) == FOR_STORE
+
+
+@pytest.mark.parametrize("testmodus", [True, False], ids=["testmodus", "uten_testmodus"])
+@pytest.mark.parametrize("type", list(FILFEIL))
+@pytest.mark.parametrize(
+    ("modus", "navn"),
+    [
+        (Modus.FULL_GENERERING, "cv"),
+        (Modus.FULL_GENERERING, "annonse"),
+        (Modus.KORREKTUR, "cv"),
+        (Modus.KORREKTUR, "eget_brev"),
+        (Modus.KORREKTUR, "annonse"),
+    ],
+)
+def test_fr10_fr11_fr12_filfeil_i_hvert_felt(
+    app, innlogget_client, lest, modus, navn, type, testmodus
+):
+    """FR-10/FR-11/FR-12/UX-DR7/UX-DR8 (story 6.2): en fil med feil type, over 5 MB eller uten
+    lesbar tekst i hvert felt, i begge modusene og med og uten testmodus, gir samme side på nytt
+    (200, ingen redirect) med teksten i feilboksen (lenke til feltet) og under feltnavnet. Feltet
+    er rødt og tomt («Last opp PDF» og «Lim inn tekst»), og knappene og tekstboksen er koblet
+    til feilteksten med aria-describedby. Den avviste fila lagres ikke, og de andre feltene
+    beholdes. En fil med feil type eller over 5 MB leses ikke med pypdf."""
+    sett_soknad(app, innlogget_client, Soknad(steg=Steg.INNLEGGING, modus=modus))
+    if not testmodus:
+        uten_testmodus(app, innlogget_client)
+    felt = {n: GYLDIG[n] for n in inndata.felt_for_modus(modus)}
+    felt[navn] = FILFEIL[type]
+    svar = send_felt(innlogget_client, **felt)
+    assert svar.status_code == 200
+    html = html_av(svar)
+    tekst = feiltekst(navn, type)
+    assert feilboks_lenker(html) == [(f"#{navn}-felt", tekst)]
+    feltet = felt_html(html, navn)
+    assert 'class="innleggingsfelt har-feil"' in feltet
+    assert f'<p class="feiltekst" id="{navn}-feil">{tekst}</p>' in feltet
+    assert '<div class="tom-tilstand">' in feltet
+    assert '<div class="filboks" hidden>' in feltet
+    for knapp in (f"{navn}-last-opp", f"{navn}-lim-inn"):
+        assert element(html, knapp)["aria-describedby"] == f"{navn}-feil"
+    assert element(html, f"{navn}-tekst")["aria-describedby"] == f"{navn}-feil {navn}-hjelp"
+    soknad = soknaden(app, innlogget_client)
+    assert getattr(soknad, navn) == Tekstfelt()
+    for annet in felt.keys() - {navn}:
+        assert getattr(soknad, annet) == Tekstfelt(GYLDIG[annet])
+    assert soknad.steg == Steg.INNLEGGING
+    assert lest == ([SKANNET] if type == FeilType.ULESELIG else [])
+
+
+def test_fr10_omdopt_docx_gir_feil_filtype(paa_innlegging, lest):
+    """FR-10 (story 6.2): en .docx som er omdøpt til cv.pdf, har ikke %PDF- i starten og gir
+    feil_filtype. Den leses ikke med pypdf."""
+    html = html_av(send_felt(paa_innlegging, cv=(FEIL_TYPE_DOCX, "cv.pdf"), annonse=ANNONSE))
+    assert feilboks_lenker(html) == [("#cv-felt", feiltekst("cv", FeilType.FEIL_FILTYPE))]
+    assert lest == []
+
+
+def test_fr10_navnet_sjekkes_uansett_store_og_smaa_bokstaver(app, paa_innlegging):
+    """FR-10 (story 6.2): CV.PDF godtas, og en PDF som heter noe annet enn .pdf, gir
+    feil_filtype."""
+    svar = send_felt(paa_innlegging, cv=(PDF_CV, "CV.PDF"), annonse=ANNONSE)
+    assert svar.location == "/resultat"
+    til_innlegging(app, paa_innlegging)
+    html = html_av(send_felt(paa_innlegging, cv=(PDF_CV, "cv.txt"), annonse=ANNONSE))
+    assert feilboks_lenker(html) == [("#cv-felt", feiltekst("cv", FeilType.FEIL_FILTYPE))]
+
+
+def test_fr12_akkurat_5_mb_leses(paa_innlegging, lest):
+    """FR-12 (story 6.2): en PDF på akkurat 5 MB leses og godtas."""
+    akkurat = PDF_CV.ljust(MAKS_FILSTORRELSE, b" ")
+    svar = send_felt(paa_innlegging, cv=(akkurat, "cv.pdf"), annonse=ANNONSE)
+    assert svar.location == "/resultat"
+    assert lest == [akkurat]
+
+
+def test_fr11_odelagt_pdf_gir_uleselig_uten_krasj(paa_innlegging):
+    """FR-11 (story 6.2): en fil som begynner med %PDF-, men er ødelagt, gir uleselig uten
+    krasj."""
+    svar = send_felt(paa_innlegging, cv=(b"%PDF-1.7\n\xff\xfe odelagt", "cv.pdf"), annonse=ANNONSE)
+    assert svar.status_code == 200
+    assert feilboks_lenker(html_av(svar)) == [("#cv-felt", feiltekst("cv", FeilType.ULESELIG))]
+
+
+def test_fr10_fr9_flere_feil_samtidig_i_feltrekkefolgen(paa_innlegging):
+    """FR-10/FR-9 (story 6.2): .docx i CV-feltet og tom annonse gir begge feilene samtidig, CV
+    først."""
+    html = html_av(send_felt(paa_innlegging, cv=FILFEIL[FeilType.FEIL_FILTYPE], annonse=""))
+    assert feilboks_lenker(html) == [
+        ("#cv-felt", feiltekst("cv", FeilType.FEIL_FILTYPE)),
+        ("#annonse-felt", TOM_ANNONSE),
+    ]
+
+
+def test_fr10_fr11_fr12_tre_filfeil_samtidig_i_korrektur(paa_korrektur):
+    """FR-10/FR-11/FR-12 (story 6.2): feil filtype, skannet PDF og for stor fil i hvert sitt
+    felt i Korrektur gir tre feil samtidig, i rekkefølgen CV, brev, annonse."""
+    svar = send_felt(
+        paa_korrektur,
+        cv=FILFEIL[FeilType.FEIL_FILTYPE],
+        eget_brev=FILFEIL[FeilType.ULESELIG],
+        annonse=FILFEIL[FeilType.FOR_STOR],
+    )
+    assert feilboks_lenker(html_av(svar)) == [
+        ("#cv-felt", feiltekst("cv", FeilType.FEIL_FILTYPE)),
+        ("#eget_brev-felt", feiltekst("eget_brev", FeilType.ULESELIG)),
+        ("#annonse-felt", feiltekst("annonse", FeilType.FOR_STOR)),
+    ]
+
+
+def test_fr11_fr34_skannet_cv_i_testmodus_gir_bare_uleselig(paa_innlegging):
+    """FR-11/FR-34 (story 6.2): i testmodus gir en skannet CV med testannonsen bare uleselig på
+    CV-en, ikke ikke_testdata."""
+    html = html_av(send_felt(paa_innlegging, cv=(SKANNET, "skannet.pdf"), annonse=ANNONSE))
+    assert feilboks_lenker(html) == [("#cv-felt", feiltekst("cv", FeilType.ULESELIG))]
+
+
+def test_fr11_felt_uten_feil_beholder_fila(app, paa_innlegging):
+    """FR-11/FR-9 (story 6.2): en skannet CV og annonsen som PDF gir feilen på CV-en, og
+    annonsen står igjen med filnavnet. Et nytt forsøk med CV-en som tekst og annonsen fra økten
+    gir resultatsiden."""
+    svar = send_felt(paa_innlegging, cv=(SKANNET, "skannet.pdf"), annonse=(PDF_ANNONSE, "a.pdf"))
+    html = html_av(svar)
+    assert feilboks_lenker(html) == [("#cv-felt", feiltekst("cv", FeilType.ULESELIG))]
+    assert '<span class="filnavn" title="a.pdf">a.pdf</span>' in felt_html(html, "annonse")
+    assert soknaden(app, paa_innlegging).annonse == Tekstfelt(les_pdf(PDF_ANNONSE), "a.pdf")
+    assert send_felt(paa_innlegging, cv=CV, annonse=None).location == "/resultat"
+
+
+def test_fr11_filfeil_erstatter_lagret_fil(app, paa_innlegging):
+    """FR-11/FR-13 (story 6.2, bestemt av Kristine 16. november 2026): en ny fil med feil
+    erstatter den lagrede PDF-en i feltet, så feltet er tomt etterpå, også ved «Tilbake»."""
+    send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    paa_innlegging.post("/modus", data={"modus": "full_generering"})
+    svar = send_felt(
+        paa_innlegging, cv=(SKANNET, "skannet.pdf"), annonse=ANNONSE, handling="tilbake"
+    )
+    assert svar.location == "/modus"
+    assert soknaden(app, paa_innlegging).cv == Tekstfelt()
+
+
+def test_fr11_lagret_fil_sjekkes_ikke_paa_nytt(paa_innlegging, monkeypatch):
+    """FR-11 (story 6.2): bare en ny fil sjekkes. En fil som er lagret i økten fra før, har alt
+    passert, så «Sjekk CV-en min» uten ny fil verken sjekker eller leser den igjen."""
+    send_felt(paa_innlegging, cv=(PDF_CV, "cv.pdf"), annonse=ANNONSE, handling="tilbake")
+    paa_innlegging.post("/modus", data={"modus": "full_generering"})
+
+    def ikke_kall(*args):
+        raise AssertionError("Den lagrede fila skal ikke sjekkes på nytt.")
+
+    monkeypatch.setattr(ruter, "sjekk_fil", ikke_kall)
+    monkeypatch.setattr(pdf_inn, "les_pdf", ikke_kall)
+    assert send_felt(paa_innlegging, cv=None, annonse=ANNONSE).location == "/resultat"
+
+
+def test_nfr4_avvist_fil_logges_ikke(paa_innlegging, caplog):
+    """NFR-4 (story 6.2): verken navnet eller innholdet i en avvist fil står i loggen."""
+    caplog.set_level("DEBUG")
+    send_felt(paa_innlegging, cv=(FEIL_TYPE_DOCX, "hemmelig-cv.docx"), annonse=ANNONSE)
+    send_felt(paa_innlegging, cv=(SKANNET, "hemmelig-skannet.pdf"), annonse=ANNONSE)
+    assert "hemmelig" not in caplog.text
+
+
+# --- Hele forespørselen over MAX_CONTENT_LENGTH (story 6.2, FR-12) ---
+
+LITEN_GRENSE = 10_000
+
+
+@pytest.fixture
+def liten_app():
+    """En app med MAX_CONTENT_LENGTH på 10 000 byte, så 413 kan prøves uten 16 MB i testen."""
+    return create_app(
+        {"TESTING": True, "SECRET_KEY": "test-nokkel", "MAX_CONTENT_LENGTH": LITEN_GRENSE}
+    )
+
+
+def test_fr12_for_stor_foresporsel_gir_innleggingen_med_feilboksen(liten_app):
+    """FR-12 (story 6.2): er hele forespørselen over MAX_CONTENT_LENGTH, vises innleggingen med
+    «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen, uten lenke og uten
+    feltnavn, og status 413. Det som var lagret fra før, står igjen, og ingenting fra
+    forespørselen lagres. Ingen feil står ved feltene."""
+    client = liten_app.test_client()
+    assert logg_inn(client).status_code == 302
+    lagret = Soknad(
+        steg=Steg.INNLEGGING,
+        modus=Modus.FULL_GENERERING,
+        cv=Tekstfelt("Lagret CV"),
+        annonse=Tekstfelt("tekst", "annonse.pdf"),
+    )
+    sett_soknad(liten_app, client, lagret)
+    svar = send_felt(client, cv=(b"%PDF-1.7" + b" " * LITEN_GRENSE, "stor.pdf"), annonse="Ny")
+    assert svar.status_code == 413
+    assert svar.headers["Cache-Control"] == "no-store"
+    html = html_av(svar)
+    boks = re.search(r'<div class="feilboks"[^>]*>(.*?)</div>', html, re.S).group(1)
+    assert tekster.FEILBOKS_OVERSKRIFT in boks
+    assert f"<li>{FOR_STORE}</li>" in boks
+    assert "<a " not in boks
+    assert "har-feil" not in html
+    assert 'class="feiltekst"' not in html
+    assert tekstboks(html, "cv") == "Lagret CV"
+    assert '<span class="filnavn" title="annonse.pdf">annonse.pdf</span>' in html
+    assert soknaden(liten_app, client) == lagret
+
+
+def test_fr12_skjemafeilen_star_foran_feltfeilene(app):
+    """FR-12/UX-DR7 (story 6.2): en feil uten felt står i feilboksen uten lenke, foran feilene
+    ved feltene."""
+    with app.test_request_context():
+        html = ruter._vis_innlegging(
+            Soknad(steg=Steg.INNLEGGING, modus=Modus.FULL_GENERERING),
+            feil=[InndataFeil(None, FeilType.FOR_STOR), InndataFeil("cv", FeilType.TOM)],
+        )
+    boks = re.search(r'<div class="feilboks"[^>]*>(.*?)</div>', html, re.S).group(1)
+    assert boks.index(f"<li>{FOR_STORE}</li>") < boks.index('<a href="#cv-felt">')
+
+
+def test_fr12_for_stor_foresporsel_paa_en_annen_side_gir_vanlig_413(liten_app):
+    """FR-12 (story 6.2): på andre sider enn innleggingen (her innloggingen) gir en for stor
+    forespørsel Werkzeugs vanlige 413-side, uten feilboksen."""
+    svar = liten_app.test_client().post(
+        "/logg-inn", data={"epost": "x" * LITEN_GRENSE, "passord": "p"}
+    )
+    assert svar.status_code == 413
+    html = html_av(svar)
+    assert "Request Entity Too Large" in html
+    assert FOR_STORE not in html

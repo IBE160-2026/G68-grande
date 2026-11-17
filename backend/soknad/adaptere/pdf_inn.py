@@ -24,13 +24,14 @@ def normaliser(tekst: str) -> str:
 
 
 def les_pdf(innhold: bytes) -> str:
-    """Teksten i PDF-en, side for side med linjeskift mellom, normalisert. En fil pypdf ikke kan
-    lese (eller som ikke er en PDF), gir tom tekst, så feltet får feilen «tom». De egne
-    feilene for filtype, størrelse og uleselig PDF kommer i story 6.2."""
+    """Teksten i PDF-en, side for side med linjeskift mellom, normalisert. Ruten sjekker
+    filtypen og størrelsen før fila leses (inndata.sjekk_fil). En fil pypdf ikke kan lese, gir
+    tom tekst, og tom tekst har under MIN_BOKSTAVER_PDF bokstaver, så feltet får feilen
+    uleselig (inndata.er_uleselig, story 6.2)."""
     try:
         leser = PdfReader(BytesIO(innhold))
         tekst = "\n".join(side.extract_text() or "" for side in leser.pages)
     except Exception:
-        # pypdf kan kaste mange slags unntak for ødelagte filer. Feilene kommer i story 6.2.
+        # pypdf kan kaste mange slags unntak for ødelagte filer. Tom tekst gir uleselig.
         return ""
     return normaliser(tekst)

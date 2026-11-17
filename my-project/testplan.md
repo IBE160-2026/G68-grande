@@ -421,3 +421,24 @@ En fiktiv CV (Tobias Tabellsen) med ferdighetene i en tabell med tre kolonner (f
 | Dato | Hva som ble lest | Resultat |
 | --- | --- | --- |
 | 16. november 2026 | All teksten kom med, i riktig rekkefølge: overskriften «Ferdigheter», så tabellen rad for rad med cellene fra venstre mot høyre («Python God Bacheloroppgave og deltidsjobb»), så «Erfaring». En celle med tekst på to linjer i PDF-en ble to linjer i teksten, men rekkefølgen er riktig, og telleregelen ser bort fra linjeskift. | Bestått. Tabeller fra Word blir ikke en kjent begrensning, og settes ikke på kuttlisten |
+
+## Story 6.2: Feilmeldinger for filer (16. november 2026)
+
+### Grensen på 50 bokstaver
+
+Bokstavene (`isalpha`) i teksten pypdf leser, telt med `les_pdf`. `skannet.pdf` (CV-en fra case 1 som et bilde uten tekst) og `feil-type.docx` ligger i `backend/testdata/feil/` og lages med `backend/scripts/lag_feilfiler.ps1`.
+
+| Fil | Bokstaver |
+| --- | --- |
+| `feil/skannet.pdf` | 0 |
+| `case-1-utvikler/annonse.pdf` | 896 |
+| `case-1-utvikler/cv.pdf` | 993 |
+| `case-1-utvikler/eget-brev.pdf` | 952 |
+| `case-2-okonomi/annonse.pdf` | 952 |
+| `case-2-okonomi/cv.pdf` | 1 038 |
+
+Grensen på 50 skiller dem godt, så `MIN_BOKSTAVER_PDF` i `innstillinger.py` er beholdt. Testes automatisk i `backend/tests/adaptere/test_pdf_inn.py`.
+
+### Over 16 MB med den ekte utviklingsserveren
+
+`flask --app soknad run`, innlogget med testbrukeren, og `POST /innlegging` med en fil på 17 MB fra Python `urllib`. Svaret var status 413 med innleggingssiden og «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen, og forbindelsen ble ikke brutt. Ikke prøvd i nettleseren ennå (Kristines sjekk i PR-en).

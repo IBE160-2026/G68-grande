@@ -2,7 +2,12 @@
 
 from typing import NamedTuple
 
-from soknad.innstillinger import MAKS_TEGN, MAKS_TEGN_EGET_BREV, MIN_PASSORD_LENGDE
+from soknad.innstillinger import (
+    MAKS_FILSTORRELSE,
+    MAKS_TEGN,
+    MAKS_TEGN_EGET_BREV,
+    MIN_PASSORD_LENGDE,
+)
 from soknad.kjerne.feil import FeilType, InndataFeil, KIFeil, KIFeilType
 from soknad.kjerne.inndata import maks_tegn
 from soknad.kjerne.okt import Modus
@@ -316,6 +321,8 @@ def _med_mellomrom(tall: int) -> str:
 # Tegngrensene med mellomrom mellom tusenene: «15 000» og «5 000» for brevfeltet (NFR-11).
 MAKS_TEGN_TEKST = _med_mellomrom(MAKS_TEGN)
 MAKS_TEGN_EGET_BREV_TEKST = _med_mellomrom(MAKS_TEGN_EGET_BREV)
+# Største fil i hvert felt: «5 MB» (story 6.2).
+MAKS_FILSTORRELSE_TEKST = f"{MAKS_FILSTORRELSE // (1024 * 1024)} MB"
 
 # Feiltekstene slås opp med (felt, type). felt=None betyr hele skjemaet.
 FEILTEKSTER = {
@@ -360,7 +367,25 @@ FEILTEKSTER = {
     ("eget_brev", FeilType.IKKE_TESTDATA): (
         "Ditt søknadsbrev: I testmodus fungerer bare testdataene fra mappen backend/testdata/."
     ),
+    # Hele forespørselen er over MAKS_FORESPORSEL (story 6.2). Står i feilboksen uten feltnavn
+    # og uten lenke (bestemt av Kristine 16. november 2026).
+    (None, FeilType.FOR_STOR): (
+        f"Filene er for store. Hver fil kan være på høyst {MAKS_FILSTORRELSE_TEKST}."
+    ),
 }
+
+# Feilene for en opplastet fil, i alle tre feltene (FR-10, FR-11, FR-12, story 6.2). Feltnavnet
+# står først, som i de andre feiltekstene.
+for _navn, _felt in INNLEGGINGSFELT.items():
+    FEILTEKSTER[(_navn, FeilType.FEIL_FILTYPE)] = f"{_felt.navn}: Feil filtype, prøv PDF."
+    FEILTEKSTER[(_navn, FeilType.FOR_STOR)] = (
+        f"{_felt.navn}: Filen er for stor. Den kan være på høyst {MAKS_FILSTORRELSE_TEKST}."
+    )
+    FEILTEKSTER[(_navn, FeilType.ULESELIG)] = (
+        f"{_felt.navn}: Vi klarer ikke å lese teksten i PDF-en. Den kan være skannet. "
+        "Lim inn teksten i stedet."
+    )
+del _navn, _felt
 
 # Feil fra KI-en (FR-28). Et ubrukelig svar får samme tekst som andre feil.
 KI_FEILTEKSTER = {
