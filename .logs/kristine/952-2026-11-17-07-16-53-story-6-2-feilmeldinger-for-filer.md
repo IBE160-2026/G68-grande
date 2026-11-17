@@ -19,6 +19,8 @@ Bygge story 6.2 med `bmad-build`: tydelige feilmeldinger når en fil ikke kan br
 - 1 184 tester består, og ruff er uten feil. Gjennomgangen: 17 funn, 4 rettet (en død testkonstant, to tester som sjekket for lite eller for strengt, en docstring), resten avvist (se Review Triage Log i spec-en). Ingenting utsatt.
 - Sprint-status: 6.2 er `review`. Notat lagt til i `my-project/8-refleksjonsrapport/notater.md`.
 - Lukket i `issues.md`: de to punktene fra 6.1 om 6.2.
+- Pushet og [PR #43](https://github.com/IBE160-2026/G68-grande/pull/43) laget, med notat om KI-feilene. CI er grønn.
+- Kristine prøvde i nettleseren med filene i `C:BMAD	est-6-2` (utenfor Git): tre filfeil samtidig i Korrektur, det samme i testmodus, et riktig felt står igjen, testdata-meldingen virker fortsatt, og over 16 MB gir siden med feilboksen. Alt virket, og kommentaren står i PR #43.
 
 ### Åpne punkter
-- Prøve story 6.2 i nettleseren: `feil-type.docx`, `skannet.pdf` og en PDF over 5 MB i hvert sitt felt (tre feil samtidig, lenkene gir fokus), det samme i testmodus, og en fil over 16 MB (siden med feilboksen, ikke en hvit feilside). Kommentere PR-en etterpå.
+Ingen.
