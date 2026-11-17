@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-17-2026 17:58
+last_updated: 11-17-2026 18:47
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -75,7 +75,7 @@ development_status:
   epic-6: done
   6-1-laste-opp-pdf: done
   6-2-feilmeldinger-for-filer: done
-  epic-6-retrospective: optional
+  epic-6-retrospective: done
 
   epic-7: backlog
   7-1-nytt-forslag: backlog
@@ -312,7 +312,7 @@ action_items:
     action: "Prosess: en endring i PRD-en føres inn i epics og epic-konteksten samme
       dag"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-14.md"
   - id: "epic-4-retro-item-33-prosess-samle-endringene-i-brev-prompten"
     epic: 4
@@ -327,21 +327,21 @@ action_items:
       egne brevet med bare mellomrommene slått sammen (ikke vasket), så «Du skrev»
       viser nøyaktig det brukeren skrev, med test og sjekk av de åtte ekte svarene"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-35-testen-av-korrektur-svarene-sjekker-orde"
     epic: 5
     action: "Testen av Korrektur-svarene sjekker ordene i «Sjekkliste for brevet»
       som testen for brevene, og «minst én endret» bruker korrektur_visning"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-36-én-måling-med-ekte-ki-med-et-fiktivt-ege"
     epic: 5
     action: "Én måling med ekte KI med et fiktivt eget brev nær 15 000 tegn, så egen
       max_tokens for Korrektur eller lavere grense for brevfeltet, med tydelig feilmelding"
     owner: "KI (Claude) forbereder, Kristine godkjenner kostnaden og bestemmer grensen"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-37-bedre-flyt-i-brevet-fra-korrektur-prompt"
     epic: 5
@@ -349,14 +349,14 @@ action_items:
       sammen korte setninger i samme avsnitt, med tre nye kjøringer med ekte KI og
       ny sjekk av kriterium 12 (gjerne sammen med målingen av et langt brev)"
     owner: "KI (Claude), Kristine godkjenner kostnaden"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-38-kristines-beslutninger-i-epic-5-føres-in"
     epic: 5
     action: "Kristines beslutninger i epic 5 føres inn i epics.md (story 5.2 og 5.3)
       og EXPERIENCE.md, og «Bestemmes i 5.2» i epic-5-context.md rettes"
     owner: "KI (Claude), Kristine godkjenner teksten"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-39-prosess-når-kristine-beskriver-noe-hun-s"
     epic: 5
@@ -370,5 +370,44 @@ action_items:
     action: "Prosess: spec-en beholder alle seksjonene fra malen (Implementation Notes,
       Spec Change Log, Review Triage Log) fra starten, også tomme"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
+  - id: "epic-6-retro-item-41-pdf-lesingen-strammes-inn-teksten-kuttes"
+    epic: 6
+    action: "PDF-lesingen strammes inn: teksten kuttes rett over tegngrensen før den
+      lagres, mellomrom foran linjeskift fjernes, unntak fanges per side, og loggeren
+      til pypdf viser bare feil, med tester"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
+  - id: "epic-6-retro-item-42-testene-for-filfeltet-send_felt-sender-e"
+    epic: 6
+    action: "Testene for filfeltet: send_felt sender en tom fildel slik nettleseren
+      gjør, og en test sikrer at MAKS_FORESPORSEL er større enn tre filer på MAKS_FILSTORRELSE"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
+  - id: "epic-6-retro-item-43-a9-med-innlimt-tekst-regelen-beholdes-og"
+    epic: 6
+    action: "A9 med innlimt tekst: regelen beholdes, og raden «Samme tekst, nytt navn»
+      i spec-6-1 og docstringen i testen rettes"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
+  - id: "epic-6-retro-item-44-avstemming-for_lang-i-rekkefølgen-i-epic"
+    epic: 6
+    action: "Avstemming: for_lang i rekkefølgen i epics.md og AD-9, Kristines beslutninger
+      fra 6.1 og 6.2 i epics.md og EXPERIENCE.md, README-statusen, testplan.md, resolved
+      i deferred-work.md og issues.md, og sletting av de flettede branchene for epic
+      6"
+    owner: "KI (Claude), Kristine godkjenner teksten og slettingen"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
+  - id: "epic-6-retro-item-45-prosess-når-en-story-startes-søkes-det-i"
+    epic: 6
+    action: "Prosess: når en story startes, søkes det i deferred-work.md og issues.md
+      etter punkter som nevner storyen, og et punkt som lukkes, får resolved samme
+      dag"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
