@@ -24,3 +24,21 @@
 ### Åpne punkter
 - Prøve story 7.3 i nettleseren: case 1 i testmodus til resultatsiden, «Tilbake», tomme linjer i CV-en, «Sjekk CV-en min» → samme resultatside. Valgfritt med ekte KI (under 1 kr): legg til et manglende nøkkelord → samme liste, høyere prosent. Så push, PR med kommentar, grønn CI og fletting.
 - Utsatt (`deferred-work.md`): lykkes nøkkelordkallet, men gap feiler i en analyse uten gjenbruk, kastes listen, og «Prøv på nytt» bruker 2 kall igjen.
+
+## 2026-11-19 kl. 22:20 — Kristine
+
+### Oppgave
+«åpne» og «alt stemmer»: starte nettsiden fra branchen, prøve story 7.3 i nettleseren, og så push og PR.
+
+### Plan
+- Starte nettsiden med `uv run flask --app soknad run` i `backend/` og åpne den i nettleseren.
+- Etter prøven: TO DO og prompt-logg, push, PR med KI-feil og kommentar om nettlesertesten.
+
+### Resultat
+- Kristine prøvde i testmodus: tomme linjer i CV-en ga samme resultatside med samme prosent, og en endret annonse ga feilen om testdata som før. Alt stemte.
+- Branchen er pushet, og [PR #48](https://github.com/IBE160-2026/G68-grande/pull/48) er laget med «Feil KI-en gjorde» og en kommentar om nettlesertesten.
+- TO DO og prompt-logg 488 er committet på branchen. Nettsiden kjører fortsatt.
+- Lukket i `issues.md`: nettleserprøven, push og PR for 7.3.
+
+### Åpne punkter
+- Grønn CI og fletting av PR #48, så sette 7.3 til ferdig i sprint-statusen, kopien og TO DO, og slette branchen.
