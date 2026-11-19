@@ -2,8 +2,10 @@
 // data-nedlasting laster ned filen som vanlig (svaret er et vedlegg, så siden blir stående).
 // Skriptet gjør knappen grønn med «✓ Lastet ned som …», viser filnavnet under, skjuler
 // feilboksen fra en nedlasting som feilet (ikke KI-feilboksen fra «Nytt forslag») og åpner
-// vinduet etter nedlasting. Tekstene står alt i siden. Skriptet endrer bare hvordan siden
-// ser ut, aldri søknadsdata (AD-1). Kan filen ikke lages, svarer serveren med brevsiden og feilboksen, og vinduet er borte.
+// vinduet etter nedlasting. Før vinduet åpnes, kopieres filnavnet for formatet som ble lastet
+// ned, inn i vinduet (story 7.2). Tekstene står alt i siden. Skriptet endrer bare hvordan
+// siden ser ut, aldri søknadsdata (AD-1). Kan filen ikke lages, svarer serveren med brevsiden
+// og feilboksen, og vinduet er borte.
 (function () {
   var vindu = document.getElementById("vindu-nedlastet");
   // Knappen under brevet fra siste trykk. Fokus går tilbake hit når vinduet lukkes.
@@ -37,9 +39,14 @@
         knapp.focus();
       }
     }
-    // Vinduet etter nedlasting: åpnes hver gang, med fokus på «Bli her» (UX-DR17).
+    // Vinduet etter nedlasting: åpnes hver gang, med fokus på «Bli her» (UX-DR17). Filnavnet i
+    // vinduet blir det for formatet som ble lastet ned (story 7.2), kopiert fra filnavn-linjen.
     if (vindu && !vindu.open) {
       tilbakeTil = knapp;
+      var vinduFilnavn = document.getElementById("vindu-nedlastet-filnavn");
+      if (filnavn && vinduFilnavn) {
+        vinduFilnavn.textContent = filnavn.textContent;
+      }
       vindu.showModal();
       var bliHer = document.getElementById("bli-her");
       if (bliHer) {

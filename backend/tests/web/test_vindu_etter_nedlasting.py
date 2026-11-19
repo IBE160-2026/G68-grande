@@ -94,7 +94,7 @@ def test_fr31_knappene_i_vinduet(paa_brev):
 @pytest.mark.parametrize("tilstand", ["for-nedlasting", "lastet-ned", "filfeil"])
 def test_fr31_vinduet_aapnes_aldri_av_seg_selv(request, paa_brev, tilstand):
     """FR-31/UX-DR17: vinduet er lukket når siden lastes, også etter nedlasting (lastet_ned
-    sann) og ved FilFeil. Ingen open og ingen autofocus i vinduet. Sidens autofocus står på
+    ikke tom) og ved FilFeil. Ingen open og ingen autofocus i vinduet. Sidens autofocus står på
     overskriften eller feilboksen. «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus
     bare for når det vinduet åpnes, og er det eneste unntaket."""
     if tilstand == "for-nedlasting":

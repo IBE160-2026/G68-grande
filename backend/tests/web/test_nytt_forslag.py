@@ -204,17 +204,17 @@ def test_fr25_knappen_og_vinduet_i_begge_modusene(app, request, modus):
 
 def test_fr25_nytt_forslag_gir_neste_brev_og_nullstiller_nedlastingen(app, paa_brev):
     """FR-25/FR-29/AD-8: etter nedlasting gir «Ja, lag nytt forslag» brevsiden med forslag 2
-    (brev-2.json). lastet_ned er usann, så «Last ned som Word» er blå igjen og filnavn-linjen
+    (brev-2.json). lastet_ned er tom, så «Last ned som Word» er blå igjen og filnavn-linjen
     er skjult. Steget er fortsatt brev."""
     assert paa_brev.get(NEDLASTING).status_code == 200
-    assert soknaden(app, paa_brev).lastet_ned is True
+    assert soknaden(app, paa_brev).lastet_ned == {"docx"}
     svar = nytt_forslag(paa_brev)
     assert svar.status_code == 302
     assert svar.location == "/brev"
     soknad = soknaden(app, paa_brev)
     assert soknad.forslag == 2
     assert soknad.brev == BREV_2
-    assert soknad.lastet_ned is False
+    assert soknad.lastet_ned == frozenset()
     assert soknad.steg == Steg.BREV
     assert soknad.opptatt is False
     html = html_av(paa_brev.get("/brev"))
@@ -260,7 +260,7 @@ def test_fr25_korrektur_lager_neste_forslag_fra_det_opprinnelige_brevet(
     assert soknad.forslag == 2
     assert soknad.korrektur == korrektur_svar(2)
     assert soknad.eget_brev.tekst == EGET_BREV
-    assert soknad.lastet_ned is False
+    assert soknad.lastet_ned == frozenset()
     html = html_av(paa_brev_korrektur.get("/brev"))
     assert brevtekst(html) == korrektur_brev(2)
     # Forslag 3 lages også fra det opprinnelige brevet.
@@ -301,7 +301,7 @@ def test_fr28_ki_feil_beholder_det_gamle_brevet(app, paa_brev, feiltype):
     html = html_av(svar)
     assert soknaden(app, paa_brev) == for_
     assert for_.forslag == 1
-    assert for_.lastet_ned is True
+    assert for_.lastet_ned == {"docx"}
     assert brevtekst(html) == brevet(BREV_1["avsnitt"], BREV_1["navn"])
     boks = feilboks(html)
     assert f'<p class="feilboks-overskrift">{tekster.KI_FEILTEKSTER[feiltype]}</p>' in boks
@@ -502,13 +502,13 @@ def test_fr25_resultatsiden_har_egen_tekst_i_vinduet(request, modus):
 
 def test_fr25_ja_paa_resultatsiden_gir_neste_forslag(app, paa_brev):
     """FR-25 (retro 3): «Ja» på resultatsiden sender skjemaet, og brevet er neste forslag.
-    lastet_ned er usann."""
+    lastet_ned er tom."""
     paa_brev.get(NEDLASTING)
     assert paa_brev.post("/resultat", data={"handling": "brev"}).location == "/brev"
     soknad = soknaden(app, paa_brev)
     assert soknad.forslag == 2
     assert soknad.brev == BREV_2
-    assert soknad.lastet_ned is False
+    assert soknad.lastet_ned == frozenset()
 
 
 def test_fr28_ki_feil_paa_resultatsiden_beholder_brevet(app, paa_brev):

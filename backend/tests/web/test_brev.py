@@ -548,8 +548,8 @@ def test_nfr6_brevteksten_escapes(app, innlogget_client):
 
 def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):
     """FR-26: brevsiden har ingen «Tilbake», ingen tekstfelt og ingen contenteditable. I
-    <main> er det eneste skjemaet og den eneste knappen «Nytt forslag» (story 7.1), og den
-    eneste lenken er «Last ned som Word» (story 3.2)."""
+    <main> er det eneste skjemaet og den eneste knappen «Nytt forslag» (story 7.1), og de
+    eneste lenkene er «Last ned som Word» (story 3.2) og «Last ned som PDF» (story 7.2)."""
     html = html_av(paa_brev.get("/brev"))
     innhold = main(html)
     assert tekster.TILBAKE_KNAPP not in innhold
@@ -561,7 +561,7 @@ def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):
         ("button", "nytt-forslag"),
     ]
     lenker = [a["href"] for t, a in tagger_i(innhold) if t == "a"]
-    assert lenker == ["/last-ned/docx"]
+    assert lenker == ["/last-ned/docx", "/last-ned/pdf"]
 
 
 def test_fr22_brevsiden_har_logg_ut_og_ingen_ventetegn(paa_brev):

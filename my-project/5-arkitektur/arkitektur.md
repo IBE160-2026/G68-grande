@@ -339,7 +339,7 @@ flowchart LR
 | --- | --- |
 | Støtte for CV-er med kolonner og tabeller | Avgjøres av en prøve med pypdf i første PDF-story. Går prøven dårlig, blir det en kjent begrensning i README, og PRD-en og beslutningsloggen oppdateres. |
 | Kort grunn ved hver endring i Korrektur | Står under «Gjøres hvis det blir tid». Det er plass til feltet i AD-4. |
-| Hvilken TTF-skrift som brukes til PDF ut | Velges i nedlastings-storyen. Kravet om fri lisens og æøå er fast (AD-11). |
+| Hvilken TTF-skrift som brukes til PDF ut | Bestemt i story 7.2: Noto Sans 11 pt (fri lisens OFL), bestemt av Kristine 19. november 2026, med OFL.txt i `soknad/fonts/`. |
 | CSS og hvordan sidemalene deles opp | Følger DESIGN.md. Det som er felles, ligger allerede fast i `base.html`. |
 | CSRF-beskyttelse | Nettsiden kjører bare lokalt. Vurderes hvis den skal på nett. |
 | Justering av 90 s og grensen på 50 bokstaver | Måles når ekte KI og PDF-lesing er på plass, og justeres i `innstillinger.py`. |
