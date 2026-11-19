@@ -5,10 +5,12 @@
     åpnes: fokus går til det trygge valget. «Ja, lag nytt forslag» er type="button", og
     skriptet sender skjemaet med knappen som åpnet vinduet, så ventetegnet vises. «Avbryt» og
     Esc lukker vinduet, og skriptet sender fokus tilbake til knappen som åpnet det. Uten
-    JavaScript sendes skjemaet med en gang, uten vinduet. #}
+    JavaScript sendes skjemaet med en gang, uten vinduet. vindu_tekst settes av siden som tar
+    med vinduet: brevsiden og resultatsiden har hver sin tekst (bestemt av Kristine 19. november
+    2026), fordi brevet ikke vises på resultatsiden. #}
 <dialog class="vindu" id="vindu-nytt-forslag" aria-labelledby="vindu-nytt-forslag-overskrift" aria-describedby="vindu-nytt-forslag-tekst">
   <h2 id="vindu-nytt-forslag-overskrift">{{ tekster.VINDU_NYTT_FORSLAG_OVERSKRIFT }}</h2>
-  <p id="vindu-nytt-forslag-tekst">{{ tekster.VINDU_NYTT_FORSLAG_TEKST }}</p>
+  <p id="vindu-nytt-forslag-tekst">{{ vindu_tekst }}</p>
   <div class="vindu-knapper">
     <button class="hovedknapp" type="button" data-bekreft-ja>{{ tekster.JA_NYTT_FORSLAG_KNAPP }}</button>
     <form method="dialog">
