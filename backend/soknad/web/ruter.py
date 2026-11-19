@@ -69,9 +69,11 @@ from soknad.web.innlogging import (
     til_innloggingen,
 )
 
-# KI-kallene hver handling trenger (NFR-11): analysen er nøkkelord og gap, brevet er ett kall,
-# også det forbedrede brevet i Korrektur.
+# KI-kallene hver handling trenger (NFR-11): analysen er nøkkelord og gap, men bare gap når
+# nøkkelordlisten gjenbrukes (FR-15), brevet er ett kall, også det forbedrede brevet i
+# Korrektur.
 ANALYSE_KALL = 2
+GAP_KALL = 1
 BREV_KALL = 1
 
 
@@ -173,8 +175,13 @@ def innlegging():
     mens KI-en jobbet, blir den nye stående, og analysen kastes.
 
     Er testmodus av og samtykket mangler, sendes brukeren til startsiden uten KI-kall (AD-12).
-    Med ekte KI telles KI-kallene i søknaden. Er det ikke plass til begge kallene i analysen,
-    vises innleggingen med meldingen om det, uten KI-kall (NFR-11).
+    Med ekte KI telles KI-kallene i søknaden. Er det ikke plass til kallene i analysen, vises
+    innleggingen med meldingen om det, uten KI-kall (NFR-11).
+
+    Har søknaden fortsatt nøkkelordlisten etter sett_inndata (bare CV-en eller det egne brevet
+    er endret, ikke annonsen), gjenbrukes listen og arbeidsgiveren, og KI-en kalles bare for
+    gap-analysen. Da trenger analysen ett kall (GAP_KALL), ellers to (FR-15, FR-19, NFR-11).
+    sett_inndata avgjør om listen beholdes. Ruten ser bare på om den finnes.
 
     I Korrektur leses også brevfeltet (eget_brev), som må fylles ut og sjekkes som de andre
     (FR-8, FR-9). I Full generering ignoreres et eget_brev i skjemaet, og brevet i søknaden er
@@ -220,10 +227,16 @@ def innlegging():
     if feil:
         return _vis_innlegging(soknad, feil=feil)
 
+    gjenbruk = soknad.nokkelord is not None
+
     def analyse(valgt_ki):
-        # Én KI for begge kallene: slås testmodus av i en annen fane mellom kallene, går gap
-        # likevel til samme KI som samtykket ble sjekket for (AD-12).
-        nokkelord = valgt_ki.nokkelord(annonse)
+        # En gjenbrukt liste kommer fra den forrige analysen, og da kalles bare gap. Gjøres
+        # begge kallene, brukes én KI for begge: slås testmodus av i en annen fane mellom
+        # kallene, går gap likevel til samme KI som samtykket ble sjekket for (AD-12).
+        if gjenbruk:
+            nokkelord = {"nokkelord": list(soknad.nokkelord), "arbeidsgiver": soknad.arbeidsgiver}
+        else:
+            nokkelord = valgt_ki.nokkelord(annonse)
         gap = valgt_ki.gap(cv, annonse)
         return sett_analyse(soknad, nokkelord=nokkelord, gap=gap)
 
@@ -231,7 +244,7 @@ def innlegging():
     return _med_ki(
         soknad,
         innlogging,
-        kall=ANALYSE_KALL,
+        kall=GAP_KALL if gjenbruk else ANALYSE_KALL,
         arbeid=analyse,
         vis_feil=partial(_vis_innlegging, soknad, feil=[]),
         neste="web.resultat",

@@ -148,18 +148,14 @@ def test_fr19_sett_inndata_med_like_tekster_endrer_ingenting():
     assert sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen")) is soknad
 
 
-@pytest.mark.parametrize(
-    ("cv", "annonse"),
-    [("ny cv", "annonsen"), ("min cv", "ny annonse"), ("min cv ", "annonsen")],
-)
-def test_fr19_sett_inndata_med_endret_tekst_nullstiller_resultatene(cv, annonse):
-    """FR-19/AD-8: er en av tekstene endret (også bare et mellomrom), lagres tekstene, og
-    nøkkelordlisten, arbeidsgiveren og gap-analysen nullstilles. Steget blir innlegging."""
+@pytest.mark.parametrize("annonse", ["ny annonse", "annonse"])
+def test_fr19_sett_inndata_med_endret_annonse_nullstiller_resultatene(annonse):
+    """FR-19/AD-8: er annonsen endret, lagres tekstene, og nøkkelordlisten, annonseteksten den
+    ble laget fra, arbeidsgiveren og gap-analysen nullstilles sammen. Steget blir innlegging."""
     soknad = _med_resultater()
-    ny = sett_inndata(soknad, cv=Tekstfelt(cv), annonse=Tekstfelt(annonse))
+    ny = sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt(annonse))
     assert ny == dataclasses.replace(
         soknad,
-        cv=Tekstfelt(cv),
         annonse=Tekstfelt(annonse),
         nokkelord=None,
         nokkelord_annonse=None,
@@ -170,6 +166,74 @@ def test_fr19_sett_inndata_med_endret_tekst_nullstiller_resultatene(cv, annonse)
     )
     # Den gamle søknaden er uendret.
     assert soknad.nokkelord == ("python", "sql")
+
+
+@pytest.mark.parametrize("cv", ["ny cv", "min cv "])
+def test_fr15_sett_inndata_med_bare_ny_cv_beholder_nokkelordlisten(cv):
+    """FR-15/FR-19 (story 7.3): er bare CV-en endret (også bare et mellomrom), beholdes
+    nøkkelordlisten, annonseteksten den ble laget fra og arbeidsgiveren. Gap-analysen og
+    brevet nullstilles, og steget blir innlegging, så gap-analysen kjøres på nytt."""
+    soknad = sett_brev(_med_resultater(Steg.BREV), BREV_SVAR)
+    ny = sett_inndata(soknad, cv=Tekstfelt(cv), annonse=Tekstfelt("annonsen"))
+    assert ny == dataclasses.replace(
+        soknad, cv=Tekstfelt(cv), gap=None, brev=None, steg=Steg.INNLEGGING
+    )
+
+
+@pytest.mark.parametrize("annonse", ["annonsen ", "  annonsen\n\n", "Annonsen!"])
+def test_fr15_sett_inndata_med_lik_vasket_annonse_beholder_nokkelordlisten(annonse):
+    """FR-15/FR-19 (story 7.3, AD-10): ekstra mellomrom, linjeskift, store bokstaver og
+    tegnsetting i annonsen regnes som lik annonse (samme vask som testdata-gjenkjenningen,
+    bestemt av Kristine 19. november 2026, også når «C++» er byttet til «C#»). Annonsen
+    lagres, listen beholdes, og gap-analysen nullstilles."""
+    soknad = _med_resultater()
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt(annonse))
+    assert ny.annonse == Tekstfelt(annonse)
+    assert (ny.nokkelord, ny.nokkelord_annonse, ny.arbeidsgiver) == (
+        ("python", "sql"),
+        "annonsen",
+        "Firma AS",
+    )
+    assert ny.gap is None
+    assert ny.steg == Steg.INNLEGGING
+
+
+def test_fr15_sett_inndata_uten_liste_fra_for_har_ingen_liste():
+    """FR-15/FR-19 (story 7.3): finnes ingen liste fra før (nokkelord_annonse er None), er
+    det ingenting å gjenbruke, og listen hentes som før."""
+    soknad = Soknad(
+        steg=Steg.INNLEGGING,
+        modus=Modus.FULL_GENERERING,
+        cv=Tekstfelt("min cv"),
+        annonse=Tekstfelt("annonsen"),
+    )
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
+    assert (ny.nokkelord, ny.nokkelord_annonse, ny.arbeidsgiver) == (None, None, None)
+
+
+def test_fr15_sett_inndata_med_cpp_byttet_til_csharp_beholder_nokkelordlisten():
+    """FR-15/FR-19 (story 7.3, AD-10): bestemt av Kristine 19. november 2026: en annonse der
+    bare «C++» er byttet til «C#», regnes som lik, fordi vasken fjerner tegnsettingen. Den
+    gamle listen beholdes."""
+    soknad = dataclasses.replace(
+        _med_resultater(),
+        annonse=Tekstfelt("Vi søker C++-utvikler"),
+        nokkelord_annonse=vask("Vi søker C++-utvikler"),
+    )
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("Vi søker C#-utvikler"))
+    assert ny.nokkelord == ("python", "sql")
+    assert ny.nokkelord_annonse == vask("Vi søker C++-utvikler")
+    assert ny.arbeidsgiver == "Firma AS"
+
+
+@pytest.mark.parametrize("annonse", ["???", ""])
+def test_fr15_sett_inndata_med_vasket_tom_annonse_beholder_ikke_listen(annonse):
+    """FR-15/FR-19 (story 7.3): en annonse uten bokstaver og tall vaskes til "". En lagret
+    liste fra en slik annonse regnes ikke som lik en annen slik annonse, så listen,
+    annonseteksten og arbeidsgiveren nullstilles."""
+    soknad = dataclasses.replace(_med_resultater(), annonse=Tekstfelt("!!!"), nokkelord_annonse="")
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt(annonse))
+    assert (ny.nokkelord, ny.nokkelord_annonse, ny.arbeidsgiver) == (None, None, None)
 
 
 @pytest.mark.parametrize("steg", [Steg.INNLEGGING, Steg.RESULTAT, Steg.BREV])
@@ -199,13 +263,15 @@ def test_fr8_sett_inndata_med_nytt_filnavn_i_brevet_beholder_analysen():
 
 
 def test_fr8_sett_inndata_med_ny_tekst_fra_pdf_nullstiller_resultatene():
-    """FR-8/FR-19 (story 6.1): en PDF med en annen tekst er en endring som før, og teksten og
-    filnavnet lagres."""
+    """FR-8/FR-19 (story 6.1, 7.3): en PDF med en annen tekst er en endring som før, og
+    teksten og filnavnet lagres. Gap-analysen nullstilles, og nøkkelordlisten beholdes, for
+    annonsen er lik (FR-15)."""
     ny = sett_inndata(
         _med_resultater(), cv=Tekstfelt("ny cv", "cv.pdf"), annonse=Tekstfelt("annonsen")
     )
     assert ny.cv == Tekstfelt("ny cv", "cv.pdf")
-    assert ny.nokkelord is None
+    assert ny.gap is None
+    assert ny.nokkelord == ("python", "sql")
     assert ny.steg == Steg.INNLEGGING
 
 
@@ -233,6 +299,7 @@ def test_fr8_sett_inndata_uten_eget_brev_beholder_brevet():
     ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
     assert ny.eget_brev == Tekstfelt("mitt brev")
     assert ny.gap is None
+    assert ny.nokkelord == ("python", "sql")
 
 
 def test_fr8_sett_inndata_med_likt_eget_brev_endrer_ingenting():
@@ -248,9 +315,17 @@ def test_fr8_sett_inndata_med_likt_eget_brev_endrer_ingenting():
 
 
 def test_fr8_sett_inndata_med_bare_nytt_eget_brev_nullstiller_resultatene():
-    """FR-8 (story 5.1, AD-8): er bare brevet endret, nullstilles resultatene og steget blir
-    innlegging, så resultatsiden ikke kan åpnes med et brev som ikke har bestått sjekken."""
-    soknad = _korrektur_med_resultater()
+    """FR-8 (story 5.1, 7.3, AD-8): er bare brevet endret, nullstilles gap-analysen, brevet og
+    korrekturen, og steget blir innlegging, så resultatsiden ikke kan åpnes med et brev som
+    ikke har bestått sjekken. Nøkkelordlisten og arbeidsgiveren beholdes, for annonsen er lik
+    (FR-15)."""
+    soknad = dataclasses.replace(
+        _korrektur_med_resultater(),
+        steg=Steg.BREV,
+        korrektur={"setninger": []},
+        forslag=3,
+        lastet_ned=frozenset({"docx"}),
+    )
     ny = sett_inndata(
         soknad,
         cv=Tekstfelt("min cv"),
@@ -260,26 +335,26 @@ def test_fr8_sett_inndata_med_bare_nytt_eget_brev_nullstiller_resultatene():
     assert ny == dataclasses.replace(
         soknad,
         eget_brev=Tekstfelt("nytt brev"),
-        nokkelord=None,
-        nokkelord_annonse=None,
-        arbeidsgiver=None,
         gap=None,
         brev=None,
+        korrektur=None,
+        forslag=1,
         lastet_ned=frozenset(),
         steg=Steg.INNLEGGING,
     )
 
 
 def test_fr8_sett_inndata_med_ny_cv_og_nytt_brev_nullstiller_resultatene():
-    """FR-8/FR-19 (story 5.1): er CV-en endret, nullstilles resultatene som før, og det nye
-    brevet lagres."""
+    """FR-8/FR-19 (story 5.1, 7.3): er CV-en endret, nullstilles gap-analysen som før, og det
+    nye brevet lagres. Nøkkelordlisten beholdes, for annonsen er lik (FR-15)."""
     soknad = _korrektur_med_resultater()
     ny = sett_inndata(
         soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"), eget_brev=Tekstfelt("")
     )
     assert ny.eget_brev == Tekstfelt("")
     assert ny.cv == Tekstfelt("ny cv")
-    assert ny.nokkelord is None
+    assert ny.nokkelord == ("python", "sql")
+    assert ny.arbeidsgiver == "Firma AS"
     assert ny.gap is None
     assert ny.steg == Steg.INNLEGGING
 
