@@ -126,6 +126,8 @@
 {% endblock %}
 {% block vinduer %}
 {%- if har_brev %}
+{% with vindu_tekst = tekster.VINDU_NYTT_FORSLAG_TEKST_RESULTAT %}
 {% include "vindu_nytt_forslag.html" %}
+{% endwith %}
 {%- endif %}
 {% endblock %}

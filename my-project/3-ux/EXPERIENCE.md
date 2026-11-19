@@ -172,7 +172,7 @@ Et felt med en avvist fil (feil filtype, for stor eller uleselig) blir tomt igje
 - Under knappene etter nedlasting (filnavn-linjen): «Filnavn: Soknad_Sykehuset_2026-10-21.docx».
 - Under: «Nytt forslag».
 - Vindu etter nedlasting: «Brevet er lastet ned!» · filnavnet, for eksempel «Soknad_Sykehuset_2026-10-21.docx» · «Vil du lage en ny søknad eller logge ut?» · «Lag ny søknad», «Logg ut», «Bli her».
-- Vindu ved nytt forslag: «Vil du ha et nytt forslag?» · «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.» · «Ja, lag nytt forslag», «Avbryt».
+- Vindu ved nytt forslag: «Vil du ha et nytt forslag?» · «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.» · «Ja, lag nytt forslag», «Avbryt». På resultatsiden, når et brev finnes, står «Du har alt et brev. Det blir slettet hvis du trykker på «Ja, lag nytt forslag».» i stedet for den andre teksten, fordi brevet ikke vises der (bestemt av Kristine 19. november 2026).
 - Vindu ved logg ut før nedlasting: «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» · «Logg ut», «Avbryt».
 - Filen kan ikke lages: «Vi klarte ikke å lage filen. Prøv på nytt.» · «Prøv på nytt».
 

@@ -974,7 +974,7 @@ slik at jeg kan velge det jeg liker best.
 **Så** står «Nytt forslag» under nedlastingsknappene (FR-25)
 
 **Når** jeg trykker «Nytt forslag»
-**Så** åpnes vinduet «Vil du ha et nytt forslag?» med «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.», «Ja, lag nytt forslag» og «Avbryt». Fokus går til «Avbryt», Esc lukker, og fokus går tilbake til knappen (UX-DR17)
+**Så** åpnes vinduet «Vil du ha et nytt forslag?» med «Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte.», «Ja, lag nytt forslag» og «Avbryt». Fokus går til «Avbryt», Esc lukker, og fokus går tilbake til knappen (UX-DR17). På resultatsiden, når et brev finnes (retro 3), spør det samme vinduet med teksten «Du har alt et brev. Det blir slettet hvis du trykker på «Ja, lag nytt forslag».» (bestemt av Kristine 19. november 2026)
 
 **Når** jeg trykker «Ja, lag nytt forslag»
 **Så** økes `forslag` med `nytt_forslag` i kjernen, ventetegnet vises, og jeg får et nytt brev. I testmodus gir oddetall `-1` og partall `-2` (AD-3, AD-8)

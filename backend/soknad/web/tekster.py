@@ -267,6 +267,11 @@ VINDU_NYTT_FORSLAG_OVERSKRIFT = "Vil du ha et nytt forslag?"
 VINDU_NYTT_FORSLAG_TEKST = (
     "Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte."
 )
+# Teksten i vinduet på resultatsiden, der brevet ikke vises (bestemt av Kristine 19. november
+# 2026).
+VINDU_NYTT_FORSLAG_TEKST_RESULTAT = (
+    "Du har alt et brev. Det blir slettet hvis du trykker på «Ja, lag nytt forslag»."
+)
 JA_NYTT_FORSLAG_KNAPP = "Ja, lag nytt forslag"
 AVBRYT_KNAPP = "Avbryt"
 

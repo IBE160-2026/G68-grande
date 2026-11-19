@@ -482,6 +482,24 @@ def test_fr25_resultatsiden_med_brev_spor_forst(app, request, modus):
     assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
 
 
+@pytest.mark.parametrize("modus", list(Modus))
+def test_fr25_resultatsiden_har_egen_tekst_i_vinduet(request, modus):
+    """FR-25: på resultatsiden vises ikke brevet, så vinduet sier «Du har alt et brev. Det blir
+    slettet hvis du trykker på «Ja, lag nytt forslag».» i stedet for brevsidens tekst (bestemt
+    av Kristine 19. november 2026). Brevsiden beholder sin tekst."""
+    if modus == Modus.KORREKTUR:
+        client = request.getfixturevalue("paa_brev_korrektur")
+    else:
+        client = request.getfixturevalue("paa_brev")
+    resultat = vinduet(html_av(client.get("/resultat")))
+    tekst = tekster.VINDU_NYTT_FORSLAG_TEKST_RESULTAT
+    assert f'<p id="vindu-nytt-forslag-tekst">{tekst}</p>' in resultat
+    assert tekster.VINDU_NYTT_FORSLAG_TEKST not in resultat
+    brev = vinduet(html_av(client.get("/brev")))
+    assert f'<p id="vindu-nytt-forslag-tekst">{tekster.VINDU_NYTT_FORSLAG_TEKST}</p>' in brev
+    assert tekst not in brev
+
+
 def test_fr25_ja_paa_resultatsiden_gir_neste_forslag(app, paa_brev):
     """FR-25 (retro 3): «Ja» på resultatsiden sender skjemaet, og brevet er neste forslag.
     lastet_ned er usann."""
@@ -520,13 +538,24 @@ def test_fr25_tekstene_ligger_i_tekster_py():
     assert tekster.VINDU_NYTT_FORSLAG_TEKST == (
         "Brevet du ser nå, blir slettet. Har du ikke lastet det ned, er det borte."
     )
+    assert tekster.VINDU_NYTT_FORSLAG_TEKST_RESULTAT == (
+        "Du har alt et brev. Det blir slettet hvis du trykker på «Ja, lag nytt forslag»."
+    )
     assert tekster.JA_NYTT_FORSLAG_KNAPP == "Ja, lag nytt forslag"
     assert tekster.AVBRYT_KNAPP == "Avbryt"
     assert tekster.KI_FEIL_BEHOLDT_BREV == "Brevet du hadde, er beholdt."
     assert tekster.VENTE_BREV == "Vi lager brevet ditt – det kan ta en liten stund."
     for mal in ("brev.html", "resultat.html", "vindu_nytt_forslag.html"):
         innhold = re.sub(r"\{#.*?#\}", "", (MALER / mal).read_text(encoding="utf-8"), flags=re.S)
-        for tekst in ("Nytt forslag", "Vil du ha", "blir slettet", "Ja, lag", "Avbryt", "beholdt"):
+        for tekst in (
+            "Nytt forslag",
+            "Vil du ha",
+            "blir slettet",
+            "Du har alt",
+            "Ja, lag",
+            "Avbryt",
+            "beholdt",
+        ):
             assert tekst not in innhold, (mal, tekst)
         assert "style=" not in innhold
 
