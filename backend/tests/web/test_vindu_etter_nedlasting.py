@@ -95,18 +95,19 @@ def test_fr31_knappene_i_vinduet(paa_brev):
 def test_fr31_vinduet_aapnes_aldri_av_seg_selv(request, paa_brev, tilstand):
     """FR-31/UX-DR17: vinduet er lukket når siden lastes, også etter nedlasting (lastet_ned
     sann) og ved FilFeil. Ingen open og ingen autofocus i vinduet. Sidens autofocus står på
-    overskriften eller feilboksen."""
+    overskriften eller feilboksen. «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus
+    bare for når det vinduet åpnes, og er det eneste unntaket."""
     if tilstand == "for-nedlasting":
         html = html_av(paa_brev.get("/brev"))
-        assert med_autofocus(html) == [None]
+        assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
     elif tilstand == "lastet-ned":
         paa_brev.get(NEDLASTING)
         html = html_av(paa_brev.get("/brev"))
-        assert med_autofocus(html) == [None]
+        assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
     else:
         request.getfixturevalue("filfeil")
         html = html_av(paa_brev.get(NEDLASTING))
-        assert med_autofocus(html) == ["feilboks"]
+        assert med_autofocus(html) == ["feilboks", "nytt-forslag-avbryt"]
     assert "open" not in element(html, "vindu-nedlastet")
     boks = vinduet(html)
     assert "autofocus" not in boks

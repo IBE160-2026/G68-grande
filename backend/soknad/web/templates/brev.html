@@ -2,18 +2,39 @@
 {% block tittel %}{{ tekster.BREV_TITTEL }}{% endblock %}
 {% block skript %}
   <script src="{{ url_for('static', filename='js/nedlasting.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/bekreft.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/vente.js') }}" defer></script>
   {%- if visning %}
   <script src="{{ url_for('static', filename='js/endringer.js') }}" defer></script>
   {%- endif %}
 {%- endblock %}
+{% block ventetegn %}
+{% include "ventetegn.html" %}
+{%- endblock %}
 {% block innhold %}
 {#- Overskriften får fokus når siden åpnes, også etter ventetegnet på resultatsiden (UX-DR14).
-    Ved «Filen kan ikke lages» får feilboksen fokus i stedet. Brevsiden har ingen «Tilbake».
-    Overskriften er den for modusen (fra ruten): «Din oppdaterte søknad er ferdig!» i
-    Korrektur. Markeringene i Korrektur (story 5.3) står bare når ruten sender visning. Uten
-    visning (Full generering) er brevet som før. Fyrverkeri, PDF og «Nytt forslag» kommer i
-    Epic 7. #}
-<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
+    Ved «Filen kan ikke lages» og ved en KI-feil fra «Nytt forslag» får feilboksen fokus i
+    stedet. Brevsiden har ingen «Tilbake». Overskriften er den for modusen (fra ruten): «Din
+    oppdaterte søknad er ferdig!» i Korrektur. Markeringene i Korrektur (story 5.3) står bare
+    når ruten sender visning. Uten visning (Full generering) er brevet som før. Fyrverkeri og
+    PDF kommer senere i Epic 7. #}
+<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil and not ki_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
+{%- if ki_feil %}
+{#- KI-feil fra «Nytt forslag» (FR-25, FR-28): som på resultatsiden. Det gamle brevet står
+    under. «Prøv på nytt» står utenfor skjemaet, men sender det med form= som «Nytt forslag»
+    og viser ventetegnet. Den spør ikke på nytt, for brukeren har alt sagt ja. Meldingen om at
+    alle KI-kallene er brukt, står i samme boks, men uten knappen (NFR-11). #}
+<div class="feilboks" id="feilboks" tabindex="-1" autofocus>
+  <p class="feilboks-overskrift">{{ ki_feil }}</p>
+  <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_BREV }}</p>
+  {%- if prov_pa_nytt %}
+  <p class="feilboks-knapp">
+    <button class="hovedknapp" type="submit" form="nytt-forslag-skjema" name="handling"
+      value="nytt_forslag" data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
+  </p>
+  {%- endif %}
+</div>
+{%- endif %}
 {%- if fil_feil %}
 {#- Filen kunne ikke lages (FilFeil): som KI-feilboksen, men «Prøv på nytt» er en lenke som
     laster ned på nytt. Brevet under er ikke borte. #}
@@ -89,6 +110,14 @@
   </a>
   <p class="filnavn-linje" id="filnavn-docx"{% if not lastet_ned %} hidden{% endif %}>{{ tekster.filnavn_linje(filnavn) }}</p>
 </div>
+{#- «Nytt forslag» (FR-25) under nedlastingen: en lenkeknapp som sender POST til /brev.
+    bekreft.js stopper trykket og åpner vinduet «Vil du ha et nytt forslag?» (data-bekreft).
+    «Ja» sender skjemaet med denne knappen, så vente.js viser ventetegnet (data-vente). Uten
+    JavaScript sendes skjemaet uten vinduet. #}
+<form class="nytt-forslag" method="post" action="{{ url_for('web.brev') }}" id="nytt-forslag-skjema">
+  <button class="lenkeknapp" id="nytt-forslag" type="submit" name="handling" value="nytt_forslag"
+    data-vente="{{ tekster.VENTE_BREV }}" data-bekreft="vindu-nytt-forslag">{{ tekster.NYTT_FORSLAG_KNAPP }}</button>
+</form>
 {% endblock %}
 {% block vinduer %}
 {#- Vinduet etter nedlasting (FR-31, UX-DR17). nedlasting.js åpner det med showModal() hver gang
@@ -111,4 +140,5 @@
     </form>
   </div>
 </dialog>
+{% include "vindu_nytt_forslag.html" %}
 {% endblock %}

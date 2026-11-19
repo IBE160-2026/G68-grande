@@ -1,4 +1,4 @@
-"""Tester for søknaden i økten (FR-5, FR-8, FR-20, FR-23, FR-29, AD-7, AD-8, NFR-11)."""
+"""Tester for søknaden i økten (FR-5, FR-8, FR-20, FR-23, FR-25, FR-29, AD-7, AD-8, NFR-11)."""
 
 import dataclasses
 
@@ -12,6 +12,7 @@ from soknad.kjerne.okt import (
     begynn,
     ferdig_brev,
     har_plass_til,
+    nytt_forslag,
     sett_analyse,
     sett_brev,
     sett_inndata,
@@ -39,6 +40,7 @@ def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
     assert soknad.gap is None
     assert soknad.brev is None
     assert soknad.korrektur is None
+    assert soknad.forslag == 1
     assert soknad.lastet_ned is False
     assert soknad.opptatt is False
 
@@ -62,6 +64,7 @@ def test_fr5_soknaden_har_faste_felt_og_kan_ikke_endres_direkte():
         "gap",
         "brev",
         "korrektur",
+        "forslag",
         "lastet_ned",
         "opptatt",
         "ki_kall",
@@ -543,3 +546,52 @@ def test_nfr11_telleren_folger_soknaden_gjennom_endringene():
     soknad = sett_lastet_ned(soknad)
     soknad = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonse"))
     assert soknad.ki_kall == 7
+
+
+# --- Nytt forslag (story 7.1) ---
+
+
+def test_fr25_nytt_forslag_oker_forslag_og_nullstiller_brevet():
+    """FR-25/AD-8: nytt_forslag øker forslag med 1 og nullstiller brevet, det forbedrede brevet
+    og lastet_ned. Steget, det egne brevet, analysen og telleren er uendret."""
+    soknad = dataclasses.replace(
+        _lastet_ned(),
+        steg=Steg.BREV,
+        eget_brev=Tekstfelt("mitt brev"),
+        korrektur={"setninger": []},
+        ki_kall=4,
+    )
+    ny = nytt_forslag(soknad)
+    assert ny == dataclasses.replace(soknad, forslag=2, brev=None, korrektur=None, lastet_ned=False)
+    assert nytt_forslag(ny).forslag == 3
+    # Den gamle søknaden er uendret.
+    assert soknad.forslag == 1
+    assert soknad.lastet_ned is True
+
+
+def test_fr25_velg_modus_setter_forslag_til_1():
+    """FR-25/AD-8: velges modus på nytt, er brevet borte, og det neste brevet er forslag 1."""
+    soknad = nytt_forslag(_lastet_ned())
+    assert soknad.forslag == 2
+    assert velg_modus(soknad, Modus.KORREKTUR).forslag == 1
+
+
+def test_fr25_sett_inndata_med_endret_tekst_setter_forslag_til_1():
+    """FR-19/FR-25/AD-8: endres teksten, er brevet borte, og det neste brevet er forslag 1."""
+    soknad = nytt_forslag(_lastet_ned())
+    ny = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
+    assert ny.forslag == 1
+
+
+def test_fr25_sett_inndata_med_like_tekster_beholder_forslag():
+    """FR-19/FR-25: er tekstene like som før, er søknaden uendret, også forslag."""
+    soknad = nytt_forslag(_lastet_ned())
+    ny = sett_inndata(soknad, cv=Tekstfelt("min cv"), annonse=Tekstfelt("annonsen"))
+    assert ny is soknad
+
+
+def test_fr25_sett_brev_og_sett_korrektur_beholder_forslag():
+    """FR-25: brevet fra KI-en lagres med samme forslag som det ble laget for."""
+    soknad = nytt_forslag(_med_resultater())
+    assert sett_brev(soknad, BREV_SVAR).forslag == 2
+    assert sett_korrektur(soknad, {"setninger": []}).forslag == 2

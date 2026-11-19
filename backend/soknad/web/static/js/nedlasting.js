@@ -1,9 +1,9 @@
 // Nedlastingen på brevsiden (FR-29, FR-31, UX-DR16, UX-DR17). Et trykk på en lenke med
 // data-nedlasting laster ned filen som vanlig (svaret er et vedlegg, så siden blir stående).
 // Skriptet gjør knappen grønn med «✓ Lastet ned som …», viser filnavnet under, skjuler
-// feilboksen fra et forsøk som feilet og åpner vinduet etter nedlasting. Tekstene står alt i
-// siden. Skriptet endrer bare hvordan siden ser ut, aldri søknadsdata (AD-1). Kan filen ikke
-// lages, svarer serveren med brevsiden og feilboksen, og vinduet er borte.
+// feilboksen fra en nedlasting som feilet (ikke KI-feilboksen fra «Nytt forslag») og åpner
+// vinduet etter nedlasting. Tekstene står alt i siden. Skriptet endrer bare hvordan siden
+// ser ut, aldri søknadsdata (AD-1). Kan filen ikke lages, svarer serveren med brevsiden og feilboksen, og vinduet er borte.
 (function () {
   var vindu = document.getElementById("vindu-nedlastet");
   // Knappen under brevet fra siste trykk. Fokus går tilbake hit når vinduet lukkes.
@@ -26,7 +26,9 @@
     if (filnavn) {
       filnavn.hidden = false;
     }
-    if (feilboks) {
+    // Bare feilboksen fra en nedlasting som feilet (FilFeil), som har en nedlastingslenke,
+    // skjules. KI-feilboksen fra «Nytt forslag» (story 7.1) har samme id, men blir stående.
+    if (feilboks && feilboks.querySelector("a[data-nedlasting]")) {
       // Kom trykket fra «Prøv på nytt» i feilboksen, flyttes fokus til knappen under brevet,
       // så fokus ikke forsvinner når boksen skjules.
       var fraFeilboks = feilboks.contains(lenke);

@@ -44,6 +44,7 @@ from tests.web.hjelpere import (
 # Fiksturene paa_resultat og paa_brev står i conftest.py.
 
 BREV_SVAR = json.loads((CASE / "ki-svar" / "brev-1.json").read_text(encoding="utf-8"))
+BREV_SVAR_2 = json.loads((CASE / "ki-svar" / "brev-2.json").read_text(encoding="utf-8"))
 
 
 def lag_brev(client, handling="brev"):
@@ -474,13 +475,15 @@ def test_fr28_prov_paa_nytt_sender_skjemaet_som_lag_brev(app, paa_resultat):
 
 
 def test_fr22_lag_brev_igjen_fra_resultatsiden_gir_brevsiden(app, paa_brev):
-    """FR-22/AD-8: tilbake til resultatsiden (nettleserens tilbakeknapp) og «Lag
-    søknadsbrevet mitt» igjen gir brevsiden på nytt, og steget er fortsatt brev."""
+    """FR-22/FR-25/AD-8: tilbake til resultatsiden (nettleserens tilbakeknapp) og «Lag
+    søknadsbrevet mitt» igjen gir brevsiden på nytt, og steget er fortsatt brev. Brevet er
+    neste forslag (story 7.1, retro 3), altså brev-2.json."""
     assert paa_brev.get("/resultat").status_code == 200
     assert lag_brev(paa_brev).location == "/brev"
     soknad = soknaden(app, paa_brev)
     assert soknad.steg == Steg.BREV
-    assert soknad.brev == BREV_SVAR
+    assert soknad.forslag == 2
+    assert soknad.brev == BREV_SVAR_2
     assert paa_brev.get("/brev").status_code == 200
 
 
@@ -495,7 +498,9 @@ def test_fr22_brevsiden_har_overskrift_tittel_og_fokus(paa_brev):
     h1 = [a for t, a in tagger_i(html) if t == "h1"]
     assert h1 == [{"class": "brev-overskrift", "tabindex": "-1", "autofocus": None}]
     assert re.search(r"<h1[^>]*>Din ferdigstilte søknad!</h1>", html)
-    assert med_autofocus(html) == [None]
+    # «Avbryt» i vinduet «Nytt forslag» har også autofocus, men den gjelder bare når vinduet
+    # åpnes (story 7.1).
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
 
 
 def test_fr22_ett_avsnitt_per_element(paa_brev):
@@ -543,14 +548,18 @@ def test_nfr6_brevteksten_escapes(app, innlogget_client):
 
 def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):
     """FR-26: brevsiden har ingen «Tilbake», ingen tekstfelt og ingen contenteditable. I
-    <main> er det ingen skjema eller knapper, og den eneste lenken er «Last ned som Word»
-    (story 3.2)."""
+    <main> er det eneste skjemaet og den eneste knappen «Nytt forslag» (story 7.1), og den
+    eneste lenken er «Last ned som Word» (story 3.2)."""
     html = html_av(paa_brev.get("/brev"))
     innhold = main(html)
     assert tekster.TILBAKE_KNAPP not in innhold
     assert "contenteditable" not in html
-    tagger = {t for t, _ in tagger_i(innhold)}
-    assert tagger.isdisjoint({"textarea", "input", "form", "button"})
+    tagger = [(t, a.get("id")) for t, a in tagger_i(innhold)]
+    assert {t for t, _ in tagger}.isdisjoint({"textarea", "input"})
+    assert [a for a in tagger if a[0] in ("form", "button")] == [
+        ("form", "nytt-forslag-skjema"),
+        ("button", "nytt-forslag"),
+    ]
     lenker = [a["href"] for t, a in tagger_i(innhold) if t == "a"]
     assert lenker == ["/last-ned/docx"]
 
@@ -558,14 +567,15 @@ def test_fr26_brevet_kan_ikke_redigeres_og_har_ingen_tilbake(paa_brev):
 def test_fr22_brevsiden_har_logg_ut_og_ingen_ventetegn(paa_brev):
     """FR-22/FR-6/NFR-4: «Logg ut» står i hjørneraden: nøyaktig ett skjema der, til
     /logg-ut. Vinduet etter nedlasting (story 3.3) har også et skjema til /logg-ut, så
-    testen ser bare på <footer>. Brevsiden har ingen KI-kall ennå, så den har ikke
-    ventetegnet."""
+    testen ser bare på <footer>. «Nytt forslag» er et KI-kall (story 7.1), så brevsiden har
+    ventetegnet, utenfor <main>."""
     html = html_av(paa_brev.get("/brev"))
     hjornerad = footer(html)
     skjemaer = [a for t, a in tagger_i(hjornerad) if t == "form"]
     assert skjemaer == [{"class": "utlogging", "method": "post", "action": "/logg-ut"}]
     assert tekster.LOGG_UT_KNAPP in hjornerad
-    assert 'id="vente"' not in html
+    assert 'id="vente"' in html
+    assert 'id="vente"' not in main(html)
 
 
 def test_nfr4_brevet_bare_i_minnet(paa_brev):
@@ -775,12 +785,13 @@ def test_nfr11_korrektur_med_ekte_ki_telles_som_ett_kall(med_nokkel, tmp_path):
 
 
 def test_fr22_korrektur_paa_nytt_fra_resultatsiden_gir_brevsiden(app, paa_brev_korrektur):
-    """FR-22/AD-8: tilbake til resultatsiden og «Oppdater søknadsbrevet mitt» igjen gir
-    brevsiden på nytt, og steget er fortsatt brev."""
+    """FR-22/FR-25/AD-8: tilbake til resultatsiden og «Oppdater søknadsbrevet mitt» igjen
+    gir brevsiden på nytt, og steget er fortsatt brev. Brevet er neste forslag (story 7.1,
+    retro 3)."""
     assert paa_brev_korrektur.get("/resultat").status_code == 200
     assert lag_brev(paa_brev_korrektur).location == "/brev"
     assert soknaden(app, paa_brev_korrektur).steg == Steg.BREV
-    assert avsnitt(html_av(paa_brev_korrektur.get("/brev"))) == korrektur_brev(1)
+    assert avsnitt(html_av(paa_brev_korrektur.get("/brev"))) == korrektur_brev(2)
 
 
 def test_fr23_brevsiden_i_korrektur_uten_forbedret_brev_sender_til_resultatsiden(

@@ -36,6 +36,7 @@ from soknad.kjerne.okt import (
     begynn,
     ferdig_brev,
     har_plass_til,
+    nytt_forslag,
     sett_analyse,
     sett_brev,
     sett_inndata,
@@ -274,7 +275,12 @@ def resultat():
 
     I Korrektur er POST «Oppdater søknadsbrevet mitt» (FR-23, FR-24), med samme handling=brev.
     KI-en får CV-en, annonsen og det egne brevet og gir det forbedrede brevet, som lagres med
-    sett_korrektur. Alt annet er som over, også feilene og «Prøv på nytt»."""
+    sett_korrektur. Alt annet er som over, også feilene og «Prøv på nytt».
+
+    Finnes det alt et brev (for eksempel etter nettleserens tilbakeknapp fra brevsiden), spør
+    vinduet «Vil du ha et nytt forslag?» først, og brevet lages fra nytt_forslag, altså som
+    neste forslag (FR-25, bestemt av Kristine 12. november 2026, retro 3). Feiler KI-en, er det
+    gamle brevet beholdt."""
     lagret = gjeldende_soknad()
     if lagret.nokkelord is None or lagret.gap is None:
         return redirect(url_for("web.innlegging"))
@@ -288,13 +294,9 @@ def resultat():
         return _vis_resultat(lagret), 400
 
     def brevet(valgt_ki):
-        if lagret.modus == Modus.KORREKTUR:
-            svar = valgt_ki.korrektur(
-                lagret.cv.tekst, lagret.annonse.tekst, lagret.eget_brev.tekst, forslag=1
-            )
-            return sett_korrektur(lagret, svar)
-        svar = valgt_ki.brev(lagret.cv.tekst, lagret.annonse.tekst, forslag=1)
-        return sett_brev(lagret, svar)
+        # nytt_forslag inni kallet: feiler KI-en, lagrer _med_ki søknaden fra før (AD-8).
+        grunnlag = lagret if ferdig_brev(lagret) is None else nytt_forslag(lagret)
+        return _lag_brev(grunnlag, valgt_ki)
 
     # Logget ut i en annen fane etter login_required: _med_ki sender til innloggingen.
     return _med_ki(
@@ -307,17 +309,43 @@ def resultat():
     )
 
 
-@web.route("/brev")
+@web.route("/brev", methods=["GET", "POST"])
 @login_required
 @krever_steg(Steg.BREV)
 def brev():
     """Brevsiden (FR-22, FR-26). Brevet vises bare og kan ikke redigeres. Uten brev (i
-    Korrektur: uten det forbedrede brevet) sendes brukeren til resultatsiden."""
-    soknad = gjeldende_soknad()
-    avsnitt = ferdig_brev(soknad)
+    Korrektur: uten det forbedrede brevet) sendes brukeren til resultatsiden, også ved POST.
+
+    POST er «Ja, lag nytt forslag» i vinduet etter «Nytt forslag» (FR-25), med
+    handling=nytt_forslag. Mens søknaden er opptatt, sendes POST til siden for steget uten
+    KI-kall (AD-8, FR-27). En ukjent knapp gir brevsiden med 400, og søknaden er uendret.
+    Ellers lages neste forslag gjennom _med_ki (samtykke, plass til kallet, opptatt og
+    telling): nytt_forslag øker forslag og nullstiller brevet og lastet_ned, og KI-en lager et
+    nytt brev, i Korrektur fra det opprinnelige egne brevet. nytt_forslag kalles inni kallet,
+    så en KIFeil gir brevsiden med det gamle brevet, forslag og lastet_ned uendret, og
+    feilboksen med «Brevet du hadde, er beholdt.» og «Prøv på nytt» (FR-28). Er alle
+    KI-kallene brukt, står meldingen om det i samme boks, uten «Prøv på nytt» (NFR-11)."""
+    lagret = gjeldende_soknad()
+    avsnitt = ferdig_brev(lagret)
     if avsnitt is None:
         return redirect(url_for("web.resultat"))
-    return _vis_brev(soknad, avsnitt)
+    if request.method == "GET":
+        return _vis_brev(lagret, avsnitt)
+    opptatt = til_steget_hvis_opptatt(lagret)
+    if opptatt is not None:
+        return opptatt
+    if request.form.get("handling") != "nytt_forslag":
+        # Ukjent knapp: samme side på nytt, og søknaden er uendret.
+        return _vis_brev(lagret, avsnitt), 400
+    # Logget ut i en annen fane etter login_required: _med_ki sender til innloggingen.
+    return _med_ki(
+        lagret,
+        gjeldende_innlogging(),
+        kall=BREV_KALL,
+        arbeid=lambda valgt_ki: _lag_brev(nytt_forslag(lagret), valgt_ki),
+        vis_feil=partial(_vis_brev, lagret, avsnitt),
+        neste="web.brev",
+    )
 
 
 @web.route("/last-ned/<any(docx):format>")
@@ -448,7 +476,7 @@ class _TelteKall:
 
 def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
     """KI-kallet for alle rutene som bruker KI-en (AD-8, AD-12, FR-27, FR-28, NFR-11).
-    Korrektur bruker den også, og «Nytt forslag» (Epic 7) skal bruke den.
+    Korrektur og «Nytt forslag» bruker den også.
 
     Ruten leser innloggingen én gang og gir den hit, så samtykket sjekkes for samme testmodus
     som velger KI-en. En annen fane som slår av testmodus i mellomtiden, endrer ingenting her.
@@ -487,6 +515,20 @@ def _med_ki(soknad, innlogging, kall, arbeid, vis_feil, neste):
     finally:
         erstatt_soknad(opptatt_soknad, tell_ki_kall(ferdig, telte.kall))
     return redirect(url_for(neste))
+
+
+def _lag_brev(soknad, valgt_ki):
+    """Brevet for søknaden fra KI-en, lagret i en ny søknad («Lag søknadsbrevet mitt»,
+    «Oppdater søknadsbrevet mitt» og «Nytt forslag», FR-22, FR-23, FR-25). KI-en får forslag
+    fra søknaden. I Korrektur får den CV-en, annonsen og det egne brevet brukeren skrev, også
+    ved nytt forslag, og svaret lagres med sett_korrektur. Ellers får den CV-en og annonsen, og
+    svaret lagres med sett_brev."""
+    cv, annonse = soknad.cv.tekst, soknad.annonse.tekst
+    if soknad.modus == Modus.KORREKTUR:
+        svar = valgt_ki.korrektur(cv, annonse, soknad.eget_brev.tekst, forslag=soknad.forslag)
+        return sett_korrektur(soknad, svar)
+    svar = valgt_ki.brev(cv, annonse, forslag=soknad.forslag)
+    return sett_brev(soknad, svar)
 
 
 def _les_felt(navn, lagret_felt):
@@ -571,12 +613,15 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
     (NFR-11). Knappen videre er «Oppdater søknadsbrevet mitt» i Korrektur og «Lag
-    søknadsbrevet mitt» ellers."""
+    søknadsbrevet mitt» ellers. har_brev er sann når søknaden alt har et brev (ferdig_brev).
+    Da spør vinduet «Vil du ha et nytt forslag?» før knappen videre sender skjemaet (FR-25,
+    retro 3)."""
     treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
     korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
         "resultat.html",
         brev_knapp=tekster.OPPDATER_BREV_KNAPP if korrektur else tekster.LAG_BREV_KNAPP,
+        har_brev=ferdig_brev(soknad) is not None,
         gap=soknad.gap,
         treff=treff,
         nokkelordtreff=tekster.nokkelordtreff(treff.antall_treff, treff.antall, treff.prosent),
@@ -585,9 +630,12 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     )
 
 
-def _vis_brev(soknad, avsnitt, fil_feil=False):
+def _vis_brev(soknad, avsnitt, fil_feil=False, ki_feil=None, prov_pa_nytt=True):
     """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
-    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). avsnitt er
+    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). ki_feil er
+    teksten til en KI-feil fra «Nytt forslag», som står øverst i feilboksen over «Brevet du
+    hadde, er beholdt.» og «Prøv på nytt» (FR-25, FR-28). prov_pa_nytt=False tar bort «Prøv på
+    nytt», for meldingen om at alle KI-kallene er brukt (NFR-11). avsnitt er
     brevet fra ferdig_brev, det samme som i Word-fila: i Full generering med hilsen og navn
     til slutt, i Korrektur det forbedrede brevet. Overskriften er den for modusen.
     I Korrektur får malen også visning (korrektur_visning): de samme avsnittene med hver
@@ -603,6 +651,8 @@ def _vis_brev(soknad, avsnitt, fil_feil=False):
         lastet_ned=soknad.lastet_ned,
         filnavn=lag_filnavn(date.today(), "docx"),
         fil_feil=fil_feil,
+        ki_feil=ki_feil,
+        prov_pa_nytt=prov_pa_nytt,
     )
 
 

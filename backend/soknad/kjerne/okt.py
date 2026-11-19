@@ -40,8 +40,9 @@ class Soknad:
 
     eget_brev er brevet brukeren har skrevet selv, og brukes bare i Korrektur (FR-8). Det
     beholdes også i Full generering, så det ikke er borte når brukeren bytter modus.
-    korrektur er det forbedrede brevet i Korrektur (story 5.2.1). forslag legges til i Epic 7,
-    med det navnet."""
+    korrektur er det forbedrede brevet i Korrektur (story 5.2.1). forslag er nummeret på
+    brevforslaget («Nytt forslag», FR-25). Bare TestKI bruker nummeret. Ekte KI får det, men
+    sender det ikke, for hvert kall gir et nytt brev."""
 
     steg: Steg = Steg.START
     modus: Modus | None = None
@@ -60,6 +61,10 @@ class Soknad:
     # Det forbedrede brevet i Korrektur, i formen fra kontroller() ({setninger: [{ny, gammel,
     # nytt_avsnitt}]}). ki_svar.korrigert_brev setter det sammen. Bare i minnet.
     korrektur: dict | None = None
+    # Nummeret på brevforslaget (FR-25). Det første brevet er forslag 1, og hvert «Nytt
+    # forslag» øker det med 1. TestKI gir brev-1 ved oddetall og brev-2 ved partall. Ekte KI
+    # sender ikke nummeret, for hvert kall gir et nytt brev.
+    forslag: int = 1
     # Sann når brevet er lastet ned som Word (FR-29). Gjelder bare brevet som er der nå.
     lastet_ned: bool = False
     opptatt: bool = False
@@ -77,7 +82,8 @@ def begynn(soknad: Soknad, samtykke: bool = False) -> Soknad:
 def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
     """Et trykk på et modus-kort. Steget blir innlegging, og gap-analysen og brevet (også det
     forbedrede brevet i Korrektur, og om det er lastet ned) gjelder ikke lenger, fordi analysen
-    kjøres på nytt før resultatsiden. CV, annonse, eget brev og nøkkelordlisten beholdes."""
+    kjøres på nytt før resultatsiden. forslag blir 1, så det første brevet etterpå er forslag 1
+    igjen (FR-25). CV, annonse, eget brev og nøkkelordlisten beholdes."""
     return replace(
         soknad,
         modus=modus,
@@ -85,6 +91,7 @@ def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
         gap=None,
         brev=None,
         korrektur=None,
+        forslag=1,
         lastet_ned=False,
     )
 
@@ -98,10 +105,10 @@ def sett_inndata(
     feltene (med et nytt filnavn, hvis brukeren lastet opp samme tekst som PDF), og resten av
     søknaden er uendret. Er teksten i ett av dem endret, også bare i det egne brevet (FR-8),
     gjelder ikke resultatene lenger: nøkkelordlisten, arbeidsgiveren, gap-analysen, brevet,
-    det forbedrede brevet i Korrektur og lastet_ned nullstilles, og steget blir høyst
-    innlegging, så resultatsiden ikke vises før analysen har lyktes igjen med et brev som har
-    bestått sjekken (AD-8). Gjenbruk av nøkkelordlisten når bare CV-en er endret, kommer i
-    Epic 7."""
+    det forbedrede brevet i Korrektur og lastet_ned nullstilles, forslag blir 1 (FR-25), og
+    steget blir høyst innlegging, så resultatsiden ikke vises før analysen har lyktes igjen
+    med et brev som har bestått sjekken (AD-8). Gjenbruk av nøkkelordlisten når bare CV-en er
+    endret, kommer i Epic 7."""
     if eget_brev is None:
         eget_brev = soknad.eget_brev
     if (soknad.cv.tekst, soknad.annonse.tekst, soknad.eget_brev.tekst) == (
@@ -123,6 +130,7 @@ def sett_inndata(
         gap=None,
         brev=None,
         korrektur=None,
+        forslag=1,
         lastet_ned=False,
         steg=min(soknad.steg, Steg.INNLEGGING),
     )
@@ -170,6 +178,15 @@ def ferdig_brev(soknad: Soknad) -> list[str] | None:
     return None if soknad.brev is None else hele_brevet(soknad.brev)
 
 
+def nytt_forslag(soknad: Soknad) -> Soknad:
+    """«Ja, lag nytt forslag» (FR-25): forslag øker med 1, og brevet, det forbedrede brevet i
+    Korrektur og lastet_ned nullstilles, så nedlastingsknappen og filnavn-linjen er som før
+    nedlasting. Det egne brevet beholdes, så KI-en i Korrektur alltid får det opprinnelige
+    brevet. Steget og resten av søknaden er uendret. Ruten bruker den inni KI-kallet, så det
+    gamle brevet står igjen når kallet feiler (AD-8)."""
+    return replace(soknad, forslag=soknad.forslag + 1, brev=None, korrektur=None, lastet_ned=False)
+
+
 def sett_lastet_ned(soknad: Soknad) -> Soknad:
     """Brevet er lastet ned (FR-29). Resten av søknaden er uendret."""
     return replace(soknad, lastet_ned=True)
@@ -185,6 +202,6 @@ def har_plass_til(soknad: Soknad, antall: int) -> bool:
 def tell_ki_kall(soknad: Soknad, antall: int) -> Soknad:
     """Legger antall KI-kall til telleren (NFR-11). Hvert kall telles når det startes, også
     når det feiler. Resten av søknaden er uendret. har_plass_til må kalles først. Begge brukes
-    av hjelperen for KI-kallet i web/ruter.py (_med_ki), som også Korrektur bruker, og «Nytt
-    forslag» (Epic 7) skal bruke den hjelperen."""
+    av hjelperen for KI-kallet i web/ruter.py (_med_ki), som alle KI-kallene går gjennom, også
+    Korrektur og «Nytt forslag»."""
     return replace(soknad, ki_kall=soknad.ki_kall + antall)
