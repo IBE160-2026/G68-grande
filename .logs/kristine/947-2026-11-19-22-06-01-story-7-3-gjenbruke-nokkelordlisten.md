@@ -54,8 +54,8 @@
 
 ### Resultat
 - PR #48 er flettet (merge `2a5dccf`), og CI er grønn på Linux og Windows. Nettsiden er stoppet, og `main` er hentet.
-- Story 7.3 er `done` i sprint-statusen og kopien i `my-project/7-sprint-planning/`, krysset av i TO DO, og prompt-logg 489 er skrevet. Alt er committet på `main`.
-- Grenen `story-7-3-gjenbruke-nokkelordlisten` ble ikke slettet, fordi tillatelsene stoppet slettingen. Kristine bestemmer selv.
+- Story 7.3 er `done` i sprint-statusen og kopien i `my-project/7-sprint-planning/`, krysset av i TO DO, og prompt-logg 489 er skrevet. Alt er committet og pushet til `main` (`3c00a46`, `63b9b87`).
+- Grenen `story-7-3-gjenbruke-nokkelordlisten` ble ikke slettet, fordi tillatelsene stoppet slettingen. Kristine sletter den selv på GitHub.
 - Lukket i `issues.md`: CI og fletting av PR #48.
 
 ### Åpne punkter
