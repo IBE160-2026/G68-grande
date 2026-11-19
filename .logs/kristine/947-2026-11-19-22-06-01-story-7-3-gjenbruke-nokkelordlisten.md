@@ -42,3 +42,21 @@
 
 ### Åpne punkter
 - Grønn CI og fletting av PR #48, så sette 7.3 til ferdig i sprint-statusen, kopien og TO DO, og slette branchen.
+
+## 2026-11-19 kl. 22:25 — Kristine
+
+### Oppgave
+«flettet»: PR #48 er flettet. Sette story 7.3 til ferdig og rydde opp.
+
+### Plan
+- Sjekke at PR #48 er flettet og at CI er grønn, stoppe nettsiden og hente `main`.
+- Sette 7.3 til ferdig i sprint-statusen (og kopien), TO DO og prompt-logg 489.
+
+### Resultat
+- PR #48 er flettet (merge `2a5dccf`), og CI er grønn på Linux og Windows. Nettsiden er stoppet, og `main` er hentet.
+- Story 7.3 er `done` i sprint-statusen og kopien i `my-project/7-sprint-planning/`, krysset av i TO DO, og prompt-logg 489 er skrevet. Alt er committet på `main`.
+- Grenen `story-7-3-gjenbruke-nokkelordlisten` ble ikke slettet, fordi tillatelsene stoppet slettingen. Kristine bestemmer selv.
+- Lukket i `issues.md`: CI og fletting av PR #48.
+
+### Åpne punkter
+- Slette den flettede grenen `story-7-3-gjenbruke-nokkelordlisten` på PC-en og på GitHub.
