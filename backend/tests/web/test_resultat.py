@@ -489,8 +489,8 @@ def test_fr19_tilbake_gir_feltene_fylt_ut(paa_resultat):
 
 def test_fr15_kriterium_8_samme_treff_etter_tilbake(app, paa_resultat):
     """FR-15, suksesskriterium 8: samme CV og annonse kjørt to ganger i samme søknad, med
-    «Tilbake» imellom, gir samme nøkkelordtreff. Analysen kjøres på nytt: KI-en kalles igjen
-    for både nøkkelordene og gap-analysen (AD-8)."""
+    «Tilbake» imellom, gir samme nøkkelordtreff. Analysen kjøres på nytt, men nøkkelordlisten
+    gjenbrukes, så KI-en kalles bare for gap-analysen (AD-8, story 7.3)."""
     forste = nokkelordtreff(html_av(paa_resultat.get("/resultat")))
     assert paa_resultat.get("/innlegging").status_code == 200
     kalt = []
@@ -499,14 +499,15 @@ def test_fr15_kriterium_8_samme_treff_etter_tilbake(app, paa_resultat):
         "/innlegging", data={"cv": CV, "annonse": ANNONSE, "handling": "sjekk"}
     )
     assert svar.location == "/resultat"
-    assert kalt == ["nokkelord", "gap"]
+    assert kalt == ["gap"]
     assert nokkelordtreff(html_av(paa_resultat.get("/resultat"))) == forste
     assert soknaden(app, paa_resultat).steg == Steg.RESULTAT
 
 
 def test_fr19_endret_cv_via_tilbake_til_modusvalget_nullstiller(app, paa_resultat):
     """FR-19/AD-8: «Tilbake» fra resultatsiden, endret CV og «Tilbake» til modusvalget gir
-    steg innlegging uten analyse, og /resultat sender til /innlegging."""
+    steg innlegging uten gap-analyse, og /resultat sender til /innlegging. Nøkkelordlisten
+    beholdes, for annonsen er lik (FR-15, story 7.3)."""
     paa_resultat.get("/innlegging")
     svar = paa_resultat.post(
         "/innlegging", data={"cv": "Ny CV", "annonse": ANNONSE, "handling": "tilbake"}
@@ -514,7 +515,7 @@ def test_fr19_endret_cv_via_tilbake_til_modusvalget_nullstiller(app, paa_resulta
     assert svar.location == "/modus"
     soknad = soknaden(app, paa_resultat)
     assert soknad.steg == Steg.INNLEGGING
-    assert soknad.nokkelord is None
+    assert soknad.nokkelord == tuple(NOKKELORD_SVAR["nokkelord"])
     assert soknad.gap is None
     assert paa_resultat.get("/resultat").location == "/innlegging"
 
@@ -671,12 +672,14 @@ def test_fr23_brevknappen_i_korrektur_kaller_korrektur(app, paa_resultat_korrekt
 @pytest.mark.parametrize("brev", ["", "a" * (MAKS_TEGN_EGET_BREV + 1), "Mitt eget brev"])
 def test_fr8_nytt_brev_som_feiler_stenger_resultatsiden(app, paa_resultat_korrektur, brev):
     """FR-8/FR-9/AD-8 (story 5.1): endres bare brevet til et brev som ikke består sjekken
-    (tomt, for langt eller ikke testdata), er analysen nullstilt, og /resultat sender
-    tilbake til innleggingen. Resultatsiden kan ikke åpnes med et brev som ikke er sjekket."""
+    (tomt, for langt eller ikke testdata), er gap-analysen nullstilt, og /resultat sender
+    tilbake til innleggingen. Resultatsiden kan ikke åpnes med et brev som ikke er sjekket.
+    Nøkkelordlisten beholdes, for annonsen er lik (FR-15, story 7.3)."""
     data = {"cv": CV, "eget_brev": brev, "annonse": ANNONSE, "handling": "sjekk"}
     assert paa_resultat_korrektur.post("/innlegging", data=data).status_code == 200
     soknad = soknaden(app, paa_resultat_korrektur)
-    assert (soknad.steg, soknad.gap, soknad.nokkelord) == (Steg.INNLEGGING, None, None)
+    assert (soknad.steg, soknad.gap) == (Steg.INNLEGGING, None)
+    assert soknad.nokkelord == tuple(NOKKELORD_SVAR["nokkelord"])
     svar = paa_resultat_korrektur.get("/resultat")
     assert svar.status_code == 302
     assert svar.location == "/innlegging"

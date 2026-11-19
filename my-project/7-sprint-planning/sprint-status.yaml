@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-19-2026 21:35
+last_updated: 11-19-2026 22:05
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -80,7 +80,7 @@ development_status:
   epic-7: in-progress
   7-1-nytt-forslag: done
   7-2-laste-ned-brevet-som-pdf: done
-  7-3-gjenbruke-nøkkelordlisten-når-bare-cv-en-er-endret: backlog
+  7-3-gjenbruke-nøkkelordlisten-når-bare-cv-en-er-endret: review
   7-4-pynt-fyrverkeri-og-bevegelse: backlog
   7-5-logg-ut-før-nedlasting-og-arbeidsgiver-i-filnavnet: backlog
   epic-7-retrospective: optional
@@ -192,7 +192,7 @@ action_items:
     action: "Story 3.1, 6.1 og 7.3: brevsteget i SIDE_FOR_STEG, PDF-navnet gjør ikke
       feltet endret, avstemme vasken for endret annonse mot arkitekturen"
     owner: "KI (Claude) skriver det inn i storiene"
-    status: in-progress
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-16-prosess-en-beslutning-om-samtidighet-ell"
     epic: 2

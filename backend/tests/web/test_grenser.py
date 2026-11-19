@@ -248,15 +248,16 @@ def test_nfr11_ikke_plass_til_analysen(med_nokkel):
     assert lagret.opptatt is False
 
 
-def test_nfr11_fem_analyser_gir_ti_kall_og_den_sjette_gir_meldingen(med_nokkel):
-    """NFR-11: «Sjekk CV-en min» fem ganger gir 10 kall. Den sjette gangen gir meldingen uten
-    KI-kall."""
+def test_nfr11_ni_analyser_gir_ti_kall_og_den_tiende_gir_meldingen(med_nokkel):
+    """NFR-11/FR-15 (story 7.3): den første «Sjekk CV-en min» gir 2 kall. Annonsen er lik, så
+    nøkkelordlisten gjenbrukes, og de neste åtte gir 1 kall hver (bare gap), til sammen 10.
+    Den tiende gangen gir meldingen uten KI-kall."""
     app, client, kalt = med_nokkel
     legg_paa_innlegging(app, client)
-    for _ in range(5):
+    for _ in range(9):
         assert sjekk(client).location == "/resultat"
     assert soknaden(app, client).ki_kall == MAKS_KI_KALL
-    assert len(kalt) == MAKS_KI_KALL
+    assert kalt == ["nokkelord"] + ["gap"] * 9
     svar = sjekk(client)
     assert svar.status_code == 200
     assert KI_KALL_BRUKT in feilboks(html_av(svar))

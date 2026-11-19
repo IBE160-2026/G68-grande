@@ -105,11 +105,14 @@ def sett_inndata(
     er endret, ikke filnavnet (retro 2, A9). Er teksten i alle feltene lik som før, lagres
     feltene (med et nytt filnavn, hvis brukeren lastet opp samme tekst som PDF), og resten av
     søknaden er uendret. Er teksten i ett av dem endret, også bare i det egne brevet (FR-8),
-    gjelder ikke resultatene lenger: nøkkelordlisten, arbeidsgiveren, gap-analysen, brevet,
-    det forbedrede brevet i Korrektur og lastet_ned nullstilles, forslag blir 1 (FR-25), og
-    steget blir høyst innlegging, så resultatsiden ikke vises før analysen har lyktes igjen
-    med et brev som har bestått sjekken (AD-8). Gjenbruk av nøkkelordlisten når bare CV-en er
-    endret, kommer i Epic 7."""
+    gjelder ikke resultatene lenger: gap-analysen, brevet, det forbedrede brevet i Korrektur og
+    lastet_ned nullstilles, forslag blir 1 (FR-25), og steget blir høyst innlegging, så
+    resultatsiden ikke vises før analysen har lyktes igjen med et brev som har bestått sjekken
+    (AD-8). Nøkkelordlisten, den vaskede annonseteksten den ble laget fra og arbeidsgiveren
+    beholdes sammen når den vaskede annonseteksten er lik den listen ble laget fra (samme vask
+    som AD-10, så ekstra mellomrom og tegnsetting regnes som likt). Da kjøres bare
+    gap-analysen på nytt, og prosenten regnes fra samme liste (FR-15, FR-19). Ellers
+    nullstilles alle tre, og listen hentes på nytt."""
     if eget_brev is None:
         eget_brev = soknad.eget_brev
     if (soknad.cv.tekst, soknad.annonse.tekst, soknad.eget_brev.tekst) == (
@@ -120,14 +123,16 @@ def sett_inndata(
         if (soknad.cv, soknad.annonse, soknad.eget_brev) == (cv, annonse, eget_brev):
             return soknad
         return replace(soknad, cv=cv, annonse=annonse, eget_brev=eget_brev)
+    # En annonse uten bokstaver og tall vaskes til "", og den skal ikke regnes som lik en annen.
+    behold = bool(soknad.nokkelord_annonse) and vask(annonse.tekst) == soknad.nokkelord_annonse
     return replace(
         soknad,
         cv=cv,
         annonse=annonse,
         eget_brev=eget_brev,
-        nokkelord=None,
-        nokkelord_annonse=None,
-        arbeidsgiver=None,
+        nokkelord=soknad.nokkelord if behold else None,
+        nokkelord_annonse=soknad.nokkelord_annonse if behold else None,
+        arbeidsgiver=soknad.arbeidsgiver if behold else None,
         gap=None,
         brev=None,
         korrektur=None,
@@ -144,9 +149,11 @@ def sett_opptatt(soknad: Soknad, opptatt: bool) -> Soknad:
 
 
 def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
-    """Lagrer analysen når begge KI-kallene har lyktes («Sjekk CV-en min»). nokkelord og gap
-    har formen fra AD-4. Annonseteksten listen ble laget fra, lagres vasket (samme vask som
-    AD-10), så Epic 7 kan se om annonsen er endret. Steget blir minst resultat (AD-8)."""
+    """Lagrer analysen når KI-kallene har lyktes («Sjekk CV-en min»). nokkelord og gap har
+    formen fra AD-4. Når nøkkelordlisten gjenbrukes (FR-15), gir ruten den lagrede listen og
+    arbeidsgiveren i formen fra AD-4, så de skrives tilbake uendret. Annonseteksten listen ble
+    laget fra, lagres vasket (samme vask som AD-10), så sett_inndata kan se om annonsen er
+    endret (FR-19). Steget blir minst resultat (AD-8)."""
     return replace(
         soknad,
         nokkelord=tuple(nokkelord["nokkelord"]),
@@ -200,8 +207,8 @@ def sett_lastet_ned(soknad: Soknad, format: str) -> Soknad:
 
 def har_plass_til(soknad: Soknad, antall: int) -> bool:
     """Sann når søknaden kan bruke antall KI-kall til uten å gå over MAKS_KI_KALL (NFR-11).
-    En handling startes bare når alle kallene den trenger, får plass (analysen trenger 2,
-    brevet 1), så grensen aldri passeres."""
+    En handling startes bare når alle kallene den trenger, får plass (analysen trenger 2, eller
+    1 når nøkkelordlisten gjenbrukes, brevet 1), så grensen aldri passeres."""
     return soknad.ki_kall + antall <= MAKS_KI_KALL
 
 

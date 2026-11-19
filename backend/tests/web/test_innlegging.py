@@ -303,24 +303,43 @@ def test_fr19_samme_tekster_igjen_endrer_ikke_soknaden(app, innlogget_client):
     assert soknaden(app, innlogget_client) == soknad
 
 
-def test_fr19_endret_tekst_nullstiller_og_gir_steg_innlegging(app, innlogget_client):
-    """FR-19/AD-8: ny CV etter resultatet nullstiller nøkkelordlisten og gap-analysen, og
-    steget blir innlegging."""
+def _med_analyse(app, client):
     sett_soknad(
         app,
-        innlogget_client,
+        client,
         Soknad(
             steg=Steg.RESULTAT,
             modus=Modus.FULL_GENERERING,
             cv=Tekstfelt(CV),
             annonse=Tekstfelt(ANNONSE),
             nokkelord=("Python",),
-            nokkelord_annonse="annonse",
+            nokkelord_annonse=vask(ANNONSE),
             arbeidsgiver="Testvik Utvikling AS",
             gap={"dekker": ["Python"], "mangler": []},
         ),
     )
+
+
+def test_fr19_endret_cv_nullstiller_gap_og_gir_steg_innlegging(app, innlogget_client):
+    """FR-15/FR-19/AD-8 (story 7.3): ny CV etter resultatet nullstiller gap-analysen, og
+    steget blir innlegging. Nøkkelordlisten og arbeidsgiveren beholdes, for annonsen er lik."""
+    _med_analyse(app, innlogget_client)
     send(innlogget_client, "Ny CV", ANNONSE, handling="tilbake")
+    ny = soknaden(app, innlogget_client)
+    assert ny.steg == Steg.INNLEGGING
+    assert ny.gap is None
+    assert (ny.nokkelord, ny.nokkelord_annonse, ny.arbeidsgiver) == (
+        ("Python",),
+        vask(ANNONSE),
+        "Testvik Utvikling AS",
+    )
+
+
+def test_fr19_endret_annonse_nullstiller_alt_og_gir_steg_innlegging(app, innlogget_client):
+    """FR-19/AD-8: ny annonse etter resultatet nullstiller nøkkelordlisten, arbeidsgiveren og
+    gap-analysen, og steget blir innlegging."""
+    _med_analyse(app, innlogget_client)
+    send(innlogget_client, CV, "Ny annonse", handling="tilbake")
     ny = soknaden(app, innlogget_client)
     assert ny.steg == Steg.INNLEGGING
     assert (ny.nokkelord, ny.nokkelord_annonse, ny.arbeidsgiver, ny.gap) == (None,) * 4
