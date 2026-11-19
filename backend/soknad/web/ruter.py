@@ -348,17 +348,24 @@ def brev():
     )
 
 
-@web.route("/last-ned/<any(docx):format>")
+# Medietypen for hvert format i nedlastingsruten (FR-29). _vis_brev bruker den også til
+# filnavnene.
+MEDIETYPER = {"docx": fil_ut.DOCX_MEDIETYPE, "pdf": fil_ut.PDF_MEDIETYPE}
+
+
+@web.route("/last-ned/<any(docx, pdf):format>")
 @login_required
 @krever_steg(Steg.BREV)
 def last_ned(format):
-    """«Last ned som Word» (FR-29, FR-30, AD-8). Filen lages i minnet, lastet_ned settes, og
-    filen sendes som vedlegg, så brevsiden blir stående. PDF kommer i Epic 7. Fila har det samme
-    brevet som brevsiden (ferdig_brev), også i Korrektur, uten markeringer.
+    """«Last ned som Word» og «Last ned som PDF» (FR-29, FR-30, AD-8). Filen lages i minnet,
+    formatet legges til lastet_ned, og filen sendes som vedlegg, så brevsiden blir stående. Fila
+    har det samme brevet som brevsiden (ferdig_brev), også i Korrektur, uten markeringer. Et
+    annet format enn docx og pdf gir 404.
 
     Uten brev sendes brukeren til resultatsiden. Mens søknaden er opptatt, sendes brukeren til
     siden for steget uten fil. Kan filen ikke lages (FilFeil), vises brevsiden med feilboksen,
-    og brevet er ikke borte. lastet_ned lagres bare når søknaden ikke er endret i mellomtiden."""
+    der «Prøv på nytt» laster ned samme format, og brevet er ikke borte. lastet_ned lagres bare
+    når søknaden ikke er endret i mellomtiden."""
     lagret = gjeldende_soknad()
     avsnitt = ferdig_brev(lagret)
     if avsnitt is None:
@@ -367,13 +374,13 @@ def last_ned(format):
     if opptatt is not None:
         return opptatt
     try:
-        innhold = fil_ut.lag_docx(avsnitt)
+        innhold = fil_ut.lag_pdf(avsnitt) if format == "pdf" else fil_ut.lag_docx(avsnitt)
     except FilFeil:
-        return _vis_brev(lagret, avsnitt, fil_feil=True), 500
-    erstatt_soknad(lagret, sett_lastet_ned(lagret))
+        return _vis_brev(lagret, avsnitt, fil_feil=format), 500
+    erstatt_soknad(lagret, sett_lastet_ned(lagret, format))
     return send_file(
         BytesIO(innhold),
-        mimetype=fil_ut.DOCX_MEDIETYPE,
+        mimetype=MEDIETYPER[format],
         as_attachment=True,
         download_name=lag_filnavn(date.today(), format),
     )
@@ -630,17 +637,19 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     )
 
 
-def _vis_brev(soknad, avsnitt, fil_feil=False, ki_feil=None, prov_pa_nytt=True):
-    """Viser brevsiden. Er brevet lastet ned, er knappen grønn og filnavnet står under, også
-    når siden lastes på nytt (UX-DR16). fil_feil gir feilboksen øverst (FilFeil). ki_feil er
-    teksten til en KI-feil fra «Nytt forslag», som står øverst i feilboksen over «Brevet du
-    hadde, er beholdt.» og «Prøv på nytt» (FR-25, FR-28). prov_pa_nytt=False tar bort «Prøv på
-    nytt», for meldingen om at alle KI-kallene er brukt (NFR-11). avsnitt er
-    brevet fra ferdig_brev, det samme som i Word-fila: i Full generering med hilsen og navn
-    til slutt, i Korrektur det forbedrede brevet. Overskriften er den for modusen.
+def _vis_brev(soknad, avsnitt, fil_feil=None, ki_feil=None, prov_pa_nytt=True):
+    """Viser brevsiden. Er brevet lastet ned i et format, er knappen for det formatet grønn og
+    filnavnet står under, også når siden lastes på nytt (UX-DR16). fil_feil er formatet som
+    ikke kunne lages (FilFeil), og gir feilboksen øverst med «Prøv på nytt» for det formatet.
+    Siden får filnavn, filnavnet for hvert format. ki_feil er teksten til en KI-feil fra «Nytt
+    forslag», som står øverst i feilboksen over «Brevet du hadde, er beholdt.» og «Prøv på
+    nytt» (FR-25, FR-28). prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle
+    KI-kallene er brukt (NFR-11). avsnitt er brevet fra ferdig_brev, det samme som i Word- og
+    PDF-fila: i Full generering med hilsen og navn til slutt, i Korrektur det forbedrede
+    brevet. Overskriften er den for modusen.
     I Korrektur får malen også visning (korrektur_visning): de samme avsnittene med hver
     setning merket som endret eller uendret, og antallet fjernede setninger, til markeringene
-    (FR-23, story 5.3). Word-fila har ingen markeringer. I Full generering er visning None."""
+    (FR-23, story 5.3). Filene har ingen markeringer. I Full generering er visning None."""
     korrektur = soknad.modus == Modus.KORREKTUR
     visning = korrektur_visning(soknad.korrektur) if korrektur else None
     return render_template(
@@ -649,7 +658,7 @@ def _vis_brev(soknad, avsnitt, fil_feil=False, ki_feil=None, prov_pa_nytt=True):
         avsnitt=avsnitt,
         visning=visning,
         lastet_ned=soknad.lastet_ned,
-        filnavn=lag_filnavn(date.today(), "docx"),
+        filnavn={format: lag_filnavn(date.today(), format) for format in MEDIETYPER},
         fil_feil=fil_feil,
         ki_feil=ki_feil,
         prov_pa_nytt=prov_pa_nytt,

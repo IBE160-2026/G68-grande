@@ -246,9 +246,12 @@ NY_SETNING = "(Ny setning)"
 INGENTING_ENDRET = "Vi fant ingenting å endre. Brevet ditt er bra som det er."
 
 # Nedlastingen under brevet (FR-29, UX-DR16). Etter nedlasting blir knappen grønn med ✓ foran
-# «Lastet ned som Word». ✓ er bare pynt og skjules for skjermlesere.
+# «Lastet ned som Word» eller «Lastet ned som PDF», hver knapp for seg. ✓ er bare pynt og
+# skjules for skjermlesere.
 LAST_NED_WORD = "Last ned som Word"
 LASTET_NED_WORD = "Lastet ned som Word"
+LAST_NED_PDF = "Last ned som PDF"
+LASTET_NED_PDF = "Lastet ned som PDF"
 FERDIG_IKON = "✓"
 # Feilboksen øverst på brevsiden når filen ikke kan lages (FilFeil).
 FIL_FEIL = "Vi klarte ikke å lage filen. Prøv på nytt."

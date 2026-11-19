@@ -29,8 +29,9 @@ EGET_BREV = (CASE / "eget-brev.txt").read_text(encoding="utf-8")
 NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
 GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
 
-# Adressen til nedlastingen av brevet som Word.
+# Adressen til nedlastingen av brevet som Word, og som PDF (story 7.2).
 NEDLASTING = "/last-ned/docx"
+NEDLASTING_PDF = "/last-ned/pdf"
 
 # Linjene med tekst i det egne brevet. Hver linje er ett avsnitt (eller hilsen og navn).
 _LINJER = [linje for linje in EGET_BREV.splitlines() if linje.strip()]
@@ -175,9 +176,9 @@ def med_autofocus(html):
     return [a.get("id") for _, a in tagger_i(html) if "autofocus" in a]
 
 
-def filnavn_i_dag():
-    """Filnavnet Word-filen får i dag."""
-    return lag_filnavn(date.today(), "docx")
+def filnavn_i_dag(endelse="docx"):
+    """Filnavnet Word-filen (eller PDF-filen, med endelse="pdf") får i dag."""
+    return lag_filnavn(date.today(), endelse)
 
 
 def logg_inn(client, epost=TESTBRUKER_EPOST, passord=TESTBRUKER_PASSORD):

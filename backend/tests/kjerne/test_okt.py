@@ -41,7 +41,7 @@ def test_fr5_ny_soknad_er_tom_og_paa_steg_start():
     assert soknad.brev is None
     assert soknad.korrektur is None
     assert soknad.forslag == 1
-    assert soknad.lastet_ned is False
+    assert soknad.lastet_ned == frozenset()
     assert soknad.opptatt is False
 
 
@@ -265,7 +265,7 @@ def test_fr8_sett_inndata_med_bare_nytt_eget_brev_nullstiller_resultatene():
         arbeidsgiver=None,
         gap=None,
         brev=None,
-        lastet_ned=False,
+        lastet_ned=frozenset(),
         steg=Steg.INNLEGGING,
     )
 
@@ -412,10 +412,12 @@ KORREKTUR_SVAR = {
 def test_fr23_sett_korrektur_lagrer_brevet_og_gir_steg_brev(steg, forventet):
     """FR-23/AD-8: det forbedrede brevet lagres, steget blir minst brev, og det er ikke lastet
     ned. Resten er uendret."""
-    soknad = dataclasses.replace(_korrektur_med_resultater(), steg=steg, lastet_ned=True)
+    soknad = dataclasses.replace(
+        _korrektur_med_resultater(), steg=steg, lastet_ned=frozenset({"docx", "pdf"})
+    )
     ny = sett_korrektur(soknad, KORREKTUR_SVAR)
     assert ny == dataclasses.replace(
-        soknad, korrektur=KORREKTUR_SVAR, lastet_ned=False, steg=forventet
+        soknad, korrektur=KORREKTUR_SVAR, lastet_ned=frozenset(), steg=forventet
     )
     assert soknad.korrektur is None
 
@@ -453,36 +455,70 @@ def test_fr23_ferdig_brev_velger_etter_modus():
     assert ferdig_brev(dataclasses.replace(korrektur, modus=Modus.FULL_GENERERING)) is None
 
 
-# --- lastet_ned (story 3.2) ---
+# --- lastet_ned (story 3.2, som mengde av formater fra story 7.2) ---
 
 
 def _lastet_ned():
-    return sett_lastet_ned(sett_brev(_med_resultater(), BREV_SVAR))
+    """Et brev som er lastet ned både som Word og som PDF."""
+    return sett_lastet_ned(sett_lastet_ned(sett_brev(_med_resultater(), BREV_SVAR), "docx"), "pdf")
 
 
-def test_fr29_sett_lastet_ned_endrer_bare_lastet_ned():
-    """FR-29: sett_lastet_ned gjør lastet_ned sann. Resten av søknaden er uendret."""
+def test_fr29_sett_lastet_ned_legger_til_formatet():
+    """FR-29 (story 7.2): sett_lastet_ned legger formatet til lastet_ned. Resten av søknaden
+    og den gamle søknaden er uendret."""
     soknad = sett_brev(_med_resultater(), BREV_SVAR)
-    assert soknad.lastet_ned is False
-    ny = sett_lastet_ned(soknad)
-    assert ny == dataclasses.replace(soknad, lastet_ned=True)
-    assert soknad.lastet_ned is False
+    assert soknad.lastet_ned == frozenset()
+    assert not soknad.lastet_ned
+    ny = sett_lastet_ned(soknad, "pdf")
+    assert ny == dataclasses.replace(soknad, lastet_ned=frozenset({"pdf"}))
+    assert ny.lastet_ned
+    assert soknad.lastet_ned == frozenset()
+
+
+def test_fr29_to_formater_gir_begge_i_lastet_ned():
+    """FR-29 (story 7.2): Word og så PDF gir begge formatene. Samme format to ganger gir det
+    samme som én gang."""
+    soknad = sett_brev(_med_resultater(), BREV_SVAR)
+    begge = sett_lastet_ned(sett_lastet_ned(soknad, "docx"), "pdf")
+    assert begge.lastet_ned == frozenset({"docx", "pdf"})
+    assert sett_lastet_ned(begge, "docx") == begge
+    assert sett_lastet_ned(sett_lastet_ned(soknad, "docx"), "docx").lastet_ned == {"docx"}
+
+
+@pytest.mark.parametrize(
+    "endre",
+    [
+        lambda s: velg_modus(s, Modus.FULL_GENERERING),
+        lambda s: sett_inndata(s, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen")),
+        lambda s: sett_brev(s, BREV_SVAR),
+        lambda s: sett_korrektur(s, KORREKTUR_SVAR),
+        nytt_forslag,
+    ],
+    ids=["velg_modus", "sett_inndata", "sett_brev", "sett_korrektur", "nytt_forslag"],
+)
+def test_fr29_nullstilling_gir_tom_lastet_ned(endre):
+    """FR-29/AD-8 (story 7.2): velg_modus, sett_inndata med endret tekst, sett_brev,
+    sett_korrektur og nytt_forslag gjør lastet_ned til en tom mengde, også når brevet er lastet
+    ned i begge formatene."""
+    soknad = _lastet_ned()
+    assert soknad.lastet_ned == frozenset({"docx", "pdf"})
+    assert endre(soknad).lastet_ned == frozenset()
 
 
 def test_fr29_nytt_brev_er_ikke_lastet_ned():
     """FR-29/AD-8: et nytt brev (sett_brev) er ikke lastet ned ennå."""
-    assert sett_brev(_lastet_ned(), BREV_SVAR).lastet_ned is False
+    assert not sett_brev(_lastet_ned(), BREV_SVAR).lastet_ned
 
 
 def test_fr29_velg_modus_nullstiller_lastet_ned():
-    """FR-29/AD-8: velges modus på nytt, er lastet_ned usann."""
-    assert velg_modus(_lastet_ned(), Modus.FULL_GENERERING).lastet_ned is False
+    """FR-29/AD-8: velges modus på nytt, er brevet ikke lastet ned i noe format."""
+    assert not velg_modus(_lastet_ned(), Modus.FULL_GENERERING).lastet_ned
 
 
 def test_fr29_sett_inndata_med_endret_tekst_nullstiller_lastet_ned():
-    """FR-19/FR-29/AD-8: endres CV-en, er lastet_ned usann."""
+    """FR-19/FR-29/AD-8: endres CV-en, er brevet ikke lastet ned i noe format."""
     ny = sett_inndata(_lastet_ned(), cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonsen"))
-    assert ny.lastet_ned is False
+    assert not ny.lastet_ned
 
 
 def test_fr29_sett_inndata_med_like_tekster_beholder_lastet_ned():
@@ -543,7 +579,7 @@ def test_nfr11_telleren_folger_soknaden_gjennom_endringene():
         gap={"dekker": [], "mangler": []},
     )
     soknad = sett_brev(soknad, {"avsnitt": ["Hei"], "navn": None})
-    soknad = sett_lastet_ned(soknad)
+    soknad = sett_lastet_ned(soknad, "docx")
     soknad = sett_inndata(soknad, cv=Tekstfelt("ny cv"), annonse=Tekstfelt("annonse"))
     assert soknad.ki_kall == 7
 
@@ -562,11 +598,13 @@ def test_fr25_nytt_forslag_oker_forslag_og_nullstiller_brevet():
         ki_kall=4,
     )
     ny = nytt_forslag(soknad)
-    assert ny == dataclasses.replace(soknad, forslag=2, brev=None, korrektur=None, lastet_ned=False)
+    assert ny == dataclasses.replace(
+        soknad, forslag=2, brev=None, korrektur=None, lastet_ned=frozenset()
+    )
     assert nytt_forslag(ny).forslag == 3
     # Den gamle søknaden er uendret.
     assert soknad.forslag == 1
-    assert soknad.lastet_ned is True
+    assert soknad.lastet_ned == frozenset({"docx", "pdf"})
 
 
 def test_fr25_velg_modus_setter_forslag_til_1():

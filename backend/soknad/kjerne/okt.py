@@ -65,8 +65,9 @@ class Soknad:
     # forslag» øker det med 1. TestKI gir brev-1 ved oddetall og brev-2 ved partall. Ekte KI
     # sender ikke nummeret, for hvert kall gir et nytt brev.
     forslag: int = 1
-    # Sann når brevet er lastet ned som Word (FR-29). Gjelder bare brevet som er der nå.
-    lastet_ned: bool = False
+    # Formatene brevet er lastet ned i («docx», «pdf», FR-29). Gjelder bare brevet som er der
+    # nå. Tom mengde er usann, så «lastet ned i noe format» er bare bool(lastet_ned).
+    lastet_ned: frozenset[str] = frozenset()
     opptatt: bool = False
     # KI-kallene søknaden har brukt med ekte KI (NFR-11). En ny søknad begynner på 0.
     ki_kall: int = 0
@@ -92,7 +93,7 @@ def velg_modus(soknad: Soknad, modus: Modus) -> Soknad:
         brev=None,
         korrektur=None,
         forslag=1,
-        lastet_ned=False,
+        lastet_ned=frozenset(),
     )
 
 
@@ -131,7 +132,7 @@ def sett_inndata(
         brev=None,
         korrektur=None,
         forslag=1,
-        lastet_ned=False,
+        lastet_ned=frozenset(),
         steg=min(soknad.steg, Steg.INNLEGGING),
     )
 
@@ -159,14 +160,16 @@ def sett_analyse(soknad: Soknad, *, nokkelord: dict, gap: dict) -> Soknad:
 def sett_brev(soknad: Soknad, brev: dict) -> Soknad:
     """Lagrer brevet når KI-kallet har lyktes («Lag søknadsbrevet mitt»). brev har formen fra
     AD-4. Steget blir minst brev (AD-8). Et nytt brev er ikke lastet ned ennå."""
-    return replace(soknad, brev=brev, lastet_ned=False, steg=max(soknad.steg, Steg.BREV))
+    return replace(soknad, brev=brev, lastet_ned=frozenset(), steg=max(soknad.steg, Steg.BREV))
 
 
 def sett_korrektur(soknad: Soknad, korrektur: dict) -> Soknad:
     """Lagrer det forbedrede brevet når KI-kallet har lyktes («Oppdater søknadsbrevet mitt» i
     Korrektur). korrektur har formen fra kontroller(). Steget blir minst brev (AD-8). Et nytt
     brev er ikke lastet ned ennå."""
-    return replace(soknad, korrektur=korrektur, lastet_ned=False, steg=max(soknad.steg, Steg.BREV))
+    return replace(
+        soknad, korrektur=korrektur, lastet_ned=frozenset(), steg=max(soknad.steg, Steg.BREV)
+    )
 
 
 def ferdig_brev(soknad: Soknad) -> list[str] | None:
@@ -184,12 +187,15 @@ def nytt_forslag(soknad: Soknad) -> Soknad:
     nedlasting. Det egne brevet beholdes, så KI-en i Korrektur alltid får det opprinnelige
     brevet. Steget og resten av søknaden er uendret. Ruten bruker den inni KI-kallet, så det
     gamle brevet står igjen når kallet feiler (AD-8)."""
-    return replace(soknad, forslag=soknad.forslag + 1, brev=None, korrektur=None, lastet_ned=False)
+    return replace(
+        soknad, forslag=soknad.forslag + 1, brev=None, korrektur=None, lastet_ned=frozenset()
+    )
 
 
-def sett_lastet_ned(soknad: Soknad) -> Soknad:
-    """Brevet er lastet ned (FR-29). Resten av søknaden er uendret."""
-    return replace(soknad, lastet_ned=True)
+def sett_lastet_ned(soknad: Soknad, format: str) -> Soknad:
+    """Brevet er lastet ned i format («docx» eller «pdf», FR-29): formatet legges til
+    lastet_ned, og formatene som alt er der, beholdes. Resten av søknaden er uendret."""
+    return replace(soknad, lastet_ned=soknad.lastet_ned | {format})
 
 
 def har_plass_til(soknad: Soknad, antall: int) -> bool:

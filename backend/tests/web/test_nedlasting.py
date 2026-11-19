@@ -43,7 +43,7 @@ def test_fr29_nedlastingen_sender_word_filen(app, paa_brev):
     """FR-29/AD-8/AD-11: GET /last-ned/docx gir 200 med Word-filen som vedlegg, filnavnet
     Soknad_<i dag>.docx og lastet_ned sann. Steget og brevet er uendret."""
     for_ = soknaden(app, paa_brev)
-    assert for_.lastet_ned is False
+    assert for_.lastet_ned == frozenset()
     svar = paa_brev.get(NEDLASTING)
     assert svar.status_code == 200
     assert svar.mimetype == fil_ut.DOCX_MEDIETYPE
@@ -52,7 +52,8 @@ def test_fr29_nedlastingen_sender_word_filen(app, paa_brev):
     assert svar.headers["Cache-Control"] == "no-store"
     assert re.fullmatch(r"Soknad_\d{4}-\d{2}-\d{2}\.docx", filnavn_i_dag())
     etter = soknaden(app, paa_brev)
-    assert etter == sett_lastet_ned(for_)
+    assert etter == sett_lastet_ned(for_, "docx")
+    assert etter.lastet_ned == {"docx"}
 
 
 def test_fr30_nedlastet_fil_er_lik_brevet_uten_topp_og_bunntekst(app, paa_brev):
@@ -95,7 +96,7 @@ def test_fr30_korrektur_filen_er_lik_brevet_paa_siden(app, paa_brev_korrektur):
     assert tekst.count("Med vennlig hilsen") == 1
     for ord_ in ("Du skrev", "Ny setning", "Hei!", "Endret setning", "Grønn og", "fjernet"):
         assert all(ord_ not in avsnitt for avsnitt in tekst)
-    assert soknaden(app, paa_brev_korrektur).lastet_ned is True
+    assert soknaden(app, paa_brev_korrektur).lastet_ned == {"docx"}
     html = html_av(paa_brev_korrektur.get("/brev"))
     assert 'id="vindu-nedlastet"' in html
     assert tekster.LASTET_NED_WORD in knapp_html(html)
@@ -142,7 +143,7 @@ def test_ad9_filfeil_i_korrektur_gir_brevsiden_med_feilboksen(app, paa_brev_korr
     assert tekster.FIL_FEIL in html
     assert tekster.BREV_OVERSKRIFT_KORREKTUR in html
     assert len(_avsnitt_paa_siden(html)) == len(korrektur_brev(1))
-    assert soknaden(app, paa_brev_korrektur).lastet_ned is False
+    assert soknaden(app, paa_brev_korrektur).lastet_ned == frozenset()
 
 
 def test_ad9_filfeil_gir_brevsiden_med_feilboksen(app, paa_brev, filfeil):
@@ -285,12 +286,12 @@ def test_ux_dr16_allerede_lastet_ned_gir_gronn_knapp_og_filnavn(paa_brev):
     ids=["nytt-brev", "modus-paa-nytt", "endret-cv"],
 )
 def test_fr29_nytt_brev_eller_endret_inndata_nullstiller_lastet_ned(app, paa_brev, endre):
-    """FR-29/AD-8: et nytt brev, modus på nytt eller endret CV gjør lastet_ned usann."""
+    """FR-29/AD-8: et nytt brev, modus på nytt eller endret CV gjør lastet_ned tom."""
     paa_brev.get(NEDLASTING)
-    assert soknaden(app, paa_brev).lastet_ned is True
+    assert soknaden(app, paa_brev).lastet_ned == {"docx"}
     paa_brev.get("/resultat")
     endre(paa_brev)
-    assert soknaden(app, paa_brev).lastet_ned is False
+    assert soknaden(app, paa_brev).lastet_ned == frozenset()
 
 
 # --- Brevsiden før nedlasting ---
@@ -360,11 +361,12 @@ def test_fr29_tekstene_ligger_i_tekster_py():
 
 
 def test_nfr7_nedlastingsknappen_og_filnavnet_i_css():
-    """NFR-7/UX-DR16: knappen er i midten uten fast bredde, den grønne knappen har success-
-    fargene, og filnavnet bryter lange ord. Ingen fast høyde og ingen nowrap."""
+    """NFR-7/UX-DR16: knappene er i midten uten fast bredde, den grønne knappen har success-
+    fargene, og filnavnet bryter lange ord. Ingen fast høyde og ingen nowrap. At Word og PDF
+    står ved siden av hverandre, testes i test_nedlasting_pdf.py (story 7.2)."""
     css = STIL.read_text(encoding="utf-8")
     nedlasting = css_blokk(css, ".nedlasting")
-    assert "align-items: center;" in nedlasting
+    assert "justify-content: center;" in nedlasting
     knapp = css_blokk(css, ".nedlasting .hovedknapp")
     assert "width: auto;" in knapp
     assert "max-width: 100%;" in knapp

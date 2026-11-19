@@ -10,7 +10,7 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting, Korrektur av eget brev med markerte endringer, og opplasting av CV, brev og annonse som PDF med feilmeldinger for filer som ikke kan brukes. Med API-nøkkel kan testmodus slås av, og da brukes ekte KI (Claude). PDF-nedlasting kommer. Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og PDF og vinduet etter nedlasting, Korrektur av eget brev med markerte endringer, og opplasting av CV, brev og annonse som PDF med feilmeldinger for filer som ikke kan brukes. Med API-nøkkel kan testmodus slås av, og da brukes ekte KI (Claude). Seksjonene merket «kommer» fylles ut når nettsiden er laget.
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
@@ -121,6 +121,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
 - **Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.
 - **Brevet skrives bare på norsk** i versjon 1.
+- **Tegn som ikke finnes i skriften, vises ikke i PDF-fila.** PDF-en bruker skriften Noto Sans, som har æ, ø og å og vanlige tegn. Et tegn den ikke har (for eksempel emoji), gir ingen feil, men blir borte i PDF-en. I Word-fila er det med. KI-en skriver vanlig norsk tekst, så det skjer sjelden.
 
 ## Mappestruktur
 
@@ -129,7 +130,8 @@ backend/                 Nettsiden (Python og Flask)
   soknad/
     web/                 Sidene: ruter, HTML-maler, tekstene på siden, CSS og JavaScript
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
-    adaptere/            Det som snakker med omverdenen: database, øktlager, KI, PDF inn og Word-fila
+    adaptere/            Det som snakker med omverdenen: database, øktlager, KI, PDF inn, og Word- og PDF-fila
+    fonts/               Skriften i PDF-fila (Noto Sans, 11 pt) med lisensen ved siden av (OFL.txt)
   tests/                 De automatiske testene, delt på samme måte som soknad/
   testdata/              Fiktive CV-er, annonser og et eget brev (.txt og .pdf), med fasit og ekte KI-svar til testmodus, og feil/ med filer som gir feilmeldinger
   scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI, lag_testpdf.ps1, som lager PDF-ene, og lag_feilfiler.ps1, som lager filene i feil/

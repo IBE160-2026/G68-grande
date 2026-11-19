@@ -16,8 +16,8 @@
     Ved «Filen kan ikke lages» og ved en KI-feil fra «Nytt forslag» får feilboksen fokus i
     stedet. Brevsiden har ingen «Tilbake». Overskriften er den for modusen (fra ruten): «Din
     oppdaterte søknad er ferdig!» i Korrektur. Markeringene i Korrektur (story 5.3) står bare
-    når ruten sender visning. Uten visning (Full generering) er brevet som før. Fyrverkeri og
-    PDF kommer senere i Epic 7. #}
+    når ruten sender visning. Uten visning (Full generering) er brevet som før. Fyrverkeri
+    kommer senere i Epic 7. #}
 <h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil and not ki_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
 {%- if ki_feil %}
 {#- KI-feil fra «Nytt forslag» (FR-25, FR-28): som på resultatsiden. Det gamle brevet står
@@ -37,11 +37,11 @@
 {%- endif %}
 {%- if fil_feil %}
 {#- Filen kunne ikke lages (FilFeil): som KI-feilboksen, men «Prøv på nytt» er en lenke som
-    laster ned på nytt. Brevet under er ikke borte. #}
+    laster ned det samme formatet på nytt (fil_feil er formatet). Brevet under er ikke borte. #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
   <p class="feilboks-overskrift">{{ tekster.FIL_FEIL }}</p>
   <p class="feilboks-knapp">
-    <a class="hovedknapp" href="{{ url_for('web.last_ned', format='docx') }}" data-nedlasting="docx">{{ tekster.PROV_PA_NYTT_KNAPP }}</a>
+    <a class="hovedknapp" href="{{ url_for('web.last_ned', format=fil_feil) }}" data-nedlasting="{{ fil_feil }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</a>
   </p>
 </div>
 {%- endif %}
@@ -98,17 +98,27 @@
 {#- Fjernede setninger vises ikke i brevet, bare antallet under det. #}
 <p class="fjernet-linje">{{ tekster.fjernet(visning.fjernet) }}</p>
 {%- endif %}
-{#- «Last ned som Word» er en lenke, fordi nedlastingen er en GET (AD-8). Svaret er et vedlegg,
-    så siden blir stående. nedlasting.js gjør knappen grønn og viser filnavnet med en gang.
-    Etter nedlasting viser serveren det samme (lastet_ned), også når siden lastes på nytt
-    (FR-29, UX-DR16). Filnavnet leses ikke opp her, men i vinduet etter nedlasting (story 3.3). #}
+{#- «Last ned som Word» og «Last ned som PDF» er lenker, fordi nedlastingen er en GET (AD-8).
+    Én blokk per format, Word først, ved siden av hverandre (under hverandre når det er trangt).
+    Svaret er et vedlegg, så siden blir stående. nedlasting.js gjør knappen grønn og viser
+    filnavnet med en gang. Etter nedlasting viser serveren det samme for hvert format som er i
+    lastet_ned, også når siden lastes på nytt (FR-29, UX-DR16). Filnavnet leses ikke opp her,
+    men i vinduet etter nedlasting (story 3.3). #}
 <div class="nedlasting">
-  <a class="hovedknapp{% if lastet_ned %} ferdig{% endif %}" id="last-ned-docx"
-    href="{{ url_for('web.last_ned', format='docx') }}" data-nedlasting="docx">
-    <span class="ikke-lastet-ned"{% if lastet_ned %} hidden{% endif %}>{{ tekster.LAST_NED_WORD }}</span>
-    <span class="lastet-ned"{% if not lastet_ned %} hidden{% endif %}><span aria-hidden="true">{{ tekster.FERDIG_IKON }}</span> {{ tekster.LASTET_NED_WORD }}</span>
-  </a>
-  <p class="filnavn-linje" id="filnavn-docx"{% if not lastet_ned %} hidden{% endif %}>{{ tekster.filnavn_linje(filnavn) }}</p>
+  {%- for format, last_ned_tekst, lastet_ned_tekst in [
+    ("docx", tekster.LAST_NED_WORD, tekster.LASTET_NED_WORD),
+    ("pdf", tekster.LAST_NED_PDF, tekster.LASTET_NED_PDF),
+  ] %}
+  {%- set ferdig = format in lastet_ned %}
+  <div class="nedlasting-format">
+    <a class="hovedknapp{% if ferdig %} ferdig{% endif %}" id="last-ned-{{ format }}"
+      href="{{ url_for('web.last_ned', format=format) }}" data-nedlasting="{{ format }}">
+      <span class="ikke-lastet-ned"{% if ferdig %} hidden{% endif %}>{{ last_ned_tekst }}</span>
+      <span class="lastet-ned"{% if not ferdig %} hidden{% endif %}><span aria-hidden="true">{{ tekster.FERDIG_IKON }}</span> {{ lastet_ned_tekst }}</span>
+    </a>
+    <p class="filnavn-linje" id="filnavn-{{ format }}"{% if not ferdig %} hidden{% endif %}>{{ tekster.filnavn_linje(filnavn[format]) }}</p>
+  </div>
+  {%- endfor %}
 </div>
 {#- «Nytt forslag» (FR-25) under nedlastingen: en lenkeknapp som sender POST til /brev.
     bekreft.js stopper trykket og åpner vinduet «Vil du ha et nytt forslag?» (data-bekreft).
@@ -125,10 +135,12 @@
     når siden lastes (ingen open, ingen autofocus). Filnavnet og spørsmålet leses opp via
     aria-describedby. «Lag ny søknad» er startsiden, som alltid lager en ny søknad og beholder
     testmodus (AD-7). «Logg ut» er utloggingen fra story 1.4. «Bli her» og Esc lukker vinduet,
-    og skriptet sender fokus tilbake til knappen under brevet. #}
+    og skriptet sender fokus tilbake til knappen under brevet. Filnavnet fra serveren er det
+    for Word. nedlasting.js kopierer filnavnet for formatet som ble lastet ned, inn før vinduet
+    åpnes. #}
 <dialog class="vindu" id="vindu-nedlastet" aria-labelledby="vindu-nedlastet-overskrift" aria-describedby="vindu-nedlastet-filnavn vindu-nedlastet-tekst">
   <h2 id="vindu-nedlastet-overskrift">{{ tekster.VINDU_NEDLASTET_OVERSKRIFT }}</h2>
-  <p id="vindu-nedlastet-filnavn">{{ tekster.filnavn_linje(filnavn) }}</p>
+  <p id="vindu-nedlastet-filnavn">{{ tekster.filnavn_linje(filnavn["docx"]) }}</p>
   <p id="vindu-nedlastet-tekst">{{ tekster.VINDU_NEDLASTET_TEKST }}</p>
   <div class="vindu-knapper">
     <a class="hovedknapp" href="{{ url_for('web.start') }}">{{ tekster.LAG_NY_SOKNAD_KNAPP }}</a>

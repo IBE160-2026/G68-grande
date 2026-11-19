@@ -96,3 +96,13 @@ def filfeil(monkeypatch):
         raise FilFeil()
 
     monkeypatch.setattr(fil_ut, "lag_docx", feiler)
+
+
+@pytest.fixture
+def filfeil_pdf(monkeypatch):
+    """PDF-filen kan ikke lages (story 7.2). Word-filen lages som vanlig."""
+
+    def feiler(avsnitt):
+        raise FilFeil()
+
+    monkeypatch.setattr(fil_ut, "lag_pdf", feiler)
