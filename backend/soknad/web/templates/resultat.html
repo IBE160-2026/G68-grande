@@ -82,9 +82,10 @@
     {{- info("nokkelord", tekster.NOKKELORD_INFO_SKJERMLESER, tekster.NOKKELORD_INFO) }}
   </div>
   <p class="poeng"><strong id="nokkelordtreff">{{ nokkelordtreff }}</strong> <span>{{ tekster.NOKKELORDTREFF_FORKLARING }}</span></p>
-  {#- Prosentlinjen er bare pynt, tallet står som tekst over (FR-17). Den fylles uten
-      animasjon. Animasjonen kommer i Epic 7. En SVG, så bredden kan stå som attributt uten
-      style-attributt og uten JavaScript. Høyden er 12 px (score-meter). #}
+  {#- Prosentlinjen er bare pynt, tallet står som tekst over (FR-17). Den fylles fra 0 på 1 s
+      med CSS når siden åpnes (UX-DR13), og står ferdig fylt ved redusert bevegelse. En SVG, så
+      bredden kan stå som attributt uten style-attributt og uten JavaScript. Høyden er 12 px
+      (score-meter). #}
   <svg class="prosentlinje" viewBox="0 0 100 12" preserveAspectRatio="none" height="12"
     aria-hidden="true" focusable="false">
     <rect class="spor" width="100" height="12"></rect>
