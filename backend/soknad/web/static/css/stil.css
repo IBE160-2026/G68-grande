@@ -496,11 +496,18 @@ svg {
   transform: scale(0.97);
 }
 
+/* Ikonet vipper og blir litt større når kortet holdes over (UX-DR12). Står stille ved
+ * redusert bevegelse */
 .modus-kort .ikon {
   display: block;
   margin-bottom: var(--space-1);
   font-size: 2.4rem;
   line-height: 1.2;
+  transition: transform 0.3s ease;
+}
+
+.modus-kort:hover .ikon {
+  transform: rotate(-8deg) scale(1.1);
 }
 
 .modus-kort .navn {
@@ -1184,9 +1191,10 @@ svg {
   color: var(--primary);
 }
 
-/* Prosentlinjen: en SVG som er 12 px høy, bare pynt. Fylles uten animasjon (animasjonen
- * kommer i Epic 7). «svg { height: auto }» over gjør høyden til 12 % av bredden, så
- * min-height og max-height holder den på 12 px. */
+/* Prosentlinjen: en SVG som er 12 px høy, bare pynt. Fyllet vokser fra 0 til prosenten på 1 s
+ * når siden åpnes (UX-DR13). Bredden står alt i SVG-en, så scaleX fra 0 gir fyllingen uten
+ * JavaScript, og ved redusert bevegelse står den ferdig fylt. «svg { height: auto }» over
+ * gjør høyden til 12 % av bredden, så min-height og max-height holder den på 12 px. */
 .prosentlinje {
   display: block;
   width: 100%;
@@ -1203,6 +1211,14 @@ svg {
 
 .prosentlinje .fyll {
   fill: var(--primary);
+  transform-origin: 0 0;
+  animation: fyll 1s ease-out;
+}
+
+@keyframes fyll {
+  from {
+    transform: scaleX(0);
+  }
 }
 
 /* ATS-forklaringen: foldes ut og inn, lukket når siden åpnes */
@@ -1247,8 +1263,30 @@ svg {
 
 /* Brevsiden (FR-22, FR-26) */
 
-/* Brevoverskriften: «Din ferdigstilte søknad!», sentrert, mindre på mobil */
+/* Fyrverkeriet (UX-DR18): canvas fyller rammen rundt overskriften og ligger bak teksten. Litt
+ * luft over og under gir plass til utbruddene. Prikkene klippes i kanten av canvas, så de
+ * kommer aldri over brevet. Canvas tar ikke trykk */
+.fyrverkeri-ramme {
+  position: relative;
+  padding: var(--space-3) 0;
+}
+
+/* inline-size og block-size er det samme som bredde og høyde 100 %. Canvas er et
+ * bilde-element, så inset alene strekker det ikke. Logiske navn, så regelen mot faste høyder
+ * (test_ruter.py) ikke slår til på en høyde som følger rammen */
+.fyrverkeri {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+/* Brevoverskriften: «Din ferdigstilte søknad!», sentrert, mindre på mobil. Den ligger over
+ * fyrverkeriet */
 .brev-overskrift {
+  position: relative;
+  z-index: 1;
   margin: var(--space-2) 0 var(--space-5);
   font-size: var(--size-heading-letter);
   line-height: var(--line-height-heading-page);
@@ -1686,6 +1724,12 @@ a.hovedknapp {
     forced-color-adjust: none;
     background: CanvasText;
   }
+
+  /* Fyrverkeriet: fargene på canvas følger ikke systemfargene og kan gjøre overskriften
+   * vanskelig å lese, så det skjules */
+  .fyrverkeri {
+    display: none;
+  }
 }
 
 /* Redusert bevegelse: alle animasjoner og overganger av */
@@ -1707,6 +1751,7 @@ a.hovedknapp {
   .stor-knapp:active,
   .modus-kort:hover,
   .modus-kort:active,
+  .modus-kort:hover .ikon,
   .soppelbotte:hover {
     transform: none;
   }

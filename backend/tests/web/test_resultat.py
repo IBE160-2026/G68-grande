@@ -375,7 +375,8 @@ def test_fr17_tallet_har_forklaringen_ved_siden_av(paa_resultat):
 
 def test_fr17_prosentlinjen_er_pynt_og_fylt_til_prosenten(paa_resultat):
     """FR-17/UX-DR13: prosentlinjen er skjult for skjermlesere, 12 px høy og fylt til
-    prosenten i fasiten (av 100) uten animasjon."""
+    prosenten i fasiten (av 100). Bredden står i SVG-en, så linjen er riktig også uten
+    animasjonen fra story 7.4."""
     html = html_av(paa_resultat.get("/resultat"))
     linje = next(a for t, a in tagger_i(main(html)) if t == "svg")
     assert linje["class"] == "prosentlinje"
@@ -391,6 +392,8 @@ def test_fr17_prosentlinjen_er_pynt_og_fylt_til_prosenten(paa_resultat):
     css = STIL.read_text(encoding="utf-8")
     for velger in (".prosentlinje", ".prosentlinje .spor", ".prosentlinje .fyll"):
         assert "transition" not in css_blokk(css, velger)
+    # Bare fyllet har animasjon (story 7.4, testet i test_pynt.py). Sporet står stille.
+    for velger in (".prosentlinje", ".prosentlinje .spor"):
         assert "animation" not in css_blokk(css, velger)
 
 

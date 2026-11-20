@@ -7,6 +7,9 @@
   {%- if visning %}
   <script src="{{ url_for('static', filename='js/endringer.js') }}" defer></script>
   {%- endif %}
+  {%- if not fil_feil and not ki_feil %}
+  <script src="{{ url_for('static', filename='js/fyrverkeri.js') }}" defer></script>
+  {%- endif %}
 {%- endblock %}
 {% block ventetegn %}
 {% include "ventetegn.html" %}
@@ -16,9 +19,19 @@
     Ved «Filen kan ikke lages» og ved en KI-feil fra «Nytt forslag» får feilboksen fokus i
     stedet. Brevsiden har ingen «Tilbake». Overskriften er den for modusen (fra ruten): «Din
     oppdaterte søknad er ferdig!» i Korrektur. Markeringene i Korrektur (story 5.3) står bare
-    når ruten sender visning. Uten visning (Full generering) er brevet som før. Fyrverkeri
-    kommer senere i Epic 7. #}
-<h1 class="brev-overskrift" tabindex="-1"{% if not fil_feil and not ki_feil %} autofocus{% endif %}>{{ overskrift }}</h1>
+    når ruten sender visning. Uten visning (Full generering) er brevet som før.
+    Fyrverkeriet (UX-DR18, story 7.4): fyrverkeri.js tegner på canvas bak overskriften når
+    siden åpnes, også etter «Nytt forslag». Canvas er bare pynt, skjult for skjermlesere og
+    tom uten JavaScript. Ved en feilboks er det ikke noe å feire, så da står overskriften
+    uten canvas og uten skriptet. #}
+{%- if not fil_feil and not ki_feil %}
+<div class="fyrverkeri-ramme">
+  <canvas class="fyrverkeri" aria-hidden="true"></canvas>
+  <h1 class="brev-overskrift" tabindex="-1" autofocus>{{ overskrift }}</h1>
+</div>
+{%- else %}
+<h1 class="brev-overskrift" tabindex="-1">{{ overskrift }}</h1>
+{%- endif %}
 {%- if ki_feil %}
 {#- KI-feil fra «Nytt forslag» (FR-25, FR-28): som på resultatsiden. Det gamle brevet står
     under. «Prøv på nytt» står utenfor skjemaet, men sender det med form= som «Nytt forslag»
