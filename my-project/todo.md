@@ -83,7 +83,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Stories: når de ekte KI-svarene til testmodus lages (FR-38), kjøre hver prompt tre ganger og sjekke mot fasiten, så kriterium 1, 3, 11 og 12 testes tidlig (story 4.4, 4.5 og 5.2) (4.4 gjort 14. november for kriterium 1, 11 og 14. 4.5 gjort 14. november for case 2 og kriterium 3. 5.2.2 gjort 15. november for kriterium 12: bestått i alle tre kjøringene uten plan B)
   - [x] Testdata: lage CV-er med tydelige hull (for eksempel «førerkort» eller «SQL»), ikke grensetilfeller, særlig for gap-analysen (kriterium 1) (story 2.2 og 4.5) (case 2 laget 14. november: hull i Power BI, regnskapsprogram, lønnskjøring og Python)
   - [x] Skrive fasiten for gap-analysen nøye, med en kort begrunnelse per krav (om et krav er dekket, er en skjønnsvurdering) (løst: lagt inn som krav i NFR-3 i PRD-en)
-  - [ ] Avtale med en kollega innen 20. november for kriterium 13 (testen gjøres etter 29. november, gjerne helgen 5.–6. desember, på Teams eller med skjermbilde)
+  - [x] Avtale med en kollega innen 20. november for kriterium 13 (testen gjøres etter 29. november, gjerne helgen 5.–6. desember, på Teams eller med skjermbilde) (løst 20. november: jeg har flere som kan prøve nettsiden)
   - [x] Vurdere å legge til en kilde på at mange arbeidsgivere bruker ATS (problembeskrivelsen i brief og PRD) (løst: Harvard Business School-kilde under Kilder i begge)
 - [x] Konkurrentanalyse av Jobscan, Rezi, Teal og Kickresume (anbefalt av faglærer, gjort etter UX, ligger i 4-konkurrentanalyse/)
 
