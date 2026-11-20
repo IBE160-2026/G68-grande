@@ -1548,7 +1548,10 @@ a.hovedknapp {
 
 /* «Avbryt» i vinduet «Vil du ha et nytt forslag?» får fokus når vinduet åpnes, og knappen som
  * åpnet det («Nytt forslag» eller «Lag søknadsbrevet mitt») får fokus tilbake når det lukkes
- * (FR-25). Begge kan komme etter et museklikk, så ringen vises for :focus (som «Bli her») */
+ * (FR-25). Begge kan komme etter et museklikk, så ringen vises for :focus (som «Bli her»).
+ * Det samme gjelder «Avbryt» i vinduet «Du har ikke lastet ned brevet.» og «Logg ut» nede til
+ * høyre på brevsiden (data-bekreft), som får fokus tilbake (story 7.5). */
+#logg-ut-avbryt:focus,
 #nytt-forslag-avbryt:focus,
 [data-bekreft]:focus {
   outline: 3px solid var(--focus-ring);

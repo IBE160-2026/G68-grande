@@ -203,9 +203,10 @@ def _rens_setning(setning: dict) -> dict:
 
 def _rens(oppgave: str, svar: dict) -> dict:
     """Svaret uten tomme punkter og uten enslige surrogater i listene. Tom arbeidsgiver blir
-    None, og brevteksten renses. Ellers renses ikke arbeidsgiver før story 7.5. I brevet renses
-    navnet som avsnittene, tomt navn blir None, og hilsenen KI-en skrev selv, fjernes. I
-    Korrektur renses ny og hver gammel som avsnittene, og tom ny blir None."""
+    None, og brevteksten renses. Ellers renses ikke arbeidsgiver her, men i kjerne/filnavn.py
+    når filnavnet lages (story 7.5). I brevet renses navnet som avsnittene, tomt navn blir None,
+    og hilsenen KI-en skrev selv, fjernes. I Korrektur renses ny og hver gammel som avsnittene,
+    og tom ny blir None."""
     if oppgave == "korrektur":
         return {"setninger": [_rens_setning(setning) for setning in svar["setninger"]]}
     if oppgave == "nokkelord":

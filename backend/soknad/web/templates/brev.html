@@ -168,4 +168,8 @@
 {% with vindu_tekst = tekster.VINDU_NYTT_FORSLAG_TEKST %}
 {% include "vindu_nytt_forslag.html" %}
 {% endwith %}
+{#- Vinduet før utlogging (story 7.5): bare når brevet ikke er lastet ned i noe format. #}
+{%- if advar_utlogging %}
+{% include "vindu_logg_ut.html" %}
+{%- endif %}
 {% endblock %}

@@ -378,7 +378,8 @@ def last_ned(format):
     Uten brev sendes brukeren til resultatsiden. Mens søknaden er opptatt, sendes brukeren til
     siden for steget uten fil. Kan filen ikke lages (FilFeil), vises brevsiden med feilboksen,
     der «Prøv på nytt» laster ned samme format, og brevet er ikke borte. lastet_ned lagres bare
-    når søknaden ikke er endret i mellomtiden."""
+    når søknaden ikke er endret i mellomtiden. Filnavnet har arbeidsgiveren fra nøkkelordsvaret
+    (story 7.5), renset i kjerne/filnavn.py."""
     lagret = gjeldende_soknad()
     avsnitt = ferdig_brev(lagret)
     if avsnitt is None:
@@ -395,7 +396,7 @@ def last_ned(format):
         BytesIO(innhold),
         mimetype=MEDIETYPER[format],
         as_attachment=True,
-        download_name=lag_filnavn(date.today(), format),
+        download_name=lag_filnavn(date.today(), format, lagret.arbeidsgiver),
     )
 
 
@@ -654,7 +655,10 @@ def _vis_brev(soknad, avsnitt, fil_feil=None, ki_feil=None, prov_pa_nytt=True):
     """Viser brevsiden. Er brevet lastet ned i et format, er knappen for det formatet grønn og
     filnavnet står under, også når siden lastes på nytt (UX-DR16). fil_feil er formatet som
     ikke kunne lages (FilFeil), og gir feilboksen øverst med «Prøv på nytt» for det formatet.
-    Siden får filnavn, filnavnet for hvert format. ki_feil er teksten til en KI-feil fra «Nytt
+    Siden får filnavn, filnavnet for hvert format, med arbeidsgiveren fra nøkkelordsvaret
+    (story 7.5), det samme som filen får i last_ned. advar_utlogging er sann når brevet ikke er
+    lastet ned i noe format: da åpner «Logg ut» vinduet «Du har ikke lastet ned brevet.» først
+    (UX-DR17). ki_feil er teksten til en KI-feil fra «Nytt
     forslag», som står øverst i feilboksen over «Brevet du hadde, er beholdt.» og «Prøv på
     nytt» (FR-25, FR-28). prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle
     KI-kallene er brukt (NFR-11). avsnitt er brevet fra ferdig_brev, det samme som i Word- og
@@ -671,7 +675,10 @@ def _vis_brev(soknad, avsnitt, fil_feil=None, ki_feil=None, prov_pa_nytt=True):
         avsnitt=avsnitt,
         visning=visning,
         lastet_ned=soknad.lastet_ned,
-        filnavn={format: lag_filnavn(date.today(), format) for format in MEDIETYPER},
+        advar_utlogging=not soknad.lastet_ned,
+        filnavn={
+            format: lag_filnavn(date.today(), format, soknad.arbeidsgiver) for format in MEDIETYPER
+        },
         fil_feil=fil_feil,
         ki_feil=ki_feil,
         prov_pa_nytt=prov_pa_nytt,

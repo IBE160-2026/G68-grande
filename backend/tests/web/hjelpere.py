@@ -28,6 +28,8 @@ ANNONSE = (CASE / "annonse.txt").read_text(encoding="utf-8")
 EGET_BREV = (CASE / "eget-brev.txt").read_text(encoding="utf-8")
 NOKKELORD_SVAR = json.loads((CASE / "ki-svar" / "nokkelord.json").read_text(encoding="utf-8"))
 GAP_SVAR = json.loads((CASE / "ki-svar" / "gap.json").read_text(encoding="utf-8"))
+# Arbeidsgiveren i nøkkelordsvaret til case 1, som havner i filnavnet (story 7.5).
+ARBEIDSGIVER = NOKKELORD_SVAR["arbeidsgiver"]
 
 # Adressen til nedlastingen av brevet som Word, og som PDF (story 7.2).
 NEDLASTING = "/last-ned/docx"
@@ -176,9 +178,11 @@ def med_autofocus(html):
     return [a.get("id") for _, a in tagger_i(html) if "autofocus" in a]
 
 
-def filnavn_i_dag(endelse="docx"):
-    """Filnavnet Word-filen (eller PDF-filen, med endelse="pdf") får i dag."""
-    return lag_filnavn(date.today(), endelse)
+def filnavn_i_dag(endelse="docx", arbeidsgiver=ARBEIDSGIVER):
+    """Filnavnet Word-filen (eller PDF-filen, med endelse="pdf") får i dag (story 7.5). Som
+    standard er arbeidsgiveren den fra case 1, som de fleste testene bruker. For andre caser
+    sendes arbeidsgiveren deres inn, og arbeidsgiver=None gir filnavnet uten arbeidsgiver."""
+    return lag_filnavn(date.today(), endelse, arbeidsgiver)
 
 
 def logg_inn(client, epost=TESTBRUKER_EPOST, passord=TESTBRUKER_PASSORD):

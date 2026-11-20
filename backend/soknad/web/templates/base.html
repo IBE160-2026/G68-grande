@@ -29,14 +29,21 @@
     {% block innhold %}{% endblock %}
   </main>
   {#- Hjørneraden (corner-row): bare etter innlogging. KI-merknaden til venstre bare når
-      testmodus er av (FR-35), «Logg ut» til høyre. ⓘ er bare pynt. #}
+      testmodus er av (FR-35), «Logg ut» til høyre. ⓘ er bare pynt.
+      advar_utlogging settes bare av brevsiden, når brevet ikke er lastet ned i noe format
+      (story 7.5, UX-DR17). Da får «Logg ut» data-bekreft="vindu-logg-ut", og bekreft.js åpner
+      vinduet «Du har ikke lastet ned brevet.» før skjemaet sendes. nedlasting.js tar bort
+      data-bekreft når brevet lastes ned, så brukeren da logges ut med en gang (NFR-4). På
+      andre sider er advar_utlogging udefinert, og «Logg ut» sender skjemaet som før. Uten
+      JavaScript sendes skjemaet med en gang, uten vinduet. #}
   <footer class="bunn{% if innlogget %} hjornerad{% endif %}">
     {%- if innlogget and not testmodus %}
     <p class="ki-merknad"><span aria-hidden="true">{{ tekster.KI_MERKNAD_IKON }}</span> {{ tekster.KI_MERKNAD }}</p>
     {%- endif %}
     {%- if innlogget %}
     <form class="utlogging" method="post" action="{{ url_for('web.logg_ut') }}">
-      <button class="sekundaerknapp liten" type="submit">{{ tekster.LOGG_UT_KNAPP }}</button>
+      <button class="sekundaerknapp liten" type="submit"
+        {%- if advar_utlogging %} data-bekreft="vindu-logg-ut"{% endif %}>{{ tekster.LOGG_UT_KNAPP }}</button>
     </form>
     {%- endif %}
   </footer>

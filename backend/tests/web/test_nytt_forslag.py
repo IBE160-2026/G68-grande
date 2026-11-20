@@ -149,7 +149,8 @@ def test_fr25_vinduet_er_lukket_og_har_tekstene_og_aria(paa_brev):
     assert f'<p id="vindu-nytt-forslag-tekst">{tekster.VINDU_NYTT_FORSLAG_TEKST}</p>' in boks
     assert boks.index('vindu-nytt-forslag-tekst">') < boks.index("vindu-knapper")
     assert re.search(r"<dialog[^>]*\bopen\b", html) is None
-    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
+    # «Avbryt» i vinduet før utlogging (story 7.5) har også autofocus før nedlasting.
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt", "logg-ut-avbryt"]
 
 
 def test_fr25_knappene_i_vinduet(paa_brev):
@@ -221,7 +222,8 @@ def test_fr25_nytt_forslag_gir_neste_brev_og_nullstiller_nedlastingen(app, paa_b
     assert brevtekst(html) == brevet(BREV_2["avsnitt"], BREV_2["navn"])
     assert element(html, "last-ned-docx")["class"].split() == ["hovedknapp"]
     assert "hidden" in element(html, "filnavn-docx")
-    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
+    # lastet_ned er tom igjen, så vinduet før utlogging (story 7.5) er tilbake.
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt", "logg-ut-avbryt"]
     assert "feilboks" not in main(html)
 
 
