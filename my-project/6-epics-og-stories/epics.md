@@ -1098,6 +1098,9 @@ slik at jeg får nettsiden i gang på 10–15 minutter.
 
 **Og** seksjonene som var merket «kommer», er fylt ut
 **Og** lærerens CI-sjekk av at `README.md` og `my-project/1-product-brief/product-brief.md` finnes, går fortsatt gjennom
+**Og** de kjente begrensningene sier at nettsiden ikke har CSRF-beskyttelse, som må legges til før nettsiden legges på nett, og innloggings-cookien har `SameSite=Lax` i koden, med en test (bestemt av Kristine i story 8.1)
+**Og** punktet om telleregelen sier at korte nøkkelord (1–3 tegn) ikke gir treff inne i lengre ord, for eksempel «SQL» i «MySQL» (bestemt av Kristine i story 8.1)
+**Og** skjermbildene er tre: resultatsiden, brevsiden i Full generering og Korrektur med markerte endringer, med case 1, og de står øverst i README, rett under «Hvem den er for» (bestemt av Kristine i story 8.1)
 
 ### Story 8.2: Testplan og prøve fra en ny kopi
 
