@@ -34,3 +34,21 @@ Kristine startet `/bmad-build 8`, altså første story i epic 8: README skal væ
 - Ta de tre skjermbildene med ekte KI, testmodus av og case 1, og lagre dem som `my-project/skjermbilder/resultatside.png`, `brevside.png` og `korrektur.png`. Sjekk at alternativtekstene i README stemmer med bildene. Til da viser README tre bilder som mangler.
 - Story 8.1: push, PR med merknad om KI-feil, grønn CI på Linux og Windows og fletting når bildene er lagt til. Deretter settes 8.1 til `done` i sprint-statusen og kopien.
 - `GET /last-ned/<format>` endrer tilstand. En lenke fra en annen nettside kan merke brevet som lastet ned, og da spør ikke «Logg ut» først. Ruten kan gjøres om til POST, eller tas med når CSRF-vern legges til. Står som kjent begrensning i README.
+
+## 2026-11-21 kl. 19:39 — Kristine
+
+### Oppgave
+Kristine ba meg starte nettsiden og si hva hun skulle ta skjermbilde av. Etterpå la hun bildene i mappen.
+
+### Plan
+- Starte nettsiden med API-nøkkelen og gi en oppskrift for de tre bildene (resultatsiden, brevsiden og Korrektur, case 1, testmodus av).
+- Sjekke bildene, så commit, push og PR.
+
+### Resultat
+- Kristine tok bildene på 75 % zoom, så alt kom med. Filnavnene hadde stor forbokstav, og jeg ga dem små bokstaver, siden GitHub skiller mellom store og små bokstaver.
+- Jeg så på alle tre bildene: bare fiktive data, og «Teksten behandles av ekstern KI» synes nede til venstre. Alternativtekstene stemmer, og den for resultatsiden har nå fått tallet 9 av 19 (47 %).
+- Nettsiden er stoppet. Commit `f5f4b0d` (skjermbildene). Branchen er pushet, og [PR #52](https://github.com/IBE160-2026/G68-grande/pull/52) er laget med «Feil KI-en gjorde» og en kommentar om nettleserprøven.
+- Lukket i `issues.md`: README-seksjonene merket «kommer» (fra 2026-11-03) og skjermbildene (løst 2026-11-21).
+
+### Åpne punkter
+- Grønn CI og fletting av PR #52. Etter flettingen settes 8.1 til `done` i sprint-statusen og kopien, og branchen slettes.
