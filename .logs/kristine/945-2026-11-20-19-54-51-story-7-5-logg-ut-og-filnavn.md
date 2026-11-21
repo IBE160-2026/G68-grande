@@ -60,3 +60,24 @@ Kristine ba om å få nettsiden åpnet («åpne»), prøvde story 7.5 i nettlese
 
 ### Åpne punkter
 - Grønn CI og fletting av [PR #50](https://github.com/IBE160-2026/G68-grande/pull/50). Etter flettingen: 7.5 til ferdig i sprint-statusen, kopien og TO DO, og slette branchen `story-7-5-logg-ut-og-filnavn`.
+
+## 2026-11-21 kl. 12:09 — Kristine
+
+### Oppgave
+Kristine spurte om sesjonsloggen, memlog og resten var logget, og sa så at PR #50 var flettet, så alt kunne pushes.
+
+### Plan
+- Sjekke loggene, kopiene og hva som ikke var pushet.
+- Sjekke at PR #50 var flettet (`gh pr view`), og legge den lokale loggcommiten på `main` i stedet for på den flettede branchen.
+- Sette 7.5 og epic 7 til ferdig, og pushe `main`.
+
+### Resultat
+- Alt var logget. Bare loggcommiten `977daa7` var ikke pushet. Memlog lages bare av planleggingsverktøyene, og ingen av dem er endret siden 19. november.
+- [PR #50](https://github.com/IBE160-2026/G68-grande/pull/50) var flettet (merge `5faf9af`) med grønn CI på Linux og Windows.
+- Loggcommiten er lagt på `main` med cherry-pick (`09240ed`).
+- Commit `2a5da32`: 7.5 og epic 7 = `done` i sprint-statusen og kopien, 7.5 krysset av i TO DO, og prompt-logg 495.
+- Løst i `issues.md`: grønn CI og fletting av PR #50, og 7.5 ferdig i sprint-statusen, kopien og TO DO. Slettingen av branchen står igjen.
+
+### Åpne punkter
+- Slette de flettede branchene `story-7-3-gjenbruke-nokkelordlisten`, `story-7-4-pynt-fyrverkeri` og `story-7-5-logg-ut-og-filnavn` på PC-en og på GitHub (7.3 og 7.4 står alt i `issues.md`).
+- Neste: retrospektiven for epic 7 (valgfri) eller epic 8.
