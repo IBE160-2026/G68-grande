@@ -192,7 +192,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [ ] Spørre faglærer om fristen for rapporten, hvis den ikke står noe sted
   - [ ] Sette av tid til rapporten i planen (uke 50 er allerede satt av til testplan, README og buffer, og eksamen i et annet fag er 11. desember)
   - Råmateriale som allerede finnes: prompt-loggen, «mine valg og KI-feil» for hvert dokument, beslutningsloggene og sesjonsloggene
-- [ ] Fylle ut README-seksjonene merket «kommer» (installasjon, testdata og tester, skjermbilder, mappestruktur), og legge til nye kjente begrensninger (NFR-8) (tekstene er fylt ut 21. november i story 8.1. Gjenstår bare de tre skjermbildene i `my-project/skjermbilder/`, som Kristine tar med ekte KI)
+- [x] Fylle ut README-seksjonene merket «kommer» (installasjon, testdata og tester, skjermbilder, mappestruktur), og legge til nye kjente begrensninger (NFR-8) (tekstene er fylt ut 21. november i story 8.1. Gjenstår bare de tre skjermbildene i `my-project/skjermbilder/`, som Kristine tar med ekte KI) (skjermbildene tatt 21. november, story 8.1 ferdig)
 - [ ] Sjekke på nytt at ingen av konkurrentene har fått norsk eller korrektur av eget brev med markerte endringer (konkurrentanalysen sier sjekk fra 7. november)
 - [ ] Lage en kort prompt-logg med de viktigste valgene for hele prosjektet, til sensor (den lange loggen beholdes)
   - Ta med `3-ux/mine-valg-og-ki-feil.md` (UX er ferdig der), og legg til brief, PRD, arkitektur og koding

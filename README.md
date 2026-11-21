@@ -22,7 +22,7 @@ Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i cas
 
 **Resultatsiden** med gap-analyse og nøkkelordtreff:
 
-![Resultatsiden «Slik passer CV-en din til stillingen» for case 1. Boksen «Gap-analyse» viser hva CV-en dekker, og hva som kan jobbes videre med, og boksen «Nøkkelordtreff» viser hvor mange av annonsens nøkkelord som står i CV-en, med prosentlinjen. Nede til venstre står «Teksten behandles av ekstern KI».](my-project/skjermbilder/resultatside.png)
+![Resultatsiden «Slik passer CV-en din til stillingen» for case 1. Boksen «Gap-analyse» viser hva CV-en dekker, og hva som kan jobbes videre med, og boksen «Nøkkelordtreff» viser at 9 av 19 nøkkelord (47 %) står i CV-en, med prosentlinjen. Nede til venstre står «Teksten behandles av ekstern KI».](my-project/skjermbilder/resultatside.png)
 
 **Brevsiden** i Full generering:
 

@@ -48,7 +48,7 @@ context:
 - [x] `README.md` -- statuslinja, innledningen til kjente begrensninger, CSRF-punktet og «SQL» i «MySQL», mappestrukturen (også `my-project/skjermbilder/`), retro-lenkene 5–7 og lenken til testplanen -- NFR-8 og de åpne punktene for 8.1
 - [x] `backend/soknad/__init__.py` og `backend/tests/test_app.py` -- `SESSION_COOKIE_SAMESITE="Lax"` og en test som sjekker verdien -- beslutning 1
 - [x] `README.md` -- seksjonen «Skjermbilder» flyttes opp under «Hvem den er for», med de tre bildene og alternativtekst for hvert -- FR-38, NFR-6, beslutning 3
-- [ ] Kristine (for hånd) -- tar de tre skjermbildene og lagrer dem med navnene i beslutning 3 -- FR-38 krever ekte KI, nettleser og API-nøkkel
+- [x] Kristine (for hånd) -- tar de tre skjermbildene og lagrer dem med navnene i beslutning 3 -- FR-38 krever ekte KI, nettleser og API-nøkkel
 - [x] `deferred-work.md`, `.logs/kristine/issues.md`, `my-project/todo.md` -- krysse av punktene for 8.1 -- regelen om utsatte punkter
 
 **Acceptance Criteria:**
