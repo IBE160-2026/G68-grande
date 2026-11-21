@@ -355,6 +355,20 @@ def test_fr31_skriptet_kopierer_filnavnet_inn_i_vinduet():
     assert "fetch" not in skript
 
 
+def test_fr31_skriptet_skjuler_bare_feilboksen_for_samme_format():
+    """FR-31/AD-9: nedlasting.js skjuler feilboksen bare når lenken i den er for formatet som
+    lastes ned. Feilet PDF-en og brukeren laster ned Word, blir boksen med «Prøv på nytt» for
+    PDF stående (retro 7, A3). Feilet Word og brukeren laster ned Word (eller trykker «Prøv på
+    nytt»), skjules boksen, og fokus flyttes som før."""
+    skript = SKRIPT.read_text(encoding="utf-8")
+    vakt = "if (feilboks && feilboks.querySelector('a[data-nedlasting=\"' + format + '\"]'))"
+    assert vakt in skript
+    assert 'feilboks.querySelector("a[data-nedlasting]")' not in skript
+    assert skript.index('var format = lenke.getAttribute("data-nedlasting");') < skript.index(vakt)
+    etter = skript[skript.index(vakt) :]
+    assert etter.index("feilboks.hidden = true;") < etter.index("knapp.focus();")
+
+
 def test_nfr7_knappene_ved_siden_av_hverandre_og_brytes_i_css():
     """NFR-7/UX-DR16: blokkene står ved siden av hverandre i midten og brytes til under
     hverandre når det er trangt (flex-wrap), med toppen likt. Ingen fast høyde, ingen bredde i

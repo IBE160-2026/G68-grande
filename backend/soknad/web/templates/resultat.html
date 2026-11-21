@@ -83,11 +83,13 @@
   </div>
   <p class="poeng"><strong id="nokkelordtreff">{{ nokkelordtreff }}</strong> <span>{{ tekster.NOKKELORDTREFF_FORKLARING }}</span></p>
   {#- Prosentlinjen er bare pynt, tallet står som tekst over (FR-17). Den fylles fra 0 på 1 s
-      med CSS når siden åpnes (UX-DR13), og står ferdig fylt ved redusert bevegelse. En SVG, så
-      bredden kan stå som attributt uten style-attributt og uten JavaScript. Høyden er 12 px
-      (score-meter). #}
-  <svg class="prosentlinje" viewBox="0 0 100 12" preserveAspectRatio="none" height="12"
-    aria-hidden="true" focusable="false">
+      med CSS når siden åpnes (UX-DR13), og står ferdig fylt ved redusert bevegelse. Viser siden
+      en KI-feil (også meldingen om at alle KI-kallene er brukt), får den klassen
+      uten-animasjon og står ferdig fylt, slik fyrverkeriet ikke vises ved feilboks (retro 7).
+      En SVG, så bredden kan stå som attributt uten style-attributt og uten JavaScript. Høyden
+      er 12 px (score-meter). #}
+  <svg class="prosentlinje{% if ki_feil %} uten-animasjon{% endif %}" viewBox="0 0 100 12"
+    preserveAspectRatio="none" height="12" aria-hidden="true" focusable="false">
     <rect class="spor" width="100" height="12"></rect>
     <rect class="fyll" width="{{ treff.prosent }}" height="12"></rect>
   </svg>

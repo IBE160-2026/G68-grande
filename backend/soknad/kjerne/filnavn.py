@@ -13,8 +13,9 @@ from datetime import date
 MAKS_ARBEIDSGIVER = 30
 
 # Æ, ø og å skrives om før resten gjøres om til ASCII, så «Prøvdal» blir «Provdal» og ikke
-# «Prvdal». Det samme gjelder andre bokstaver som NFKD ikke deler opp («Straße», «Łódź»).
-_AEOEAA = str.maketrans(
+# «Prvdal». Det samme gjelder bokstavene som NFKD ikke deler opp: ß, ł, đ, œ og þ («Straße»,
+# «Łódź»). Både små og store bokstaver står i tabellen.
+_TIL_ASCII = str.maketrans(
     {
         "æ": "ae",
         "ø": "o",
@@ -42,7 +43,7 @@ def _rens_arbeidsgiver(arbeidsgiver: str | None) -> str:
     bindestrek først eller sist fjernes, også etter kuttet til 30 tegn."""
     if not arbeidsgiver:
         return ""
-    tekst = unicodedata.normalize("NFKD", arbeidsgiver.translate(_AEOEAA))
+    tekst = unicodedata.normalize("NFKD", arbeidsgiver.translate(_TIL_ASCII))
     tekst = tekst.encode("ascii", "ignore").decode("ascii")
     tekst = re.sub(r"\s+", "-", tekst)
     tekst = re.sub(r"[^A-Za-z0-9-]", "", tekst)

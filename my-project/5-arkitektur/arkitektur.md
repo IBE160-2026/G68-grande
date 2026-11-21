@@ -196,9 +196,10 @@ flowchart TD
   - **PDF inn:** bare `adaptere/pdf_inn.py` (pypdf). Gir en PDF færre enn 50 bokstaver, regnes den som `uleselig`. Grensen er høyst 5 MB per fil, og `MAX_CONTENT_LENGTH` er 16 MB.
   - **Word og PDF ut:** bare `adaptere/fil_ut.py`. Word lages med python-docx, og PDF med fpdf2 og TTF-skriften i `soknad/fonts/`.
   - **Filnavn:** bare `kjerne/filnavn.py`. Mønsteret er `Soknad_<Arbeidsgiver>_<ÅÅÅÅ-MM-DD>`:
-    - æ blir ae, ø blir o og å blir a, og andre tegn gjøres om til ASCII.
+    - æ blir ae, ø blir o og å blir a, og andre tegn gjøres om til ASCII. Bokstavene som ikke kan gjøres om av seg selv (ß, ł, đ, þ og œ), står i samme tabell som æ, ø og å (`_TIL_ASCII`), så «Straße» blir `Strasse` (story 7.5).
     - Mellomrom blir bindestrek, og alt annet enn `[A-Za-z0-9-]` fjernes.
     - Arbeidsgiveren kuttes til høyst 30 tegn.
+    - Flere bindestreker etter hverandre blir én, og bindestrek først eller sist fjernes, også etter kuttet til 30 tegn (bestemt av Kristine 20. november 2026, story 7.5).
     - Uten arbeidsgiver blir filnavnet `Soknad_<dato>`.
 
 ### AD-12 — Hemmeligheter, personvern og oppstart

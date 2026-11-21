@@ -9,7 +9,7 @@ import re
 
 import pytest
 
-from soknad.innstillinger import MAKS_TEGN_EGET_BREV
+from soknad.innstillinger import MAKS_KI_KALL, MAKS_TEGN_EGET_BREV
 from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
 from soknad.kjerne.steg import Steg
 from soknad.web import tekster
@@ -395,6 +395,57 @@ def test_fr17_prosentlinjen_er_pynt_og_fylt_til_prosenten(paa_resultat):
     # Bare fyllet har animasjon (story 7.4, testet i test_pynt.py). Sporet står stille.
     for velger in (".prosentlinje", ".prosentlinje .spor"):
         assert "animation" not in css_blokk(css, velger)
+
+
+def prosentlinje(html):
+    """Attributtene til prosentlinjen (SVG-en) i <main>."""
+    return next(a for t, a in tagger_i(main(html)) if t == "svg")
+
+
+def test_ux_dr13_prosentlinjen_fylles_uten_feilboks(paa_resultat):
+    """UX-DR13: i vanlig visning har prosentlinjen ikke klassen uten-animasjon, så den fylles
+    på 1 s som før (retro 7, A7)."""
+    html = html_av(paa_resultat.get("/resultat"))
+    assert prosentlinje(html)["class"] == "prosentlinje"
+    assert "uten-animasjon" not in html
+
+
+def test_ux_dr13_prosentlinjen_staar_stille_ved_ki_feil(app, paa_resultat):
+    """UX-DR13/FR-28: feiler KI-en ved «Lag søknadsbrevet mitt», viser resultatsiden
+    feilboksen, og prosentlinjen har klassen uten-animasjon og fylles ikke på nytt, samme
+    regel som fyrverkeriet (retro 7, A7). Bredden er den samme."""
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave="brev")
+    svar = paa_resultat.post("/resultat", data={"handling": "brev"})
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert tekster.KI_FEIL_BEHOLDT_RESULTAT in html
+    assert prosentlinje(html)["class"] == "prosentlinje uten-animasjon"
+    fyll = next(a for t, a in tagger_i(main(html)) if t == "rect" and a["class"] == "fyll")
+    assert fyll["width"] == str(PROSENT)
+
+
+def test_ux_dr13_prosentlinjen_staar_stille_naar_alle_kall_er_brukt(med_nokkel):
+    """UX-DR13/NFR-11: med ekte KI og alle KI-kallene brukt viser resultatsiden meldingen om
+    det i feilboksen, og prosentlinjen har klassen uten-animasjon (retro 7, A7)."""
+    app, client, kalt = med_nokkel
+    soknad = Soknad(
+        steg=Steg.RESULTAT,
+        modus=Modus.FULL_GENERERING,
+        samtykke=True,
+        cv=Tekstfelt(CV),
+        annonse=Tekstfelt(ANNONSE),
+        nokkelord=tuple(NOKKELORD_SVAR["nokkelord"]),
+        gap=GAP_SVAR,
+        ki_kall=MAKS_KI_KALL,
+    )
+    sett_soknad(app, client, soknad)
+    svar = client.post("/resultat", data={"handling": "brev"})
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert kalt == []
+    assert tekster.KI_KALL_BRUKT in html
+    assert prosentlinje(html)["class"] == "prosentlinje uten-animasjon"
+    assert soknaden(app, client) == soknad
 
 
 @pytest.mark.parametrize(

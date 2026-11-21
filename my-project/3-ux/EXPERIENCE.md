@@ -224,7 +224,7 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | «Nytt forslag» | Brevside | Åpner bekreftelsesvinduet. «Ja, lag nytt forslag» → ventetegn → nytt brev med nytt fyrverkeri. Nedlastingsknappene og filnavnet nullstilles. I Korrektur lages det nye forslaget fra det opprinnelige brevet (FR-25). |
 | Vindu etter nedlasting (`dialog`) | Brevside | Viser filnavnet under «Brevet er lastet ned!». «Lag ny søknad» → startsiden med tomme felt (FR-31). «Logg ut» → logger ut. «Bli her» lukker vinduet, slik at man kan laste ned det andre formatet. |
 | Vindu «Nytt forslag» (`dialog`) | Brevside | «Ja, lag nytt forslag» starter. «Avbryt» og Esc lukker. |
-| Vindu «Logg ut før nedlasting» (`dialog`) | Brevside | Åpnes når man trykker «Logg ut» før brevet er lastet ned i noe format. «Logg ut» logger ut, og brevet slettes. «Avbryt» og Esc lukker. Fokus går til «Avbryt» når vinduet åpnes. |
+| Vindu «Logg ut før nedlasting» (`dialog`) | Brevside | Åpnes når man trykker «Logg ut» før brevet er lastet ned i noe format. «Logg ut» logger ut, og brevet slettes. «Avbryt» og Esc lukker. Fokus går til «Avbryt» når vinduet åpnes. Uten JavaScript logges man ut med en gang, uten vinduet. |
 | Ventetegn | Innlegging, resultatside, brevside | Dekker siden mens KI-en jobber. Ingen avbryt-knapp i versjon 1. Tar det for lang tid, kommer KI-feilen med «Prøv på nytt» (FR-28). Teksten avhenger av hva som skjer (se Voice and Tone). |
 | Feilboks | Innlegging, resultatside, brevside | Øverst på siden. Samler alle feilene. Hver linje er en lenke som flytter fokus til feltet den gjelder. Se State Patterns. |
 | Hjørnerad (`corner-row`) | Alle sider etter innlogging | Festet til bunnen av skjermen. Se Information Architecture. |
@@ -246,7 +246,7 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 
 - Mønster: `Soknad_<Arbeidsgiver>_<ÅÅÅÅ-MM-DD>.docx` eller `.pdf`, for eksempel «Soknad_Sykehuset_2026-10-20.docx». Arbeidsgiveren står med, slik at søknadene er lette å skille.
 - Ingen æ, ø eller å i filnavnet.
-- Arbeidsgiveren er et ekstra felt i det samme KI-svaret som nøkkelordene, og kuttes til høyst 30 tegn. Mangler den, brukes «Soknad_<dato>». Æ, ø og å byttes til ae, o og a, og mellomrom blir bindestrek.
+- Arbeidsgiveren er et ekstra felt i det samme KI-svaret som nøkkelordene, og kuttes til høyst 30 tegn. Mangler den, brukes «Soknad_<dato>». Æ, ø og å byttes til ae, o og a, og mellomrom blir bindestrek. Flere bindestreker etter hverandre blir én, og bindestrek først eller sist fjernes, så «Bergen & Co» blir `Bergen-Co` (bestemt av Kristine 20. november 2026, story 7.5).
 - Funksjonen som lager filnavnet, får en enhetstest.
 - Arbeidsgiver i filnavnet står på UX-kuttlisten.
 
@@ -276,14 +276,14 @@ Atferd. Utseende står i `DESIGN.md` under Components.
 | Feil i det man har lagt inn | Innlegging | Alt det man legger inn, sjekkes ikke før man trykker «Sjekk CV-en min»: tomme felt, feil filtype, for stor fil, uleselig PDF og filer eller tekst som ikke er testdata, i testmodus. Ingen sjekk mens man velger fil eller limer inn. Da kommer feilboksen øverst med alle feilene samtidig. Felt med feil får rød ramme, og feilteksten står også under feltnavnet. Siden ruller opp til boksen, fokus flyttes dit, og skjermlesere leser den opp. Feilboksen forsvinner når man prøver igjen uten feil. |
 | Venter på KI | Innlegging, resultatside, brevside | Ventetegnet dekker siden. Knappen er låst, så det ikke sendes flere forespørsler (FR-27). Resten av siden er sperret. Fokus etterpå: se Accessibility Floor (Ventetegn). |
 | KI-feil | Innlegging, resultatside, brevside | Rød boks øverst på siden man sto på, med feiltekst, en tekst om at ingenting er borte, og «Prøv på nytt». Siden ruller opp til boksen, og fokus flyttes dit. Det man har lagt inn, er der fortsatt (FR-28). Feiler «Nytt forslag», beholdes det gamle brevet. Svarer ikke KI-en innen en fast tid (bestemmes i arkitekturen), vises «Noe gikk galt hos KI-tjenesten. Prøv på nytt.» |
-| Resultat | Resultatside | Gap-analysen først, så nøkkelordtreffet, så ATS-forklaringen (lukket). |
+| Resultat | Resultatside | Gap-analysen først, så nøkkelordtreffet, så ATS-forklaringen (lukket). Prosentlinjen fylles når siden åpnes. Viser siden en KI-feil (også meldingen om at alle KI-kallene er brukt), står den stille og ferdig fylt, slik fyrverkeriet ikke vises ved feilboks (bestemt av Kristine 21. november 2026, retro 7). |
 | Tom liste | Resultatside | Tom «Dette dekker CV-en din»: «CV-en din dekker ingen av kravene ennå. Se hva du kan jobbe videre med.» · Tom «Dette kan du jobbe videre med»: «Bra jobbet! CV-en din dekker alle kravene i annonsen. 🎉» · Tom «Står i CV-en (0)»: «Ingen av nøkkelordene står i CV-en ennå.» · Tom «Står ikke i CV-en (0)»: «Alle nøkkelordene står i CV-en din!» Er begge listene tomme, gjelder FR-28. |
-| Brevet vises | Brevside | Fyrverkeri rundt overskriften når siden åpnes. |
+| Brevet vises | Brevside | Fyrverkeri rundt overskriften når siden åpnes. Ikke når siden viser en feilboks (KI-feil fra «Nytt forslag» eller «Filen kan ikke lages»), og ikke i høykontrastmodus (bestemt av Kristine 20. november 2026, story 7.4). |
 | Ingenting endret · Setninger fjernet | Brevside (Korrektur) | Se Endrede setninger i Korrektur under Component Patterns. |
 | Nedlastet | Brevside | Knappen er grønn med ✓, filnavn-linjen står under, vinduet åpnes. |
-| Filen kan ikke lages | Brevside | Rød boks øverst på brevsiden, som ved KI-feil: «Vi klarte ikke å lage filen. Prøv på nytt.» med «Prøv på nytt». Brevet er ikke borte. |
+| Filen kan ikke lages | Brevside | Rød boks øverst på brevsiden, som ved KI-feil: «Vi klarte ikke å lage filen. Prøv på nytt.» med «Prøv på nytt». Brevet er ikke borte. Lastes det andre formatet ned, blir boksen stående. Lastes samme format ned, skjules den (retro 7). |
 | Nytt forslag laget | Brevside | Nytt brev, nytt fyrverkeri, nedlastingsknappene er nullstilt. |
-| Logg ut før nedlasting | Brevside | «Logg ut» før brevet er lastet ned i noe format åpner vinduet «Logg ut før nedlasting» (se Component Patterns, teksten står i Tekster per side). Er brevet lastet ned, logges man ut med en gang (NFR-4). |
+| Logg ut før nedlasting | Brevside | «Logg ut» før brevet er lastet ned i noe format åpner vinduet «Logg ut før nedlasting» (se Component Patterns, teksten står i Tekster per side). Er brevet lastet ned, logges man ut med en gang (NFR-4). Uten JavaScript logges man ut med en gang, uten vinduet, som «Nytt forslag» uten JavaScript (bestemt av Kristine 20. november 2026, story 7.5). |
 
 **Samtykket** må krysses av på nytt hver gang man kommer til startsiden, også i samme økt (via «Tilbake» på modusvalget eller «Lag ny søknad»). Avkrysningsboksen er alltid tom når startsiden åpnes. Slås testmodus på og så av igjen på startsiden, er avkrysningsboksen tom.
 

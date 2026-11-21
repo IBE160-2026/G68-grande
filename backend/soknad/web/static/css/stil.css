@@ -1215,6 +1215,12 @@ svg {
   animation: fyll 1s ease-out;
 }
 
+/* Viser resultatsiden en feilboks (KI-feil eller alle KI-kallene brukt), står prosentlinjen
+ * stille og ferdig fylt, slik fyrverkeriet ikke vises ved feilboks (retro 7). */
+.prosentlinje.uten-animasjon .fyll {
+  animation: none;
+}
+
 @keyframes fyll {
   from {
     transform: scaleX(0);
