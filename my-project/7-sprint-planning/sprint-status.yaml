@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-21-2026 12:31
+last_updated: 11-21-2026 18:18
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -417,14 +417,14 @@ action_items:
       nedlasting.js skjuler bare feilboksen for samme format, docstringen til hele_brevet
       og navnet på tabellen i filnavn.py"
     owner: "KI (Claude), Kristine godkjenner PR"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
   - id: "epic-7-retro-item-47-retro-7-rettinger-prosentlinjen-står-sti"
     epic: 7
     action: "Retro-7-rettinger: prosentlinjen står stille når resultatsiden har en
       feilboks (Kristines valg)"
     owner: "KI (Claude), Kristine prøver i nettleseren"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
   - id: "epic-7-retro-item-48-retro-7-rettinger-kristines-beslutninger"
     epic: 7
@@ -432,7 +432,7 @@ action_items:
       EXPERIENCE.md og AD-11, statuslinja og kjente begrensninger i README, oversikten
       for spec 7.2–7.5, epic-7-context og issues.md"
     owner: "KI (Claude), Kristine godkjenner teksten"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
   - id: "epic-7-retro-item-49-prosess-når-en-story-avsluttes-føres-kri"
     epic: 7
