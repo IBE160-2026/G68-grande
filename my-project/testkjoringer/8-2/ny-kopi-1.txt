@@ -1,0 +1,141 @@
+Prøven fra en ny kopi, nr. 1 (story 8.2.1), 21. november 2026
+Gjort av Claude i terminalen (Git Bash på Windows 11), etter README.md slik den er på main (commit 8e13bf1).
+Miljøvariabelen ANTHROPIC_API_KEY var ikke satt, og alle kommandoene ble kjørt med 'env -u ANTHROPIC_API_KEY'.
+uv 0.12.15 var installert fra før, og uv-mellomlageret (Python 3.14 og pakkene) var fylt fra før.
+
+== 21:12:20  Tom mappe og ny kopi
+$ mktemp -d  ->  /c/Users/krist/AppData/Local/Temp/ny-kopi-vaxm  (tom: 'ls -A' viste ingenting)
+$ git clone https://github.com/IBE160-2026/G68-grande.git
+Cloning into 'G68-grande'...
+$ git log --oneline -1
+8e13bf1 Logg: story-8-1-readme-for-sensor
+$ ls -A backend
+.env.example .python-version prompts pyproject.toml scripts soknad testdata tests uv.lock
+$ ls backend/.env
+ls: cannot access 'backend/.env': No such file or directory
+
+== 21:12:31  cd G68-grande/backend && uv sync  (README, steg 2)
+(siste linjer)
+ + werkzeug==3.1.9
+real 0m3.564s
+
+== 21:12:41  uv run pytest -q  (README, «Testdata og tester»)
+........................................................................ [ 98%]
+.........................                                                [100%]
+1393 passed in 179.37s (0:02:59)
+(ferdig 21:17:11. Nettsiden og HTTP-prøven under kjørte samtidig)
+
+$ uv run ruff check && uv run ruff format --check
+All checks passed!
+74 files already formatted
+
+== 21:13  uv run flask --app soknad run  (README, steg 2)
+ * Serving Flask app 'soknad'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+
+== 21:16:19  Innlogging med testbrukeren og en søknad i Full generering i testmodus med case 1
+$ uv run python http_prove.py http://127.0.0.1:5000 testdata/case-1-utvikler
+(skriptet ligger i samme mappe som denne fila)
+GET / -> 200 /logg-inn?ikke_innlogget=1 «Logg inn – Søknadsassistenten»
+POST /logg-inn (testbrukeren) -> 200 / «Startside – Søknadsassistenten»
+  Testmodus låst på: True
+POST / (Begynn å lage søknad) -> 200 /modus «Velg modus – Søknadsassistenten»
+POST /modus (Full generering) -> 200 /innlegging «Legg inn CV og annonse – Søknadsassistenten»
+POST /innlegging (CV og annonse fra case 1) -> 200 /resultat «Resultat – Søknadsassistenten»
+  Nøkkelordtreff på siden: 10 av 20 = 50 %
+  Nøkkelordtreff i fasit.md: 10 av 20 = 50 %
+POST /resultat (Lag søknadsbrevet mitt) -> 200 /brev «Søknadsbrev – Søknadsassistenten»
+  «Med vennlig hilsen» i brevet: True
+GET /last-ned/docx -> 200, 36283 byte, application/vnd.openxmlformats-officedocument.wordprocessingml.document, filnavn Soknad_Testvik-Utvikling-AS_2026-11-21.docx, starter med b'PK\x03\x04'
+GET /last-ned/pdf -> 200, 12889 byte, application/pdf, filnavn Soknad_Testvik-Utvikling-AS_2026-11-21.pdf, starter med b'%PDF'
+POST /logg-ut -> 200 /logg-inn «Logg inn – Søknadsassistenten»
+
+$ ls instance/
+brukere.db   (laget ved første oppstart)
+$ git status --short   (i kopien)
+(ingenting: bare filer som .gitignore holder utenfor, som .venv/ og instance/)
+
+== 21:17:44  Etikettene og alternativtekstene (etiketter.py), mot samme nettside
+Se etiketter.txt: 14 sider i Full generering og Korrektur, 0 feil.
+
+== Loggen fra nettsiden (alle forespørslene)
+127.0.0.1 - - [21/Nov/2026 21:16:20] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:20] "GET /logg-inn?ikke_innlogget=1 HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "POST /logg-inn HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "POST / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "GET /modus HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "POST /modus HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "GET /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "POST /innlegging HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "GET /resultat HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "POST /resultat HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:22] "GET /brev HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:23] "GET /last-ned/docx HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:23] "GET /last-ned/pdf HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:16:23] "POST /logg-ut HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:16:23] "GET /logg-inn HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:44] "GET /registrer HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:44] "GET /logg-inn HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "POST /logg-inn HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "POST / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "GET /modus HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "POST /modus HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:45] "GET /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /innlegging HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /resultat HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /resultat HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /brev HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /modus HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /modus HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /innlegging HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /resultat HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /resultat HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /brev HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "POST /logg-ut HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:17:46] "GET /logg-inn HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:22] "GET /registrer HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:22] "GET /logg-inn HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /logg-inn HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /modus HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /modus HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /innlegging HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /resultat HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /resultat HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /brev HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST / HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /modus HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /modus HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /innlegging HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /innlegging HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /resultat HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /resultat HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /brev HTTP/1.1" 200 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "POST /logg-ut HTTP/1.1" 302 -
+127.0.0.1 - - [21/Nov/2026 21:18:23] "GET /logg-inn HTTP/1.1" 200 -
+
+== Resultat
+Bestått. Kopien hadde ingen .env, nettsiden startet i testmodus med «Mangler API-nøkkel, se README»,
+databasen og testbrukeren ble laget ved første oppstart, testbrukeren fra README logget inn, og alle
+1 393 testene besto. Søknaden med case 1 ga 10 av 20 = 50 %, som i fasit.md, et brev med hilsen,
+og både .docx og PDF ble lastet ned (filene begynner med PK og %PDF).
+Fra kopien til første søknad tok det ca. 4 minutter. Med uv installert fra før og fylt mellomlager
+er det raskere enn for en sensor som starter helt fra bunnen.
+Ingen feil i README.

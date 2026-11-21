@@ -138,6 +138,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md), eller funnet mens nettside
 - **Nettsiden har ingen CSRF-beskyttelse.** Skjemaene har ingen CSRF-token. Det går an fordi nettsiden bare kjører lokalt på egen PC, men CSRF-beskyttelse må legges til før nettsiden legges på nett. Innloggings-cookien har `SameSite=Lax` (satt i `backend/soknad/__init__.py`). Det stopper bare skjemaer (POST) fra andre nettsteder. Det stopper ikke lenker fra en annen nettside, og ikke andre sider som kjører på din egen PC (`localhost` eller `127.0.0.1`, også på en annen port). En slik lenke til `/last-ned/docx` kan for eksempel merke brevet som lastet ned, og da spør ikke «Logg ut» først.
 - **Brevet skrives bare på norsk** i versjon 1.
 - **Tegn som ikke finnes i skriften, vises ikke i PDF-fila.** PDF-en bruker skriften Noto Sans, som har æ, ø og å og vanlige tegn. Et tegn den ikke har (for eksempel emoji), gir ingen feil, men blir borte i PDF-en. I Word-fila er det med. KI-en skriver vanlig norsk tekst, så det skjer sjelden.
+- **JavaScript-filene har ingen nettlesertester.** De automatiske testene sjekker HTML-en fra serveren og leser skriptene i `backend/soknad/web/static/js/` som tekst, men ingen test kjører dem i en nettleser. Det gjelder blant annet «Lim inn tekst» og søppelbøtta, «i»-boksene, ventetegnet, vinduene og den grønne knappen etter nedlasting. Hvert skript er prøvd for hånd i nettleseren, og tabellen «Skriptene som prøves for hånd» i [testplanen](my-project/testplan.md) viser hvor.
 
 ## Mappestruktur
 

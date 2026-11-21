@@ -1,0 +1,18 @@
+| Side | Felt | Skjulte felt | Knapper | Bilder, svg og canvas | aria-referanser | Resultat |
+| --- | --- | --- | --- | --- | --- | --- |
+| Registrering | 3 | 0 | 1 | 0 | 1 | Bestått |
+| Innlogging | 2 | 0 | 1 | 0 | 0 | Bestått |
+| Startside (Full generering) | 0 | 0 | 3 | 0 | 1 | Bestått |
+| Modusvalg (Full generering) | 0 | 0 | 3 | 0 | 0 | Bestått |
+| Innlegging (Full generering) | 2 | 2 | 11 | 0 | 4 | Bestått |
+| Innlegging med feil (Full generering) | 2 | 2 | 11 | 0 | 12 | Bestått |
+| Resultat (Full generering) | 0 | 0 | 4 | 1 | 2 | Bestått |
+| Brev (Full generering) | 0 | 0 | 8 | 1 | 7 | Bestått |
+| Startside (Korrektur) | 0 | 0 | 3 | 0 | 1 | Bestått |
+| Modusvalg (Korrektur) | 0 | 0 | 3 | 0 | 0 | Bestått |
+| Innlegging (Korrektur) | 3 | 3 | 15 | 0 | 6 | Bestått |
+| Innlegging med feil (Korrektur) | 3 | 3 | 15 | 0 | 18 | Bestått |
+| Resultat (Korrektur) | 0 | 0 | 4 | 1 | 2 | Bestått |
+| Brev (Korrektur) | 0 | 0 | 8 | 1 | 7 | Bestått |
+
+0 feil.
