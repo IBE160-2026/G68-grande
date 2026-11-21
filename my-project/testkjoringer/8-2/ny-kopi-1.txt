@@ -23,9 +23,9 @@ real 0m3.564s
 ........................................................................ [ 98%]
 .........................                                                [100%]
 1393 passed in 179.37s (0:02:59)
-(ferdig 21:17:11. Nettsiden og HTTP-prøven under kjørte samtidig)
+(ferdig 21:17:11. pytest kjørte i bakgrunnen, samtidig med nettsiden og HTTP-prøven under)
 
-$ uv run ruff check && uv run ruff format --check
+$ uv run ruff check && uv run ruff format --check   (uten klokkeslett, kjørt etter pytest og etiketter.py)
 All checks passed!
 74 files already formatted
 
@@ -37,8 +37,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
 
 == 21:16:19  Innlogging med testbrukeren og en søknad i Full generering i testmodus med case 1
-$ uv run python http_prove.py http://127.0.0.1:5000 testdata/case-1-utvikler
-(skriptet ligger i samme mappe som denne fila)
+$ uv run python C:/Users/krist/AppData/Local/Temp/ny-kopi-skript/http_prove.py http://127.0.0.1:5000 testdata/case-1-utvikler
 GET / -> 200 /logg-inn?ikke_innlogget=1 «Logg inn – Søknadsassistenten»
 POST /logg-inn (testbrukeren) -> 200 / «Startside – Søknadsassistenten»
   Testmodus låst på: True
@@ -59,7 +58,12 @@ $ git status --short   (i kopien)
 (ingenting: bare filer som .gitignore holder utenfor, som .venv/ og instance/)
 
 == 21:17:44  Etikettene og alternativtekstene (etiketter.py), mot samme nettside
-Se etiketter.txt: 14 sider i Full generering og Korrektur, 0 feil.
+$ uv run python my-project/testkjoringer/8-2/etiketter.py http://127.0.0.1:5000
+Første kjøring (21:17:44): 10 feil. Alle var de skjulte filvelgerne (input type="file" med
+attributtet hidden) på innleggingen, som skriptet regnet som felt uten etikett. De er skjult
+for alle og åpnes med knappen «Last opp PDF», som har aria-label. Skriptet ble rettet til å
+telle dem for seg.
+Andre kjøring (21:18:23): 14 sider i Full generering og Korrektur, 0 feil.
 
 == Loggen fra nettsiden (alle forespørslene)
 127.0.0.1 - - [21/Nov/2026 21:16:20] "GET / HTTP/1.1" 302 -
@@ -136,6 +140,23 @@ Bestått. Kopien hadde ingen .env, nettsiden startet i testmodus med «Mangler A
 databasen og testbrukeren ble laget ved første oppstart, testbrukeren fra README logget inn, og alle
 1 393 testene besto. Søknaden med case 1 ga 10 av 20 = 50 %, som i fasit.md, et brev med hilsen,
 og både .docx og PDF ble lastet ned (filene begynner med PK og %PDF).
-Fra kopien til første søknad tok det ca. 4 minutter. Med uv installert fra før og fylt mellomlager
-er det raskere enn for en sensor som starter helt fra bunnen.
+Klokketiden fra kopien til første søknad var ca. 4 minutter, med pytest samtidig med nettsiden.
+Etter hverandre: clone og uv sync ca. 15 s, pytest 179 s, nettsiden og søknaden noen sekunder.
+Med uv installert fra før og fylt mellomlager er det raskere enn for en sensor som starter helt
+fra bunnen.
 Ingen feil i README.
+
+== Merknader
+- pytest kjørte i bakgrunnen samtidig med nettsiden, HTTP-prøven og etiketter.py, så
+  klokkeslettene viser ikke stegene etter hverandre.
+- Skriptene ble ikke kjørt fra kopien på 8e13bf1, der de ikke finnes. http_prove.py ble kjørt fra
+  C:/Users/krist/AppData/Local/Temp/ny-kopi-skript/http_prove.py og etiketter.py fra
+  C:/BMAD/G68-grande/my-project/testkjoringer/8-2/etiketter.py (arbeidsmappen på branchen
+  story-8-2-1-testplan-og-forste-prove). Begge snakket med nettsiden fra kopien.
+- Utskriften over er fra den første utgaven av http_prove.py, som bare skrev ut svarene. Etter
+  gjennomgangen fikk skriptet sjekker med feilkode 1, og etiketter.py fikk sjekk av at hvert steg
+  kommer til riktig side, aria-controls, doble id-er og tekst med aria-hidden. Begge ble da kjørt
+  på nytt 21. november mot nettsiden fra arbeidsmappen (backend/ med ANTHROPIC_API_KEY tom, altså
+  testmodus), ikke fra kopien. http_prove.py: bestått. etiketter.py: 14 sider, 0 feil
+  (etiketter.txt er fra denne kjøringen).
+- ruff-steget har ikke klokkeslett.

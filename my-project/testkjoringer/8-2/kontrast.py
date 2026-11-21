@@ -61,19 +61,26 @@ PAR = [
 
 
 def les_farger(css: str) -> dict[str, tuple[float, float, float, float]]:
-    """Fargevariablene i :root som (r, g, b, alfa), med r, g, b fra 0 til 255."""
+    """Fargevariablene i PAR fra :root som (r, g, b, alfa), med r, g, b fra 0 til 255. Mangler
+    en av dem, eller har den et format skriptet ikke kjenner (bare #rrggbb og rgba(...)),
+    stopper skriptet med navnet og verdien."""
     rot = re.search(r":root\s*\{(.*?)\}", css, flags=re.S)
     if rot is None:
         raise SystemExit("Fant ikke :root i stil.css")
+    verdier = dict(re.findall(r"--([\w-]+):\s*([^;]+);", rot.group(1)))
     farger = {}
-    for navn, verdi in re.findall(r"--([\w-]+):\s*([^;]+);", rot.group(1)):
-        verdi = verdi.strip()
+    for navn in {n for par in PAR for n in par[:2]} | {"background"}:
+        if navn not in verdier:
+            raise SystemExit(f"--{navn} finnes ikke i :root i stil.css")
+        verdi = verdier[navn].strip()
         if m := re.fullmatch(r"#([0-9a-fA-F]{6})", verdi):
             h = m.group(1)
             farger[navn] = (int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16), 1.0)
         elif m := re.fullmatch(r"rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)", verdi):
             r, g, b, a = m.groups()
             farger[navn] = (int(r), int(g), int(b), float(a))
+        else:
+            raise SystemExit(f"--{navn} har et fargeformat skriptet ikke kjenner: {verdi!r}")
     return farger
 
 
