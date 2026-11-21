@@ -81,3 +81,19 @@ Kristine spurte om sesjonsloggen, memlog og resten var logget, og sa så at PR #
 ### Åpne punkter
 - Slette de flettede branchene `story-7-3-gjenbruke-nokkelordlisten`, `story-7-4-pynt-fyrverkeri` og `story-7-5-logg-ut-og-filnavn` på PC-en og på GitHub (7.3 og 7.4 står alt i `issues.md`).
 - Neste: retrospektiven for epic 7 (valgfri) eller epic 8.
+
+## 2026-11-21 kl. 12:12 — Kristine
+
+### Oppgave
+Kristine hadde slettet de flettede branchene på GitHub og ba om å slette dem på PC-en også.
+
+### Plan
+- `git fetch --prune`, og sjekke at hver branch er flettet i `main` før den slettes.
+
+### Resultat
+- Slettet på PC-en: `story-7-2-laste-ned-pdf`, `story-7-3-gjenbruke-nokkelordlisten` og `story-7-4-pynt-fyrverkeri` (flettet i `main`). `story-7-5-logg-ut-og-filnavn` ble også slettet. Den siste commiten der (`977daa7`) finnes i `main` som `09240ed` (`git cherry` viste «-»).
+- Nå er bare `main` igjen, på PC-en og på GitHub.
+- Løst i `issues.md`: punktene om fletting og sletting av branchene for 7.2, 7.3, 7.4 og 7.5.
+
+### Åpne punkter
+- Neste: retrospektiven for epic 7 (valgfri) eller epic 8.
