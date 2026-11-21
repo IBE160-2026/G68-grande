@@ -4,15 +4,15 @@
 
 ## Goal
 
-Brukeren kan be om et nytt forslag til brevet, laste ned brevet som PDF i tillegg til Word, og se om en endring i CV-en ga bedre treff, fordi prosenten regnes fra den samme nøkkelordlisten når bare CV-en er endret. Til slutt kommer pynten fra UX-kuttlisten: fyrverkeri på brevsiden, prosentlinjen som fylles, ikonet som vipper på modusvalget, vinduet «Logg ut før nedlasting» og arbeidsgiveren i filnavnet. Alt i epicen kan kuttes uten at kjerneflyten stopper. Storiene står i motsatt rekkefølge av nødlisten (det som kuttes først, bygges sist), og pynten kommer etter nødlistepunktene. Epicen er viktig fordi suksesskriterium 5 krever at både .docx og PDF kan åpnes, og kriterium 8 (samme annonse og CV gir samme treff i samme søknad) blir tydeligere med gjenbruken. Story 7.1 og 7.2 er ferdige (flettet). Neste er 7.3.
+Brukeren kan be om et nytt forslag til brevet, laste ned brevet som PDF i tillegg til Word, og se om en endring i CV-en ga bedre treff, fordi prosenten regnes fra den samme nøkkelordlisten når bare CV-en er endret. Til slutt kommer pynten fra UX-kuttlisten: fyrverkeri på brevsiden, prosentlinjen som fylles, ikonet som vipper på modusvalget, vinduet «Logg ut før nedlasting» og arbeidsgiveren i filnavnet. Alt i epicen kan kuttes uten at kjerneflyten stopper. Storiene står i motsatt rekkefølge av nødlisten (det som kuttes først, bygges sist), og pynten kommer etter nødlistepunktene. Epicen er viktig fordi suksesskriterium 5 krever at både .docx og PDF kan åpnes, og kriterium 8 (samme annonse og CV gir samme treff i samme søknad) blir tydeligere med gjenbruken. Alle fem storiene er ferdige (flettet), og epicen er avsluttet med retrospektiven 21. november 2026.
 
 ## Stories
 
 - Story 7.1: Nytt forslag (ferdig)
 - Story 7.2: Laste ned brevet som PDF (ferdig)
-- Story 7.3: Gjenbruke nøkkelordlisten når bare CV-en er endret
-- Story 7.4: Pynt: fyrverkeri og bevegelse
-- Story 7.5: Logg ut før nedlasting, og arbeidsgiver i filnavnet
+- Story 7.3: Gjenbruke nøkkelordlisten når bare CV-en er endret (ferdig)
+- Story 7.4: Pynt: fyrverkeri og bevegelse (ferdig)
+- Story 7.5: Logg ut før nedlasting, og arbeidsgiver i filnavnet (ferdig)
 
 ## Requirements & Constraints
 

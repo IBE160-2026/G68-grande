@@ -4,15 +4,23 @@ skriptet som vinduet «Nytt forslag»), så her testes at vinduet, knappene og s
 plass, at «Logg ut» nede til høyre bare spør før brevet er lastet ned, og at POST /logg-ut
 virker som før. Skriptene prøves for hånd i PR-en (nettlesertester hører til issue #16)."""
 
+import json
 import re
 
 import pytest
 
-from soknad.kjerne.okt import Modus
+from soknad.innstillinger import MAKS_KI_KALL
+from soknad.kjerne.okt import Modus, Soknad, Tekstfelt
+from soknad.kjerne.steg import Steg
 from soknad.web import tekster
 from tests.web.hjelpere import (
+    ANNONSE,
+    CASE,
+    CV,
+    GAP_SVAR,
     NEDLASTING,
     NEDLASTING_PDF,
+    NOKKELORD_SVAR,
     STIL,
     FeilendeKI,
     css_blokk,
@@ -21,6 +29,7 @@ from tests.web.hjelpere import (
     html_av,
     main,
     okt_id,
+    sett_soknad,
     soknaden,
     tagger_i,
 )
@@ -29,6 +38,7 @@ from tests.web.hjelpere import (
 
 MALER = STIL.parents[2] / "templates"
 JS = STIL.parents[1] / "js"
+BREV_1 = json.loads((CASE / "ki-svar" / "brev-1.json").read_text(encoding="utf-8"))
 
 
 def vinduet(html):
@@ -152,6 +162,47 @@ def test_ux_dr17_ki_feil_fra_nytt_forslag_beholder_nedlastingen(app, paa_brev):
     assert soknaden(app, paa_brev).lastet_ned == {"docx"}
     assert "data-bekreft" not in logg_ut_knapp(html)
     assert "vindu-logg-ut" not in html
+
+
+def test_ux_dr17_ki_feil_fra_nytt_forslag_uten_nedlasting_spor_fortsatt(app, paa_brev):
+    """FR-6/NFR-4/UX-DR17: feiler KI-en ved «Nytt forslag» før brevet er lastet ned, er
+    lastet_ned fortsatt tom, og «Logg ut» på siden med feilboksen spør først (retro 7, A2)."""
+    app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave="brev")
+    svar = paa_brev.post("/brev", data={"handling": "nytt_forslag"})
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert 'class="feilboks"' in html
+    assert tekster.KI_FEIL_BEHOLDT_BREV in html
+    assert soknaden(app, paa_brev).lastet_ned == frozenset()
+    assert logg_ut_knapp(html)["data-bekreft"] == "vindu-logg-ut"
+    assert 'id="vindu-logg-ut"' in html
+
+
+def test_ux_dr17_alle_kall_brukt_uten_nedlasting_spor_fortsatt(med_nokkel):
+    """FR-6/NFR-4/NFR-11/UX-DR17: med ekte KI og alle KI-kallene brukt gir «Nytt forslag»
+    feilboksen med meldingen om det. Er brevet ikke lastet ned, spør «Logg ut» først
+    (retro 7, A2)."""
+    app, client, kalt = med_nokkel
+    soknad = Soknad(
+        steg=Steg.BREV,
+        modus=Modus.FULL_GENERERING,
+        samtykke=True,
+        cv=Tekstfelt(CV),
+        annonse=Tekstfelt(ANNONSE),
+        nokkelord=tuple(NOKKELORD_SVAR["nokkelord"]),
+        gap=GAP_SVAR,
+        brev=BREV_1,
+        ki_kall=MAKS_KI_KALL,
+    )
+    sett_soknad(app, client, soknad)
+    svar = client.post("/brev", data={"handling": "nytt_forslag"})
+    assert svar.status_code == 200
+    html = html_av(svar)
+    assert kalt == []
+    assert tekster.KI_KALL_BRUKT in html
+    assert soknaden(app, client) == soknad
+    assert logg_ut_knapp(html)["data-bekreft"] == "vindu-logg-ut"
+    assert 'id="vindu-logg-ut"' in html
 
 
 def test_ux_dr17_filfeil_spor_fortsatt(paa_brev, filfeil):

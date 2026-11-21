@@ -979,7 +979,7 @@ slik at jeg kan velge det jeg liker best.
 **Når** jeg trykker «Ja, lag nytt forslag»
 **Så** økes `forslag` med `nytt_forslag` i kjernen, ventetegnet vises, og jeg får et nytt brev. I testmodus gir oddetall `-1` og partall `-2` (AD-3, AD-8)
 **Og** i Korrektur sendes alltid det opprinnelige `eget_brev` (FR-25, AD-5)
-**Og** nedlastingsknappene og filnavn-linjen nullstilles, og `lastet_ned` settes til usann (UX-DR16, AD-8)
+**Og** nedlastingsknappene og filnavn-linjen nullstilles, og `lastet_ned` tømmes (UX-DR16, AD-8)
 
 **Gitt** en `KIFeil` ved nytt forslag
 **Så** beholdes det gamle brevet, og feilboksen sier «Brevet du hadde, er beholdt.» (FR-28, EXPERIENCE)
@@ -999,10 +999,11 @@ slik at jeg kan sende det med en gang uten å åpne Word.
 
 **Når** jeg trykker på den
 **Så** lager `GET /last-ned/pdf` filen i `adaptere/fil_ut.py` med fpdf2 og TTF-skriften i `soknad/fonts/`, så æ, ø og å vises riktig (AD-11)
-**Og** skriften velges i denne storyen: en TTF med fri lisens og æ, ø og å (for eksempel Noto Sans eller DejaVu Sans), med lisensfilen ved siden av (arkitekturen, Utsatt)
+**Og** skriften er Noto Sans, 11 pt (fri lisens OFL), med lisensfilen ved siden av (bestemt av Kristine 19. november 2026). Word-fila beholder sin skrift
 **Og** filen har bare brevteksten med avsnittene, uten markeringer og uten topp- eller bunntekst (FR-30)
 **Og** knappen blir grønn med «✓ Lastet ned som PDF», filnavn-linjen viser `.pdf`, og vinduet etter nedlasting åpnes (UX-DR16, FR-31)
 **Og** «Bli her» i vinduet lar meg laste ned det andre formatet
+**Og** kan filen for ett format ikke lages (`FilFeil`), og jeg laster ned det andre formatet, blir feilboksen stående. Laster jeg ned samme format, skjules den (retro 7)
 
 **Og** tester (NFR-9, FR-30) leser PDF-en med pypdf og sjekker at teksten med æøå er lik brevet, uten markeringer
 
@@ -1017,6 +1018,7 @@ slik at jeg kan se om endringen min faktisk ga bedre treff.
 **Gitt** at jeg har gått tilbake fra resultatsiden (story 2.6)
 **Når** jeg bare har endret CV-en og går videre igjen
 **Så** er den vaskede annonseteksten lik, og `sett_inndata` beholder den lagrede nøkkelordlisten. Den hentes ikke på nytt fra KI-en (FR-15, FR-19, AD-8)
+**Og** en annonse der bare tegnsetting er endret (for eksempel «C++» → «C#»), regnes som lik, og den gamle listen brukes (samme vask som i dag, AD-10, bestemt av Kristine 19. november 2026)
 **Og** gap-analysen kjøres fortsatt på nytt
 
 **Når** annonsen er endret
@@ -1036,9 +1038,11 @@ slik at det blir litt gøy å bli ferdig med søknaden.
 **Gitt** brevsiden
 **Når** den åpnes, også etter nytt forslag
 **Så** vises fyrverkeri rundt brevoverskriften i ca. 2,2 s, borte etter ca. 3,2 s, med høyst 3 utbrudd i sekundet og bak teksten (UX-DR18)
+**Og** viser brevsiden en feilboks (KI-feil fra «Nytt forslag» eller «Filen kan ikke lages»), eller er høykontrastmodus på, vises ikke fyrverkeriet (bestemt av Kristine 20. november 2026)
 
 **Gitt** resultatsiden
 **Så** fylles prosentlinjen på 1 s når siden åpnes. Tallet står alltid som tekst (UX-DR13)
+**Og** viser resultatsiden en feilboks (KI-feil eller meldingen om at alle KI-kallene er brukt), står prosentlinjen stille og ferdig fylt, slik fyrverkeriet ikke vises ved feilboks (bestemt av Kristine 21. november 2026, retro 7)
 
 **Gitt** modusvalget
 **Så** løftes kortet 4 px og ikonet vipper ved hover (UX-DR12)
@@ -1058,9 +1062,11 @@ slik at jeg ikke mister brevet ved et uhell og finner riktig søknad senere.
 **Når** jeg trykker «Logg ut»
 **Så** åpnes vinduet «Du har ikke lastet ned brevet. Vil du logge ut likevel? Brevet blir slettet.» med «Logg ut» og «Avbryt». Fokus går til «Avbryt», og Esc lukker (UX-DR17, UX-DR22)
 **Og** er brevet lastet ned, logges jeg ut med en gang (NFR-4)
+**Og** uten JavaScript logges jeg ut med en gang, uten vinduet, som «Nytt forslag» uten JavaScript (bestemt av Kristine 20. november 2026)
 
 **Gitt** `arbeidsgiver` fra nøkkelordsvaret
 **Så** blir filnavnet `Soknad_<Arbeidsgiver>_<ÅÅÅÅ-MM-DD>`: æ → ae, ø → o, å → a, andre tegn til ASCII, mellomrom til bindestrek, alt annet enn `[A-Za-z0-9-]` fjernet, høyst 30 tegn. Uten arbeidsgiver er det `Soknad_<dato>` (AD-11)
+**Og** flere bindestreker etter hverandre blir én, og bindestrek først eller sist fjernes, også etter kuttet til 30 tegn. «Bergen & Co» blir `Bergen-Co` (bestemt av Kristine 20. november 2026)
 **Og** filnavnet i vinduet og i filnavn-linjen er det samme som filen får
 
 **Og** enhetstester for `kjerne/filnavn.py` dekker æøå, mellomrom, spesialtegn, 30 tegn og manglende arbeidsgiver (AD-11)

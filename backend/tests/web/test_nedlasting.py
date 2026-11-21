@@ -328,14 +328,15 @@ def test_fr29_knappen_last_ned_som_word_under_brevet(paa_brev):
 def test_fr29_brevsiden_laster_nedlastingsskriptet(paa_brev):
     """FR-29/UX-DR16: brevsiden laster nedlasting.js. Skriptet gjør knappen grønn, viser
     filnavnet og skjuler feilboksen fra en nedlasting som feilet (bare når den har en
-    nedlastingslenke, så KI-feilboksen fra «Nytt forslag» blir stående, story 7.1), men stopper
-    ikke nedlastingen (AD-1)."""
+    nedlastingslenke for samme format, så KI-feilboksen fra «Nytt forslag» blir stående,
+    story 7.1), men stopper ikke nedlastingen (AD-1)."""
     html = html_av(paa_brev.get("/brev"))
     assert '<script src="/static/js/nedlasting.js" defer></script>' in html
     skript = (STIL.parents[1] / "js" / "nedlasting.js").read_text(encoding="utf-8")
     for del_ in ('classList.add("ferdig")', "filnavn.hidden = false", "feilboks.hidden = true"):
         assert del_ in skript
-    assert 'if (feilboks && feilboks.querySelector("a[data-nedlasting]"))' in skript
+    vakt = "feilboks.querySelector('a[data-nedlasting=\"' + format + '\"]')"
+    assert f"if (feilboks && {vakt})" in skript
     assert "preventDefault" not in skript
     assert "fetch" not in skript
 

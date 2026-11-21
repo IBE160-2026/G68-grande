@@ -167,6 +167,20 @@ def test_ux_dr13_prosentlinjen_fylles_paa_ett_sekund():
     assert re.search(r"from\s*\{\s*transform: scaleX\(0\);\s*\}", keyframes)
 
 
+def test_ux_dr13_prosentlinjen_staar_stille_ved_feilboks():
+    """UX-DR13: har prosentlinjen klassen uten-animasjon (resultatsiden med feilboks), har
+    fyllet ingen animasjon og står ferdig fylt, samme regel som fyrverkeriet (retro 7, A7).
+    Regelen står utenfor @media-blokkene, så den gjelder alltid, og den vanlige fyllingen er
+    som før."""
+    css = STIL.read_text(encoding="utf-8")
+    stille = css_blokk(css, ".prosentlinje.uten-animasjon .fyll")
+    assert stille.strip() == "animation: none;"
+    assert "animation: fyll 1s ease-out;" in css_blokk(css, ".prosentlinje .fyll")
+    assert css.index(".prosentlinje .fyll {") < css.index(".prosentlinje.uten-animasjon .fyll {")
+    # Uten innrykk på starten av linjen, altså ikke inni en @media-blokk.
+    assert re.search(r"^\.prosentlinje\.uten-animasjon \.fyll \{", css, re.M)
+
+
 def test_ux_dr13_tallet_staar_fortsatt_som_tekst(paa_resultat):
     """UX-DR13/FR-17: prosentlinjen er bare pynt. Tallet står som tekst, og bredden står i
     SVG-en, så linjen er riktig også uten animasjonen."""
