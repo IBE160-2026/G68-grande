@@ -10,11 +10,27 @@ Repoet inneholder gruppens applikasjon og dokumentasjon av utvikling, testing og
 
 ## Søknadsassistenten
 
-> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Kodingen er i gang, én story om gangen. I testmodus virker nå innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og PDF og vinduet etter nedlasting, «Nytt forslag» til brevet, Korrektur av eget brev med markerte endringer, og opplasting av CV, brev og annonse som PDF med feilmeldinger for filer som ikke kan brukes. Er bare CV-en endret, brukes den samme nøkkelordlisten igjen. Pynten er på plass (fyrverkeri på brevsiden, prosentlinjen som fylles og ikonet som vipper på modusvalget), «Logg ut» spør først når brevet ikke er lastet ned, og filnavnet har arbeidsgiveren i seg. Med API-nøkkel kan testmodus slås av, og da brukes ekte KI (Claude). Seksjonene merket «kommer» fylles ut når nettsiden er laget.
+> **Status:** Planleggingen er ferdig (brief, PRD, UX, konkurrentanalyse, arkitektur, epics og stories, og sprint planning). Nettsiden er ferdig. I testmodus virker innlogging og registrering, startsiden, modusvalget, innleggingen av CV og annonse, ventetegnet, resultatsiden med gap-analyse og nøkkelordtreff, søknadsbrevet, nedlastingen som Word og PDF og vinduet etter nedlasting, «Nytt forslag» til brevet, Korrektur av eget brev med markerte endringer, og opplasting av CV, brev og annonse som PDF med feilmeldinger for filer som ikke kan brukes. Er bare CV-en endret, brukes den samme nøkkelordlisten igjen. Pynten er på plass (fyrverkeri på brevsiden, prosentlinjen som fylles og ikonet som vipper på modusvalget), «Logg ut» spør først når brevet ikke er lastet ned, og filnavnet har arbeidsgiveren i seg. Med API-nøkkel kan testmodus slås av, og da brukes ekte KI (Claude).
 
 Søknadsassistenten er en nettside som hjelper studenter med å skrive et søknadsbrev som er skreddersydd til én konkret stilling. Brukeren legger inn CV-en sin og en stillingsannonse, og velger om KI-en skal skrive brevet fra bunnen av (**Full generering**) eller forbedre et brev brukeren har skrevet selv (**Korrektur**). Før brevet skrives, viser nettsiden hvilke krav i annonsen CV-en dekker og mangler (**gap-analyse**), og hvor mange av annonsens nøkkelord som står i CV-en (**nøkkelordtreff**, for eksempel «7 av 10 = 70 %»). Brevet kan lastes ned som Word eller PDF.
 
 **Hvem den er for:** studenter og nyutdannede som søker jobb eller praksisplass for første gang, og som mangler erfaring med hva som fungerer i en søknad. Nettsiden er åpen for alle jobbsøkere, men forklaringene er laget for studenter.
+
+## Skjermbilder
+
+Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i case 1 (`backend/testdata/case-1-utvikler/`). Nede til venstre står «Teksten behandles av ekstern KI».
+
+**Resultatsiden** med gap-analyse og nøkkelordtreff:
+
+![Resultatsiden «Slik passer CV-en din til stillingen» for case 1. Boksen «Gap-analyse» viser hva CV-en dekker, og hva som kan jobbes videre med, og boksen «Nøkkelordtreff» viser at 9 av 19 nøkkelord (47 %) står i CV-en, med prosentlinjen. Nede til venstre står «Teksten behandles av ekstern KI».](my-project/skjermbilder/resultatside.png)
+
+**Brevsiden** i Full generering:
+
+![Brevsiden «Din ferdigstilte søknad!» i Full generering, med søknadsbrevet som KI-en har skrevet for case 1, og knappene «Last ned som Word» og «Last ned som PDF» under brevet. Nede til venstre står «Teksten behandles av ekstern KI».](my-project/skjermbilder/brevside.png)
+
+**Korrektur** med markerte endringer:
+
+![Brevsiden «Din oppdaterte søknad er ferdig!» i Korrektur for case 1. Over brevet står «Grønn og understreket = endret. Trykk på setningen for å se det du skrev.», og de endrede setningene i brevet er grønne og understreket. Nede til venstre står «Teksten behandles av ekstern KI».](my-project/skjermbilder/korrektur.png)
 
 ## Installasjon og oppstart
 
@@ -102,17 +118,13 @@ Med `--case` kjøres bare ett testcase. Med `--testdata` leses testcasene fra en
 
 En kjøring tar omtrent ett minutt per testcase og kostet ca. 1,2–1,8 kr per testcase 14. november 2026. De to Korrektur-svarene i case 1 tar i tillegg ca. 45 sekunder og kostet ca. 1,7 kr 15. november 2026. Tokens og anslått pris for hvert kall står i terminalen. Feiler et testcase, kjøres de andre likevel, og skriptet ender med feilkode 1 (2 når API-nøkkelen mangler, 3 når testcaset i `--case` ikke finnes, når mappen ikke har noen testcaser, eller når ingen av testcasene har `eget-brev.txt` med `--bare-korrektur`). Etter en ny kjøring oppdateres tabellen «Nøkkelord» og prosenten i `fasit.md`, ellers feiler testene. Testene sjekker også brevene: ingen av de 17 typiske KI-frasene, og ingenting fra sjekklisten i `fasit.md`. Feiler de, er det plan B i testplanen. Resultatet av kjøringene mot fasiten står i [testplanen](my-project/testplan.md).
 
-## Skjermbilder
-
-*Kommer.* To–tre skjermbilder av nettsiden med ekte KI på.
-
 ## Kjente begrensninger
 
-Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når nettsiden er laget.
+Disse er bestemt i [PRD-en](my-project/2-prd/prd.md), eller funnet mens nettsiden ble laget.
 
 - **Nøkkelordtreffet er bare en ordtelling** og en pekepinn på hvordan et ATS kan vurdere CV-en, ikke en garanti.
 - **Bøyningsformer fanges ikke opp:** «prosjektledelse» er ikke et treff i «prosjektleder».
-- **Et nøkkelord kan gi treff inne i et annet ord:** «Java» er et treff i «JavaScript». Korte nøkkelord på 1–3 tegn må stå som eget ord, men «C» kan likevel gi feil treff i en liste nummerert med bokstaver, og «C» gir også treff i «C#» og «C++».
+- **Et nøkkelord kan gi treff inne i et annet ord:** «Java» er et treff i «JavaScript». Korte nøkkelord på 1–3 tegn må stå som eget ord, men «C» kan likevel gi feil treff i en liste nummerert med bokstaver, og «C» gir også treff i «C#» og «C++». Motsatt gir korte nøkkelord (1–3 tegn) ikke treff inne i lengre ord, for eksempel «SQL» i «MySQL» og «PostgreSQL».
 - **Gap-analysen og nøkkelordtreffet kan si hverandre imot,** fordi gap-analysen er en vurdering KI-en gjør, mens nøkkelordtreffet bare teller ord.
 - **I testmodus virker bare de fiktive testdataene i `backend/testdata/`,** og CV-en og annonsen må være fra samme testcase. I Korrektur virker bare brevet i case 1.
 - **PDF fra Canva og lignende programmer kan gi teksten i feil rekkefølge.** PDF lagret fra Word leses best, også med to kolonner eller en tabell (tabellprøven i `my-project/testplan.md`). Fra Canva kommer all teksten, men overskriftene kan havne på feil sted. Lim da heller inn teksten. En skannet PDF (bare et bilde) kan ikke leses.
@@ -123,6 +135,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md). Flere kan komme til når n
 - **En dårlig nøkkelordliste kan ikke byttes ut uten å endre annonsen:** listen brukes igjen så lenge annonsen er lik (store og små bokstaver, mellomrom og tegnsetting teller ikke). Gir KI-en en dårlig liste, får du en ny bare ved å endre ordene i annonsen eller begynne på en ny søknad.
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
 - **Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.
+- **Nettsiden har ingen CSRF-beskyttelse.** Skjemaene har ingen CSRF-token. Det går an fordi nettsiden bare kjører lokalt på egen PC, men CSRF-beskyttelse må legges til før nettsiden legges på nett. Innloggings-cookien har `SameSite=Lax` (satt i `backend/soknad/__init__.py`). Det stopper bare skjemaer (POST) fra andre nettsteder. Det stopper ikke lenker fra en annen nettside, og ikke andre sider som kjører på din egen PC (`localhost` eller `127.0.0.1`, også på en annen port). En slik lenke til `/last-ned/docx` kan for eksempel merke brevet som lastet ned, og da spør ikke «Logg ut» først.
 - **Brevet skrives bare på norsk** i versjon 1.
 - **Tegn som ikke finnes i skriften, vises ikke i PDF-fila.** PDF-en bruker skriften Noto Sans, som har æ, ø og å og vanlige tegn. Et tegn den ikke har (for eksempel emoji), gir ingen feil, men blir borte i PDF-en. I Word-fila er det med. KI-en skriver vanlig norsk tekst, så det skjer sjelden.
 
@@ -135,11 +148,17 @@ backend/                 Nettsiden (Python og Flask)
     kjerne/              Reglene: telleregelen, stegene i flyten, sjekk av inndata og KI-svar
     adaptere/            Det som snakker med omverdenen: database, øktlager, KI, PDF inn, og Word- og PDF-fila
     fonts/               Skriften i PDF-fila (Noto Sans, 11 pt) med lisensen ved siden av (OFL.txt)
+  prompts/               Promptene til Claude: nøkkelord, gap-analyse, brev og korrektur
+  instance/              Databasen brukere.db, som lages ved første oppstart (ikke i Git)
   tests/                 De automatiske testene, delt på samme måte som soknad/
   testdata/              Fiktive CV-er, annonser og et eget brev (.txt og .pdf), med fasit og ekte KI-svar til testmodus, og feil/ med filer som gir feilmeldinger
   scripts/               lag_testsvar.py, som lager KI-svarene i testdata/ med ekte KI, lag_testpdf.ps1, som lager PDF-ene, og lag_feilfiler.ps1, som lager filene i feil/
+  pyproject.toml, uv.lock  Pakkene og de låste versjonene, som uv sync bruker
   .env.example           Eksempel på innstillinger, uten ekte nøkler
 my-project/              Alle plan- og prosessdokumentene (se oversikten der)
+  testplan.md            Testplanen: resultatet av testene som gjøres for hånd og med ekte KI
+  testkjoringer/         Svarene fra kjøringene med ekte KI, én mappe per story, retrospektiv eller retting
+  skjermbilder/          Skjermbildene i denne README-en
 .logs/kristine/          Sesjonslogger og åpne punkter
 .github/workflows/       Automatiske sjekker (tester og ruff) på GitHub
 _bmad/, .claude/         BMAD-oppsettet og skillene som KI-en bruker
@@ -165,9 +184,10 @@ Lagene er beskrevet i [arkitekturen](my-project/5-arkitektur/arkitektur.md): `we
 
 - [Oversikt over alle dokumentene](my-project/README.md): hvert dokument med utkast, tilbakemeldinger, gjennomganger og beslutningslogger
 - [Prompt-logg](my-project/prompt-logg.md): de viktigste forespørslene jeg har gitt KI-en underveis
+- [Testplan](my-project/testplan.md): testene som gjøres for hånd og med ekte KI, med dato og resultat
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
 - [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant
 - [Mine valg og KI-feil i epics og stories](my-project/6-epics-og-stories/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil sjekkene fant
-- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og retrospektivene for [epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md), [epic 2](my-project/9-koding/epic-2-retro-2026-11-10.md), [epic 3](my-project/9-koding/epic-3-retro-2026-11-12.md) og [epic 4](my-project/9-koding/epic-4-retro-2026-11-14.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
+- [Koding](my-project/9-koding/): planen og kodegjennomgangen for hver story, med alle funn, hva som ble rettet og hvorfor resten ble avvist, og retrospektivene for [epic 1](my-project/9-koding/epic-1-retro-2026-11-08.md), [epic 2](my-project/9-koding/epic-2-retro-2026-11-10.md), [epic 3](my-project/9-koding/epic-3-retro-2026-11-12.md), [epic 4](my-project/9-koding/epic-4-retro-2026-11-14.md), [epic 5](my-project/9-koding/epic-5-retro-2026-11-15.md), [epic 6](my-project/9-koding/epic-6-retro-2026-11-17.md) og [epic 7](my-project/9-koding/epic-7-retro-2026-11-21.md). Koden for hver story ligger i en egen [pull request](https://github.com/IBE160-2026/G68-grande/pulls?q=is%3Apr), med hva KI-en gjorde feil
 - [Sesjonslogger](.logs/kristine/README.md): hva som ble gjort i hver arbeidsøkt, med [åpne punkter](.logs/kristine/issues.md)
 - [TO DO-liste](my-project/todo.md): hva som er gjort, og hva som gjenstår
