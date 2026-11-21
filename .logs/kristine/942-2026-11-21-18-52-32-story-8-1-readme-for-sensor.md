@@ -27,7 +27,8 @@ Kristine startet `/bmad-build 8`, altså første story i epic 8: README skal væ
   At `GET /last-ned/<format>` endrer `lastet_ned`, er utsatt i `deferred-work.md`. Resten ble avvist med begrunnelse (se Review Triage Log i spec-en).
 - 1393 tester består, og ruff gir ingen feil. Sprint-statusen har 8.1 på `review`, og epic 8 er `in-progress` (kopien er oppdatert). Spec-en er kopiert til `my-project/9-koding/`, og oversikten i `my-project/README.md` har fått en rad for den.
 - Lukket i `issues.md`: CSRF i README, «SQL» i «MySQL» og SameSite (løst 2026-11-21).
-- Commits: `e2b0941` (story 8.1) og `738470b` (prompt-logg 500). Ikke pushet.
+- Kristines tre valg er ført inn i story 8.1 i `epics.md` (begge kopiene), etter tiltak 4 fra retro 7. Det står ingenting om README i `EXPERIENCE.md`, så den er ikke endret.
+- Commits: `e2b0941` (story 8.1), `738470b` (prompt-logg 500) og `8e5c638` (beslutningene i epics.md). Ikke pushet.
 
 ### Åpne punkter
 - Ta de tre skjermbildene med ekte KI, testmodus av og case 1, og lagre dem som `my-project/skjermbilder/resultatside.png`, `brevside.png` og `korrektur.png`. Sjekk at alternativtekstene i README stemmer med bildene. Til da viser README tre bilder som mangler.
