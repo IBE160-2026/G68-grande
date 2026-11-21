@@ -41,3 +41,22 @@
   - Filnavnet `Soknad_Testvik-Utvikling-AS_<dato>` i vinduet, linjen og fila.
   - Alt ved 375 og 1280 px og i høykontrast.
 - Utsatt (`deferred-work.md`): ingen automatisk test kjører vinduet før utlogging i en nettleser. Det hører til issue #16 (story 8.2).
+
+## 2026-11-21 kl. 12:04 — Kristine
+
+### Oppgave
+Kristine ba om å få nettsiden åpnet («åpne»), prøvde story 7.5 i nettleseren og sa «alt fungerer». Så skulle branchen pushes og PR-en lages.
+
+### Plan
+- Starte nettsiden fra branchen (`uv run flask --app soknad run`) og åpne den i nettleseren.
+- Etter testen: stoppe nettsiden, oppdatere TO DO og prompt-loggen, pushe og lage PR med merknad om KI-feil og kommentar om nettlesertesten.
+
+### Resultat
+- Kristine prøvde vinduet før utlogging, utlogging med en gang etter nedlasting, vinduet igjen etter «Nytt forslag» og filnavnet med arbeidsgiveren. Alt virket.
+- Nettsiden er stoppet.
+- Commit `a8eef85`: TO DO (7.5 prøvd i nettleseren) og prompt-logg 494. Branchen er pushet.
+- [PR #50](https://github.com/IBE160-2026/G68-grande/pull/50) er laget, med «Feil KI-en gjorde» og kommentar om nettlesertesten. CI kjørte da loggen ble skrevet.
+- Løst i `issues.md`: prøve story 7.5 i nettleseren, push og PR (delvis: grønn CI og fletting står igjen).
+
+### Åpne punkter
+- Grønn CI og fletting av [PR #50](https://github.com/IBE160-2026/G68-grande/pull/50). Etter flettingen: 7.5 til ferdig i sprint-statusen, kopien og TO DO, og slette branchen `story-7-5-logg-ut-og-filnavn`.
