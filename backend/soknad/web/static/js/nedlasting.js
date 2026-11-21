@@ -3,9 +3,11 @@
 // Skriptet gjør knappen grønn med «✓ Lastet ned som …», viser filnavnet under, skjuler
 // feilboksen fra en nedlasting som feilet (ikke KI-feilboksen fra «Nytt forslag») og åpner
 // vinduet etter nedlasting. Før vinduet åpnes, kopieres filnavnet for formatet som ble lastet
-// ned, inn i vinduet (story 7.2). Tekstene står alt i siden. Skriptet endrer bare hvordan
-// siden ser ut, aldri søknadsdata (AD-1). Kan filen ikke lages, svarer serveren med brevsiden
-// og feilboksen, og vinduet er borte.
+// ned, inn i vinduet (story 7.2). Er brevet lastet ned, spør ikke «Logg ut» nede til høyre
+// lenger: skriptet tar bort data-bekreft="vindu-logg-ut" fra knappen, så brukeren logges ut med
+// en gang, også før siden lastes på nytt (story 7.5, NFR-4). Tekstene står alt i siden.
+// Skriptet endrer bare hvordan siden ser ut, aldri søknadsdata (AD-1). Kan filen ikke lages,
+// svarer serveren med brevsiden og feilboksen, og vinduet er borte.
 (function () {
   var vindu = document.getElementById("vindu-nedlastet");
   // Knappen under brevet fra siste trykk. Fokus går tilbake hit når vinduet lukkes.
@@ -27,6 +29,11 @@
     }
     if (filnavn) {
       filnavn.hidden = false;
+    }
+    // Brevet er lastet ned: «Logg ut» nede til høyre logger ut uten vinduet (story 7.5).
+    var loggUt = document.querySelector('[data-bekreft="vindu-logg-ut"]');
+    if (loggUt) {
+      loggUt.removeAttribute("data-bekreft");
     }
     // Bare feilboksen fra en nedlasting som feilet (FilFeil), som har en nedlastingslenke,
     // skjules. KI-feilboksen fra «Nytt forslag» (story 7.1) har samme id, men blir stående.

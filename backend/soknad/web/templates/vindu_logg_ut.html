@@ -1,0 +1,18 @@
+{#- Vinduet «Du har ikke lastet ned brevet.» (UX-DR17, UX-DR22, story 7.5), bare på brevsiden og
+    bare når brevet ikke er lastet ned i noe format (advar_utlogging). bekreft.js åpner det med
+    showModal() når «Logg ut» nede til høyre (data-bekreft="vindu-logg-ut") trykkes, og
+    utloggingen sendes ikke før «Logg ut» her. Det er aldri åpent når siden lastes (ingen
+    open). autofocus på «Avbryt» gjelder bare når vinduet åpnes: fokus går til det trygge
+    valget. «Logg ut» her er type="button", og skriptet sender utloggingsskjemaet med knappen
+    som åpnet vinduet. «Avbryt» og Esc lukker vinduet, og skriptet sender fokus tilbake til
+    «Logg ut» nede til høyre. Uten JavaScript logges brukeren ut med en gang, uten vinduet. #}
+<dialog class="vindu" id="vindu-logg-ut" aria-labelledby="vindu-logg-ut-overskrift" aria-describedby="vindu-logg-ut-tekst">
+  <h2 id="vindu-logg-ut-overskrift">{{ tekster.VINDU_LOGG_UT_OVERSKRIFT }}</h2>
+  <p id="vindu-logg-ut-tekst">{{ tekster.VINDU_LOGG_UT_TEKST }}</p>
+  <div class="vindu-knapper">
+    <button class="hovedknapp" type="button" data-bekreft-ja>{{ tekster.LOGG_UT_KNAPP }}</button>
+    <form method="dialog">
+      <button class="sekundaerknapp" id="logg-ut-avbryt" autofocus>{{ tekster.AVBRYT_KNAPP }}</button>
+    </form>
+  </div>
+</dialog>

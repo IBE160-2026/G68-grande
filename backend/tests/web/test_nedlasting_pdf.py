@@ -86,7 +86,7 @@ def test_fr29_pdf_nedlastingen_sender_pdf_filen(app, paa_brev):
     assert svar.status_code == 200
     assert svar.mimetype == "application/pdf"
     assert svar.mimetype == fil_ut.PDF_MEDIETYPE
-    assert re.fullmatch(r"Soknad_\d{4}-\d{2}-\d{2}\.pdf", filnavn_i_dag("pdf"))
+    assert re.fullmatch(r"Soknad_Testvik-Utvikling-AS_\d{4}-\d{2}-\d{2}\.pdf", filnavn_i_dag("pdf"))
     assert svar.headers["Content-Disposition"] == f"attachment; filename={filnavn_i_dag('pdf')}"
     # NFR-4: nettleseren lagrer ikke brevet i hurtigbufferen.
     assert svar.headers["Cache-Control"] == "no-store"

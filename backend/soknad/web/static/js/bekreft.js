@@ -5,6 +5,10 @@
 // og sender skjemaet med knappen som åpnet det (requestSubmit), så vente.js viser ventetegnet
 // som vanlig. «Avbryt» og Esc lukker vinduet, og fokus går tilbake til knappen. Uten
 // JavaScript sendes skjemaet uten vinduet. Skriptet endrer aldri søknadsdata (AD-1).
+// Det samme gjelder vinduet «Du har ikke lastet ned brevet.» (story 7.5, UX-DR17): «Logg ut»
+// nede til høyre på brevsiden har data-bekreft="vindu-logg-ut" før brevet er lastet ned, og
+// «Logg ut» i vinduet (data-bekreft-ja) sender utloggingsskjemaet. nedlasting.js tar bort
+// data-bekreft når brevet lastes ned, og da sendes skjemaet med en gang.
 (function () {
   // Knappen som åpnet vinduet, og vinduet. Fokus går tilbake til knappen når vinduet lukkes.
   var apner = null;

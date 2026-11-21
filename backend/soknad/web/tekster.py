@@ -278,6 +278,11 @@ VINDU_NYTT_FORSLAG_TEKST_RESULTAT = (
 JA_NYTT_FORSLAG_KNAPP = "Ja, lag nytt forslag"
 AVBRYT_KNAPP = "Avbryt"
 
+# Vinduet som spør før utlogging på brevsiden når brevet ikke er lastet ned i noe format
+# (UX-DR17, UX-DR22, story 7.5). Knappene bruker LOGG_UT_KNAPP og AVBRYT_KNAPP.
+VINDU_LOGG_UT_OVERSKRIFT = "Du har ikke lastet ned brevet."
+VINDU_LOGG_UT_TEKST = "Vil du logge ut likevel? Brevet blir slettet."
+
 
 def filnavn_linje(filnavn: str) -> str:
     """Under knappen etter nedlasting: «Filnavn: Soknad_2026-11-11.docx»."""

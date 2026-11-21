@@ -50,7 +50,7 @@ def test_fr29_nedlastingen_sender_word_filen(app, paa_brev):
     assert svar.headers["Content-Disposition"] == f"attachment; filename={filnavn_i_dag()}"
     # NFR-4: nettleseren lagrer ikke brevet i hurtigbufferen.
     assert svar.headers["Cache-Control"] == "no-store"
-    assert re.fullmatch(r"Soknad_\d{4}-\d{2}-\d{2}\.docx", filnavn_i_dag())
+    assert re.fullmatch(r"Soknad_Testvik-Utvikling-AS_\d{4}-\d{2}-\d{2}\.docx", filnavn_i_dag())
     etter = soknaden(app, paa_brev)
     assert etter == sett_lastet_ned(for_, "docx")
     assert etter.lastet_ned == {"docx"}
@@ -168,8 +168,9 @@ def test_ux_dr7_filfeil_gir_fokus_til_feilboksen_og_prov_paa_nytt_laster_ned(paa
     """AD-9/UX-DR7: feilboksen har fokus (ikke overskriften), og «Prøv på nytt» er en lenke som
     laster ned på nytt."""
     html = html_av(paa_brev.get(NEDLASTING))
-    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus bare for når vinduet åpnes.
-    assert med_autofocus(html) == ["feilboks", "nytt-forslag-avbryt"]
+    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) og i vinduet før utlogging (story 7.5) har
+    # autofocus bare for når vinduet åpnes. Brevet er ikke lastet ned, så det siste står der.
+    assert med_autofocus(html) == ["feilboks", "nytt-forslag-avbryt", "logg-ut-avbryt"]
     boks = re.search(r'<div class="feilboks".*?</div>', html, re.S).group(0)
     prov = re.search(r"<a [^>]*>(.*?)</a>", boks, re.S)
     assert prov.group(1) == tekster.PROV_PA_NYTT_KNAPP
@@ -318,8 +319,9 @@ def test_fr29_knappen_last_ned_som_word_under_brevet(paa_brev):
     assert "hidden" in filnavn
     assert "aria-live" not in filnavn
     assert f">{tekster.filnavn_linje(filnavn_i_dag())}</p>" in html
-    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) har autofocus bare for når vinduet åpnes.
-    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
+    # «Avbryt» i vinduet «Nytt forslag» (story 7.1) og i vinduet før utlogging (story 7.5) har
+    # autofocus bare for når vinduet åpnes.
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt", "logg-ut-avbryt"]
     assert "feilboks" not in main(html)
 
 

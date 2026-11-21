@@ -499,8 +499,8 @@ def test_fr22_brevsiden_har_overskrift_tittel_og_fokus(paa_brev):
     assert h1 == [{"class": "brev-overskrift", "tabindex": "-1", "autofocus": None}]
     assert re.search(r"<h1[^>]*>Din ferdigstilte søknad!</h1>", html)
     # «Avbryt» i vinduet «Nytt forslag» har også autofocus, men den gjelder bare når vinduet
-    # åpnes (story 7.1).
-    assert med_autofocus(html) == [None, "nytt-forslag-avbryt"]
+    # åpnes (story 7.1). Det samme gjelder «Avbryt» i vinduet før utlogging (story 7.5).
+    assert med_autofocus(html) == [None, "nytt-forslag-avbryt", "logg-ut-avbryt"]
 
 
 def test_fr22_ett_avsnitt_per_element(paa_brev):
