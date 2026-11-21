@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-21-2026 12:09
+last_updated: 11-21-2026 12:31
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -83,7 +83,7 @@ development_status:
   7-3-gjenbruke-nøkkelordlisten-når-bare-cv-en-er-endret: done
   7-4-pynt-fyrverkeri-og-bevegelse: done
   7-5-logg-ut-før-nedlasting-og-arbeidsgiver-i-filnavnet: done
-  epic-7-retrospective: optional
+  epic-7-retrospective: done
 
   epic-8: backlog
   8-1-readme-for-sensor: backlog
@@ -248,7 +248,7 @@ action_items:
     action: "Epic 7: vinduet «Nytt forslag» spør også når «Lag søknadsbrevet mitt»
       trykkes og et brev finnes"
     owner: "KI (Claude) skriver det inn i storyen"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
   - id: "epic-3-retro-item-24-prosess-kjente-fallgruver-fokusring-ette"
     epic: 3
@@ -363,7 +363,7 @@ action_items:
     action: "Prosess: når Kristine beskriver noe hun så i nettleseren, gjentar KI-en
       hva den tror hun mener før den endrer kode"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-5-retro-2026-11-15.md"
   - id: "epic-5-retro-item-40-prosess-spec-en-beholder-alle-seksjonene"
     epic: 5
@@ -409,5 +409,36 @@ action_items:
       etter punkter som nevner storyen, og et punkt som lukkes, får resolved samme
       dag"
     owner: "KI (Claude)"
-    status: in-progress
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-6-retro-2026-11-17.md"
+  - id: "epic-7-retro-item-46-retro-7-rettinger-test-for-advarselen-fø"
+    epic: 7
+    action: "Retro-7-rettinger: test for advarselen før utlogging på KI-feilsiden,
+      nedlasting.js skjuler bare feilboksen for samme format, docstringen til hele_brevet
+      og navnet på tabellen i filnavn.py"
+    owner: "KI (Claude), Kristine godkjenner PR"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
+  - id: "epic-7-retro-item-47-retro-7-rettinger-prosentlinjen-står-sti"
+    epic: 7
+    action: "Retro-7-rettinger: prosentlinjen står stille når resultatsiden har en
+      feilboks (Kristines valg)"
+    owner: "KI (Claude), Kristine prøver i nettleseren"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
+  - id: "epic-7-retro-item-48-retro-7-rettinger-kristines-beslutninger"
+    epic: 7
+    action: "Retro-7-rettinger: Kristines beslutninger fra 7.2–7.5 inn i epics.md,
+      EXPERIENCE.md og AD-11, statuslinja og kjente begrensninger i README, oversikten
+      for spec 7.2–7.5, epic-7-context og issues.md"
+    owner: "KI (Claude), Kristine godkjenner teksten"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
+  - id: "epic-7-retro-item-49-prosess-når-en-story-avsluttes-føres-kri"
+    epic: 7
+    action: "Prosess: når en story avsluttes, føres Kristines beslutninger fra spec-en
+      inn i epics.md og EXPERIENCE.md, og nye filer i my-project/9-koding får en rad
+      i oversikten, i samme PR"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
