@@ -11,7 +11,12 @@ from flask import request
 import soknad
 from soknad import create_app
 from soknad.adaptere.ki import EkteKI
-from soknad.innstillinger import MAKS_FORESPORSEL, STANDARD_MODELL
+from soknad.innstillinger import (
+    MAKS_FORESPORSEL,
+    STANDARD_MODELL,
+    TESTBRUKER_EPOST,
+    TESTBRUKER_PASSORD,
+)
 
 # Leses når testfilen importeres, før autouse-fiksturen bytter den ut med tmp_path.
 EKTE_INSTANCE_MAPPE = soknad.INSTANCE_MAPPE
@@ -85,6 +90,20 @@ def test_nfr8_test_config_vinner_over_miljoet(uten_env, monkeypatch):
     app = create_app({"TESTING": True, "SECRET_KEY": "x"})
     assert app.config["SECRET_KEY"] == "x"
     assert app.testing is True
+
+
+def test_fr3_innloggings_cookien_er_samesite_lax(uten_env):
+    """FR-3 (story 8.1): innloggings-cookien har SameSite=Lax, så den ikke sendes med når en
+    annen nettside poster til Søknadsassistenten. Det er ikke et fullt CSRF-vern (README)."""
+    app = create_app({"TESTING": True, "SECRET_KEY": "x"})
+    assert app.config["SESSION_COOKIE_SAMESITE"] == "Lax"
+    svar = app.test_client().post(
+        "/logg-inn", data={"epost": TESTBRUKER_EPOST, "passord": TESTBRUKER_PASSORD}
+    )
+    assert svar.status_code == 302
+    cookier = svar.headers.getlist("Set-Cookie")
+    assert cookier
+    assert all("SameSite=Lax" in cookie for cookie in cookier)
 
 
 def test_nfr2_env_example_har_ingen_verdier():
