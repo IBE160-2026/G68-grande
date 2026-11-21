@@ -52,3 +52,20 @@ Kristine ba meg starte nettsiden og si hva hun skulle ta skjermbilde av. Etterp�
 
 ### Åpne punkter
 - Grønn CI og fletting av PR #52. Etter flettingen settes 8.1 til `done` i sprint-statusen og kopien, og branchen slettes.
+
+## 2026-11-21 kl. 19:45 — Kristine
+
+### Oppgave
+Kristine flettet PR #52 og så at bildene vises riktig på GitHub.
+
+### Plan
+- Sjekke at PR-en er flettet, hente `main`, sette story 8.1 til ferdig og slette branchen.
+
+### Resultat
+- [PR #52](https://github.com/IBE160-2026/G68-grande/pull/52) er flettet (`9b7b7fd`). Kristine har sett at skjermbildene vises riktig i README.
+- Story 8.1 står som `done` i sprint-statusen og kopien. TO DO har fått en linje for 8.1, og prompt-loggen har fått nr. 501 (`bd41305`, ikke pushet).
+- Branchen `story-8-1-readme-for-sensor` er slettet lokalt og på GitHub.
+- Lukket i `issues.md`: CI og fletting av PR #52.
+
+### Åpne punkter
+- Ingen nye. Neste er story 8.2 (testplanen og prøven fra en ny kopi, «Closes #16»).
