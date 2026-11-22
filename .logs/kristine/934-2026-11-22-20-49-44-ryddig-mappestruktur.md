@@ -19,3 +19,20 @@ Kristine så at `my-project/` på GitHub hopper fra 7 til 9, fordi mappen med nr
 
 ### Åpne punkter
 Ingen.
+
+## 2026-11-22 kl. 21:34 — Kristine
+
+### Oppgave
+Kristine spurte om README har en oppskrift på hele flyten, og senere om det er lenker til alt testmaterialet.
+
+### Plan
+- Sjekket README mot sensorveiledningen. Steg 3 sier at sensor går gjennom kjerneflytene som README beskriver, men README hadde ingen samlet oppskrift.
+- Skrev avsnittet «Slik bruker du nettsiden» etter «Installasjon og oppstart». Knappenavnene, overskriftene og prosenten er sjekket mot `tekster.py` og `fasit.md`.
+
+### Resultat
+- README har fått åtte steg: innlogging, Full generering, innlegging, resultatsiden (10 av 20 = 50 %), brevet, nedlasting, Korrektur og feil input.
+- Over stegene står en tabell med lenker til CV, annonse, eget brev og fasit for begge casene, og til filene som gir feil. Alle de 14 lenkene er sjekket.
+- Kristine godkjente teksten.
+
+### Åpne punkter
+Ingen.
