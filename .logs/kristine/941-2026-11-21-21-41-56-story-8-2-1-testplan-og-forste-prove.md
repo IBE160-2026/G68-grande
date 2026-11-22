@@ -45,8 +45,7 @@ Kristine spurte hva hun skulle gjøre videre (`bmad-help`). Så ba hun om at net
 - Spec-en er kopiert til `my-project/9-koding/` med en rad i `my-project/README.md`. Notatet til refleksjonsrapporten er skrevet i `my-project/8-refleksjonsrapport/notater.md` (mappen er git-ignorert, så det ligger bare lokalt).
 - Commits `b570c26`, `567fa6b` og `1e2bca1`. Branchen er pushet, og [PR #53](https://github.com/IBE160-2026/G68-grande/pull/53) er laget med «Closes #16» og en merknad om KI-feilene. CI kjørte da loggen ble skrevet.
 - I `issues.md` er disse punktene lukket: nettleserprøven, README-beslutningen og «Closes #16». Punktet for 8.2.2 har fått med det nye README-steget.
-- Nettsiden kjører fortsatt i bakgrunnen.
+- Etter flettingen: [PR #53](https://github.com/IBE160-2026/G68-grande/pull/53) er flettet (merge-commit `922c5f9`), og issue #16 er lukket. Nettsiden er stoppet, branchen er slettet på PC-en (på GitHub var den alt slettet), TO DO er krysset av, og prompt-logg 502 (kodingen 21. november, som manglet) og 503 er skrevet (commit `1835d26` på main).
 
 ### Åpne punkter
-- Flette PR #53 når CI er grønn, så issue #16 lukkes. Story 8.2 blir stående som «in-progress» til 8.2.2 er ferdig.
 - Story 8.2.2: kriterium 13 og andre prøve fra en ny kopi, også det nye steget «1. Hent koden» (punktet står alt i `issues.md`).
