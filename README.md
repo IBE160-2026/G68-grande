@@ -87,6 +87,30 @@ uv run flask --app soknad run
 
 **Testmodus og samtykke:** uten API-nøkkel er bryteren «Testmodus» oppe til høyre på startsiden låst på, og under den står «Mangler API-nøkkel, se README». Nettsiden bruker da de ferdige svarene i `backend/testdata/`, og ingenting sendes til ekstern KI. Med API-nøkkel i `backend/.env` er testmodus av når du logger inn, og bryteren kan slås av og på, men bare på startsiden. Når testmodus er av, sendes CV-en og annonsen til Claude, og du må krysse av for «Jeg samtykker til bruk av KI» før «Begynn å lage søknad» virker. Avkrysningen må gjøres hver gang du kommer til startsiden. «i»-knappen ved siden av forklarer hva samtykket betyr. Nede til venstre står «Teksten behandles av ekstern KI» så lenge testmodus er av. Hvert kall til Claude koster litt (se `ANTHROPIC_MODEL` over). Nøkkelen leses bare når nettsiden starter, så du må starte nettsiden på nytt etter at du har endret `.env`. Er nøkkelen ugyldig, gir hvert KI-kall «Noe gikk galt hos KI-tjenesten. Prøv på nytt.». Rett da nøkkelen, eller slå på testmodus.
 
+## Slik bruker du nettsiden
+
+Hele flyten i testmodus med de fiktive testdataene. Den virker uten API-nøkkel. Alt testmaterialet ligger i `backend/testdata/`:
+
+| | Case 1: junior utvikler | Case 2: junior økonomimedarbeider |
+| --- | --- | --- |
+| CV | [cv.txt](backend/testdata/case-1-utvikler/cv.txt) · [cv.pdf](backend/testdata/case-1-utvikler/cv.pdf) | [cv.txt](backend/testdata/case-2-okonomi/cv.txt) · [cv.pdf](backend/testdata/case-2-okonomi/cv.pdf) |
+| Stillingsannonse | [annonse.txt](backend/testdata/case-1-utvikler/annonse.txt) · [annonse.pdf](backend/testdata/case-1-utvikler/annonse.pdf) | [annonse.txt](backend/testdata/case-2-okonomi/annonse.txt) · [annonse.pdf](backend/testdata/case-2-okonomi/annonse.pdf) |
+| Eget søknadsbrev (Korrektur) | [eget-brev.txt](backend/testdata/case-1-utvikler/eget-brev.txt) · [eget-brev.pdf](backend/testdata/case-1-utvikler/eget-brev.pdf) | – |
+| Fasit (prosenten og kravene) | [fasit.md](backend/testdata/case-1-utvikler/fasit.md) | [fasit.md](backend/testdata/case-2-okonomi/fasit.md) |
+
+Filer som gir feilmeldinger: [skannet.pdf](backend/testdata/feil/skannet.pdf) og [feil-type.docx](backend/testdata/feil/feil-type.docx) i [`backend/testdata/feil/`](backend/testdata/feil/).
+
+1. **Logg inn** med testbrukeren (`test@example.com` og `testpassord1`). Startsiden «Velkommen! 👋» sier at du er i testmodus.
+2. Trykk **«Begynn å lage søknad»**, og velg kortet **«Full generering»** på siden «Hva vil du gjøre i dag?».
+3. På innleggingen trykker du «Lim inn tekst» i feltet «CV» og limer inn hele `cv.txt` fra case 1. Gjør det samme med `annonse.txt` i feltet «Stillingsannonse». Du kan også trykke «Last opp PDF» og velge `cv.pdf` og `annonse.pdf`. Trykk **«Sjekk CV-en min»**.
+4. **Resultatsiden** «Slik passer CV-en din til stillingen» viser gap-analysen: hva CV-en dekker, og hva som kan jobbes videre med. Nøkkelordtreffet skal vise **10 av 20 = 50 %**, som i `fasit.md`.
+5. Trykk **«Lag søknadsbrevet mitt»**. Brevsiden «Din ferdigstilte søknad!» viser brevet. «Nytt forslag» gir et annet brev.
+6. Trykk **«Last ned som Word»** eller **«Last ned som PDF»**. Fila lastes ned, og vinduet «Brevet er lastet ned!» spør om du vil lage en ny søknad eller logge ut.
+7. **Korrektur:** trykk «Lag ny søknad», så «Begynn å lage søknad» og kortet **«Korrektur»**. Lim inn `cv.txt`, `eget-brev.txt` i feltet «Ditt søknadsbrev» og `annonse.txt`, alle fra case 1. Trykk «Sjekk CV-en min» og så **«Oppdater søknadsbrevet mitt»**. Brevsiden viser de endrede setningene i grønt, og trykker du på en av dem, ser du under «Du skrev» det brukeren skrev.
+8. **Feil input:** trykk «Sjekk CV-en min» med tomme felt, eller last opp filene i `backend/testdata/feil/`. Da kommer feilmeldingene øverst på siden. Flere feilmeldinger står under «Testdata og tester».
+
+Case 2 kan brukes i Full generering på samme måte. Prosenten står i fasiten for case 2. Med API-nøkkel kan testmodus slås av på startsiden, og da lager Claude analysen og brevet (se «Testmodus og samtykke» over).
+
 ## Testdata og tester
 
 De automatiske testene og kodesjekken kjøres fra `backend/`:
