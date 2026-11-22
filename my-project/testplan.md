@@ -12,7 +12,7 @@ Testfilene ligger i `backend/tests/` og kjøres med `uv run pytest` fra `backend
 | 2 | Nøkkelordtreffet gir nøyaktig prosenten i fasiten når listen er fast | Automatisk: [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr17_fasiten_gir_samme_treff_og_prosent_som_telleregelen`) og [test_resultat.py](../backend/tests/web/test_resultat.py) (`test_fr17_kriterium_2_…` for case 1 og 2) | Bestått |
 | 3 | Samme CV med to annonser gir brev med krav som er spesifikke for hver annonse | For hånd med ekte KI, tre kjøringer | Bestått 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
 | 4 | Korrektur viser minst én markert endring, og den nedlastede fila har ingen markeringer | Automatisk: [test_ki_svar.py](../backend/tests/kjerne/test_ki_svar.py) (`test_fr23_visningen_av_de_ekte_testsvarene`), [test_nedlasting.py](../backend/tests/web/test_nedlasting.py) (`test_fr30_korrektur_…`) og [test_fil_ut.py](../backend/tests/adaptere/test_fil_ut.py) (`test_fr30_filen_har_ingen_markeringer`). Svarene fra ekte KI er sjekket i «Story 5.2.2» og «Retro 5» | Bestått |
-| 5 | PDF og innlimt tekst gir samme treff, og både .docx og PDF kan åpnes | Treffet automatisk: [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr8_pdf_og_txt_gir_samme_nokkelordtreff`, `test_fr34_pdf_ene_gir_samme_testcase_som_txt`), [test_pdf_inn.py](../backend/tests/adaptere/test_pdf_inn.py) og [test_innlegging.py](../backend/tests/web/test_innlegging.py). At filene kan åpnes: for hånd i «Hele flyten for hånd» | Treffet: bestått. Åpne filene: ikke prøvd ennå |
+| 5 | PDF og innlimt tekst gir samme treff, og både .docx og PDF kan åpnes | Treffet automatisk: [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr8_pdf_og_txt_gir_samme_nokkelordtreff`, `test_fr34_pdf_ene_gir_samme_testcase_som_txt`), [test_pdf_inn.py](../backend/tests/adaptere/test_pdf_inn.py) og [test_innlegging.py](../backend/tests/web/test_innlegging.py). At filene kan åpnes: for hånd i «Hele flyten for hånd» | Treffet: bestått. Åpne filene: bestått 22. november 2026 |
 | 6 | En ny bruker kan registrere seg, feil passord gir ikke tilgang, og testbrukeren fra README virker | Automatisk: [test_registrering.py](../backend/tests/web/test_registrering.py) (`test_fr1_…`, `test_fr2_testbrukeren_finnes_fra_for`) og [test_innlogging.py](../backend/tests/web/test_innlogging.py) (`test_fr3_feil_passord_eller_ukjent_epost_gir_skjemafeil`). Testbrukeren er også prøvd i «Prøven fra en ny kopi» | Bestått |
 | 7 | Nettsiden kan kjøres lokalt etter README i testmodus uten API-nøkkel | For hånd: «Prøven fra en ny kopi» | Første prøve bestått 21. november 2026. Andre prøve kommer i 8.2.2 |
 | 8 | Samme annonse og CV kjørt to ganger i samme søknad gir samme nøkkelordtreff | Automatisk: [test_resultat.py](../backend/tests/web/test_resultat.py) (`test_fr15_kriterium_8_samme_treff_etter_tilbake`) og [test_gjenbruk_nokkelord.py](../backend/tests/web/test_gjenbruk_nokkelord.py) | Bestått |
@@ -36,7 +36,7 @@ Tallene er samlet fra «Kostnad og tid» i hver runde under. Kronene er regnet m
 | Full generering med «Nytt forslag», CV og annonse nær 15 000 tegn | 52 039 | 6 953 | 3,82 kr (4,02 kr etter de nye reglene) | Samme. Over målet, godtatt 17. november |
 | Korrektur, testdataene (case 1) | ca. 8 670 (5 108 for brevet) | ca. 3 300–3 500 | ca. 1,15 kr | Retro 5, runde 2, med nøkkelord og gap fra story 4.4 |
 | Korrektur, eget brev på 5 000 tegn | | | ca. 2,8 kr, eller ca. 4,4 kr med CV og annonse nær 15 000 tegn | Regnet ut i retro 5, ikke målt |
-| Full generering, case 1, i nettleseren i story 8.2.1 | | | Ikke kjørt ennå | «Hele flyten for hånd» |
+| Full generering, case 1, i nettleseren i story 8.2.1 (22. november 2026) | 7 635 (1 503 nøkkelord, 2 069 gap, 4 063 brev) | 2 377 (138, 190, 2 049) | 0,86 kr (0,0781 dollar) | «Hele flyten for hånd» |
 
 Med testdataene koster en fullført søknad ca. 0,7–1,2 kr i begge modusene. Med svært lange tekster holder Full generering med ett brev målet, men med liten margin. Med «Nytt forslag», eller i Korrektur med lange tekster, blir det mer enn 3 kr.
 
@@ -501,11 +501,11 @@ Hele flyten prøves i nettleseren i begge modusene, i testmodus med testdataene 
 | Hva | Dato | Hva som ble gjort | Resultat |
 | --- | --- | --- | --- |
 | Full generering, testmodus, case 1 (over HTTP) | 21. november 2026 | Claude, i prøven fra en ny kopi: innlogging, modusvalget, innleggingen, resultatsiden, brevsiden, nedlasting som Word og PDF og «Logg ut». Filene begynner som en ekte Word-fil (`PK`) og en ekte PDF (`%PDF`), men er ikke åpnet | Bestått |
-| Full generering, testmodus, case 1 (nettleseren) | | Kristine: fra innloggingen til brevet er lastet ned, og «Logg ut» | Ikke prøvd ennå |
-| Korrektur, testmodus, case 1 (nettleseren) | | Kristine: CV, annonse og `eget-brev.txt` fra case 1, de markerte endringene og «Du skrev», nedlasting og «Logg ut» | Ikke prøvd ennå |
-| Full generering, ekte KI, case 1 (nettleseren) | | Kristine: testmodus av, samtykket, hele flyten og nedlasting. Tokens og kroner leses fra terminalen | Ikke prøvd ennå |
-| .docx åpnes | | Kristine: fila fra nedlastingen åpnes i Word | Ikke prøvd ennå |
-| PDF åpnes | | Kristine: fila fra nedlastingen åpnes i en PDF-leser | Ikke prøvd ennå |
+| Full generering, testmodus, case 1 (nettleseren) | 22. november 2026 | Kristine: fra innloggingen til brevet er lastet ned, og «Logg ut». CV-en lastet opp som `cv.pdf`, annonsen limt inn fra `annonse.txt`, feilboksen for tomme felt, søppelbøtta, «Nytt forslag», «Logg ut» før nedlasting, nedlasting som Word og PDF, og tilbakeknappen etter «Logg ut» | Bestått. Resultatsiden ga 50 %, som i `fasit.md` |
+| Korrektur, testmodus, case 1 (nettleseren) | 22. november 2026 | Kristine: CV, annonse og `eget-brev.txt` fra case 1, de markerte endringene og «Du skrev», nedlasting og «Logg ut» | Bestått |
+| Full generering, ekte KI, case 1 (nettleseren) | 22. november 2026 | Kristine: testmodus av, samtykket, hele flyten og nedlasting. Tokens og kroner lest fra terminalen av Claude | Bestått. 7 635 tokens inn og 2 377 ut, ca. 0,86 kr (se «Kostnad per søknad») |
+| .docx åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i Word | Bestått |
+| PDF åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i en PDF-leser | Bestått |
 
 ## Tilgjengelighet og skjermbredder
 
@@ -515,14 +515,14 @@ Sjekkene for NFR-6 (kontrast, tastatur, synlige etiketter og alternativtekst) og
 | --- | --- | --- | --- |
 | Kontrast (WCAG AA) | 21. november 2026 | Claude: [kontrast.py](testkjoringer/8-2/kontrast.py) leser fargene i `backend/soknad/web/static/css/stil.css` og regner ut kontrasten for 25 fargepar som brukes sammen. Krav: 4,5:1 for tekst og 3:1 for rammer rundt felt, fokusringen og bryteren. Tabellen ligger i [kontrast.txt](testkjoringer/8-2/kontrast.txt). Den samme sjekken kjører med de andre testene og på GitHub i [test_kontrast.py](../backend/tests/web/test_kontrast.py) (`test_nfr6_kontrast_fargeparene_i_stilen_holder_wcag_aa`), så en ny farge med for lav kontrast gir en test som feiler | Bestått: alle 24 parene med krav består. Lavest er grønn tekst på lysegrønt (`success` på `success-tint`, 4,53:1), som DESIGN.md alt sier har ingen margin. Prosentlinjen (4,47:1) er bare pynt, fordi prosenten står som tekst |
 | Etiketter og navn i HTML-en | 21. november 2026 | Claude: [etiketter.py](testkjoringer/8-2/etiketter.py) logger inn med testbrukeren og henter 14 sider i testmodus med case 1: registreringen og innloggingen, og i både Full generering og Korrektur startsiden, modusvalget, innleggingen, innleggingen med feilene for tomme felt, resultatsiden og brevsiden. Hvert steg sjekker at nettsiden kom til riktig side. Hvert felt skal ha en etikett (`<label>`, `aria-label` eller `aria-labelledby`), hver knapp tekst eller `aria-label` (tekst med `aria-hidden` teller ikke), hver `aria-labelledby`, `aria-describedby` og `aria-controls` skal peke på noe som finnes, og ingen id kan stå to ganger. Om etiketten synes på skjermen, kan skriptet ikke se. Feiltilstander som feil passord, KI-feilboksen og meldingen når alle KI-kallene er brukt, er ikke med. Tabellen ligger i [etiketter.txt](testkjoringer/8-2/etiketter.txt). Avkrysningsboksen for samtykket vises bare med API-nøkkel, så den er sjekket i malen (`start.html`): den ligger inni sin `<label>` | Bestått: 14 sider, ingen feil. Filvelgerne er skjult (`hidden`) og åpnes med knappen «Last opp PDF», som har `aria-label` |
-| Synlige etiketter i nettleseren | | Kristine: hvert felt har en etikett man ser, ikke bare en plassholder | Ikke prøvd ennå |
+| Synlige etiketter i nettleseren | 22. november 2026 | Kristine: hvert felt har en etikett man ser, ikke bare en plassholder | Bestått: hvert felt har en tekst over seg, og ingen felt har grå tekst inni |
 | Alternativtekst | 21. november 2026 | Claude: [etiketter.py](testkjoringer/8-2/etiketter.py) fant ingen `<img>` på de 14 sidene, og prosentlinjen (`<svg>`) og fyrverkeriet (`<canvas>`) er skjult for skjermlesere (`aria-hidden="true"`), fordi det samme står som tekst. Ikonene (for eksempel ✓, →, «i», søppelbøtta og ikonene på modus-kortene) er `<span>`-er, og dem sjekker ikke skriptet. Claude har sett i malene at alle har `aria-hidden="true"`, og knappene med et ikon har `aria-label`. Skjermbildene i README har alternativtekst (story 8.1) | Bestått |
-| Bare tastatur | | Kristine: hele flyten med Tab, Shift+Tab, Enter, mellomrom og Esc, uten mus. Fokusringen skal alltid synes | Ikke prøvd ennå |
-| 320 px | | Kristine: alle sidene, ingen rulling sidelengs | Ikke prøvd ennå |
-| 375 px (mobil) | | Kristine: alle sidene, ingen rulling sidelengs | Ikke prøvd ennå |
-| 768 px (nettbrett) | | Kristine: alle sidene, ingen rulling sidelengs | Ikke prøvd ennå |
-| 1280 px (PC) | | Kristine: alle sidene, ingen rulling sidelengs | Ikke prøvd ennå |
-| 200 % zoom | | Kristine: alle sidene på 1280 px med 200 % zoom, alt kan leses og brukes | Ikke prøvd ennå |
+| Bare tastatur | 22. november 2026 | Kristine: hele flyten med Tab, Shift+Tab, Enter, mellomrom og Esc, uten mus. Fokusringen skal alltid synes | Bestått: alt kan nås med tastaturet. Tab går også gjennom nettleserens egne knapper (adresselinja og fanene) før nettsiden, så det tar litt tid. Det er vanlig i nettlesere og ikke en feil i nettsiden |
+| 320 px | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 375 px (mobil) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 768 px (nettbrett) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 1280 px (PC) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 200 % zoom | 22. november 2026 | Kristine: alle sidene på 1280 px med 200 % zoom, alt kan leses og brukes | Bestått |
 
 ## Skriptene som prøves for hånd
 
@@ -530,14 +530,14 @@ Prosjektet har ingen nettlesertester (bestemt av Kristine 21. november 2026, iss
 
 | Skript | Hva det gjør | Laget eller endret i | Siste prøve for hånd (8.2.1) |
 | --- | --- | --- | --- |
-| `innlegging.js` | «Last opp PDF» og «Lim inn tekst» på innleggingen, søppelbøtta som tømmer feltet, og fokus fra feilboksen til feltet | Story 2.5.1 (PR #12) og 6.1 (PR #42) | Ikke prøvd ennå |
-| `info.js` | «i»-boksene: trykk, Enter og mellomrom åpner og lukker, Esc lukker, og hover med mus | Story 2.6 (PR #14) | Ikke prøvd ennå |
-| `vente.js` | Ventetegnet mens KI-en jobber: siden sperres, og et nytt trykk sender ingenting. Også «Prøv på nytt» i KI-feilboksen | Story 2.7.1 (PR #15) og 2.7.2 (PR #17) | Ikke prøvd ennå |
-| `nedlasting.js` | Knappen blir grønn med «✓ Lastet ned som …», filnavnet (`.docx` eller `.pdf`) vises, vinduet etter nedlasting åpnes med fokus på «Bli her», og feilboksen for samme format skjules | Story 3.2 (PR #20), 3.3 (PR #21), 7.1 (PR #45), 7.2 (PR #47), 7.5 (PR #50) og retro 7 (PR #51) | Ikke prøvd ennå |
-| `endringer.js` | «Du skrev» under en endret setning i Korrektur åpnes og lukkes med trykk, Enter og mellomrom, og flere kan være åpne | Story 5.3 (PR #37) og PR #40 | Ikke prøvd ennå |
-| `bekreft.js` | Vinduet «Vil du ha et nytt forslag?» («Ja» lager nytt brev, «Avbryt» og Esc lukker), og vinduet «Du har ikke lastet ned brevet.» før «Logg ut» | Story 7.1 (PR #45) og 7.5 (PR #50) | Ikke prøvd ennå |
-| `fyrverkeri.js` | Fyrverkeriet rundt overskriften på brevsiden, borte etter ca. 3 sekunder, og ingenting med redusert bevegelse | Story 7.4 (PR #49) | Ikke prøvd ennå |
-| `tilbake.js` | Etter «Logg ut» gir nettleserens tilbakeknapp innloggingen, ikke en side fra minnet | Story 1.4 (PR #5) | Ikke prøvd ennå |
+| `innlegging.js` | «Last opp PDF» og «Lim inn tekst» på innleggingen, søppelbøtta som tømmer feltet, og fokus fra feilboksen til feltet | Story 2.5.1 (PR #12) og 6.1 (PR #42) | Bestått 22. november 2026 |
+| `info.js` | «i»-boksene: trykk, Enter og mellomrom åpner og lukker, Esc lukker, og hover med mus | Story 2.6 (PR #14) | Bestått 22. november 2026 (trykk, Esc og hover) |
+| `vente.js` | Ventetegnet mens KI-en jobber: siden sperres, og et nytt trykk sender ingenting. Også «Prøv på nytt» i KI-feilboksen | Story 2.7.1 (PR #15) og 2.7.2 (PR #17) | Bestått 22. november 2026 (ventetegnet og et nytt trykk). «Prøv på nytt» ble ikke prøvd, fordi ingen KI-feil kom |
+| `nedlasting.js` | Knappen blir grønn med «✓ Lastet ned som …», filnavnet (`.docx` eller `.pdf`) vises, vinduet etter nedlasting åpnes med fokus på «Bli her», og feilboksen for samme format skjules | Story 3.2 (PR #20), 3.3 (PR #21), 7.1 (PR #45), 7.2 (PR #47), 7.5 (PR #50) og retro 7 (PR #51) | Bestått 22. november 2026 |
+| `endringer.js` | «Du skrev» under en endret setning i Korrektur åpnes og lukkes med trykk, Enter og mellomrom, og flere kan være åpne | Story 5.3 (PR #37) og PR #40 | Bestått 22. november 2026 |
+| `bekreft.js` | Vinduet «Vil du ha et nytt forslag?» («Ja» lager nytt brev, «Avbryt» og Esc lukker), og vinduet «Du har ikke lastet ned brevet.» før «Logg ut» | Story 7.1 (PR #45) og 7.5 (PR #50) | Bestått 22. november 2026 |
+| `fyrverkeri.js` | Fyrverkeriet rundt overskriften på brevsiden, borte etter ca. 3 sekunder, og ingenting med redusert bevegelse | Story 7.4 (PR #49) | Bestått 22. november 2026 (fyrverkeriet vises og blir borte). Redusert bevegelse er prøvd i story 7.4 (ikke noe fyrverkeri med animasjonene slått av i Windows), og skriptet er ikke endret siden |
+| `tilbake.js` | Etter «Logg ut» gir nettleserens tilbakeknapp innloggingen, ikke en side fra minnet | Story 1.4 (PR #5) | Bestått 22. november 2026 |
 
 ## Kriterium 13
 
