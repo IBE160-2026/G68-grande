@@ -80,6 +80,7 @@ context:
 - På resultatsiden med brev har også «Avbryt» i vinduet «Vil du ha et nytt forslag?» `autofocus` (bare når vinduet åpnes), så testen venter `["feilboks", "nytt-forslag-avbryt"]`.
 - Kildetekst-testen for velgeren i `innlegging.js` står i `test_innlegging.py`, ved de andre testene som leser skriptet (`JS`).
 - Testene: 1 423 (1 416 + 7 nye).
+- Etter gjennomgangen og nettleserprøven (22. november, «det virket»): Kristine valgte at det utsatte punktet om «Tilbake» på modusvalget (punkt 9 i triage-loggen) står i README under «Brevet kan slettes uten å spørre på tre måter», uten endring i koden.
 
 ## Spec Change Log
 
