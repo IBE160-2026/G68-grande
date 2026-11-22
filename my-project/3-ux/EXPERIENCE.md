@@ -62,7 +62,7 @@ Hvordan raden ser ut, står i `DESIGN.md` (`corner-row`). Siden ruller slik at e
   - **Modusvalg → startsiden.** Under kortene. Grunn: blant annet hvis sensor går videre uten å slå på testmodus, som bare kan slås på på startsiden. På startsiden starter en ny søknad med tomme felt (se State Patterns).
   - **Innlegging → modusvalget.** Ved siden av «Sjekk CV-en min». Retter opp feil valg av modus. Dette er et tillegg i UX, ikke i strid med PRD-en. CV og annonse beholdes hvis de er fylt ut. Feltet for eget brev finnes bare i Korrektur.
   - **Resultatside → innleggingen.** Nederst ved siden av «Lag søknadsbrevet mitt» / «Oppdater søknadsbrevet mitt». Feltene er fortsatt fylt ut (FR-19).
-- Brevsiden har ingen «Tilbake». Derfra går man videre med vinduet etter nedlasting, eller med «Logg ut».
+- Brevsiden har ingen «Tilbake». Derfra går man videre med vinduet etter nedlasting, eller med «Logg ut». Grunn: brevsiden er slutten på flyten, og brevet er det viktigste brukeren har laget. Går man tilbake, endrer CV-en, annonsen eller brevet og trykker «Sjekk CV-en min», slettes brevet uten spørsmål (kjent begrensning i README). En «Tilbake»-knapp ville gjort det lettere å miste brevet. Vil man ha et annet brev, finnes «Nytt forslag» på brevsiden. Nettleserens egen tilbakeknapp virker fortsatt, og går man da tilbake til resultatsiden og trykker «Lag søknadsbrevet mitt», spør vinduet «Vil du ha et nytt forslag?» først. (Valget er fra UX-arbeidet i oktober. Grunnen ble skrevet inn og godkjent av Kristine 22. november 2026.)
 - «Logg ut» fører til innloggingssiden.
 - Hva nettleserens egen tilbakeknapp gjør midt i en søknad, bestemmes i arkitekturen, ikke i UX.
 

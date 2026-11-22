@@ -75,7 +75,8 @@ Hele oversikten står i [Mine valg og KI-feil (epics og stories)](6-epics-og-sto
 - **Brudd på kriterium 11.** Med ekte KI skrev to brev ting som ikke står i CV-en. Jeg bestemte at det var brudd, og prompten fikk en ny regel (story 4.5, PR #28).
 - **Hva er en omformulering i Korrektur?** Regelen min er at ingenting som ikke står i CV-en, brevet eller annonsen, skal dras inn (story 5.2.2, 440–442).
 - **Lavere grense for brevfeltet i Korrektur (5 000 tegn).** Et brev på nesten 15 000 tegn tok 190 s og kostet ca. 7 kr. Jeg valgte 5 000 tegn, og 22. november målte vi det med ekte KI: 68,6 s og ca. 3 kr (retro 5, [testplanen](testplan.md)).
-- **Ingen nettlesertester for skriptene.** Issue #16 ble lukket med en tabell over hva som prøves for hånd, og en kjent begrensning i README (story 8.2.1, PR #53).
+- **Skriptene prøves for hånd, ikke med automatiske tester.** Det som bare skjer i nettleseren, for eksempel «Lim inn tekst», vinduene og fyrverkeriet, har ingen automatiske tester. Jeg valgte å prøve alt dette selv i nettleseren. Testplanen har en tabell over hvor hvert skript er prøvd, og det står som kjent begrensning i README (story 8.2.1, PR #53).
+- **Ingen «Tilbake» på brevsiden.** Valget er fra UX-arbeidet. Går man tilbake og endrer noe, kan brevet slettes uten spørsmål, så en knapp ville gjort det lettere å miste brevet. «Nytt forslag» gir et annet brev. Grunnen står i `EXPERIENCE.md`.
 - **README så enkel som mulig for sensor**, med et eget steg for å hente koden (`git clone` eller ZIP) (story 8.2.1, 503).
 - **Kriterium 13 bestått med en merknad.** Testpersonen forsto hva 50 % ikke betyr først da jeg spurte på nytt. Vi skrev det ærlig i stedet for å runde det opp (story 8.2.2, PR #54, 504).
 - **«Lag ny søknad» når alle KI-kallene er brukt**, men ikke på brevsiden, fordi brevet da ville blitt borte (PR #55, 505).
