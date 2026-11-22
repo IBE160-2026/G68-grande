@@ -122,7 +122,7 @@ Ting som skal gjøres i prosjektet. Kryss av (`[x]`) når et punkt er gjort, og 
   - [x] Test som sjekker at KI-en kalles på nytt etter «Tilbake» fra resultatsiden
   - [x] Utlogging i en annen fane midt i «Sjekk CV-en min» gir innloggingen, ikke en feilside (bestemt 10. november)
   - [x] Hjelpeteksten sier `backend/testdata/` i koden, UX, epics og README (bestemt 10. november). Jeg ser på feilteksten «… fra mappen testdata/» i PR-en (bestemt etter prøvingen: feilteksten sier også `backend/testdata/`)
-- [ ] Prøve resultatsiden og ventetegnet ved 768 og 1280 px (fra retrospektiven for epic 2)
+- [x] Prøve resultatsiden og ventetegnet ved 768 og 1280 px (fra retrospektiven for epic 2) (gjort 22. november i story 8.2.1, i hele flyten ved 320, 375, 768 og 1280 px)
 - [ ] Fra retrospektiven for epic 2: punkter som skal inn i senere stories (4.5 flere testcaser, epic 4 valg av KI og tidsgrense, 3.1, 6.1 og 7.3). Står i retro-dokumentet (4.5 gjort 14. november i PR #28) (7.3 gjort 19. november: samme vask som testmodus, bestemt av meg)
 - [x] Story 3.1 «Se søknadsbrevet» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #19 flettet, CI grønn på Linux og Windows, 512 tester. Testbrevet er godkjent som plassholder til epic 4)
 - [x] Story 3.2 «Laste ned brevet som Word» med egen branch og PR (`bmad-build`) (ferdig 11. november: PR #20 flettet, 549 tester. Prøvd i nettleseren og i Word. Feilboksen har ikke «Brevet er ikke borte.»)
