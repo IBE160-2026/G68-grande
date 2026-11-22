@@ -36,7 +36,18 @@ Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i cas
 
 **Forutsetninger:** [uv](https://docs.astral.sh/uv/) versjon 0.12 eller nyere. uv henter selv riktig Python (3.14, låst i `backend/.python-version`, minst 3.12) og alle pakkene. Du trenger ikke installere Python først.
 
-**1. Installer uv** (bare første gang):
+**1. Hent koden** (bare første gang). Velg én av måtene:
+
+- **Med Git:** skriv dette i terminalen. Det laster ned hele repoet til en ny mappe `G68-grande` og går inn i den:
+
+  ```bash
+  git clone https://github.com/IBE160-2026/G68-grande.git
+  cd G68-grande
+  ```
+
+- **Uten Git:** trykk den grønne knappen «Code» på GitHub-siden til repoet og velg «Download ZIP». Pakk ut ZIP-fila, og åpne terminalen i mappen som kommer ut (`G68-grande-main`). På Windows kan du høyreklikke i mappen og velge «Åpne i Terminal».
+
+**2. Installer uv** (bare første gang):
 
 - Windows (PowerShell):
 
@@ -52,7 +63,7 @@ Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i cas
 
 Lukk og åpne terminalen igjen etterpå, så kommandoen `uv` blir funnet.
 
-**2. Start nettsiden** fra mappen der repoet ligger:
+**3. Start nettsiden** fra mappen fra steg 1 (`G68-grande` eller `G68-grande-main`):
 
 ```bash
 cd backend
@@ -138,6 +149,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md), eller funnet mens nettside
 - **Nettsiden har ingen CSRF-beskyttelse.** Skjemaene har ingen CSRF-token. Det går an fordi nettsiden bare kjører lokalt på egen PC, men CSRF-beskyttelse må legges til før nettsiden legges på nett. Innloggings-cookien har `SameSite=Lax` (satt i `backend/soknad/__init__.py`). Det stopper bare skjemaer (POST) fra andre nettsteder. Det stopper ikke lenker fra en annen nettside, og ikke andre sider som kjører på din egen PC (`localhost` eller `127.0.0.1`, også på en annen port). En slik lenke til `/last-ned/docx` kan for eksempel merke brevet som lastet ned, og da spør ikke «Logg ut» først.
 - **Brevet skrives bare på norsk** i versjon 1.
 - **Tegn som ikke finnes i skriften, vises ikke i PDF-fila.** PDF-en bruker skriften Noto Sans, som har æ, ø og å og vanlige tegn. Et tegn den ikke har (for eksempel emoji), gir ingen feil, men blir borte i PDF-en. I Word-fila er det med. KI-en skriver vanlig norsk tekst, så det skjer sjelden.
+- **JavaScript-filene har ingen nettlesertester.** De automatiske testene sjekker HTML-en fra serveren og leser skriptene i `backend/soknad/web/static/js/` som tekst, men ingen test kjører dem i en nettleser. Det gjelder blant annet «Lim inn tekst» og søppelbøtta, «i»-boksene, ventetegnet, vinduene og den grønne knappen etter nedlasting. Hvert skript er prøvd for hånd i nettleseren, og tabellen «Skriptene som prøves for hånd» i [testplanen](my-project/testplan.md) viser hvor.
 
 ## Mappestruktur
 

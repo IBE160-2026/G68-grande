@@ -1,6 +1,44 @@
 # Testplan
 
-Testplanen viser resultatet for suksesskriteriene som ikke testes automatisk (NFR-12). Den fylles ut underveis, og gjøres ferdig i Epic 8 (hele flyten og README fra en ny kopi av repoet).
+Testplanen viser resultatet for alle de 14 suksesskriteriene i PRD-en (del 5) og for testene som gjøres for hånd (NFR-12). Kriteriene som har automatiske tester, viser til testfila. De andre har dato, hva som ble gjort, og bestått eller ikke bestått. Testplanen viser også hele flyten prøvd for hånd i begge modusene, sjekkene av tilgjengelighet og skjermbredder, skriptene som bare prøves for hånd, tokens og kroner per søknad, og prøvene av README fra en ny kopi av repoet. Første prøve ble gjort i story 8.2.1. Kriterium 13 og andre prøve fra en ny kopi kommer i story 8.2.2.
+
+## Oversikt over suksesskriteriene
+
+Testfilene ligger i `backend/tests/` og kjøres med `uv run pytest` fra `backend/` (se README). Hver test nevner FR-nummeret, og noen nevner også kriteriet.
+
+| Kriterium | Hva | Hvordan | Resultat |
+| --- | --- | --- | --- |
+| 1 | Gap-analysen viser alle krav som mangler, og ingen dekkede krav under «mangler» | For hånd med ekte KI, tre kjøringer per testcase | Bestått 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI» under) |
+| 2 | Nøkkelordtreffet gir nøyaktig prosenten i fasiten når listen er fast | Automatisk: [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr17_fasiten_gir_samme_treff_og_prosent_som_telleregelen`) og [test_resultat.py](../backend/tests/web/test_resultat.py) (`test_fr17_kriterium_2_…` for case 1 og 2) | Bestått |
+| 3 | Samme CV med to annonser gir brev med krav som er spesifikke for hver annonse | For hånd med ekte KI, tre kjøringer | Bestått 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
+| 4 | Korrektur viser minst én markert endring, og den nedlastede fila har ingen markeringer | Automatisk: [test_ki_svar.py](../backend/tests/kjerne/test_ki_svar.py) (`test_fr23_visningen_av_de_ekte_testsvarene`), [test_nedlasting.py](../backend/tests/web/test_nedlasting.py) (`test_fr30_korrektur_…`) og [test_fil_ut.py](../backend/tests/adaptere/test_fil_ut.py) (`test_fr30_filen_har_ingen_markeringer`). Svarene fra ekte KI er sjekket i «Story 5.2.2» og «Retro 5» | Bestått |
+| 5 | PDF og innlimt tekst gir samme treff, og både .docx og PDF kan åpnes | Treffet automatisk: [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr8_pdf_og_txt_gir_samme_nokkelordtreff`, `test_fr34_pdf_ene_gir_samme_testcase_som_txt`), [test_pdf_inn.py](../backend/tests/adaptere/test_pdf_inn.py) og [test_innlegging.py](../backend/tests/web/test_innlegging.py). At filene kan åpnes: for hånd i «Hele flyten for hånd» | Treffet: bestått. Åpne filene: bestått 22. november 2026 |
+| 6 | En ny bruker kan registrere seg, feil passord gir ikke tilgang, og testbrukeren fra README virker | Automatisk: [test_registrering.py](../backend/tests/web/test_registrering.py) (`test_fr1_…`, `test_fr2_testbrukeren_finnes_fra_for`) og [test_innlogging.py](../backend/tests/web/test_innlogging.py) (`test_fr3_feil_passord_eller_ukjent_epost_gir_skjemafeil`). Testbrukeren er også prøvd i «Prøven fra en ny kopi» | Bestått |
+| 7 | Nettsiden kan kjøres lokalt etter README i testmodus uten API-nøkkel | For hånd: «Prøven fra en ny kopi» | Første prøve bestått 21. november 2026. Andre prøve kommer i 8.2.2 |
+| 8 | Samme annonse og CV kjørt to ganger i samme søknad gir samme nøkkelordtreff | Automatisk: [test_resultat.py](../backend/tests/web/test_resultat.py) (`test_fr15_kriterium_8_samme_treff_etter_tilbake`) og [test_gjenbruk_nokkelord.py](../backend/tests/web/test_gjenbruk_nokkelord.py) | Bestått |
+| 9 | I vanlig modus kommer brukeren ikke videre uten samtykke | Automatisk: [test_samtykke.py](../backend/tests/web/test_samtykke.py) (`test_fr36_begynn_uten_samtykke_gir_feilen_ved_boksen`) | Bestått |
+| 10 | Feil filtype, tomme felt og en uleselig PDF gir riktig feilmelding | Automatisk: [test_innlegging.py](../backend/tests/web/test_innlegging.py) (`test_fr9_…`, `test_fr10_…`, `test_fr11_…`), [test_inndata.py](../backend/tests/kjerne/test_inndata.py), og [test_innlogging.py](../backend/tests/web/test_innlogging.py) og [test_registrering.py](../backend/tests/web/test_registrering.py) (`test_fr4_…`) | Bestått |
+| 11 | Brevet nevner ingenting som ikke står i CV-en | For hånd med ekte KI, tre kjøringer per testcase | Bestått etter plan B 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
+| 12 | Korrektur beholder innholdet, eksemplene og rekkefølgen | For hånd med ekte KI, tre kjøringer | Bestått 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
+| 13 | En person som ikke kjenner prosjektet, forklarer resultatsiden med egne ord | For hånd: «Kriterium 13» | Kommer i 8.2.2 |
+| 14 | Nøkkelordlisten har alle de viktige nøkkelordene i fasiten | For hånd med ekte KI, tre kjøringer per testcase. Svarene i testmodus sjekkes også automatisk i [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr15_nokkelordlisten_har_alle_de_viktige`) | Bestått 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
+
+Kriterium 1, 3, 11, 12 og 14 er ikke kjørt på nytt i story 8.2.1. De er bestått, og promptene i `backend/prompts/` er ikke endret siden.
+
+## Kostnad per søknad
+
+Tallene er samlet fra «Kostnad og tid» i hver runde under. Kronene er regnet med 11 kr per dollar og prisene for `claude-opus-5-5` (4 dollar per million tokens inn og 20 dollar per million tokens ut). En fullført søknad i Full generering er nøkkelord, gap og ett brev. I Korrektur er det nøkkelord, gap og ett forbedret brev. Målet er under 3 kr (NFR-11).
+
+| Søknad | Tokens inn | Tokens ut | Kroner | Hvor |
+| --- | --- | --- | --- | --- |
+| Full generering, testdataene (case 1 og 2, også kriterium 3) | 6 690–7 323 | 1 688–3 383 | 0,67–1,07 kr | Story 4.4 og 4.5 |
+| Full generering, CV og annonse nær 15 000 tegn | 36 647 | 4 482 | 2,60 kr (2,64 kr etter de nye reglene i brevet) | Retro 4 og «Hilsen, navn og to nye regler i brevet» |
+| Full generering med «Nytt forslag», CV og annonse nær 15 000 tegn | 52 039 | 6 953 | 3,82 kr (4,02 kr etter de nye reglene) | Samme. Over målet, godtatt 17. november |
+| Korrektur, testdataene (case 1) | ca. 8 670 (5 108 for brevet) | ca. 3 300–3 500 | ca. 1,15 kr | Retro 5, runde 2, med nøkkelord og gap fra story 4.4 |
+| Korrektur, eget brev på 5 000 tegn | | | ca. 2,8 kr, eller ca. 4,4 kr med CV og annonse nær 15 000 tegn | Regnet ut i retro 5, ikke målt |
+| Full generering, case 1, i nettleseren i story 8.2.1 (22. november 2026) | 7 635 (1 503 nøkkelord, 2 069 gap, 4 063 brev) | 2 377 (138, 190, 2 049) | 0,86 kr (0,0781 dollar) | «Hele flyten for hånd» |
+
+Med testdataene koster en fullført søknad ca. 0,7–1,2 kr i begge modusene. Med svært lange tekster holder Full generering med ett brev målet, men med liten margin. Med «Nytt forslag», eller i Korrektur med lange tekster, blir det mer enn 3 kr.
 
 ## Slik testes kriteriene med ekte KI
 
@@ -414,6 +452,8 @@ PDF-ene i testdataene (`cv.pdf`, `annonse.pdf` og `eget-brev.pdf` i case 1, `cv.
 
 Testes automatisk i `backend/tests/test_testdata.py`: for hvert testcase gir `cv.pdf` og `cv.txt` samme nøkkelordtreff med `nokkelord.json`, og PDF og `.txt` gir samme testcase, også blandet og med brevet i Korrektur. Bestått.
 
+Kriterium 5 krever også at både .docx og PDF kan åpnes. Det prøves for hånd under «Hele flyten for hånd».
+
 ### Tabellprøven
 
 En fiktiv CV (Tobias Tabellsen) med ferdighetene i en tabell med tre kolonner (ferdighet, nivå, brukt i) ble laget med python-docx og lagret som PDF i Word. Skriptet, PDF-en og teksten pypdf leste, ligger i `my-project/testkjoringer/6-1/` (`lag_tabellprove.py`, `tabell-cv.pdf`, `tabell-cv-lest.txt`).
@@ -442,3 +482,67 @@ Grensen på 50 skiller dem godt, så `MIN_BOKSTAVER_PDF` i `innstillinger.py` er
 ### Over 16 MB med den ekte utviklingsserveren
 
 `flask --app soknad run`, innlogget med testbrukeren, og `POST /innlegging` med en fil på 17 MB fra Python `urllib`. Svaret var status 413 med innleggingssiden og «Filene er for store. Hver fil kan være på høyst 5 MB.» i feilboksen, og forbindelsen ble ikke brutt. Prøvd i nettleseren av Kristine (PR #43): en fil på 17 MB ga siden med feilboksen.
+
+## Prøven fra en ny kopi
+
+README er prøvd i en tom mappe uten `.env` og andre lokale filer. Planen sa at første prøve skulle bruke README slik den var etter Epic 1–6, før story 8.1. Story 8.1 ble ferdig først, så første prøve bruker README slik den er 21. november 2026 (commit `8e13bf1` på main), før kodestopp. Hensikten er den samme: å finne feil i README tidlig. Loggen fra terminalen ligger i [ny-kopi-1.txt](testkjoringer/8-2/ny-kopi-1.txt), og skriptet for innloggingen og søknaden i [http_prove.py](testkjoringer/8-2/http_prove.py).
+
+| Prøve | Dato | Hva som ble gjort | Resultat |
+| --- | --- | --- | --- |
+| 1 | 21. november 2026 | Claude i terminalen (Git Bash på Windows 11). `git clone` fra GitHub til en ny, tom mappe, uten `.env` og uten `ANTHROPIC_API_KEY`. Så README steg for steg: `cd backend`, `uv sync`, `uv run pytest`, `uv run ruff check`, `uv run ruff format --check` og `uv run flask --app soknad run`. Mens nettsiden kjørte: innlogging med testbrukeren fra README, og en søknad i Full generering i testmodus med CV og annonse fra case 1, over HTTP, til og med nedlasting som Word og PDF og «Logg ut» | Bestått. Databasen og testbrukeren ble laget ved første oppstart, testbrukeren logget inn, og startsiden viste «Mangler API-nøkkel, se README». Alle 1 393 testene besto, og ruff fant ingen feil. Resultatsiden ga 10 av 20 = 50 %, som i `fasit.md`, brevet hadde «Med vennlig hilsen», og begge filene ble lastet ned. Klokketiden fra kopien til første søknad var ca. 4 minutter, men `uv run pytest` kjørte samtidig med nettsiden og søknaden over HTTP, så tiden er ikke stegene etter hverandre. Hvert steg for seg: `git clone` og `uv sync` ca. 15 sekunder, `uv run pytest` 179 sekunder (ca. 3 minutter), og oppstarten, innloggingen og søknaden over HTTP noen sekunder. Etter hverandre blir det ca. 3,5 minutter med skriptet, og lenger når søknaden gjøres for hånd i nettleseren. uv var installert fra før, og Python og pakkene lå i mellomlageret til uv, så for en sensor som begynner helt fra bunnen, tar det lenger tid. Ingen feil i README |
+| 2 | | Rett før levering | Kommer i 8.2.2 |
+
+**Merknad til README:** README sa «Start nettsiden fra mappen der repoet ligger», men ikke hvordan repoet hentes (`git clone` eller ZIP-fila fra GitHub). Det var ikke en feil, og prøven gikk gjennom uten. Kristine bestemte 22. november 2026 at det skal være så enkelt som mulig for sensor, så README har nå steget «1. Hent koden» med begge måtene, også `cd G68-grande` etter `git clone`. Steget prøves i andre prøve fra en ny kopi (8.2.2).
+
+## Hele flyten for hånd
+
+Hele flyten prøves i nettleseren i begge modusene, i testmodus med testdataene i case 1, og én gang med ekte KI (ca. 1 kr). Filene som lastes ned, åpnes i Word og i en PDF-leser (kriterium 5).
+
+| Hva | Dato | Hva som ble gjort | Resultat |
+| --- | --- | --- | --- |
+| Full generering, testmodus, case 1 (over HTTP) | 21. november 2026 | Claude, i prøven fra en ny kopi: innlogging, modusvalget, innleggingen, resultatsiden, brevsiden, nedlasting som Word og PDF og «Logg ut». Filene begynner som en ekte Word-fil (`PK`) og en ekte PDF (`%PDF`), men er ikke åpnet | Bestått |
+| Full generering, testmodus, case 1 (nettleseren) | 22. november 2026 | Kristine: fra innloggingen til brevet er lastet ned, og «Logg ut». CV-en lastet opp som `cv.pdf`, annonsen limt inn fra `annonse.txt`, feilboksen for tomme felt, søppelbøtta, «Nytt forslag», «Logg ut» før nedlasting, nedlasting som Word og PDF, og tilbakeknappen etter «Logg ut» | Bestått. Resultatsiden ga 50 %, som i `fasit.md` |
+| Korrektur, testmodus, case 1 (nettleseren) | 22. november 2026 | Kristine: CV, annonse og `eget-brev.txt` fra case 1, de markerte endringene og «Du skrev», nedlasting og «Logg ut» | Bestått |
+| Full generering, ekte KI, case 1 (nettleseren) | 22. november 2026 | Kristine: testmodus av, samtykket, hele flyten og nedlasting. Tokens og kroner lest fra terminalen av Claude | Bestått. 7 635 tokens inn og 2 377 ut, ca. 0,86 kr (se «Kostnad per søknad») |
+| .docx åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i Word | Bestått |
+| PDF åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i en PDF-leser | Bestått |
+
+## Tilgjengelighet og skjermbredder
+
+Sjekkene for NFR-6 (kontrast, tastatur, synlige etiketter og alternativtekst) og NFR-7 (bredder og zoom). 320 px er med i tillegg til 375, 768 og 1280 px i PRD-en, fordi det er den smaleste vanlige mobilbredden.
+
+| Sjekk | Dato | Hva som ble gjort | Resultat |
+| --- | --- | --- | --- |
+| Kontrast (WCAG AA) | 21. november 2026 | Claude: [kontrast.py](testkjoringer/8-2/kontrast.py) leser fargene i `backend/soknad/web/static/css/stil.css` og regner ut kontrasten for 25 fargepar som brukes sammen. Krav: 4,5:1 for tekst og 3:1 for rammer rundt felt, fokusringen og bryteren. Tabellen ligger i [kontrast.txt](testkjoringer/8-2/kontrast.txt). Den samme sjekken kjører med de andre testene og på GitHub i [test_kontrast.py](../backend/tests/web/test_kontrast.py) (`test_nfr6_kontrast_fargeparene_i_stilen_holder_wcag_aa`), så en ny farge med for lav kontrast gir en test som feiler | Bestått: alle 24 parene med krav består. Lavest er grønn tekst på lysegrønt (`success` på `success-tint`, 4,53:1), som DESIGN.md alt sier har ingen margin. Prosentlinjen (4,47:1) er bare pynt, fordi prosenten står som tekst |
+| Etiketter og navn i HTML-en | 21. november 2026 | Claude: [etiketter.py](testkjoringer/8-2/etiketter.py) logger inn med testbrukeren og henter 14 sider i testmodus med case 1: registreringen og innloggingen, og i både Full generering og Korrektur startsiden, modusvalget, innleggingen, innleggingen med feilene for tomme felt, resultatsiden og brevsiden. Hvert steg sjekker at nettsiden kom til riktig side. Hvert felt skal ha en etikett (`<label>`, `aria-label` eller `aria-labelledby`), hver knapp tekst eller `aria-label` (tekst med `aria-hidden` teller ikke), hver `aria-labelledby`, `aria-describedby` og `aria-controls` skal peke på noe som finnes, og ingen id kan stå to ganger. Om etiketten synes på skjermen, kan skriptet ikke se. Feiltilstander som feil passord, KI-feilboksen og meldingen når alle KI-kallene er brukt, er ikke med. Tabellen ligger i [etiketter.txt](testkjoringer/8-2/etiketter.txt). Avkrysningsboksen for samtykket vises bare med API-nøkkel, så den er sjekket i malen (`start.html`): den ligger inni sin `<label>` | Bestått: 14 sider, ingen feil. Filvelgerne er skjult (`hidden`) og åpnes med knappen «Last opp PDF», som har `aria-label` |
+| Synlige etiketter i nettleseren | 22. november 2026 | Kristine: hvert felt har en etikett man ser, ikke bare en plassholder | Bestått: hvert felt har en tekst over seg, og ingen felt har grå tekst inni |
+| Alternativtekst | 21. november 2026 | Claude: [etiketter.py](testkjoringer/8-2/etiketter.py) fant ingen `<img>` på de 14 sidene, og prosentlinjen (`<svg>`) og fyrverkeriet (`<canvas>`) er skjult for skjermlesere (`aria-hidden="true"`), fordi det samme står som tekst. Ikonene (for eksempel ✓, →, «i», søppelbøtta og ikonene på modus-kortene) er `<span>`-er, og dem sjekker ikke skriptet. Claude har sett i malene at alle har `aria-hidden="true"`, og knappene med et ikon har `aria-label`. Skjermbildene i README har alternativtekst (story 8.1) | Bestått |
+| Bare tastatur | 22. november 2026 | Kristine: hele flyten med Tab, Shift+Tab, Enter, mellomrom og Esc, uten mus. Fokusringen skal alltid synes | Bestått: alt kan nås med tastaturet. Tab går også gjennom nettleserens egne knapper (adresselinja og fanene) før nettsiden, så det tar litt tid. Det er vanlig i nettlesere og ikke en feil i nettsiden |
+| 320 px | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 375 px (mobil) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 768 px (nettbrett) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 1280 px (PC) | 22. november 2026 | Kristine: alle sidene, ingen rulling sidelengs. Bredden valgt i utviklerverktøyene (F12) | Bestått |
+| 200 % zoom | 22. november 2026 | Kristine: alle sidene på 1280 px med 200 % zoom, alt kan leses og brukes | Bestått |
+
+## Skriptene som prøves for hånd
+
+Prosjektet har ingen nettlesertester (bestemt av Kristine 21. november 2026, issue #16). De automatiske testene leser bare HTML-en fra serveren og kildeteksten til skriptene, så ingen test kjører dem i en nettleser. Hvert skript er prøvd for hånd i nettleseren i PR-ene der det ble laget eller endret, og prøves en siste gang her. Det står også under «Kjente begrensninger» i README. Skriptene ligger i `backend/soknad/web/static/js/`.
+
+| Skript | Hva det gjør | Laget eller endret i | Siste prøve for hånd (8.2.1) |
+| --- | --- | --- | --- |
+| `innlegging.js` | «Last opp PDF» og «Lim inn tekst» på innleggingen, søppelbøtta som tømmer feltet, og fokus fra feilboksen til feltet | Story 2.5.1 (PR #12) og 6.1 (PR #42) | Bestått 22. november 2026 |
+| `info.js` | «i»-boksene: trykk, Enter og mellomrom åpner og lukker, Esc lukker, og hover med mus | Story 2.6 (PR #14) | Bestått 22. november 2026 (trykk, Esc og hover) |
+| `vente.js` | Ventetegnet mens KI-en jobber: siden sperres, og et nytt trykk sender ingenting. Også «Prøv på nytt» i KI-feilboksen | Story 2.7.1 (PR #15) og 2.7.2 (PR #17) | Bestått 22. november 2026 (ventetegnet og et nytt trykk). «Prøv på nytt» ble ikke prøvd, fordi ingen KI-feil kom |
+| `nedlasting.js` | Knappen blir grønn med «✓ Lastet ned som …», filnavnet (`.docx` eller `.pdf`) vises, vinduet etter nedlasting åpnes med fokus på «Bli her», og feilboksen for samme format skjules | Story 3.2 (PR #20), 3.3 (PR #21), 7.1 (PR #45), 7.2 (PR #47), 7.5 (PR #50) og retro 7 (PR #51) | Bestått 22. november 2026 |
+| `endringer.js` | «Du skrev» under en endret setning i Korrektur åpnes og lukkes med trykk, Enter og mellomrom, og flere kan være åpne | Story 5.3 (PR #37) og PR #40 | Bestått 22. november 2026 |
+| `bekreft.js` | Vinduet «Vil du ha et nytt forslag?» («Ja» lager nytt brev, «Avbryt» og Esc lukker), og vinduet «Du har ikke lastet ned brevet.» før «Logg ut» | Story 7.1 (PR #45) og 7.5 (PR #50) | Bestått 22. november 2026 |
+| `fyrverkeri.js` | Fyrverkeriet rundt overskriften på brevsiden, borte etter ca. 3 sekunder, og ingenting med redusert bevegelse | Story 7.4 (PR #49) | Bestått 22. november 2026 (fyrverkeriet vises og blir borte). Redusert bevegelse er prøvd i story 7.4 (ikke noe fyrverkeri med animasjonene slått av i Windows), og skriptet er ikke endret siden |
+| `tilbake.js` | Etter «Logg ut» gir nettleserens tilbakeknapp innloggingen, ikke en side fra minnet | Story 1.4 (PR #5) | Bestått 22. november 2026 |
+
+## Kriterium 13
+
+En person som ikke kjenner prosjektet, helst en student eller noen som har søkt jobb nylig, ser resultatsiden for en av test-CV-ene og forklarer med egne ord hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. Testen gjøres etter 29. november.
+
+| Dato | Hvem (ikke navn) | Hva personen forklarte | Resultat |
+| --- | --- | --- | --- |
+| | | | Kommer i 8.2.2 |
