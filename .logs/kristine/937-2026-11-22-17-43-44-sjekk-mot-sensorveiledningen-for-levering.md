@@ -19,3 +19,20 @@ Kristine spurte om det bare var fire punkter igjen, eller om noe annet lå og lu
 
 ### Åpne punkter
 Ingen nye.
+
+## 2026-11-22 kl. 18:12 — Kristine
+
+### Oppgave
+Kristine leste den korte prompt-loggen. Hun forsto ikke punktet om nettlesertester, og la merke til at brevsiden ikke har «Tilbake». Hun ville ikke ha mer kode, men ønsket at grunnen til valget ble skrevet ned.
+
+### Plan
+- Forklare punktet om nettlesertester med enklere ord, og vise tabellen «Skriptene som prøves for hånd» fra testplanen.
+- Finne ut om det var bestemt at brevsiden ikke skal ha «Tilbake», og skrive grunnen inn i `EXPERIENCE.md`.
+
+### Resultat
+- Det var bestemt i UX (`EXPERIENCE.md`, linje 65), men grunnen sto ikke der. Den er nå skrevet inn i begge kopiene (`my-project/3-ux/` og `_bmad-output`): brevet kan slettes uten spørsmål hvis man går tilbake og endrer noe, «Nytt forslag» gir et annet brev, og nettleserens tilbakeknapp virker. Kristine godkjente teksten. Det er sjekket i `ruter.py` at vinduet «Vil du ha et nytt forslag?» kommer først når det alt finnes et brev.
+- `my-project/prompt-logg-kort.md` har fått enklere tekst om skriptene og et nytt punkt om brevsiden. Rad 508 er lagt til i `prompt-logg.md`.
+- Commit: «Grunnen til at brevsiden ikke har «Tilbake» …». Ingen ny kode.
+
+### Åpne punkter
+Ingen nye.
