@@ -391,6 +391,8 @@ def test_nfr11_alle_kall_brukt_gir_feilboksen_uten_prov_paa_nytt(med_nokkel):
     assert tekster.KI_FEIL_BEHOLDT_BREV in boks
     assert tekster.PROV_PA_NYTT_KNAPP not in boks
     assert "<button" not in boks
+    # Ingen lenke til startsiden her: GET / lager en ny søknad, og brevet ville blitt borte.
+    assert "<a " not in boks
     assert brevtekst(html) == brevet(BREV_1["avsnitt"], BREV_1["navn"])
 
 

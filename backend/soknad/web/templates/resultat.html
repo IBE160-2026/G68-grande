@@ -52,6 +52,11 @@
     <button class="hovedknapp" type="submit" form="resultat-skjema" name="handling"
       value="brev" data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
+  {%- else %}
+  {#- Alle KI-kallene er brukt: lenken til startsiden, der en ny søknad begynner (NFR-11). #}
+  <p class="feilboks-knapp">
+    <a class="hovedknapp" href="{{ url_for('web.start') }}">{{ tekster.LAG_NY_SOKNAD_KNAPP }}</a>
+  </p>
   {%- endif %}
 </div>
 {%- endif %}
