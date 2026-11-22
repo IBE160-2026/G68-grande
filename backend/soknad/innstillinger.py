@@ -35,7 +35,9 @@ MAKS_TEGN = 15_000
 # ny) og KI-en tenker lenge før den svarer. Målt i retro 5, runde B (my-project/testplan.md):
 # et eget brev på 14 585 tegn ga 28 686 tokens ut, tok 190 s og kostet ca. 7,31 kr, altså over
 # både KI_MAKS_TOKENS og KI_TIDSGRENSE. Regnet ut fra målingen gir 5 000 tegn ca. 10 000 tokens
-# og ca. 70–75 s. Bestemt av Kristine 15. november 2026.
+# og ca. 70–75 s. Bestemt av Kristine 15. november 2026. Målt 22. november 2026 med de samme
+# grensene: et eget brev på 4 954 tegn, med CV og annonse nær 15 000 tegn, ga 10 000 tokens ut
+# og tok 68,6 s (my-project/testplan.md, «Måling av grensen på 5 000 tegn»).
 MAKS_TEGN_EGET_BREV = 5_000
 MAKS_KI_KALL = 10
 

@@ -32,6 +32,8 @@ FOR_LANG_ANNONSE = "Stillingsannonse: Teksten er for lang. Den kan være på hø
 KI_KALL_BRUKT = (
     "Du har brukt alle KI-kallene for denne søknaden. Begynn på en ny søknad fra startsiden."
 )
+# Lenken i feilboksen når alle KI-kallene er brukt, på innleggingen og resultatsiden (NFR-11).
+LENKE_NY_SOKNAD = '<a class="hovedknapp" href="/">Lag ny søknad</a>'
 
 
 class FasteSvarKI(TellendeKI):
@@ -239,6 +241,7 @@ def test_nfr11_ikke_plass_til_analysen(med_nokkel):
     assert tekster.KI_FEIL_BEHOLDT_INNLEGGING in boks
     assert boks.index(KI_KALL_BRUKT) < boks.index(tekster.KI_FEIL_BEHOLDT_INNLEGGING)
     assert tekster.PROV_PA_NYTT_KNAPP not in html
+    assert LENKE_NY_SOKNAD in boks
     assert med_autofocus(html) == ["feilboks"]
     assert kalt == []
     lagret = soknaden(app, client)
@@ -284,6 +287,7 @@ def test_nfr11_ki_feil_i_brevet_teller_kallet(med_nokkel):
     boks = feilboks(html_av(svar))
     assert tekster.KI_FEILTEKSTER[KIFeilType.ANNET] in boks
     assert tekster.PROV_PA_NYTT_KNAPP in boks
+    assert tekster.LAG_NY_SOKNAD_KNAPP not in boks
     lagret = soknaden(app, client)
     assert lagret.ki_kall == 3
     assert lagret.brev is None
@@ -302,6 +306,7 @@ def test_nfr11_ikke_plass_til_brevet(med_nokkel):
     assert KI_KALL_BRUKT in boks
     assert tekster.KI_FEIL_BEHOLDT_RESULTAT in boks
     assert tekster.PROV_PA_NYTT_KNAPP not in html
+    assert LENKE_NY_SOKNAD in boks
     assert med_autofocus(html) == ["feilboks"]
     assert 'id="gap-dekker"' in html
     assert 'id="nokkelordtreff"' in html

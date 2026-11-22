@@ -46,6 +46,9 @@
       value="nytt_forslag" data-vente="{{ tekster.VENTE_BREV }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
   {%- endif %}
+  {#- Alle KI-kallene er brukt: ingen lenke til startsiden her, fordi GET / lager en ny søknad
+      med en gang og brevet ville blitt borte uten spørsmål. Brevet under kan lastes ned, og
+      vinduet etter nedlasting har «Lag ny søknad» (NFR-11). #}
 </div>
 {%- endif %}
 {%- if fil_feil %}

@@ -24,6 +24,11 @@
     <button class="hovedknapp" type="submit" form="innlegging-skjema" name="handling"
       value="sjekk" data-vente="{{ tekster.VENTE_SJEKKER }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
+  {%- else %}
+  {#- Alle KI-kallene er brukt: lenken til startsiden, der en ny søknad begynner (NFR-11). #}
+  <p class="feilboks-knapp">
+    <a class="hovedknapp" href="{{ url_for('web.start') }}">{{ tekster.LAG_NY_SOKNAD_KNAPP }}</a>
+  </p>
   {%- endif %}
 </div>
 {%- elif feltfeil or skjemafeil %}
