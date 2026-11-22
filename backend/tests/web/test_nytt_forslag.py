@@ -378,7 +378,8 @@ def test_nfr11_ki_feil_med_ekte_ki_telles_ogsaa(med_nokkel):
 def test_nfr11_alle_kall_brukt_gir_feilboksen_uten_prov_paa_nytt(med_nokkel):
     """NFR-11: med ekte KI og alle KI-kallene brukt kalles ikke KI-en. Brevsiden viser
     feilboksen med meldingen om det og «Brevet du hadde, er beholdt.», uten «Prøv på nytt»,
-    og søknaden er uendret."""
+    og søknaden er uendret. Meldingen er den egne teksten for brevsiden, som sier at brevet
+    kan lastes ned først, for siden har ingen vei til startsiden (retro 8, A6)."""
     app, client, kalt = med_nokkel
     for_ = paa_brev_med_ekte_ki(app, client, ki_kall=MAKS_KI_KALL)
     svar = nytt_forslag(client)
@@ -387,7 +388,8 @@ def test_nfr11_alle_kall_brukt_gir_feilboksen_uten_prov_paa_nytt(med_nokkel):
     assert kalt == []
     assert soknaden(app, client) == for_
     boks = feilboks(html)
-    assert f'<p class="feilboks-overskrift">{tekster.KI_KALL_BRUKT}</p>' in boks
+    assert f'<p class="feilboks-overskrift">{tekster.KI_KALL_BRUKT_BREV}</p>' in boks
+    assert tekster.KI_KALL_BRUKT not in boks
     assert tekster.KI_FEIL_BEHOLDT_BREV in boks
     assert tekster.PROV_PA_NYTT_KNAPP not in boks
     assert "<button" not in boks
@@ -522,6 +524,13 @@ def test_fr28_ki_feil_paa_resultatsiden_beholder_brevet(app, paa_brev):
     app.extensions["test_ki"] = FeilendeKI(app.extensions["test_ki"], oppgave="brev")
     html = html_av(paa_brev.post("/resultat", data={"handling": "brev"}))
     assert soknaden(app, paa_brev) == for_
+    # En vanlig KI-feil med brev gir feilteksten og «Prøv på nytt», ikke teksten og lenken for
+    # alle KI-kallene brukt (retro 8, A1).
+    boks = feilboks(html)
+    overskrift = f'<p class="feilboks-overskrift">{tekster.KI_FEILTEKSTER[KIFeilType.ANNET]}</p>'
+    assert overskrift in boks
+    assert tekster.KI_KALL_BRUKT_BREV not in boks
+    assert tekster.GA_TIL_BREVET_KNAPP not in boks
     prov = next(a for t, a in tagger_i(html) if t == "button" and a.get("form"))
     assert "data-bekreft" not in prov
     videre = [

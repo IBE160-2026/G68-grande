@@ -46,7 +46,7 @@ context:
 - [x] KI-en (terminal) -- `git clone` til en tom mappe og README uten `.env`: `uv sync`, `uv run pytest`, `uv run flask --app soknad run`, innlogging med testbrukeren og en søknad i testmodus med case 1 over HTTP. Loggen i `my-project/testkjoringer/8-2/ny-kopi-1.txt` -- NFR-8, kriterium 7
 - [x] `my-project/testplan.md` -- ny innledning, oversikt over alle 14 kriteriene (automatisk med testfil, eller for hånd med lenke), og seksjonene «Prøven fra en ny kopi», «Hele flyten for hånd», «Tilgjengelighet og skjermbredder», «Skriptene som prøves for hånd», «Kostnad per søknad» og «Kriterium 13» -- NFR-12
 - [x] `README.md` -- kjent begrensning om at skriptene ikke har nettlesertester -- beslutning 1
-- [ ] Kristine (nettleser) -- hele flyten i testmodus (Full generering og Korrektur, case 1) og én gang med ekte KI (ca. 1 kr), åpne .docx og PDF, tastatur, synlige etiketter, 320/375/768/1280 px og 200 % zoom, og hvert skript i tabellen. KI-en skriver resultatene inn -- NFR-6, NFR-7, kriterium 5
+- [x] Kristine (nettleser) -- hele flyten i testmodus (Full generering og Korrektur, case 1) og én gang med ekte KI (ca. 1 kr), åpne .docx og PDF, tastatur, synlige etiketter, 320/375/768/1280 px og 200 % zoom, og hvert skript i tabellen. KI-en skriver resultatene inn -- NFR-6, NFR-7, kriterium 5
 - [x] `deferred-work.md`, `.logs/kristine/issues.md`, `my-project/todo.md` -- krysse av punktene for #16 og 8.2.1 -- regelen om utsatte punkter
 
 **Acceptance Criteria:**

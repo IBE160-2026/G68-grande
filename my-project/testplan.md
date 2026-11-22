@@ -4,7 +4,7 @@ Testplanen viser resultatet for alle de 14 suksesskriteriene i PRD-en (del 5) og
 
 ## Oversikt over suksesskriteriene
 
-Testfilene ligger i `backend/tests/` og kjøres med `uv run pytest` fra `backend/` (se README). Hver test nevner FR-nummeret, og noen nevner også kriteriet.
+Testfilene ligger i `backend/tests/` og kjøres med `uv run pytest` fra `backend/` (se README). Hver test nevner FR- eller NFR-nummeret, og noen nevner også kriteriet.
 
 | Kriterium | Hva | Hvordan | Resultat |
 | --- | --- | --- | --- |
@@ -522,6 +522,8 @@ Hele flyten prøves i nettleseren i begge modusene, i testmodus med testdataene 
 | Full generering, ekte KI, case 1 (nettleseren) | 22. november 2026 | Kristine: testmodus av, samtykket, hele flyten og nedlasting. Tokens og kroner lest fra terminalen av Claude | Bestått. 7 635 tokens inn og 2 377 ut, ca. 0,86 kr (se «Kostnad per søknad») |
 | .docx åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i Word | Bestått |
 | PDF åpnes | 22. november 2026 | Kristine: fila fra nedlastingen åpnes i en PDF-leser | Bestått |
+| «Lag ny søknad» når alle KI-kallene er brukt (PR #55) | 22. november 2026 | Kristine: ekte KI, med grensen satt til 2 KI-kall i den kjøringen: `MAKS_KI_KALL` (i `backend/soknad/innstillinger.py`, brukt i `soknad/kjerne/okt.py`) ble satt til 2 i minnet før appen ble laget, uten å endre fila. Uten brev. Analysen brukte begge kallene, og «Lag søknadsbrevet mitt» ga feilboksen med «Lag ny søknad», som førte til startsiden | Bestått («ser bra ut») |
+| «Gå til brevet» når alle KI-kallene er brukt og søknaden har et brev (retro 8) | 22. november 2026 | Kristine: ekte KI, med grensen satt til 3 KI-kall i den kjøringen (analysen 2 og brevet 1): `MAKS_KI_KALL` (i `backend/soknad/innstillinger.py`, brukt i `soknad/kjerne/okt.py`) settes til 3 i minnet før appen lages, uten å endre fila. Brevet lages, tilbakeknappen til resultatsiden, «Lag søknadsbrevet mitt» og «Ja» i vinduet: feilboksen har «Gå til brevet» og ikke «Lag ny søknad», og brevet finnes fortsatt. Det samme på innleggingen med feltene uendret. Til slutt «Nytt forslag» på brevsiden: den nye teksten om å laste ned brevet | Bestått: feilboksen hadde den nye teksten og «Gå til brevet», ikke «Lag ny søknad», på resultatsiden og innleggingen, og brevet var der etter trykket. Brevsiden hadde den nye teksten (Kristine: «det virket») |
 
 ## Tilgjengelighet og skjermbredder
 

@@ -199,7 +199,7 @@ def test_ux_dr17_alle_kall_brukt_uten_nedlasting_spor_fortsatt(med_nokkel):
     assert svar.status_code == 200
     html = html_av(svar)
     assert kalt == []
-    assert tekster.KI_KALL_BRUKT in html
+    assert tekster.KI_KALL_BRUKT_BREV in html
     assert soknaden(app, client) == soknad
     assert logg_ut_knapp(html)["data-bekreft"] == "vindu-logg-ut"
     assert 'id="vindu-logg-ut"' in html

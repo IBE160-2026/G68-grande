@@ -89,8 +89,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // En lenke i feilboksen gir fokus til knappen, filnavnet eller tekstboksen i feltet med feilen.
-  document.querySelectorAll(".feilboks a").forEach(function (lenke) {
+  // En lenke til et felt (href="#...") i feilboksen gir fokus til knappen, filnavnet eller
+  // tekstboksen i feltet med feilen. Andre lenker i boksen («Lag ny søknad» og «Gå til
+  // brevet») er vanlige lenker til en annen side (retro 8, A7).
+  document.querySelectorAll('.feilboks a[href^="#"]').forEach(function (lenke) {
     lenke.addEventListener("click", function (hendelse) {
       var felt = document.getElementById(lenke.getAttribute("href").slice(1));
       if (!felt) {

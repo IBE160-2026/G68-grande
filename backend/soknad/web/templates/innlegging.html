@@ -12,20 +12,30 @@
 {#- Feilboksen får fokus når siden kommer tilbake med feil, og da leser skjermlesere den opp.
     Den har ikke role="alert", så den ikke leses opp to ganger (UX-DR7). #}
 {%- if ki_feil %}
-{#- En KI-feil står i boksen uten lenker, med setningen om at ingenting er tapt og knappen
-    som prøver på nytt. Knappen står utenfor skjemaet, men sender det med form= som «Sjekk
-    CV-en min», med feltene slik de er nå, og viser ventetegnet (FR-27, FR-28). Meldingen om
-    at alle KI-kallene er brukt, står i samme boks, men uten knappen (NFR-11). #}
+{#- En KI-feil står i boksen med setningen om at ingenting er tapt og knappen som prøver på
+    nytt. Knappen står utenfor skjemaet, men sender det med form= som «Sjekk CV-en min», med
+    feltene slik de er nå, og viser ventetegnet (FR-27, FR-28). Meldingen om at alle
+    KI-kallene er brukt, står i samme boks med en lenke (klassen hovedknapp) i stedet for
+    knappen (NFR-11). Har søknaden et brev, står teksten fra brevsiden der (KI_KALL_BRUKT_BREV). #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
-  <p class="feilboks-overskrift">{{ ki_feil }}</p>
+  <p class="feilboks-overskrift">{{ tekster.KI_KALL_BRUKT_BREV if har_brev and not prov_pa_nytt else ki_feil }}</p>
   <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_INNLEGGING }}</p>
   {%- if prov_pa_nytt %}
   <p class="feilboks-knapp">
     <button class="hovedknapp" type="submit" form="innlegging-skjema" name="handling"
       value="sjekk" data-vente="{{ tekster.VENTE_SJEKKER }}">{{ tekster.PROV_PA_NYTT_KNAPP }}</button>
   </p>
+  {%- elif har_brev %}
+  {#- Alle KI-kallene er brukt, og søknaden har fortsatt et brev (feltene er uendret, ellers
+      har sett_inndata alt slettet det): lenken til brevsiden, der brevet kan lastes ned. Ingen
+      lenke til startsiden, fordi GET / lager en ny søknad med en gang, og brevet ville blitt
+      borte uten spørsmål (NFR-11, retro 8, A1). #}
+  <p class="feilboks-knapp">
+    <a class="hovedknapp" href="{{ url_for('web.brev') }}">{{ tekster.GA_TIL_BREVET_KNAPP }}</a>
+  </p>
   {%- else %}
-  {#- Alle KI-kallene er brukt: lenken til startsiden, der en ny søknad begynner (NFR-11). #}
+  {#- Alle KI-kallene er brukt, og søknaden har ikke et brev: lenken til startsiden, der en ny
+      søknad begynner (NFR-11). #}
   <p class="feilboks-knapp">
     <a class="hovedknapp" href="{{ url_for('web.start') }}">{{ tekster.LAG_NY_SOKNAD_KNAPP }}</a>
   </p>
