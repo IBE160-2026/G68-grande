@@ -29,3 +29,18 @@ Lukket i `issues.md`: punktene på linje 59, 118, 129, 159, 168, 179 og 194.
 
 ### Åpne punkter
 - Flette PR-en for branchen `opprydding-apne-punkter` når CI er grønn.
+
+## 2026-11-22 kl. 15:40 — Kristine
+
+### Oppgave
+Pushe branchen, lage PR-en og rydde opp etter at Kristine hadde flettet den.
+
+### Plan
+- Pushe `opprydding-apne-punkter` og lage PR-en med en merknad om KI-feil.
+- Etter flettingen: oppdatere main, slette branchen og skrive rad 505 i prompt-loggen.
+
+### Resultat
+[PR #55](https://github.com/IBE160-2026/G68-grande/pull/55) er laget og flettet (merge-commit `a8c62e2`). Branchen er slettet lokalt og på GitHub. Rad 505 er lagt til i `my-project/prompt-logg.md`. Punktet om å flette PR-en er lukket i `issues.md`.
+
+### Åpne punkter
+Ingen.
