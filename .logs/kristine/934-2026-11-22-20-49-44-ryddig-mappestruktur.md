@@ -71,3 +71,24 @@ Kristine spurte om punktene i den utsatte lista som ikke er gjort, og ba om en s
 
 ### Åpne punkter
 Ingen nye.
+
+## 2026-11-22 kl. 22:41 — Kristine
+
+### Oppgave
+Kristine spurte om alt som var utsatt nå er løst eller har en begrunnelse, bortsett fra 8.2.2. Så ba hun om push og logg.
+
+### Plan
+- Sjekket `deferred-work.md`, `my-project/todo.md` og `issues.md` en siste gang.
+
+### Resultat
+- Bekreftet: i den utsatte lista er alt løst eller har en begrunnelse, bortsett fra 8.2.2. I TO DO og `issues.md` står bare det som er planlagt, og det som er valgfritt:
+  - Planlagt: refleksjonsrapporten neste helg (28.–29. november), så 8.2.2 rett før levering.
+  - Valgfritt («Hvis tid»): mørk modus, å prøve konkurrentene selv, og kriterium 13 med én person til.
+- Pushet til GitHub i denne økten:
+  - `862c158`: mappestrukturen
+  - `ba50bc4`: «Slik bruker du nettsiden»
+  - `38b7580`: den kjente begrensningen om brev-prompten
+- Main er lik GitHub.
+
+### Åpne punkter
+Ingen nye. Rekkefølgen videre er refleksjonsrapporten, så 8.2.2, så levering.
