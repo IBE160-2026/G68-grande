@@ -1,6 +1,6 @@
 # Testplan
 
-Testplanen viser resultatet for alle de 14 suksesskriteriene i PRD-en (del 5) og for testene som gjøres for hånd (NFR-12). Kriteriene som har automatiske tester, viser til testfila. De andre har dato, hva som ble gjort, og bestått eller ikke bestått. Testplanen viser også hele flyten prøvd for hånd i begge modusene, sjekkene av tilgjengelighet og skjermbredder, skriptene som bare prøves for hånd, tokens og kroner per søknad, og prøvene av README fra en ny kopi av repoet. Første prøve ble gjort i story 8.2.1. Kriterium 13 og andre prøve fra en ny kopi kommer i story 8.2.2.
+Testplanen viser resultatet for alle de 14 suksesskriteriene i PRD-en (del 5) og for testene som gjøres for hånd (NFR-12). Kriteriene som har automatiske tester, viser til testfila. De andre har dato, hva som ble gjort, og bestått eller ikke bestått. Testplanen viser også hele flyten prøvd for hånd i begge modusene, sjekkene av tilgjengelighet og skjermbredder, skriptene som bare prøves for hånd, tokens og kroner per søknad, og prøvene av README fra en ny kopi av repoet. Første prøve ble gjort i story 8.2.1. Kriterium 13 ble gjort i story 8.2.2, og andre prøve fra en ny kopi kommer rett før levering.
 
 ## Oversikt over suksesskriteriene
 
@@ -20,7 +20,7 @@ Testfilene ligger i `backend/tests/` og kjøres med `uv run pytest` fra `backend
 | 10 | Feil filtype, tomme felt og en uleselig PDF gir riktig feilmelding | Automatisk: [test_innlegging.py](../backend/tests/web/test_innlegging.py) (`test_fr9_…`, `test_fr10_…`, `test_fr11_…`), [test_inndata.py](../backend/tests/kjerne/test_inndata.py), og [test_innlogging.py](../backend/tests/web/test_innlogging.py) og [test_registrering.py](../backend/tests/web/test_registrering.py) (`test_fr4_…`) | Bestått |
 | 11 | Brevet nevner ingenting som ikke står i CV-en | For hånd med ekte KI, tre kjøringer per testcase | Bestått etter plan B 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
 | 12 | Korrektur beholder innholdet, eksemplene og rekkefølgen | For hånd med ekte KI, tre kjøringer | Bestått 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
-| 13 | En person som ikke kjenner prosjektet, forklarer resultatsiden med egne ord | For hånd: «Kriterium 13» | Kommer i 8.2.2 |
+| 13 | En person som ikke kjenner prosjektet, forklarer resultatsiden med egne ord | For hånd: «Kriterium 13» | Bestått 22. november 2026, med en merknad (se «Kriterium 13») |
 | 14 | Nøkkelordlisten har alle de viktige nøkkelordene i fasiten | For hånd med ekte KI, tre kjøringer per testcase. Svarene i testmodus sjekkes også automatisk i [test_testdata.py](../backend/tests/test_testdata.py) (`test_fr15_nokkelordlisten_har_alle_de_viktige`) | Bestått 14. og 15. november 2026 (se «Slik testes kriteriene med ekte KI») |
 
 Kriterium 1, 3, 11, 12 og 14 er ikke kjørt på nytt i story 8.2.1. De er bestått, og promptene i `backend/prompts/` er ikke endret siden.
@@ -541,8 +541,10 @@ Prosjektet har ingen nettlesertester (bestemt av Kristine 21. november 2026, iss
 
 ## Kriterium 13
 
-En person som ikke kjenner prosjektet, helst en student eller noen som har søkt jobb nylig, ser resultatsiden for en av test-CV-ene og forklarer med egne ord hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr. Testen gjøres etter 29. november.
+En person som ikke kjenner prosjektet, helst en student eller noen som har søkt jobb nylig, ser resultatsiden for en av test-CV-ene og forklarer med egne ord hva som mangler i CV-en, og hva nøkkelordtreffet betyr og ikke betyr.
+
+Planen var at testen skulle gjøres etter 29. november, sjekkpunktet for at hele flyten virker i testmodus. Sjekkpunktet ble nådd 12. november, og kriteriet har ingen dato i PRD-en, så testen ble gjort 22. november. Den ble gjort etter [kriterium-13-oppskrift.md](testkjoringer/8-2/kriterium-13-oppskrift.md): resultatsiden for case 1 i testmodus (50 %), én fast setning til personen, og to spørsmål: «Hva mangler i CV-en?» og «Hva betyr 50 % her, og hva betyr det ikke?». Kravene for bestått står i oppskriften og ble godkjent av Kristine før testen.
 
 | Dato | Hvem (ikke navn) | Hva personen forklarte | Resultat |
 | --- | --- | --- | --- |
-| | | | Kommer i 8.2.2 |
+| 22. november 2026 | Kollega av Kristine, kjente ikke prosjektet | Spørsmål 1: det som mangler, er det som står under «Står ikke i CV-en» og under «Dette kan du jobbe videre med». Spørsmål 2: bare 50 % av nøkkelordene fra annonsen står i CV-en. Da Kristine spurte på nytt om hva det ikke betyr: det er «kun fakta», noe du treffer på med antall ord, «ikke noe mer». Han trykket på «i»-knappene og «Hva er ATS og hva betyr det for deg?» for å se hva det betydde, og forsto siden greit | Bestått, med en merknad. Spørsmål 1 er bestått: han fant og forsto listene over det som mangler. Spørsmål 2 er bestått med egne ord: tallet er bare en ordtelling og ikke noe mer. Merknad: det han sa om hva tallet ikke betyr, kom først da han ble spurt på nytt, og han nevnte ikke selv at det ikke sier noe om sjansen for å få jobben. Kristine kan prøve med én person til senere |
