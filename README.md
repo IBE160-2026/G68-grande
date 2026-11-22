@@ -16,6 +16,8 @@ Søknadsassistenten er en nettside som hjelper studenter med å skrive et søkna
 
 **Hvem den er for:** studenter og nyutdannede som søker jobb eller praksisplass for første gang, og som mangler erfaring med hva som fungerer i en søknad. Nettsiden er åpen for alle jobbsøkere, men forklaringene er laget for studenter.
 
+**Hva er med, og hva er kuttet:** Alt som er planlagt for versjon 1 i [PRD-en](my-project/2-prd/prd.md), er laget. Det gjelder også alle funksjonene på nødlisten, som kunne vært kuttet hvis tiden ble knapp. Det som bevisst er utelatt fra versjon 1, for eksempel engelsk, lagring mellom øktene og redigering av brevet i nettleseren, står med begrunnelse i kuttlisten i PRD-en (del 4).
+
 ## Skjermbilder
 
 Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i case 1 (`backend/testdata/case-1-utvikler/`). Nede til venstre står «Teksten behandles av ekstern KI».

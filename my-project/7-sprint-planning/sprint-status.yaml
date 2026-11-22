@@ -87,7 +87,7 @@ development_status:
 
   epic-8: in-progress
   8-1-readme-for-sensor: done
-  8-2-testplan-og-prøve-fra-en-ny-kopi: backlog
+  8-2-testplan-og-prøve-fra-en-ny-kopi: in-progress
   epic-8-retrospective: optional
 action_items:
   - id: "epic-1-retro-item-1-logg_inn_bruker-kaller-logg_ut_bruker-så"
