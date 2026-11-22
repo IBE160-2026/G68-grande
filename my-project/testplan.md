@@ -35,7 +35,8 @@ Tallene er samlet fra «Kostnad og tid» i hver runde under. Kronene er regnet m
 | Full generering, CV og annonse nær 15 000 tegn | 36 647 | 4 482 | 2,60 kr (2,64 kr etter de nye reglene i brevet) | Retro 4 og «Hilsen, navn og to nye regler i brevet» |
 | Full generering med «Nytt forslag», CV og annonse nær 15 000 tegn | 52 039 | 6 953 | 3,82 kr (4,02 kr etter de nye reglene) | Samme. Over målet, godtatt 17. november |
 | Korrektur, testdataene (case 1) | ca. 8 670 (5 108 for brevet) | ca. 3 300–3 500 | ca. 1,15 kr | Retro 5, runde 2, med nøkkelord og gap fra story 4.4 |
-| Korrektur, eget brev på 5 000 tegn | | | ca. 2,8 kr, eller ca. 4,4 kr med CV og annonse nær 15 000 tegn | Regnet ut i retro 5, ikke målt |
+| Korrektur, eget brev på 5 000 tegn | | | ca. 2,8 kr, eller ca. 4,4 kr med CV og annonse nær 15 000 tegn | Regnet ut i retro 5 |
+| Korrektur, bare brevet: eget brev på 4 954 tegn, CV og annonse nær 15 000 tegn | 18 521 | 10 000 | 3,02 kr (0,2741 dollar) | Målt 22. november, «Måling av grensen på 5 000 tegn». Med nøkkelord og gap fra retro 4 blir en hel søknad ca. 4,3 kr, over målet, som regnet ut |
 | Full generering, case 1, i nettleseren i story 8.2.1 (22. november 2026) | 7 635 (1 503 nøkkelord, 2 069 gap, 4 063 brev) | 2 377 (138, 190, 2 049) | 0,86 kr (0,0781 dollar) | «Hele flyten for hånd» |
 
 Med testdataene koster en fullført søknad ca. 0,7–1,2 kr i begge modusene. Med svært lange tekster holder Full generering med ett brev målet, men med liten margin. Med «Nytt forslag», eller i Korrektur med lange tekster, blir det mer enn 3 kr.
@@ -398,7 +399,22 @@ Ett `korrektur`-kall ble kjørt med den nye prompten (commit `73f6ecd`), med `ma
 
 Med grensene i koden ville en bruker med et så langt brev fått KI-feilboksen hver gang, og hvert «Prøv på nytt» ville feilet likt. Ca. 11 000 av tokenene ut er selve svaret (35 804 tegn JSON med brevet to ganger), og resten er tenkingen før svaret. Svaret har 154 oppføringer, 31 sammenslåtte setninger, «Hei!» fjernet og ingen nye setninger. Innholdet er ikke vurdert mot noen fasit, fordi caset ikke har noen.
 
-**Bestemt av Kristine:** brevfeltet i Korrektur godtar høyst 5 000 tegn (`MAKS_TEGN_EGET_BREV` i `backend/soknad/innstillinger.py`), med feilmeldingen «Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn.». CV og annonse godtar fortsatt 15 000 tegn, og 16 000 tokens og 90 s er beholdt. Regnet ut fra målingen og testbrevet (ca. 2 tokens ut per tegn og ca. 150 tokens i sekundet) gir 5 000 tegn ca. 10 000 tokens og ca. 70–75 s. Et brev på 5 000 tegn koster da ca. 2,5 kr med CV og annonse som testdataene, og en hel søknad i Korrektur ca. 2,8 kr. Med CV og annonse nær 15 000 tegn koster selve brevet ca. 3,1 kr, og en hel søknad ca. 4,4 kr (med nøkkelord og gap fra retro 4), altså over målet på 3 kr (NFR-11). Det er det samme som for Full generering med «Nytt forslag» og lange tekster (TO DO, epic 7). Et søknadsbrev på én side er ca. 2 500–3 500 tegn. Valget mot dette var høyere `max_tokens` og tidsgrense for Korrektur, men da kunne brukeren ventet i over 3 minutter, og ett brev ville kostet over 7 kr. En tredje mulighet, mindre tenking for Korrektur (`KI_INNSATS`), ble ikke lagt fram. Tenkingen er den største delen av svaret, men mindre tenking kan gi dårligere brev og må måles og sjekkes mot kriteriene på nytt. 5 000 tegn er regnet ut, ikke målt, og marginen til 90 s er ca. 15–20 s.
+**Bestemt av Kristine:** brevfeltet i Korrektur godtar høyst 5 000 tegn (`MAKS_TEGN_EGET_BREV` i `backend/soknad/innstillinger.py`), med feilmeldingen «Ditt søknadsbrev: Teksten er for lang. Den kan være på høyst 5 000 tegn.». CV og annonse godtar fortsatt 15 000 tegn, og 16 000 tokens og 90 s er beholdt. Regnet ut fra målingen og testbrevet (ca. 2 tokens ut per tegn og ca. 150 tokens i sekundet) gir 5 000 tegn ca. 10 000 tokens og ca. 70–75 s. Et brev på 5 000 tegn koster da ca. 2,5 kr med CV og annonse som testdataene, og en hel søknad i Korrektur ca. 2,8 kr. Med CV og annonse nær 15 000 tegn koster selve brevet ca. 3,1 kr, og en hel søknad ca. 4,4 kr (med nøkkelord og gap fra retro 4), altså over målet på 3 kr (NFR-11). Det er det samme som for Full generering med «Nytt forslag» og lange tekster (TO DO, epic 7). Et søknadsbrev på én side er ca. 2 500–3 500 tegn. Valget mot dette var høyere `max_tokens` og tidsgrense for Korrektur, men da kunne brukeren ventet i over 3 minutter, og ett brev ville kostet over 7 kr. En tredje mulighet, mindre tenking for Korrektur (`KI_INNSATS`), ble ikke lagt fram. Tenkingen er den største delen av svaret, men mindre tenking kan gi dårligere brev og må måles og sjekkes mot kriteriene på nytt. 5 000 tegn er regnet ut, ikke målt, og marginen til 90 s er ca. 15–20 s. Grensen ble målt 22. november 2026, se «Måling av grensen på 5 000 tegn» under.
+
+### Måling av grensen på 5 000 tegn (22. november 2026)
+
+Målt fordi grensen bare var regnet ut (åpent punkt fra gjennomgangen av runde B, godkjent av Kristine, ca. 3 kr). Skriptet [maal_korrektur.py](testkjoringer/8-2/maling-5000/maal_korrektur.py) korter ned brevet fra Ingrid Prøvesen til [eget-brev-5000.txt](testkjoringer/8-2/maling-5000/eget-brev-5000.txt) (4 954 tegn): overskriften, «Hei!», de første avsnittene og avslutningen med hilsenen, kuttet ved hele avsnitt og setninger. CV-en og annonsen er de nær 15 000 tegn fra retro 4, altså det verste tilfellet. Ett `korrektur`-kall gikk gjennom `EkteKI` med de samme grensene som nettsiden (90 s og 16 000 tokens) og prompten slik den er nå, men uten nytt forsøk, så et tidsavbrudd ikke ble skjult. Svaret og tallene ligger i [korrektur.json](testkjoringer/8-2/maling-5000/korrektur.json) og [resultat.json](testkjoringer/8-2/maling-5000/resultat.json).
+
+| | Målt | Regnet ut i retro 5 | Grensen i koden |
+| --- | --- | --- | --- |
+| Tokens inn | 18 521 | | |
+| Tokens ut | 10 000 | ca. 10 000 | 16 000 (`KI_MAKS_TOKENS`) |
+| Tid | 68,6 s | ca. 70–75 s | 90 s (`KI_TIDSGRENSE`) |
+| `stop_reason` | `end_turn` | | |
+| `kontroller()` | Bestått | | |
+| Pris | ca. 3,02 kr | ca. 3,1 kr | |
+
+Bestått: et brev på 5 000 tegn går gjennom i Korrektur med grensene i koden, også med de lengste CV-ene og annonsene. Marginen er ca. 21 s til tidsgrensen og ca. 6 000 tokens til `KI_MAKS_TOKENS`. Målingen er én kjøring, så tiden kan variere. Innholdet i brevet er ikke vurdert mot noen fasit, fordi caset ikke har noen.
 
 ### Runde 1 (kl. 21.26–21.29)
 

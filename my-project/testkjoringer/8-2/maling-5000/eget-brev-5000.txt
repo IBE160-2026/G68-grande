@@ -1,0 +1,26 @@
+Søknad på jobb som junior utvikler i Prøvestad Data
+
+Hei!
+
+Jeg så annonsen deres om to stillinger som junior utvikler i teamet for digitale tjenester og tenkte med en gang at dette er noe for meg. Jeg er lidenskapelig opptatt av å lage programvare som er enkel å bruke. Jeg går tredje år på bachelor i informatikk ved Eksempelby universitet. Jeg blir ferdig i juni 2027. Det passer fint med at dere ønsker at man begynner i august 2027. Jeg har lest hele annonsen nøye og jeg synes den beskriver akkurat den typen jobb jeg har lyst på etter studiet.
+
+Jeg begynte å programmere på videregående. Da laget jeg en enkel nettside for håndballaget mitt. Det var veldig gøy å se at folk faktisk brukte noe jeg hadde laget. Siden har jeg vært opptatt av hvordan man lager programvare som er lett å bruke og lett å vedlikeholde. Før jeg begynte på informatikk tok jeg et årsstudium i matematikk, fordi jeg ville bli tryggere i matte. Det var der jeg bestemte meg for å studere videre innen IT. På videregående hadde jeg også informasjonsteknologi 1 og 2, og i IT 2 laget jeg et lite spill i JavaScript som klassen brukte i undervisningen.
+
+I studiet har jeg jobbet mest med webutvikling, databaser og testing. Jeg har fordypning i programvareutvikling og databaser. Jeg har fått A i grunnleggende programmering i Python, i webutvikling, i databaser og SQL, i programvareutvikling og smidige metoder og i testing og kvalitetssikring. Jeg har også tatt emner i Java, algoritmer, operativsystemer og Linux, datanettverk og sikkerhet og menneske–maskin-interaksjon og universell utforming. Jeg synes egentlig alle emnene har vært nyttige men det er databaser og testing jeg liker best.
+
+Bacheloroppgaven min er et system for å bestille og følge opp reparasjoner av utstyr på et bibliotek. Vi er fire studenter på gruppa. Ansatte på biblioteket kan melde inn utstyr som er ødelagt, for eksempel skrivere, PC-er og lånekortlesere. De kan også følge med på hvor langt reparasjonen har kommet. Systemet er laget i Python med Flask og dataene lagres i PostgreSQL. Jeg har hovedansvaret for databasen og for testene. Jeg har laget datamodellen med tabeller for utstyr, saker, ansatte og statusendringer, og jeg har skrevet migreringene. Jeg har også satt opp pytest med en egen testdatabase, sånn at testene kan kjøres på nytt uten å ødelegge dataene.
+
+Vi har ca. 180 tester i bacheloroppgaven og jeg har skrevet de fleste av dem. Testene kjøres automatisk i GitHub Actions hver gang noen lager en pull request. Vi bruker GitHub til versjonskontroll og kodegjennomgang. Jeg har også laget siden der de ansatte ser alle åpne saker, med filter på type utstyr og status. I tillegg skrev jeg brukerveiledningen og README-en, så en ny utvikler kan sette opp prosjektet på egen maskin. Vi har hatt to møter med en bibliotekar for å teste nettsiden. Etter det hun sa skrev jeg om skjemaet for nye saker. Det var ganske lærerikt egentlig.
+
+Vi jobber i sprinter på to uker i bacheloroppgaven. Vi har planlegging, korte møter tre ganger i uka og en gjennomgang med veilederen på slutten av hver sprint. Jeg har vært scrum master i to av sprintene. Det jeg har lært mest av i prosjektet er å planlegge en database før man skriver koden. Jeg har også lært å skrive tester som er lette å lese. Og så har jeg lært at det lønner seg å vise nettsiden til brukerne tidlig. Jeg ser at dere også jobber etter Scrum med sprinter på to uker, og at dere har en gjennomgang med kundene på slutten av hver sprint, så det kjenner jeg godt igjen.
+
+Jeg har også vært med på flere emneprosjekter. Våren 2026 laget vi en matplanlegger for studenter i emnet i programvareutvikling. Studentene kan legge inn hva de har i kjøleskapet og få forslag til middager og en handleliste for uka. Vi var fem på gruppa og jobbet etter Scrum i åtte uker. Jeg laget grensesnittet i HTML, CSS og JavaScript og skrev API-et for oppskriftene i Flask. Vi la vekt på universell utforming. Jeg testet siden med skjermleser og bare tastatur. Prosjektet fikk karakter A og vi presenterte det for klassen og to gjestesensorer fra næringslivet.
+
+Høsten 2025 hadde jeg to emneprosjekter. I databaseemnet laget vi en database for medlemmer, lag, treninger og kontingent for en tenkt idrettsforening.
+
+Jeg snakker norsk som morsmål og engelsk flytende, muntlig og skriftlig. Mye av pensum og dokumentasjonen jeg leser er på engelsk. Jeg har også førerkort klasse B. På fritiden spiller jeg håndball, går fjellturer og spiller brettspill. Om vinteren går jeg på ski så ofte jeg kan. Jeg følger med på blogger og podkaster om webutvikling.
+
+Jeg er overbevist om at jeg vil være en verdifull ressurs for teamet deres. Jeg håper du vil invitere meg til et intervju, så jeg kan fortelle mer om meg selv og prosjektene mine. Referanser fra teamlederen min i kundeservice og fra emneansvarlig i grunnleggende programmering kan jeg gi hvis dere vil. Takk for at du tok deg tid til å lese søknaden min.
+
+Med vennlig hilsen
+Ingrid Prøvesen

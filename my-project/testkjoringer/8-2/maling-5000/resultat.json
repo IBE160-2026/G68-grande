@@ -1,0 +1,11 @@
+{
+  "modell": "claude-opus-5-5",
+  "tegn_eget_brev": 4954,
+  "tidsgrense_s": 90,
+  "maks_tokens": 16000,
+  "kontroller": "bestått",
+  "sekunder": 68.6,
+  "tokens_inn": 18521,
+  "tokens_ut": 10000,
+  "stop_reason": "end_turn"
+}
