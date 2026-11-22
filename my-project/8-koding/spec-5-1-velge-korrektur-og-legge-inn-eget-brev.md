@@ -113,7 +113,7 @@ context:
 | 25 | runde 2: blind | Et testbrev som mangler eller er tomt, stopper ikke oppstarten | low | `test_fr34_bare_case_1_har_et_eget_brev` passer på fila i repoet. Retting = ny vakt. Avvist |
 | 26 | runde 2: blind | Sjekklisten for Korrektur nevner ikke arbeidsgiveren, rollen hennes i gruppa og hva KI-frasen betyr | low | Stemmer. Direkte tekstretting → patch. Tittellinje og hilsen hører til 5.2 |
 | 27 | runde 2: blind | «Er dette Korrektur?» står to steder for resultatsiden | low | Begge byttes ut når knappen kommer i 5.2. Ingen skade nå. Avvist |
-| 28 | runde 2: blind | Plandokumentene er ikke oppdatert (kopi i `my-project/9-koding/`, sprint-status, todo) | false | Gjøres etter gjennomgangen, som i hver story. Ikke en feil i koden. Avvist |
+| 28 | runde 2: blind | Plandokumentene er ikke oppdatert (kopi i `my-project/8-koding/`, sprint-status, todo) | false | Gjøres etter gjennomgangen, som i hver story. Ikke en feil i koden. Avvist |
 
 ## Design Notes
 

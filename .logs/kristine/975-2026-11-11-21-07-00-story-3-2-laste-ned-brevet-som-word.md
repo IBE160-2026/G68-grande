@@ -6,7 +6,7 @@
 `/bmad-build 3.2`: lage nedlastingen av søknadsbrevet som Word-fil fra brevsiden, slik story 3.2 i epics beskriver.
 
 ### Plan
-- Planen ligger i [`my-project/9-koding/spec-3-2-laste-ned-brevet-som-word.md`](../../my-project/9-koding/spec-3-2-laste-ned-brevet-som-word.md) (kopi av `_bmad-output/implementation-artifacts/`).
+- Planen ligger i [`my-project/8-koding/spec-3-2-laste-ned-brevet-som-word.md`](../../my-project/8-koding/spec-3-2-laste-ned-brevet-som-word.md) (kopi av `_bmad-output/implementation-artifacts/`).
 - Kristine godkjente planen med én endring: feilboksen skal ikke ha «Brevet er ikke borte.».
 - Branch `story/3-2-laste-ned-brevet-som-word` fra `main` (`fb66299`). Koden er skrevet i hovedøkten, og tre hjelpeagenter gikk gjennom den (blind, kanttilfeller, testhull).
 
@@ -15,7 +15,7 @@
 - Gjennomgangen ga 17 funn: 2 rettet (A4 og norsk språk i Word-fila, som ble KI-feilen i prompt-loggen), 1 utsatt (skriptet testes bare ved å lese teksten, lagt til issue #16 i TO DO og i `deferred-work.md`) og 14 avvist med begrunnelse.
 - 549 tester grønne, `ruff check` og `ruff format --check` grønne.
 - `53bf578` (dokumentasjon): spec-kopi, oversikten i `my-project/README.md`, TO DO, prompt-logg 329–330 og sprint-statusen (3.2 er «review»).
-- Notat om KI-feilen er lagt i `my-project/8-refleksjonsrapport/notater.md`. Mappa er med i `.gitignore`, så notatet ligger bare lokalt.
+- Notat om KI-feilen er lagt i `my-project/9-refleksjonsrapport/notater.md`. Mappa er med i `.gitignore`, så notatet ligger bare lokalt.
 - Branchen er ikke pushet.
 
 ### Åpne punkter

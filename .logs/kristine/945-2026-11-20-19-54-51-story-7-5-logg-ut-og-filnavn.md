@@ -8,7 +8,7 @@
 ### Plan
 - `git fetch` ved start: ingen nye endringer på GitHub.
 - KI-en spurte om storyen skulle deles i to (vinduet og filnavnet). Kristine valgte én story og sa ja til underagenter.
-- Spec: [spec-7-5-logg-ut-for-nedlasting-og-arbeidsgiver-i-filnavnet.md](../../_bmad-output/implementation-artifacts/spec-7-5-logg-ut-for-nedlasting-og-arbeidsgiver-i-filnavnet.md) (kopi i `my-project/9-koding/`). Vinduet følger skissen `mockups/letter-page-1.html`. Det bruker `bekreft.js` fra «Nytt forslag».
+- Spec: [spec-7-5-logg-ut-for-nedlasting-og-arbeidsgiver-i-filnavnet.md](../../_bmad-output/implementation-artifacts/spec-7-5-logg-ut-for-nedlasting-og-arbeidsgiver-i-filnavnet.md) (kopi i `my-project/8-koding/`). Vinduet følger skissen `mockups/letter-page-1.html`. Det bruker `bekreft.js` fra «Nytt forslag».
 - To valg fra KI-en, som Kristine godkjente med planen: flere bindestreker etter hverandre blir én, og uten JavaScript logges man ut med en gang. Hun beholdt hele spec-en (ca. 2 300 tokens).
 - Branch `story-7-5-logg-ut-og-filnavn`. En underagent kodet, og tre underagenter gikk gjennom koden (blind, edge case, verification gap).
 

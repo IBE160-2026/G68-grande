@@ -43,7 +43,7 @@ Runde 1 (2026-11-10), ett lag: blind (oneshot).
 | 6 | Testen sjekker ikke klassen `feilboks-tekst` | low | Riktig. Regex-en krever nå `class="feilboks-tekst"` | patch |
 | 7 | Knappetesten sammenligner alle attributtene og knekker ved et nytt attributt | false | Med vilje: et nytt attributt på knappen bør ses i testen | avvist |
 | 8 | Ingen nettlesertest av at «Prøv på nytt» med `form=` sender feltene, viser ventetegnet og beholder fokus | medium | Riktig, samme hull som for `vente.js` i 2.7.1. Sjekkes for hånd i PR-en | utsatt |
-| 9 | Spec-en er ikke kopiert til `my-project/9-koding/`, status er `in-progress`, og logg og notater mangler | false | Gjøres etter gjennomgangen, som i 2.7.1 | avvist |
+| 9 | Spec-en er ikke kopiert til `my-project/8-koding/`, status er `in-progress`, og logg og notater mangler | false | Gjøres etter gjennomgangen, som i 2.7.1 | avvist |
 | 10 | Docstringen til `test_fr27_bare_sjekk_knappen_har_ventetekst` gjelder bare siden uten feil | low | Riktig. Docstringen sier det nå | patch |
 
 ## Verification

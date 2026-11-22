@@ -46,7 +46,7 @@ context:
 - `backend/soknad/innstillinger.py:8-11` -- `MAKS_FORESPORSEL`, `MAKS_FILSTORRELSE`.
 - `backend/tests/adaptere/test_pdf_inn.py`, `backend/tests/web/test_innlegging.py:811` (`send_felt`), `:1037` (A3-testen).
 - Werkzeug: `(BytesIO(b""), "")` i testklienten gir en tom `FileStorage` med `filename=""`, som nettleseren (prøvd).
-- Papirene: `_bmad-output/planning-artifacts/epics.md:946`, `architecture/…/ARCHITECTURE-SPINE.md:172`, `ux-designs/…/EXPERIENCE.md:130-145, 202-203`, `README.md:13`, `my-project/testplan.md:444`, `deferred-work.md:5-9, 88-90, 149-151`, `.logs/kristine/issues.md:20, 119`, `my-project/prompt-logg.md` (slutten), `my-project/README.md` (9-koding-tabellen), `sprint-status.yaml:375-413`, `spec-6-1-laste-opp-pdf.md:39` (begge kopiene).
+- Papirene: `_bmad-output/planning-artifacts/epics.md:946`, `architecture/…/ARCHITECTURE-SPINE.md:172`, `ux-designs/…/EXPERIENCE.md:130-145, 202-203`, `README.md:13`, `my-project/testplan.md:444`, `deferred-work.md:5-9, 88-90, 149-151`, `.logs/kristine/issues.md:20, 119`, `my-project/prompt-logg.md` (slutten), `my-project/README.md` (8-koding-tabellen), `sprint-status.yaml:375-413`, `spec-6-1-laste-opp-pdf.md:39` (begge kopiene).
 - Kristines ordrette prompts for 6.1 og 6.2 finnes i transkriptene `a040d139…` og `7708b50a…` i `~/.claude/projects/C--BMAD-G68-grande/`.
 
 ## Tasks & Acceptance

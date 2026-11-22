@@ -20,7 +20,7 @@ Kristine spurte hvor Docker kommer inn i prosjektet, og ba meg se på `my-projec
   - Plan B-regelen prøves på en annen CV i samme kjøring med ekte KI.
 - I `issues.md` er to punkter lukket (merknadene og hilsenen), og ett nytt er lagt til.
 
-- Rettingene ble bygd med `bmad-build` på branchen `brev-hilsen-og-regler`. Spec: `my-project/9-koding/spec-brev-hilsen-og-regler.md`.
+- Rettingene ble bygd med `bmad-build` på branchen `brev-hilsen-og-regler`. Spec: `my-project/8-koding/spec-brev-hilsen-og-regler.md`.
   - En hjelpeagent la til `navn` i brevskjemaet, `hele_brevet()` i `kjerne/ki_svar.py` (brukt på brevsiden og i Word-fila), fjerning av hilsen eller navn som KI-en likevel skriver til slutt, og de to nye reglene i `backend/prompts/brev.md`. AD-4 i arkitekturen er oppdatert.
   - Tre gjennomgangsagenter fant 15 ulike ting. Fire små ting ble rettet: navnet alene til slutt, «Mvh» og lignende, at «navn» i prompten bare gjelder avslutningen, og en test. De andre elleve ble avvist med begrunnelse (Review Triage Log i spec-en).
   - Ekte KI, runde 1: ett brudd på kriterium 11 («Python er en sentral del av utdanningen min»), bestemt av Kristine. Ingrid-kjøringen stoppet, og et lite prøvekall viste at kreditten på API-kontoen var brukt opp. Kristine fylte på.

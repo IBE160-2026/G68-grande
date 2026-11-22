@@ -6,7 +6,7 @@
 Kode story 4.2 med `/bmad-build 4.2`: Claude skal kunne skrive søknadsbrevet ut fra bare CV og annonse, med reglene for tone og de 17 KI-frasene i prompten. Teksten fra KI-en skal renses, så Word-fila ikke feiler.
 
 ### Plan
-- Planen: [spec-4-2-brevet-fra-claude.md](../../my-project/9-koding/spec-4-2-brevet-fra-claude.md) (originalen i `_bmad-output/implementation-artifacts/`).
+- Planen: [spec-4-2-brevet-fra-claude.md](../../my-project/8-koding/spec-4-2-brevet-fra-claude.md) (originalen i `_bmad-output/implementation-artifacts/`).
 - Kristine bestemte at brevet begynner rett på teksten og slutter med «Med vennlig hilsen» og navnet, at det er høyst én A4-side (250–400 ord i 4–6 avsnitt), at planen beholdes samlet (ca. 2400 tokens), og at hjelpeagenter kan brukes.
 - En hjelpeagent kodet på branchen `story/4-2-brevet-fra-claude`, og tre hjelpere gikk gjennom koden.
 

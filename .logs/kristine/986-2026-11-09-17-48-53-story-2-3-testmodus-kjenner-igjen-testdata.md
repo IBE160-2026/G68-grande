@@ -6,7 +6,7 @@
 Kristine ba om story 2.3 med `/bmad-build`, og ville at spec-en skulle åpnes når den var klar, så hun kunne lese den. Målet er at testmodus kjenner igjen de fiktive testdataene og gir de ferdige KI-svarene, slik at nettsiden kan kjøres uten API-nøkkel.
 
 ### Plan
-- Spec: [`spec-2-3-testmodus-kjenner-igjen-testdataene.md`](../../my-project/9-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md) (kopi av `_bmad-output/implementation-artifacts/`), åpnet i Notisblokk.
+- Spec: [`spec-2-3-testmodus-kjenner-igjen-testdataene.md`](../../my-project/8-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md) (kopi av `_bmad-output/implementation-artifacts/`), åpnet i Notisblokk.
 - Kristine valgte å beholde spec-en samlet (ca. 2100 tokens) og godkjente og fortsatte.
 - Egen branch `story/2-3-testmodus-kjenner-igjen-testdataene`. Hovedøkta skrev koden, og tre hjelpeagenter gikk gjennom den (blind, grensetilfeller, testhull).
 - Valg tatt av KI-en: når både CV og annonse er feil, får begge feltene feilen (alle feilene vises samtidig).

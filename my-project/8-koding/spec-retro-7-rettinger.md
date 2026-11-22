@@ -53,7 +53,7 @@ context:
   - `…/architecture/architecture-kode-prosjekt-2026-11-04/ARCHITECTURE-SPINE.md:198-202` = `my-project/5-arkitektur/arkitektur.md` (AD-11): bindestrekene, og at ß, ł, đ, þ, œ står i tabellen.
   - `README.md:13` statuslinja: legg til «Nytt forslag», gjenbruken av nøkkelordlisten, pynten, vinduet før utlogging og arbeidsgiveren i filnavnet. `README.md:109-121` «Kjente begrensninger»: tre nye punkter (A1, A4, A5).
   - `my-project/README.md:94` -- rader for `spec-7-2-…`, `spec-7-3-…`, `spec-7-4-…`, `spec-7-5-…` og `spec-retro-7-rettinger.md` (som radene for 6.1/6.2).
-  - `_bmad-output/implementation-artifacts/epic-7-context.md:7` = `my-project/9-koding/epic-7-context.md` -- «Story 7.1 og 7.2 er ferdige (flettet). Neste er 7.3.» → alle fem er ferdige.
+  - `_bmad-output/implementation-artifacts/epic-7-context.md:7` = `my-project/8-koding/epic-7-context.md` -- «Story 7.1 og 7.2 er ferdige (flettet). Neste er 7.3.» → alle fem er ferdige.
   - `.logs/kristine/issues.md:27` -- `[ ]` → `[x]` (teksten sier alt løst 2026-11-19).
 
 ## Tasks & Acceptance
@@ -75,7 +75,7 @@ context:
 - Testen for «alle kall brukt» (`test_vindu_logg_ut.py`) bygger søknaden selv med konstantene fra `hjelpere.py`, fordi `paa_brev_med_ekte_ki` står i `test_nytt_forslag.py` og testfilene ikke henter hjelpere fra hverandre (`conftest.py`).
 - Resultatsiden har tre nye tester i `test_resultat.py`: vanlig visning uten klassen, KI-feil fra «Lag søknadsbrevet mitt» med klassen (og samme bredde), og alle KI-kall brukt med klassen. CSS-testen står i `test_pynt.py`. Redusert bevegelse er uendret (den felles regelen slår av alle animasjoner, `test_ux_dr18_redusert_bevegelse_slaar_av_pynten`).
 - Kildetekst-testen for feilboksen står i `test_nedlasting_pdf.py`, og den gamle sjekken i `test_nedlasting.py` er endret til den nye vakta.
-- Beslutningene fra 7.4 og 7.5 («Mine valg») er ført inn med datoen storiene ble godkjent og flettet (20. november 2026, `git log` for `my-project/9-koding/`).
+- Beslutningene fra 7.4 og 7.5 («Mine valg») er ført inn med datoen storiene ble godkjent og flettet (20. november 2026, `git log` for `my-project/8-koding/`).
 - `_bmad-output/` er git-ignorert, så endringene i planene vises i Git bare gjennom kopiene i `my-project/`. Kopiene er skrevet på nytt fra `_bmad-output/` (med CRLF, som før), og er like bortsett fra linjeskiftene.
 
 - Etter gjennomgangen (16 funn): 8 små rettinger av tekster i README, AD-11, EXPERIENCE, epics og kommentarene i koden, og én ekstra sjekk i A2-testen. 1 utsatt (nettlesertest av `nedlasting.js`, issue #16), resten avvist. 1 392 tester består, og ruff er rent.

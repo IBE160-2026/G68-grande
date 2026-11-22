@@ -34,7 +34,7 @@ context:
 - Alle åtte ekte svarene består den strenge sjekken (sjekket i retroen), og `test_testdata.py` sjekker de to i `ki-svar/`.
 - `tests/test_testdata.py`: sjekklisteordene i alle `ny`, og `korrektur_visning(...)["antall_endret"] >= 1`.
 - `tests/kjerne/test_ki_svar.py`: testen «ser bort fra tegnsetting» er nå «ser bort fra mellomrom og linjeskift» (med NFC). En ny test viser at store bokstaver, tegnsetting og tom `gammel` gir `KIFeil`.
-- AD-4 og AD-10 i `ARCHITECTURE-SPINE.md` og Svarformen i `epic-5-context.md` er rettet, med kopier i `my-project/5-arkitektur/arkitektur.md` og `my-project/9-koding/epic-5-context.md`.
+- AD-4 og AD-10 i `ARCHITECTURE-SPINE.md` og Svarformen i `epic-5-context.md` er rettet, med kopier i `my-project/5-arkitektur/arkitektur.md` og `my-project/8-koding/epic-5-context.md`.
 - 1033 tester består, og ruff er uten feil.
 - Etter gjennomgangen: sjekken ser bort fra alle mellomrom (også mellom setninger) og usynlige formattegn (Cf), men ikke fra store bokstaver og tegnsetting (`_uten_mellomrom`). En tom `gammel` avvises med en egen regel. NFC er flyttet inn i `_rens_avsnitt`, så teksten som lagres og vises, også får NFC. `TestKI.korrektur` gir `KIFeil(annet)` når `eget-brev.txt` ikke kan leses. 1038 tester består, og 8 av 8 ekte svar består.
 

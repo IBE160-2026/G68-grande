@@ -30,7 +30,7 @@ Ta med resten av tilbakemeldingen på PRD-en («alt»), og bytte navnet til «je
 ### Resultat
 - `a06b4ba`: FR-15 (8–20 nøkkelord, tom liste eller over 30 er ubrukelig, listen lagres i søknaden), nytt suksesskriterium 14 (testes med ekte KI), «C#», «C++» og «.NET» i FR-17, minstekrav for markeringene i FR-23, kolonnen «Svar» og avklart filstørrelse og modell i §8, ordlisten (Søknad, Stillingsannonse, Søknadsbrev), lenke til arkitekturen ved AD-4. Nytt punkt i TO DO for epic 4.
 - Commit etter: «Kristine» byttet til «jeg» i PRD-en (§8) og addendumet. Prompt-logg 338–339.
-- Refleksjonsspørsmålene ligger i `my-project/8-refleksjonsrapport/notater.md` (bare lokalt). «Java» i «JavaScript» sto alt i det første utkastet av PRD-en. KI-gjennomgangen førte til regelen for korte nøkkelord.
+- Refleksjonsspørsmålene ligger i `my-project/9-refleksjonsrapport/notater.md` (bare lokalt). «Java» i «JavaScript» sto alt i det første utkastet av PRD-en. KI-gjennomgangen førte til regelen for korte nøkkelord.
 - Pushet til `main`.
 
 ### Åpne punkter

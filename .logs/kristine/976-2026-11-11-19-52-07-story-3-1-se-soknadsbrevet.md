@@ -6,8 +6,8 @@
 Kristine startet `/bmad-build 3.1`: første story i epic 3. Resultatsiden skal få «Lag søknadsbrevet mitt», og brukeren skal se brevet på en egen brevside.
 
 ### Plan
-- En hjelper samlet planene for epic 3 i `_bmad-output/implementation-artifacts/epic-3-context.md` (kopi i `my-project/9-koding/`).
-- KI-en leste koden, UX, arkitekturen og testdataene og skrev spec-en [`spec-3-1-se-soknadsbrevet.md`](../../my-project/9-koding/spec-3-1-se-soknadsbrevet.md), med et utkast til testbrevet til Sara.
+- En hjelper samlet planene for epic 3 i `_bmad-output/implementation-artifacts/epic-3-context.md` (kopi i `my-project/8-koding/`).
+- KI-en leste koden, UX, arkitekturen og testdataene og skrev spec-en [`spec-3-1-se-soknadsbrevet.md`](../../my-project/8-koding/spec-3-1-se-soknadsbrevet.md), med et utkast til testbrevet til Sara.
 - Kristine valgte å beholde spec-en samlet (ca. 2500 tokens) og godkjente den («Godkjenn og fortsett»).
 - En hjelper kodet storyen, og tre hjelpere gikk gjennom koden (blind, kanttilfeller, testhull).
 

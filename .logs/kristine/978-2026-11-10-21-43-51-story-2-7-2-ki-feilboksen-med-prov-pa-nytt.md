@@ -7,7 +7,7 @@
 
 ### Plan
 - Intensjonen kom fra `deferred-work.md` (delt ut fra 2.7.1). Ingen åpne spørsmål og en liten endring, så `bmad-build` valgte den korte veien (oneshot): kode, én gjennomgangsagent (blind), rette, committe.
-- Spec: [`my-project/9-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md`](../../my-project/9-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md).
+- Spec: [`my-project/8-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md`](../../my-project/8-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md).
 - Branch `story/2-7-2-ki-feilboksen-med-prov-pa-nytt` fra `main` (`3c79f82`).
 
 ### Resultat

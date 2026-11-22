@@ -7,7 +7,7 @@
 
 ### Plan
 - Oppdaterte `epic-7-context.md` (7.2 ferdig, skriften Noto Sans), fordi arkitekturen var endret etter at konteksten ble laget.
-- Spec: [spec-7-3-gjenbruke-nokkelordlisten-nar-bare-cv-en-er-endret.md](../../_bmad-output/implementation-artifacts/spec-7-3-gjenbruke-nokkelordlisten-nar-bare-cv-en-er-endret.md) (kopi i `my-project/9-koding/`).
+- Spec: [spec-7-3-gjenbruke-nokkelordlisten-nar-bare-cv-en-er-endret.md](../../_bmad-output/implementation-artifacts/spec-7-3-gjenbruke-nokkelordlisten-nar-bare-cv-en-er-endret.md) (kopi i `my-project/8-koding/`).
 - Kristine valgte samme vask som testmodus («C++» → «C#» regnes som lik annonse, retro 2 A11) og å beholde hele spec-en (ca. 2 400 tokens).
 - Branch `story-7-3-gjenbruke-nokkelordlisten`. En underagent kodet, og tre underagenter gikk gjennom koden (blind, edge case, verification gap).
 

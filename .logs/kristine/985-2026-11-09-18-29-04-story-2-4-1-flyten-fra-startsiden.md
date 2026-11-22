@@ -9,7 +9,7 @@ Kristine ba om story 2.4 med `/bmad-build`, og ville lese spec-en før koden ble
 - Spec-en for hele story 2.4 ble på ca. 2500 tokens (grensen er 1600). Kristine valgte å dele den i to:
   - **2.4.1** (denne): søknaden i økten, stegene, «Begynn å lage søknad», modusvalget og innleggingssiden med bare overskriften.
   - **2.4.2**: bryteren, teksten om testmodus og merkelappen «Testmodus». Står i `_bmad-output/implementation-artifacts/deferred-work.md`.
-- Spec: [`spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md`](../../my-project/9-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md) (kopi av `_bmad-output/implementation-artifacts/`).
+- Spec: [`spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md`](../../my-project/8-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md) (kopi av `_bmad-output/implementation-artifacts/`).
 - Valg tatt av KI-en: innleggingssiden har bare overskriften til story 2.5, og «Tilbake» står til venstre slik epics-fila sier (i skissen står den i midten).
 - Egen branch `story/2-4-1-flyten-fra-startsiden-til-innleggingen`. Hovedøkta skrev koden, og tre hjelpeagenter gikk gjennom den (blind, grensetilfeller, testhull).
 

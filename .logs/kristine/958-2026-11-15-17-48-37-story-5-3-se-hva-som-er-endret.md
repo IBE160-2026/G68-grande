@@ -6,7 +6,7 @@
 `/bmad-build 5.3`: vise på brevsiden i Korrektur hvilke setninger KI-en har endret, og hva brukeren skrev før, så studenten kan vurdere endringene (FR-23, kriterium 4).
 
 ### Plan
-- Planen: [spec-5-3-se-hva-som-er-endret-i-korrektur.md](../../my-project/9-koding/spec-5-3-se-hva-som-er-endret-i-korrektur.md) (kopi av `_bmad-output/implementation-artifacts/`).
+- Planen: [spec-5-3-se-hva-som-er-endret-i-korrektur.md](../../my-project/8-koding/spec-5-3-se-hva-som-er-endret-i-korrektur.md) (kopi av `_bmad-output/implementation-artifacts/`).
 - Kristine bestemte: er setninger bare fjernet (ingen grønne), skjules forklaringen over brevet. Planen (ca. 2 700 tokens) beholdes hel.
 - Branch `story-5-3-se-hva-som-er-endret`. En hjelpeagent kodet ut fra planen, tre gjennomgangsagenter (blind, edge-case, verification-gap) så på koden.
 

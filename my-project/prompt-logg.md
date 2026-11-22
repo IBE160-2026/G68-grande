@@ -352,47 +352,47 @@ Verktøy: Claude Code med BMAD-skillen `bmad-create-epics-and-stories`. Planen l
 
 ## 2026-11-08 – Story 1.1: Nettsiden starter fra en ny kopi av repoet
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/), og koden i [PR #2](https://github.com/IBE160-2026/G68-grande/pull/2).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/), og koden i [PR #2](https://github.com/IBE160-2026/G68-grande/pull/2).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 220 | `/bmad-build` / «Ja, story 1.1» / «Ja, bruk dem» (hjelpeagenter) | KI-en laget en egen branch og et sammendrag av planene for epic 1, og skrev planen (spec) for story 1.1 |
-| 221 | «Behold samlet» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg valgte å holde den samlet fordi alt er grunnmuren. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 8 av 25 funn var ekte og ble rettet, blant annet port 5000 på Mac og en test som manglet for tomme verdier i `.env` (se [spec-en](9-koding/spec-1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet.md)) |
+| 221 | «Behold samlet» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg valgte å holde den samlet fordi alt er grunnmuren. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 8 av 25 funn var ekte og ble rettet, blant annet port 5000 på Mac og en test som manglet for tomme verdier i `.env` (se [spec-en](8-koding/spec-1-1-nettsiden-starter-fra-en-ny-kopi-av-repoet.md)) |
 | 222 | «jeg skjønte ikke hva jeg skulle gjøre i den andre terminalen» | KI-en startet nettsiden for meg i stedet, så jeg bare trengte å åpne adressen i nettleseren |
 | 223 | «jeg får opp verktøyvinduet, men får ikke den til mobilstørrelse» / «jeg fikk det til nå, hadde ikke åpnet verktøysiden helt» | KI-en forklarte mobil-ikonet i verktøyvinduet (F12). Jeg sjekket siden ved 375 px |
 | 224 | «ja det ser veldig bra ut! regner med at startsiden ikke er ferdig, da det i de neste stegene kommer mer om begynn søknad og KI-samtykke osv?» | KI-en bekreftet at startsiden bygges videre i story 1.2–1.4, 2.4 og 4.3 |
 | 225 | «push» / «jeg har flettet nå» | Branchen ble pushet og PR #2 laget. CI var grønn på Linux og Windows, og jeg flettet PR-en. Story 1.1 er satt til ferdig |
-| 226 | «du kan pushe, husk å ha med promptlog og memlog også om det er nødvendig […] skulle gjerne hatt at PR #2 heter Story 1.1 ferdig eller noe i den duren der. Skal jeg trykke på den knappen som heter delete branch nå?» | Prompt-loggen ble oppdatert, og planen og kodegjennomgangen ble kopiert til `9-koding/`. PR #2 fikk nytt navn |
+| 226 | «du kan pushe, husk å ha med promptlog og memlog også om det er nødvendig […] skulle gjerne hatt at PR #2 heter Story 1.1 ferdig eller noe i den duren der. Skal jeg trykke på den knappen som heter delete branch nå?» | Prompt-loggen ble oppdatert, og planen og kodegjennomgangen ble kopiert til `8-koding/`. PR #2 fikk nytt navn |
 
 ## 2026-11-08 – Story 1.2: Logge inn med testbrukeren
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-2-logge-inn-med-testbrukeren.md), og koden i [PR #3](https://github.com/IBE160-2026/G68-grande/pull/3).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-1-2-logge-inn-med-testbrukeren.md), og koden i [PR #3](https://github.com/IBE160-2026/G68-grande/pull/3).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 227 | `/bmad-build` / «1.2» | KI-en laget en egen branch og skrev planen (spec) for story 1.2: database med testbrukeren, innloggingssiden og innlogging som krav for startsiden |
-| 228 | «Behold hele» / «Godkjenn og fortsett» / «Ja, bruk agenter» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 9 av 19 funn var ekte og ble rettet, blant annet en test som aldri kunne feile (sjekk av at passordet ikke logges), at knappen fortsatt hoppet ved redusert bevegelse, og at «testmodus på» sto to steder (se [spec-en](9-koding/spec-1-2-logge-inn-med-testbrukeren.md)) |
+| 228 | «Behold hele» / «Godkjenn og fortsett» / «Ja, bruk agenter» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 9 av 19 funn var ekte og ble rettet, blant annet en test som aldri kunne feile (sjekk av at passordet ikke logges), at knappen fortsatt hoppet ved redusert bevegelse, og at «testmodus på» sto to steder (se [spec-en](8-koding/spec-1-2-logge-inn-med-testbrukeren.md)) |
 | 229 | «du kan starte den for meg» / «det det ser bra ut, alt funker, push!» | KI-en startet nettsiden, og jeg prøvde testbrukeren, tomme felt og feil passord i nettleseren. Branchen ble pushet og PR #3 laget |
 | 230 | «jegg har flettet nå» | CI var grønn på Linux og Windows, og jeg flettet PR #3. Story 1.2 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
 ## 2026-11-08 – Story 1.3: Registrere seg som ny bruker
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md), og koden i [PR #4](https://github.com/IBE160-2026/G68-grande/pull/4).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-1-3-registrere-seg-som-ny-bruker.md), og koden i [PR #4](https://github.com/IBE160-2026/G68-grande/pull/4).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 231 | `/bmad-build` / «1.3» | KI-en laget en egen branch og skrev planen (spec) for story 1.3: registreringssiden, alle feilmeldingene og lenkene mellom innlogging og registrering |
-| 232 | «Behold hele» / «Godkjenn og fortsett» / «Ja» (hjelpeagenter) | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 3 av 16 funn var ekte og ble rettet, alle i testene: sjekken av at ingenting hentes utenfra, så ikke på den nye siden, testen av escaping kunne bestått selv om e-posten forsvant, og koblingen av «Minst 8 tegn» og feilteksten ble ikke testet ved for kort passord (se [spec-en](9-koding/spec-1-3-registrere-seg-som-ny-bruker.md)) |
+| 232 | «Behold hele» / «Godkjenn og fortsett» / «Ja» (hjelpeagenter) | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 3 av 16 funn var ekte og ble rettet, alle i testene: sjekken av at ingenting hentes utenfra, så ikke på den nye siden, testen av escaping kunne bestått selv om e-posten forsvant, og koblingen av «Minst 8 tegn» og feilteksten ble ikke testet ved for kort passord (se [spec-en](8-koding/spec-1-3-registrere-seg-som-ny-bruker.md)) |
 | 233 | «ja start siden for meg» / «det funket utmerket, push» | KI-en startet nettsiden, og jeg prøvde ny bruker, alle feilene og innlogging med den nye brukeren i nettleseren. Branchen ble pushet og PR #4 laget |
 | 234 | «flettet» | CI var grønn på Linux og Windows, og jeg flettet PR #4. Story 1.3 er satt til ferdig, og sprint-statusen og TO DO er oppdatert |
 
 ## 2026-11-08 – Story 1.4: Logge ut, og bare innloggede kommer inn
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md), og koden i [PR #5](https://github.com/IBE160-2026/G68-grande/pull/5).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md), og koden i [PR #5](https://github.com/IBE160-2026/G68-grande/pull/5).
 
 | # | Min prompt | Resultat |
 |---|---|---|
 | 235 | `/bmad-build` / «1.4» | KI-en laget en egen branch og skrev planen (spec) for story 1.4: «Logg ut» i hjørneraden, «Du må logge inn først» når man ikke er logget inn, og en test som går gjennom alle sidene |
-| 236 | «Beholde hele» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 6 av 19 funn ble rettet. Den viktigste: trykket man tilbake rett etter innlogging, sto «Du må logge inn først» og «Logg ut» på samme side. Meldingen kom også for alle verdier i adressen, og en test for gammel cookie på innloggingssiden manglet. Ett funn er utsatt til README (se [spec-en](9-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md)) |
+| 236 | «Beholde hele» / «Godkjenn og fortsett» | Planen var lengre enn anbefalt, men jeg holdt den samlet. En hjelpeagent kodet storyen, og tre andre leste koden kritisk. **KI-feil:** 6 av 19 funn ble rettet. Den viktigste: trykket man tilbake rett etter innlogging, sto «Du må logge inn først» og «Logg ut» på samme side. Meldingen kom også for alle verdier i adressen, og en test for gammel cookie på innloggingssiden manglet. Ett funn er utsatt til README (se [spec-en](8-koding/spec-1-4-logge-ut-og-bare-innloggede-kommer-inn.md)) |
 | 237 | «denne siden fungerer ikke» | Nettsiden kjørte ikke. KI-en startet den, og jeg prøvde innlogging, «Logg ut» og «Du må logge inn først». Alt virket |
 | 238 | «det virket ikke, jeg kommer tilbake til velkommen» / «det fungerer ikke nå heller» / «Lite skript» | **KI-feil:** tilbakeknappen etter utlogging viste fortsatt «Velkommen». Beskjeden til nettleseren om ikke å lagre sidene holder ikke i nyere Chrome og Edge, og det andre forsøket (å be nettleseren slette lagrede sider) hjalp heller ikke. Jeg valgte et lite skript som laster siden på nytt, og da sender serveren til innloggingen |
 | 239 | «ja nå stemmer det, push» | Tilbakeknappen virket med skriptet. Branchen ble pushet og PR #5 laget |
@@ -400,7 +400,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-08 – Retrospektiv for epic 1
 
-Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-1-retro-2026-11-08.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`8-koding/`](8-koding/epic-1-retro-2026-11-08.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -415,11 +415,11 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 
 ## 2026-11-08 – Story 2.1: Telleregelen for nøkkelordtreff
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-1-telleregelen-for-nokkelordtreff.md), og koden i [PR #7](https://github.com/IBE160-2026/G68-grande/pull/7).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-1-telleregelen-for-nokkelordtreff.md), og koden i [PR #7](https://github.com/IBE160-2026/G68-grande/pull/7).
 
 | # | Min prompt | Resultat |
 |---|---|---|
-| 249 | `/bmad-build` / «2.1» / «Ja, bruk hjelpeagenter» | KI-en laget en egen branch, en hjelpeagent samlet det viktigste for epic 2 i [`epic-2-context.md`](9-koding/epic-2-context.md), og KI-en skrev planen (spec) for telleregelen |
+| 249 | `/bmad-build` / «2.1» / «Ja, bruk hjelpeagenter» | KI-en laget en egen branch, en hjelpeagent samlet det viktigste for epic 2 i [`epic-2-context.md`](8-koding/epic-2-context.md), og KI-en skrev planen (spec) for telleregelen |
 | 250 | «er du ferdig eller skjedde det en feil nå» | **KI-feil:** KI-en stoppet midt i arbeidet uten å si fra, rett før den skulle skrive planen. Ingenting var feil, og den fortsatte |
 | 251 | «Behold hele» / «Godkjenn og fortsett» | En hjelpeagent kodet telleregelen, og tre andre leste koden kritisk. **KI-feil:** alle testene var grønne, men de ville ikke oppdaget tre feil i selve regelen: om grensen på 4 tegn ble flyttet, om «SQL» ga treff i «MySQL», eller om «C++» ga treff i en CV med bare «C». 21 funn: 6 rettelser i testene, 2 punkter utsatt (tekst fra PDF i story 6.1 og en ny linje i README i story 8.1), resten avvist med begrunnelse. 175 tester |
 | 252 | «ja» | Branchen ble pushet, og PR #7 ble laget med merknad om KI-feilene |
@@ -429,7 +429,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-08 – Story 2.2: Fiktive testdata og fasit for første testcase
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md), og koden i [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md), og koden i [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -440,7 +440,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.3: Testmodus kjenner igjen testdataene
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md), og koden i [PR #9](https://github.com/IBE160-2026/G68-grande/pull/9).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-3-testmodus-kjenner-igjen-testdataene.md), og koden i [PR #9](https://github.com/IBE160-2026/G68-grande/pull/9).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -451,7 +451,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.4.1: Flyten fra startsiden til innleggingen
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md), og koden i [PR #10](https://github.com/IBE160-2026/G68-grande/pull/10).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-4-1-flyten-fra-startsiden-til-innleggingen.md), og koden i [PR #10](https://github.com/IBE160-2026/G68-grande/pull/10).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -463,7 +463,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.4.2: Testmodus på startsiden og merkelappen
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-4-2-testmodus-pa-startsiden-og-merkelappen.md), og koden i [PR #11](https://github.com/IBE160-2026/G68-grande/pull/11).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-4-2-testmodus-pa-startsiden-og-merkelappen.md), og koden i [PR #11](https://github.com/IBE160-2026/G68-grande/pull/11).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -474,7 +474,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.5.1: Innleggingssiden
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-5-1-innleggingssiden.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-5-1-innleggingssiden.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -486,7 +486,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-09 – Story 2.5.2: Analysen og første resultatside
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-5-2-analysen-og-forste-resultatside.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-5-2-analysen-og-forste-resultatside.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -498,7 +498,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-10 – Story 2.6: Hele resultatsiden med forklaringer og «Tilbake»
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-6-hele-resultatsiden-med-forklaringer-og-tilbake.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-6-hele-resultatsiden-med-forklaringer-og-tilbake.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -512,7 +512,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-10 – Story 2.7.1: Ventetegn og «opptatt»
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-7-1-ventetegn-og-opptatt.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-7-1-ventetegn-og-opptatt.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -532,7 +532,7 @@ Verktøy: Claude Code. Ingen BMAD-skill, bare samtale og GitHub. Sjekken og det 
 |---|---|---|
 | 297 | «læreren snakker om svg og impeccable når det kommer til design osv, brukte vi en annen skill eller gikk vi rett på bmad sin ux skill» / «tror ikke vi må bruke det […] Og jeg vil påstå at vi har fått det til veldig fint uten» | KI-en sjekket prompt-loggen: UX ble laget bare med `bmad-ux`, og SVG er bare brukt i prosentlinjen. Jeg bestemte at Impeccable ikke trengs |
 | 298 | «kan du gå igjennom å se om det er noe som fraviker fra sensorveiledningen nå?» | KI-en sjekket repoet mot de sju kriteriene. Testene, ruff, historikken, hemmeligheter og lenkene var i orden. To avvik: README var utdatert, og ferdige branches var ikke slettet |
-| 299 | «mtp readme så ønsker jeg at vi oppdaterer den nå, videre så sletter vi branchene på PC […] jeg trodde vi la ved en kommentar på hver PR. mtp github issues? hvordan kan jeg bruke det?» | Branchene ble slettet på PC-en, og README fikk ny status, mappestruktur og lenke til `9-koding/`. KI-en forklarte at merknaden om KI-feil står i beskrivelsen av PR-ene, ikke som kommentar, og at `todo.md` og `issues.md` teller som «tilsvarende» issues. **KI-feil:** KI-en sa at to gamle branches lå på GitHub, men den hadde lest en avkuttet liste, og de var alt slettet |
+| 299 | «mtp readme så ønsker jeg at vi oppdaterer den nå, videre så sletter vi branchene på PC […] jeg trodde vi la ved en kommentar på hver PR. mtp github issues? hvordan kan jeg bruke det?» | Branchene ble slettet på PC-en, og README fikk ny status, mappestruktur og lenke til `8-koding/`. KI-en forklarte at merknaden om KI-feil står i beskrivelsen av PR-ene, ikke som kommentar, og at `todo.md` og `issues.md` teller som «tilsvarende» issues. **KI-feil:** KI-en sa at to gamle branches lå på GitHub, men den hadde lest en avkuttet liste, og de var alt slettet |
 | 300 | «nei vi lager ikke en issue for hver ting fremover, men vi kan teste ut konseptet!» / «under branches får jeg opp en default som det står main på, hva er dette?» | [Issue #16](https://github.com/IBE160-2026/G68-grande/issues/16) om nettlesertester for JavaScript-filene, som lukkes i story 8.2. KI-en forklarte at `main` er hovedbranchen, som ikke skal slettes |
 | 301 | «Ja planen med PR-ene er bra! og ja readme er bare å commite» / «vi gjennomfører jo en PR først, så merger jeg, sletter branchen, deretter pusher vi loggene» | README ble pushet. Sju PR-er (#5, #7, #11–#15) fikk en kommentar om det som skjedde etter at de ble laget. Fremover får hver PR en kort kommentar etter at jeg har prøvd siden |
 | 302 | «Videre så lurer jeg på hv disse innlegging.js osv er?» | KI-en forklarte forskjellen på HTML, CSS og JavaScript, og hva hver av de fire JavaScript-filene gjør |
@@ -540,7 +540,7 @@ Verktøy: Claude Code. Ingen BMAD-skill, bare samtale og GitHub. Sjekken og det 
 
 ## 2026-11-10 – Story 2.7.2: KI-feilboksen med «Prøv på nytt»
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-2-7-2-ki-feilboksen-med-prov-pa-nytt.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -555,7 +555,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-10 – Retrospektiv for epic 2
 
-Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-2-retro-2026-11-10.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`8-koding/`](8-koding/epic-2-retro-2026-11-10.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -571,7 +571,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 
 ## 2026-11-11 – Story 3.1: Se søknadsbrevet
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-1-se-soknadsbrevet.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-3-1-se-soknadsbrevet.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -586,7 +586,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-11 – Story 3.2: Laste ned brevet som Word
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-2-laste-ned-brevet-som-word.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-3-2-laste-ned-brevet-som-word.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -611,7 +611,7 @@ Verktøy: Claude Code. Tilbakemeldingen fra faglærer ligger i [`2-prd/tilbakeme
 
 ## 2026-11-12 – Story 3.3: Vinduet etter nedlasting
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-3-3-vinduet-etter-nedlasting.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-3-3-vinduet-etter-nedlasting.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -625,7 +625,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-12 – Retrospektiv for epic 3
 
-Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`9-koding/`](9-koding/epic-3-retro-2026-11-12.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i [`8-koding/`](8-koding/epic-3-retro-2026-11-12.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -634,7 +634,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-retrospective`. Dokumentet ligger i
 
 ## 2026-11-12 – Rettinger etter retrospektiven for epic 3
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-retro-3-rettinger.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-retro-3-rettinger.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -646,11 +646,11 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-13 – Story 4.1: Koble til Claude for nøkkelord og gap-analyse
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-1-koble-til-claude-for-nokkelord-og-gap-analyse.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-4-1-koble-til-claude-for-nokkelord-og-gap-analyse.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
-| 354 | `/bmad-build` «4» og «Ja, hele økta» til hjelpeagenter | KI-en valgte story 4.1. En hjelpeagent samlet planene for epic 4 i [`epic-4-context.md`](9-koding/epic-4-context.md), også de kjente fallgruvene fra retrospektivene. KI-en sjekket parameternavnene mot dokumentasjonen for anthropic 2.4.0 og skrev planen for 4.1 |
+| 354 | `/bmad-build` «4» og «Ja, hele økta» til hjelpeagenter | KI-en valgte story 4.1. En hjelpeagent samlet planene for epic 4 i [`epic-4-context.md`](8-koding/epic-4-context.md), også de kjente fallgruvene fra retrospektivene. KI-en sjekket parameternavnene mot dokumentasjonen for anthropic 2.4.0 og skrev planen for 4.1 |
 | 355 | «Nei, «Prøv på nytt»» og «Behold samlet» | Jeg valgte at nettsiden ikke skal be om en reservemodell når Claude avviser et kall, og å beholde planen samlet (ca. 2500 tokens) |
 | 356 | «må jeg fikse sånn claude console først?» | KI-en forklarte at 4.1 ikke trenger nøkkel, fordi testene bruker en falsk Claude-klient. Konto, kreditt og nøkkel trengs før story 4.3 |
 | 357 | «godkjenn og fortsett» | En hjelpeagent kodet `EkteKI`, promptene for nøkkelord og gap-analyse, feilene og loggingen av tokens og pris på branchen `story/4-1-koble-til-claude-for-nokkelord-og-gap-analyse`. Den stoppet på bruksgrensen rett før slutten, og KI-en sjekket arbeidet etterpå. Tre hjelpere fant 16 ting: 4 rettet, 3 utsatt og resten avvist med begrunnelse |
@@ -660,7 +660,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-13 – Story 4.2: Brevet fra Claude
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-2-brevet-fra-claude.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-4-2-brevet-fra-claude.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -673,7 +673,7 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 
 ## 2026-11-13 – Story 4.3.1: Slå av testmodus, med samtykke og KI-merknad
 
-Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`9-koding/`](9-koding/spec-4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad.md).
+Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen ligger i [`8-koding/`](8-koding/spec-4-3-1-sla-av-testmodus-med-samtykke-og-ki-merknad.md).
 
 | # | Min prompt | Resultat |
 |---|---|---|
@@ -820,5 +820,5 @@ Verktøy: Claude Code med BMAD-skillen `bmad-build`. Planen og kodegjennomgangen
 | 507 | «så kun disse 4 punktene ingenting som ligger å lurer? kan du nå ta en ny sjekk i forhold til sensorveiledningen om det er noe vi mangler?» og «teksten er ok, comitt» | KI-en gikk gjennom de åpne punktene og alle sju kriteriene i sensorveiledningen mot repoet: commits og PR-er, tester og CI, README, hemmeligheter i historikken, filer som ikke hører hjemme, og rester i koden. Den fant to småting. Sprint-statusen på GitHub sa at story 8.2 ikke var påbegynt, og README pekte ikke til kuttlisten, selv om sensor ser etter at det som er utelatt fra proposal, er begrunnet. Jeg godkjente et nytt avsnitt i README, «Hva er med, og hva er kuttet». |
 | 508 | «dette punktet stusser jeg litt på, også kom jeg på å at vi ikke har en tilbakeknapp fra brevsiden», «kan du vise meg tabellen?», «ønsker ikke noe mer kode, men vi må ha en begrunnelse» og «ja det ser bra ut» | KI-en forklarte punktet om nettlesertester med enklere ord og viste tabellen over skriptene jeg har prøvd for hånd. Teksten i den korte prompt-loggen ble skrevet enklere. At brevsiden ikke har «Tilbake», var bestemt i UX, men grunnen var ikke skrevet ned. Den står nå i `EXPERIENCE.md`: brevet kan slettes uten spørsmål hvis man går tilbake og endrer noe, så en knapp ville gjort det lettere å miste brevet. Ingen ny kode. |
 | 509 | «/bmad-retrospective 8», «Ja, ta den nå», «Rette den», «Egen runde nå», «hva anbefaler du?», «Ja, begge», «Godkjent med åpne punkter» og «Begge ferdig» | KI-en samlet bevisene for epic 8 (PR #52–#55, spec-ene, loggene) og kjørte tre linser over hele diffen. Den viktigste feilen var i oppryddingen (PR #55): «Lag ny søknad» i feilboksen kan slette et brev som ikke er lastet ned. KI-en prøvde det med en midlertidig test og slettet den etterpå. Jeg valgte å rette det i en egen runde, ta med begge tekstene KI-en anbefalte, og overstyre dommen fra «rejected» til «godkjent med åpne punkter», fordi bare andre prøve fra en ny kopi står igjen. Retrospektiven har 4 punkter, og sprint-statusen og TO DO er oppdatert |
-| 510 | «/bmad-retrospective gjennomfør rettinger av 8», «Gå til brevet», «Ja, bruk den» (begge tekstene), «Behold hel» og «godkjenn og fortsett» | KI-en laget planen for runden `retro-8-rettinger` på egen branch ([`spec-retro-8-rettinger.md`](9-koding/spec-retro-8-rettinger.md)). Jeg valgte at feilboksen på resultatsiden og innleggingen får knappen «Gå til brevet» i stedet for «Lag ny søknad» når søknaden har et brev, så brevet ikke slettes, og godkjente teksten om å laste ned brevet og setningen om 47 % i README. KI-en kodet det med nye tester og rettet kommentarene, README, testplanen og planene. Tre linser gikk gjennom koden (tiltak 4 i retro 8: også rettinger får en gjennomgang). De fant 16 punkter: 8 rettet, 7 avvist og 1 utsatt («Tilbake» på modusvalget kan også slette brevet, og det fantes fra før). 1 423 tester består |
+| 510 | «/bmad-retrospective gjennomfør rettinger av 8», «Gå til brevet», «Ja, bruk den» (begge tekstene), «Behold hel» og «godkjenn og fortsett» | KI-en laget planen for runden `retro-8-rettinger` på egen branch ([`spec-retro-8-rettinger.md`](8-koding/spec-retro-8-rettinger.md)). Jeg valgte at feilboksen på resultatsiden og innleggingen får knappen «Gå til brevet» i stedet for «Lag ny søknad» når søknaden har et brev, så brevet ikke slettes, og godkjente teksten om å laste ned brevet og setningen om 47 % i README. KI-en kodet det med nye tester og rettet kommentarene, README, testplanen og planene. Tre linser gikk gjennom koden (tiltak 4 i retro 8: også rettinger får en gjennomgang). De fant 16 punkter: 8 rettet, 7 avvist og 1 utsatt («Tilbake» på modusvalget kan også slette brevet, og det fantes fra før). 1 423 tester består |
 | 511 | «kan du forklare det du mente med det lille hullet? åpne nettsiden og lag en liste på hva jeg skal gjre», «ja det virket, legg det inn i readme» og «da er den flettet» | KI-en forklarte at «Tilbake» på modusvalget går til startsiden, som begynner på en ny søknad, så brevet blir borte uten spørsmål. Den startet nettsiden med grensen satt til 3 KI-kall bare i minnet og ga meg en liste med fem punkter. Jeg prøvde med ekte KI, og «Gå til brevet» og den nye teksten virket. Jeg valgte at hullet bare skrives i README («tre måter») og ikke rettes i koden så nær levering. KI-en førte prøven inn i testplanen, la til setningen i README og laget [PR #56](https://github.com/IBE160-2026/G68-grande/pull/56) med en kommentar om nettleserprøven. Etter at jeg flettet, ble tiltak 1–2 i retro 8 satt til ferdig i sprint-statusen, TO DO og `issues.md` |

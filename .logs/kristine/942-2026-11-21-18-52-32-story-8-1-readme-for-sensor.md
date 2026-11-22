@@ -7,7 +7,7 @@ Kristine startet `/bmad-build 8`, altså første story i epic 8: README skal væ
 
 ### Plan
 - Sammendraget for epic 8 ble laget (`_bmad-output/implementation-artifacts/epic-8-context.md`), og branchen `story-8-1-readme-for-sensor` ble laget fra `main`.
-- Planen: [spec-8-1-readme-for-sensor.md](../../my-project/9-koding/spec-8-1-readme-for-sensor.md). De utsatte punktene for 8.1 i `deferred-work.md` og `issues.md` ble tatt med.
+- Planen: [spec-8-1-readme-for-sensor.md](../../my-project/8-koding/spec-8-1-readme-for-sensor.md). De utsatte punktene for 8.1 i `deferred-work.md` og `issues.md` ble tatt med.
 - Kristines tre valg: (1) CSRF nevnes i README, og i tillegg settes `SESSION_COOKIE_SAMESITE="Lax"` i koden. (2) Setningen om at «SQL» ikke gir treff i «MySQL», tas med. (3) Tre skjermbilder med ekte KI (resultatsiden, brevsiden og Korrektur) legges øverst, rett under «Hvem den er for».
 - En underagent kodet det. Etterpå var det en gjennomgang med tre lag (blind, edge case og verification gap).
 
@@ -25,7 +25,7 @@ Kristine startet `/bmad-build 8`, altså første story i epic 8: README skal væ
   - Testen hadde feil kravnummer (NFR-8 i stedet for FR-3).
 
   At `GET /last-ned/<format>` endrer `lastet_ned`, er utsatt i `deferred-work.md`. Resten ble avvist med begrunnelse (se Review Triage Log i spec-en).
-- 1393 tester består, og ruff gir ingen feil. Sprint-statusen har 8.1 på `review`, og epic 8 er `in-progress` (kopien er oppdatert). Spec-en er kopiert til `my-project/9-koding/`, og oversikten i `my-project/README.md` har fått en rad for den.
+- 1393 tester består, og ruff gir ingen feil. Sprint-statusen har 8.1 på `review`, og epic 8 er `in-progress` (kopien er oppdatert). Spec-en er kopiert til `my-project/8-koding/`, og oversikten i `my-project/README.md` har fått en rad for den.
 - Lukket i `issues.md`: CSRF i README, «SQL» i «MySQL» og SameSite (løst 2026-11-21).
 - Kristines tre valg er ført inn i story 8.1 i `epics.md` (begge kopiene), etter tiltak 4 fra retro 7. Det står ingenting om README i `EXPERIENCE.md`, så den er ikke endret.
 - Commits: `e2b0941` (story 8.1), `738470b` (prompt-logg 500) og `8e5c638` (beslutningene i epics.md). Ikke pushet.

@@ -437,7 +437,7 @@ action_items:
   - id: "epic-7-retro-item-49-prosess-når-en-story-avsluttes-føres-kri"
     epic: 7
     action: "Prosess: når en story avsluttes, føres Kristines beslutninger fra spec-en
-      inn i epics.md og EXPERIENCE.md, og nye filer i my-project/9-koding får en rad
+      inn i epics.md og EXPERIENCE.md, og nye filer i my-project/8-koding får en rad
       i oversikten, i samme PR"
     owner: "KI (Claude)"
     status: done

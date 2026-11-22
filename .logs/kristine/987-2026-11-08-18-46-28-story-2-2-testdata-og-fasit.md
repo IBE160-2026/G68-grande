@@ -8,7 +8,7 @@ Kristine startet `/bmad-build` med «2.2». Nettsiden skal ha fiktive testdata m
 ### Plan
 - Egen branch `story/2-2-fiktive-testdata-og-fasit-for-forste-testcase`. Kristine sa ja til hjelpeagenter i hele økta.
 - Epic 2-konteksten fra story 2.1 var fortsatt gyldig og ble brukt på nytt.
-- Spec skrevet: [spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md](../../my-project/9-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md) (originalen ligger i `_bmad-output/implementation-artifacts/`).
+- Spec skrevet: [spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md](../../my-project/8-koding/spec-2-2-fiktive-testdata-og-fasit-for-forste-testcase.md) (originalen ligger i `_bmad-output/implementation-artifacts/`).
   - Den er på ca. 1800 tokens, og Kristine valgte «Godkjenn og fortsett».
   - KI-en tok selv disse valgene: casen er en junior utvikler (som i eksempelet i PRD-addendumet), mappen heter `case-1-utvikler`, og testen sjekker ikke ordlyden i gap-analysen, fordi ekte KI-svar i Epic 4 bruker andre ord.
   - KI-en la også til en kort sjekkliste for brevet i fasiten (kriterium 11), fordi arkitekturen sier at fasiten skal ha den, og ingen annen story lager den.
@@ -32,10 +32,10 @@ Kristine startet `/bmad-build` med «2.2». Nettsiden skal ha fiktive testdata m
 - Ingen av funnene som ble avvist, var avvist i en tidligere story, så punkt 7 fra retrospektiven ga ingen beslutning til Kristine denne gangen.
 - **KI-feil i hovedøkta:** KI-en prøvde om testen virket ved å endre fasiten med vilje. Etterpå prøvde den å legge fila tilbake med Git, men fila var ikke lagret i Git ennå, og ble tømt. Den ble lagt tilbake fra en kopi KI-en hadde tatt først, og den er helt lik originalen (samme kontrollsum, `20a262a`).
 - 182 tester grønne (175 før), `ruff check` og `ruff format --check` grønne.
-- Commits: `0881b4a` (testdataene, testene og README), `51a0d3c` (spec i `my-project/9-koding/`, prompt-logg 256–257 og TO DO).
+- Commits: `0881b4a` (testdataene, testene og README), `51a0d3c` (spec i `my-project/8-koding/`, prompt-logg 256–257 og TO DO).
 - Kristine fikk CV-en, annonsen og fasiten åpnet i Notisblokk, leste dem og sa «push». Branchen er pushet, og [PR #8](https://github.com/IBE160-2026/G68-grande/pull/8) er laget med merknad om KI-feilene (prompt-logg 258).
 - Kristine flettet PR #8 (prompt-logg 259). `sprint-status.yaml`: story 2.2 er `done`, og kopien i `my-project/7-sprint-planning/` og `todo.md` er oppdatert. Story 2.3 venter til neste økt, fordi bruksgrensen hos Claude snart var nådd.
-- Notater til refleksjonsrapporten lagt inn i `my-project/8-refleksjonsrapport/notater.md` (3.3 og 5.5).
+- Notater til refleksjonsrapporten lagt inn i `my-project/9-refleksjonsrapport/notater.md` (3.3 og 5.5).
 - Ingenting å prøve i nettleseren, fordi ingen side bruker testdataene ennå (story 2.3 og 2.5).
 
 ### Åpne punkter

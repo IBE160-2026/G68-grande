@@ -54,7 +54,7 @@ context:
 - `README.md:23` (B5), `:151` (A5: en vanlig lenke til `/` fra en annen nettside lager en ny søknad, og da er det som er lagt inn og brevet borte).
 - `my-project/testplan.md:7` «FR-nummeret» → «FR- eller NFR-nummeret» (B4). «Hele flyten for hånd» (`:515-524`): rad for lenken fra PR #55 (22. november 2026, Kristine, ekte KI, grensen satt til 2 KI-kall i den kjøringen, uten brev, «ser bra ut»), og en rad «Ikke prøvd ennå» for denne rettingen.
 - `my-project/testkjoringer/8-2/maling-5000/maal_korrektur.py:11-13` -- kommandoen med `PYTHONPATH=.` (Git Bash) og `$env:PYTHONPATH="."` (PowerShell) (B3).
-- `_bmad-output/implementation-artifacts/spec-8-2-1-testplan-og-forste-prove.md:49` = `my-project/9-koding/…` -- `[ ]` → `[x]` (B4).
+- `_bmad-output/implementation-artifacts/spec-8-2-1-testplan-og-forste-prove.md:49` = `my-project/8-koding/…` -- `[ ]` → `[x]` (B4).
 - `_bmad-output/planning-artifacts/epics.md:745` = `my-project/6-epics-og-stories/epics.md` -- «På innleggingen og resultatsiden har meldingen lenken …» får «når søknaden ikke har et brev» og datoen for retro 8.
 - `…/ux-designs/ux-kode-prosjekt-2026-10-20/EXPERIENCE.md:278` = `my-project/3-ux/EXPERIENCE.md` -- raden «KI-feil»: meldingen om alle KI-kallene, lenken og brevregelen (C2).
 - `my-project/README.md` (oversikten over spec-ene) -- rad for `spec-retro-8-rettinger.md`, som for retro 7.
@@ -90,7 +90,7 @@ Gjennomgang 1 (2026-11-22): blind, edge-case og verification-gap over `git diff 
 
 | # | Lag | Funn | Dom | Bevis | Vei |
 |---|-----|------|-----|-------|-----|
-| 1 | blind | Spec-kopien mangler i diffen | false | Tatt ut med vilje som påstandsfila. `my-project/9-koding/spec-retro-8-rettinger.md` er lagt til (`git add -N`) og kommer med i committen | avvist |
+| 1 | blind | Spec-kopien mangler i diffen | false | Tatt ut med vilje som påstandsfila. `my-project/8-koding/spec-retro-8-rettinger.md` er lagt til (`git add -N`) og kommer med i committen | avvist |
 | 2 | blind | Teksten velges ut fra `prov_pa_nytt`, ikke ut fra feilen | low | Eneste som gir `prov_pa_nytt=False`, er `_med_ki:527` med `KI_KALL_BRUKT`, og docstringene sier at `False` betyr akkurat den meldingen. Bare en framtidig kaller kan treffe det, og rettingen er et nytt flagg | avvist (low, mer enn en direkte retting) |
 | 3 | blind | Ingen test for vanlig KI-feil når søknaden har brev | low | `test_fr28_ki_feil_paa_resultatsiden_beholder_brevet` sjekker bare knappene, ikke overskriften eller at «Gå til brevet» mangler | patch |
 | 4 | blind, edge | «Endrede felt» bare i Full generering | low | `test_nfr11_endrede_felt_…` er ikke parametrisert som de to andre | patch |

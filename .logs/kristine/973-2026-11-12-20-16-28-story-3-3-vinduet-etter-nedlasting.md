@@ -28,12 +28,12 @@ Kristine prøvde story 3.3 i nettleseren og ba om å få notatene inn i refleksj
 
 ### Plan
 - Starte nettsiden, åpne testannonsen på nytt (teksten på siden var slettet, fila var urørt) og rette det som ble funnet.
-- Legge story 3.3 inn i `my-project/8-refleksjonsrapport/notater.md`.
+- Legge story 3.3 inn i `my-project/9-refleksjonsrapport/notater.md`.
 
 ### Resultat
 - Funnet ved prøving: første gang vinduet åpnes med musa, viste ikke «Bli her» fokusringen (`:focus-visible` gir ingen ring etter et museklikk). Rettet med `#bli-her:focus`, som `.lim-inn:focus`, og en ny sjekk i CSS-testen. Commit `3927d47`. 560 tester og `ruff` grønne.
 - Kristine prøvde resten av sjekklista, og alt virket.
-- Refleksjonsnotatene har fått et punkt om story 3.3 under 4.2: samme feil som i 2.5.1, og KI-en brukte ikke løsningen som alt fantes. Mappen `my-project/8-refleksjonsrapport/` er git-ignorert, så notatet er bare lagret lokalt.
+- Refleksjonsnotatene har fått et punkt om story 3.3 under 4.2: samme feil som i 2.5.1, og KI-en brukte ikke løsningen som alt fantes. Mappen `my-project/9-refleksjonsrapport/` er git-ignorert, så notatet er bare lagret lokalt.
 
 ### Åpne punkter
 - Story 3.3: kopi av spec-en, oversikten, TO DO og prompt-logg i `my-project/`, så PR med merknad om KI-feil og kommentar om prøvingen, grønn CI og fletting (står alt i `issues.md`).
@@ -48,7 +48,7 @@ Kristine sa «ja gjør det» til å stoppe nettsiden, føre story 3.3 inn i `my-
 
 ### Resultat
 - Nettsiden stoppet.
-- Commit `00a1955`: kopi av spec-en i `my-project/9-koding/`, rad i `my-project/README.md`, TO DO (3.3 og vinduet lagt til punktet om nettlesertester, issue #16), prompt-logg 340–345 og sprint-status (3.3 «review»).
+- Commit `00a1955`: kopi av spec-en i `my-project/8-koding/`, rad i `my-project/README.md`, TO DO (3.3 og vinduet lagt til punktet om nettlesertester, issue #16), prompt-logg 340–345 og sprint-status (3.3 «review»).
 - Branchen pushet og [PR #21](https://github.com/IBE160-2026/G68-grande/pull/21) laget med merknad om KI-feilen (fokusringen) og en kommentar om prøvingen i nettleseren. PR-lenken er ført inn i TO DO, oversikten og prompt-loggen.
 
 ### Åpne punkter

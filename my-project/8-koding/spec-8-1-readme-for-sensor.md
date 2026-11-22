@@ -33,7 +33,7 @@ context:
 
 ## Code Map
 
-- `README.md` -- hele leveransen. Linje 13: statuslinja (fjerne «Kodingen er i gang» og setningen om «kommer»). Linje 105–107: «Skjermbilder» / «*Kommer.*». Linje 111: innledningen «Flere kan komme til når nettsiden er laget». Linje 115: punktet om telleregelen (spørsmål 2). Linje 129–146: mappestrukturen mangler `backend/prompts/` (promptene til Claude), `backend/instance/` (databasen, lages ved oppstart), `my-project/testplan.md` og `my-project/testkjoringer/`. Linje 171: retro-lenkene stopper ved epic 4 (5, 6 og 7 finnes i `my-project/9-koding/`).
+- `README.md` -- hele leveransen. Linje 13: statuslinja (fjerne «Kodingen er i gang» og setningen om «kommer»). Linje 105–107: «Skjermbilder» / «*Kommer.*». Linje 111: innledningen «Flere kan komme til når nettsiden er laget». Linje 115: punktet om telleregelen (spørsmål 2). Linje 129–146: mappestrukturen mangler `backend/prompts/` (promptene til Claude), `backend/instance/` (databasen, lages ved oppstart), `my-project/testplan.md` og `my-project/testkjoringer/`. Linje 171: retro-lenkene stopper ved epic 4 (5, 6 og 7 finnes i `my-project/8-koding/`).
 - `backend/soknad/__init__.py:64-70` -- `app.config.from_mapping(...)`, der `SESSION_COOKIE_SAMESITE="Lax"` settes (beslutning 1). `test_config` kan fortsatt overstyre.
 - `backend/tests/test_app.py` -- testene for innstillingene (`test_nfr8_*`). Den nye testen for SameSite hører hjemme her, og helst sjekker den også `Set-Cookie` etter innlogging.
 - `backend/.env.example` -- stemmer med tabellen i README (tre innstillinger). Endres ikke.

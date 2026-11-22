@@ -54,7 +54,7 @@ context:
 - [x] `backend/tests/web/test_*.py` -- bruker de felles hjelperne og fiksturene. Kopiene og importen fra `test_nedlasting.py` er borte.
 - [x] `backend/tests/web/test_brev.py` -- testen for «Logg ut» ser på hjørneraden: nøyaktig ett skjema der, `action="/logg-ut"`.
 - [x] `backend/soknad/adaptere/fil_ut.py`, `backend/tests/adaptere/test_fil_ut.py` -- 2,5 cm marger, med test.
-- [x] `README.md` -- status: i testmodus virker også søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting. Korrektur, PDF-opplasting, PDF-nedlasting og ekte KI kommer. `adaptere/`: «database, øktlager, KI og Word-fila». Lenke til retrospektivene for epic 1, 2 og 3 i `my-project/9-koding/`.
+- [x] `README.md` -- status: i testmodus virker også søknadsbrevet, nedlastingen som Word og vinduet etter nedlasting. Korrektur, PDF-opplasting, PDF-nedlasting og ekte KI kommer. `adaptere/`: «database, øktlager, KI og Word-fila». Lenke til retrospektivene for epic 1, 2 og 3 i `my-project/8-koding/`.
 
 **Acceptance Criteria:**
 - Given koden etter rettingen, when `grep -rn "from tests.web.test_\|from tests.web import test_" backend/tests` kjøres, then er det ingen treff.

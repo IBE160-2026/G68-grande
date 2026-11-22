@@ -46,7 +46,7 @@ context:
 - `backend/soknad/innstillinger.py:29–32` og `backend/soknad/adaptere/ki.py:191–194` -- kommentarene om «måles i 4.3». Målt i 4.3.1, 4.4 og 4.5: nøkkelord og gap 2–5 s hver, et brev 16–47 s (`my-project/testplan.md:75`).
 - `backend/tests/adaptere/test_ekte_ki.py:357–360` -- `test_nfr11_nettsiden_bruker_fortsatt_testki` slettes. `testplan.md:181` nevner den ikke (sjekk med søk og rett hvis den står der).
 - `backend/soknad/kjerne/ki_svar.py:36–68` -- `_word_taler`, `_rens_avsnitt`, `_uten_tomme` og `_rens`. Listepunktene i `nokkelord`, `dekker` og `mangler` får enslige surrogater (kategori `Cs`) fjernet før `_uten_tomme`. Ikke `arbeidsgiver`.
-- `my-project/README.md:69–72` -- radene for spec-ene. Nye rader for `spec-4-3-2-…`, `spec-4-4-…` og `spec-4-5-…` (kopiene finnes i `my-project/9-koding/`), i samme stil og med PR #26, #27 og #28.
+- `my-project/README.md:69–72` -- radene for spec-ene. Nye rader for `spec-4-3-2-…`, `spec-4-4-…` og `spec-4-5-…` (kopiene finnes i `my-project/8-koding/`), i samme stil og med PR #26, #27 og #28.
 - `README.md:105` -- «Ingenting lagres mellom øktene.» `README.md:149` -- lenkene til retrospektivene for epic 1–3.
 
 ## Tasks & Acceptance
@@ -58,7 +58,7 @@ context:
 - [x] `backend/soknad/kjerne/ki_svar.py` -- enslige surrogater fjernes fra listepunktene. Tester i testfila for `ki_svar`: `\ud800` i et nøkkelord og i et gap-punkt fjernes, og et punkt med bare en surrogat blir borte.
 - [x] Webtest -- et gap-svar med `\ud800` fra KI-en gir resultatsiden (200), ikke en feilside.
 - [x] `my-project/README.md` -- radene for 4.3.2, 4.4 og 4.5.
-- [x] `README.md` -- lenke til retrospektiven for epic 4 (`my-project/9-koding/epic-4-retro-2026-11-14.md`) på linje 149, og nytt punkt rett etter «Ingenting lagres mellom øktene»: «**Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.»
+- [x] `README.md` -- lenke til retrospektiven for epic 4 (`my-project/8-koding/epic-4-retro-2026-11-14.md`) på linje 149, og nytt punkt rett etter «Ingenting lagres mellom øktene»: «**Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.»
 
 **Acceptance Criteria:**
 - Given koden etter rettingen, when man søker etter `def med_nokkel` og «måles i» i `backend/`, then står `med_nokkel` bare i `tests/web/conftest.py`, og «måles i 4.3» står ingen steder.
