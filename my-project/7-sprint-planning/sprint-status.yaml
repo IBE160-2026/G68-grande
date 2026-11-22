@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 11-07-2026 19:11
-last_updated: 11-21-2026 19:45
+last_updated: 11-22-2026 18:54
 project: kode prosjekt
 project_key: NOKEY
 tracking_system: file-system
@@ -88,7 +88,7 @@ development_status:
   epic-8: in-progress
   8-1-readme-for-sensor: done
   8-2-testplan-og-prøve-fra-en-ny-kopi: in-progress
-  epic-8-retrospective: optional
+  epic-8-retrospective: done
 action_items:
   - id: "epic-1-retro-item-1-logg_inn_bruker-kaller-logg_ut_bruker-så"
     epic: 1
@@ -255,7 +255,7 @@ action_items:
     action: "Prosess: kjente fallgruver (fokusring etter museklikk, høykontrast, svg-høyde)
       skrives inn i konteksten for epic 4 og senere epics"
     owner: "KI (Claude)"
-    status: in-progress
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-11-12.md"
   - id: "epic-3-retro-item-25-prosess-sjekk-statusen-før-et-funn-avvis"
     epic: 3
@@ -440,5 +440,37 @@ action_items:
       inn i epics.md og EXPERIENCE.md, og nye filer i my-project/9-koding får en rad
       i oversikten, i samme PR"
     owner: "KI (Claude)"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-7-retro-2026-11-21.md"
+  - id: "epic-8-retro-item-50-retro-8-rettinger-lenken-lag-ny-søknad-i"
+    epic: 8
+    action: "Retro-8-rettinger: lenken «Lag ny søknad» i feilboksen vises ikke når
+      søknaden har et brev (resultatsiden og innleggingen), med test, og kommentarene
+      i malene rettes"
+    owner: "KI (Claude), Kristine prøver i nettleseren"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-8-retro-2026-11-22.md"
+  - id: "epic-8-retro-item-51-retro-8-rettinger-små-tekster-og-papirer"
+    epic: 8
+    action: "Retro-8-rettinger: små tekster og papirer (kommentaren ved SameSite,
+      lenken til / i README, egen tekst i feilboksen på brevsiden, 47 % under Skjermbilder,
+      rad for lenken i testplanen, kommandoen i maal_korrektur.py, FR/NFR i testplanen,
+      avkrysningen i spec 8.2.1, kopien av sprint-status, lenken i EXPERIENCE.md)"
+    owner: "KI (Claude), Kristine godkjenner teksten"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-8-retro-2026-11-22.md"
+  - id: "epic-8-retro-item-52-story-8-2-2-andre-prøve-fra-en-ny-kopi-p"
+    epic: 8
+    action: "Story 8.2.2: andre prøve fra en ny kopi prøver både git clone og ZIP
+      (to mapper inni hverandre på Windows), uten uv fra før, med tomt mellomlager
+      og i PowerShell"
+    owner: "Kristine og KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-8-retro-2026-11-22.md"
+  - id: "epic-8-retro-item-53-prosess-en-kodeendring-utenfor-en-story"
+    epic: 8
+    action: "Prosess: en kodeendring utenfor en story (opprydding eller retting) får
+      minst en kort kodegjennomgang (edge-case) før PR-en"
+    owner: "KI (Claude)"
+    status: open
+    ref: "_bmad-output/implementation-artifacts/epic-8-retro-2026-11-22.md"
