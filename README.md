@@ -36,7 +36,18 @@ Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i cas
 
 **Forutsetninger:** [uv](https://docs.astral.sh/uv/) versjon 0.12 eller nyere. uv henter selv riktig Python (3.14, låst i `backend/.python-version`, minst 3.12) og alle pakkene. Du trenger ikke installere Python først.
 
-**1. Installer uv** (bare første gang):
+**1. Hent koden** (bare første gang). Velg én av måtene:
+
+- **Med Git:** skriv dette i terminalen. Det laster ned hele repoet til en ny mappe `G68-grande` og går inn i den:
+
+  ```bash
+  git clone https://github.com/IBE160-2026/G68-grande.git
+  cd G68-grande
+  ```
+
+- **Uten Git:** trykk den grønne knappen «Code» på GitHub-siden til repoet og velg «Download ZIP». Pakk ut ZIP-fila, og åpne terminalen i mappen som kommer ut (`G68-grande-main`). På Windows kan du høyreklikke i mappen og velge «Åpne i Terminal».
+
+**2. Installer uv** (bare første gang):
 
 - Windows (PowerShell):
 
@@ -52,7 +63,7 @@ Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i cas
 
 Lukk og åpne terminalen igjen etterpå, så kommandoen `uv` blir funnet.
 
-**2. Start nettsiden** fra mappen der repoet ligger:
+**3. Start nettsiden** fra mappen fra steg 1 (`G68-grande` eller `G68-grande-main`):
 
 ```bash
 cd backend
