@@ -55,3 +55,19 @@ Kristine ba om en gjennomgang av den utsatte lista (`deferred-work.md`) og av de
 
 ### Åpne punkter
 Ingen nye.
+
+## 2026-11-22 kl. 22:12 — Kristine
+
+### Oppgave
+Kristine spurte om punktene i den utsatte lista som ikke er gjort, og ba om en setning under «Kjente begrensninger». Hun sa: «så lenge alle disse har en merknad eller begrunnelse ved seg så er det bra!»
+
+### Plan
+- Forklarte de sju punktene som står igjen (to for 8.2.2 og fem små tekniske ting). Hvert punkt har en begrunnelse (`evidence`) i `deferred-work.md`.
+- La til ett punkt i README for den eneste tingen brukeren kan merke: reglene i brev-prompten.
+
+### Resultat
+- README, «Kjente begrensninger»: koden sjekker ikke at brevet fra Claude følger reglene i `backend/prompts/brev.md`. Punktet viser til de tre kjøringene mot fasiten (kriterium 11) og til den automatiske sjekken av KI-frasene i testsvarene.
+- De fire andre tekniske punktene og etikettsjekken blir stående i den utsatte lista med begrunnelse. De rettes ikke før levering.
+
+### Åpne punkter
+Ingen nye.
