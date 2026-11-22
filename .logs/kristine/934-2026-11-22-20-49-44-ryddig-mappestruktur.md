@@ -36,3 +36,22 @@ Kristine spurte om README har en oppskrift på hele flyten, og senere om det er 
 
 ### Åpne punkter
 Ingen.
+
+## 2026-11-22 kl. 21:55 — Kristine
+
+### Oppgave
+Kristine ba om en gjennomgang av den utsatte lista (`deferred-work.md`) og av det som alt er gjort der.
+
+### Plan
+- Sjekket hvert av de 21 punktene uten «resolved» mot koden, spec-ene og sprint-statusen.
+
+### Resultat
+- 14 punkter var gjort, men ikke merket, og har nå `resolved` med bevis:
+  - Sju var deler av stories eller runder som er flettet: 2.4.2, 2.5.2, 2.7.2, 4.3.2, småtingene og målingen fra retro 4, og runde C i retro 5.
+  - Seks er rettet i koden: tomme punkter (to punkter), logging av KI-feil, `SIDE_FOR_STEG`, testen av `brev-2.json` og docstringen i `ki.py`.
+  - Ett er avklart: Korrektur med case 2.
+- Sju står igjen. To av dem er 8.2.2, og fem er små tekniske ting som ikke rettes før levering: tilbakeknappen rett etter innlogging, flere avsnitt i ett element, reglene i brev-prompten, sammenslåing av setninger på tvers av avsnitt i Korrektur, og etikettsjekken i CI.
+- `deferred-work.md` ligger i `_bmad-output/`, som er git-ignorert, så bare loggen er committet.
+
+### Åpne punkter
+Ingen nye.
