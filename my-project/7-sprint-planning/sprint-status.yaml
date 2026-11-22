@@ -171,7 +171,7 @@ action_items:
     epic: 2
     action: "Prøve resultatsiden og ventetegnet ved 768 og 1280 px"
     owner: "Kristine"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-11-10.md"
   - id: "epic-2-retro-item-13-story-4-5-unike-cv-er-og-annonser-på-tve"
     epic: 2

@@ -1122,3 +1122,8 @@ slik at jeg kan vurdere suksesskriteriene som ikke har automatiske tester.
 **Så** er det gjort to ganger, med dato og resultat i testplanen (NFR-12):
 - første gang før funksjonsstopp, helgen 5.–6. desember, med README slik den er etter Epic 1–6
 - andre gang rett før levering, etter story 8.1
+**Og** skriptene i `backend/soknad/web/static/js/` får ingen nettlesertester. Testplanen har i stedet tabellen «Skriptene som prøves for hånd» med en siste prøve for hånd, README nevner det under «Kjente begrensninger», og PR-en for story 8.2.1 lukker issue #16 (bestemt av Kristine i story 8.2.1)
+**Og** storyen er delt i to: 8.2.1 (testplanen, første prøve fra en ny kopi og prøvene i nettleseren) og 8.2.2 (kriterium 13 og andre prøve fra en ny kopi) (bestemt av Kristine i story 8.2.1)
+**Og** første prøve ble gjort 21. november med README slik den var etter story 8.1, fordi 8.1 ble ferdig først. Hensikten, å finne feil i README tidlig, er den samme (står i testplanen)
+**Og** README sier hvordan koden hentes, med `git clone` eller ZIP-fila fra GitHub, så det er så enkelt som mulig for sensor (bestemt av Kristine i story 8.2.1)
+**Og** kriterium 13 ble gjort 22. november og ikke etter 29. november, fordi sjekkpunktet for hele flyten ble nådd 12. november. Testen følger `my-project/testkjoringer/8-2/kriterium-13-oppskrift.md`, kravene for bestått ble godkjent før testen, og resultatet står som «bestått med en merknad» (bestemt av Kristine i story 8.2.2)
