@@ -25,3 +25,28 @@ Kristine startet story 8.2 «Testplan og prøve fra en ny kopi» med `bmad-build
 - Kristine bestemmer om README skal si hvordan repoet hentes (`git clone` eller ZIP) og at man må `cd G68-grande` etterpå.
 - Story 8.2.2: kriterium 13 og andre prøve fra en ny kopi, uten uv fra før, med tomt mellomlager og i PowerShell.
 - PR-en for 8.2.1 skal ha «Closes #16» (punktet fra 10. november).
+
+## 2026-11-22 kl. 11:52 — Kristine
+
+### Oppgave
+Kristine spurte hva hun skulle gjøre videre (`bmad-help`). Så ba hun om at nettsiden ble åpnet, og om en liste steg for steg for prøvene i nettleseren før PR-en for 8.2.1. Hun rapporterte resultatene og ba om push.
+
+### Plan
+- Starte nettsiden i bakgrunnen (`uv run flask --app soknad run`) og åpne den i nettleseren.
+- En liste i fem runder: Full generering i testmodus med mus, Korrektur i testmodus, bare tastatur, bredder, zoom og etiketter, og ekte KI.
+- Føre resultatene inn i testplanen etter hver runde, og lese tokens og kroner for søknaden med ekte KI fra terminalen.
+- Kristines beslutning om README: det skal være så enkelt som mulig for sensor. Claude anbefalte å vise både `git clone` og ZIP, og hun godkjente teksten.
+
+### Resultat
+- Alt besto i nettleseren 22. november: hele flyten i begge modusene, ekte KI (7 635 tokens inn, 2 377 ut, ca. 0,86 kr), .docx og PDF åpnet, bare tastatur, synlige etiketter, 320, 375, 768 og 1280 px, 200 % zoom og de 8 skriptene. Ført inn i `my-project/testplan.md`, og ingen rader står lenger som «Ikke prøvd ennå».
+- Med bare tastatur går Tab også gjennom knappene i nettleseren før nettsiden. Kristine og Claude ble enige om at det er vanlig i nettlesere, og det står som en merknad i testplanen.
+- Fyrverkeriet med animasjonene av ble prøvd i story 7.4, og `fyrverkeri.js` er ikke endret siden (sjekket i git). «Prøv på nytt» i KI-feilboksen ble ikke prøvd, fordi ingen KI-feil kom.
+- README: nytt steg «1. Hent koden» (`git clone` og `cd G68-grande`, eller «Download ZIP» og mappen `G68-grande-main`). Stegene etter heter nå 2 og 3. Testene som leser README, består (66 tester).
+- Spec-en er kopiert til `my-project/9-koding/` med en rad i `my-project/README.md`. Notatet til refleksjonsrapporten er skrevet i `my-project/8-refleksjonsrapport/notater.md` (mappen er git-ignorert, så det ligger bare lokalt).
+- Commits `b570c26`, `567fa6b` og `1e2bca1`. Branchen er pushet, og [PR #53](https://github.com/IBE160-2026/G68-grande/pull/53) er laget med «Closes #16» og en merknad om KI-feilene. CI kjørte da loggen ble skrevet.
+- I `issues.md` er disse punktene lukket: nettleserprøven, README-beslutningen og «Closes #16». Punktet for 8.2.2 har fått med det nye README-steget.
+- Nettsiden kjører fortsatt i bakgrunnen.
+
+### Åpne punkter
+- Flette PR #53 når CI er grønn, så issue #16 lukkes. Story 8.2 blir stående som «in-progress» til 8.2.2 er ferdig.
+- Story 8.2.2: kriterium 13 og andre prøve fra en ny kopi, også det nye steget «1. Hent koden» (punktet står alt i `issues.md`).
