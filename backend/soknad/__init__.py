@@ -67,8 +67,9 @@ def create_app(test_config=None):
         ANTHROPIC_API_KEY=os.environ.get("ANTHROPIC_API_KEY", ""),
         MAX_CONTENT_LENGTH=MAKS_FORESPORSEL,
         DATABASE=str(Path(app.instance_path) / "brukere.db"),
-        # Innloggings-cookien sendes ikke med fra andre nettsider (story 8.1). Det er ikke et
-        # fullt CSRF-vern, se «Kjente begrensninger» i README.
+        # Innloggings-cookien sendes ikke med når et skjema fra en annen nettside sendes hit
+        # (POST), men den sendes med vanlige lenker fra andre nettsider (GET) (story 8.1, retro
+        # 8, A4). Det er ikke et fullt CSRF-vern, se «Kjente begrensninger» i README.
         SESSION_COOKIE_SAMESITE="Lax",
     )
     if test_config is not None:

@@ -8,9 +8,15 @@ neste avsnitt med, til brevet er så nær 5 000 tegn som mulig. CV-en og annonse
 Kallet går gjennom EkteKI med de samme grensene som nettsiden (KI_TIDSGRENSE og KI_MAKS_TOKENS),
 men uten nytt forsøk (max_retries=0), så et tidsavbrudd ikke skjules av et nytt forsøk.
 
-Kjøres fra backend/ (trenger ANTHROPIC_API_KEY i backend/.env, koster ca. 3 kr):
+Kjøres fra backend/ (trenger ANTHROPIC_API_KEY i backend/.env, koster ca. 3 kr). PYTHONPATH=.
+trengs, fordi pakken soknad ikke er installert, og ellers finner ikke Python den (retro 8, B3).
+I Git Bash:
 
-    uv run python ../my-project/testkjoringer/8-2/maling-5000/maal_korrektur.py
+    PYTHONPATH=. uv run python ../my-project/testkjoringer/8-2/maling-5000/maal_korrektur.py
+
+I PowerShell:
+
+    $env:PYTHONPATH="."; uv run python ../my-project/testkjoringer/8-2/maling-5000/maal_korrektur.py; Remove-Item Env:PYTHONPATH
 """
 
 import json

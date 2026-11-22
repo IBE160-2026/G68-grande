@@ -20,7 +20,7 @@ Søknadsassistenten er en nettside som hjelper studenter med å skrive et søkna
 
 ## Skjermbilder
 
-Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i case 1 (`backend/testdata/case-1-utvikler/`). Nede til venstre står «Teksten behandles av ekstern KI».
+Skjermbildene er tatt med ekte KI (testmodus av) og de fiktive testdataene i case 1 (`backend/testdata/case-1-utvikler/`). Nede til venstre står «Teksten behandles av ekstern KI». Ekte KI kan gi en litt annen nøkkelordliste enn fasiten, så prosenten på resultatsiden er 47 % her, mens testmodus gir 50 %.
 
 **Resultatsiden** med gap-analyse og nøkkelordtreff:
 
@@ -148,7 +148,7 @@ Disse er bestemt i [PRD-en](my-project/2-prd/prd.md), eller funnet mens nettside
 - **En dårlig nøkkelordliste kan ikke byttes ut uten å endre annonsen:** listen brukes igjen så lenge annonsen er lik (store og små bokstaver, mellomrom og tegnsetting teller ikke). Gir KI-en en dårlig liste, får du en ny bare ved å endre ordene i annonsen eller begynne på en ny søknad.
 - **Ingenting lagres mellom øktene.** CV, annonse og brev forsvinner når brukeren logger ut, så brevet må lastes ned.
 - **Det du har lagt inn, ligger i minnet til du logger ut.** Lukker du nettleseren uten å logge ut, blir CV-en, annonsen og brevet liggende i minnet på serveren til nettsiden stoppes.
-- **Nettsiden har ingen CSRF-beskyttelse.** Skjemaene har ingen CSRF-token. Det går an fordi nettsiden bare kjører lokalt på egen PC, men CSRF-beskyttelse må legges til før nettsiden legges på nett. Innloggings-cookien har `SameSite=Lax` (satt i `backend/soknad/__init__.py`). Det stopper bare skjemaer (POST) fra andre nettsteder. Det stopper ikke lenker fra en annen nettside, og ikke andre sider som kjører på din egen PC (`localhost` eller `127.0.0.1`, også på en annen port). En slik lenke til `/last-ned/docx` kan for eksempel merke brevet som lastet ned, og da spør ikke «Logg ut» først.
+- **Nettsiden har ingen CSRF-beskyttelse.** Skjemaene har ingen CSRF-token. Det går an fordi nettsiden bare kjører lokalt på egen PC, men CSRF-beskyttelse må legges til før nettsiden legges på nett. Innloggings-cookien har `SameSite=Lax` (satt i `backend/soknad/__init__.py`). Det stopper bare skjemaer (POST) fra andre nettsteder. Det stopper ikke lenker fra en annen nettside, og ikke andre sider som kjører på din egen PC (`localhost` eller `127.0.0.1`, også på en annen port). En slik lenke til `/last-ned/docx` kan for eksempel merke brevet som lastet ned, og da spør ikke «Logg ut» først. En vanlig lenke til `/` fra en annen nettside lager en ny søknad, og da er både det du har lagt inn og brevet borte.
 - **Brevet skrives bare på norsk** i versjon 1.
 - **Tegn som ikke finnes i skriften, vises ikke i PDF-fila.** PDF-en bruker skriften Noto Sans, som har æ, ø og å og vanlige tegn. Et tegn den ikke har (for eksempel emoji), gir ingen feil, men blir borte i PDF-en. I Word-fila er det med. KI-en skriver vanlig norsk tekst, så det skjer sjelden.
 - **JavaScript-filene har ingen nettlesertester.** De automatiske testene sjekker HTML-en fra serveren og leser skriptene i `backend/soknad/web/static/js/` som tekst, men ingen test kjører dem i en nettleser. Det gjelder blant annet «Lim inn tekst» og søppelbøtta, «i»-boksene, ventetegnet, vinduene og den grønne knappen etter nedlasting. Hvert skript er prøvd for hånd i nettleseren, og tabellen «Skriptene som prøves for hånd» i [testplanen](my-project/testplan.md) viser hvor.

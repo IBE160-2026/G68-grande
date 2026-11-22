@@ -427,6 +427,14 @@ PROV_PA_NYTT_KNAPP = "Prøv på nytt"
 KI_KALL_BRUKT = (
     "Du har brukt alle KI-kallene for denne søknaden. Begynn på en ny søknad fra startsiden."
 )
+# Samme melding når søknaden har et brev: på brevsiden, og på innleggingen og resultatsiden
+# med GA_TIL_BREVET_KNAPP i stedet for «Lag ny søknad», så brevet ikke slettes (retro 8, A1,
+# A6, bestemt av Kristine 22. november 2026).
+KI_KALL_BRUKT_BREV = (
+    "Du har brukt alle KI-kallene for denne søknaden. Last ned brevet, så kan du lage en ny "
+    "søknad i vinduet etter nedlastingen."
+)
+GA_TIL_BREVET_KNAPP = "Gå til brevet"
 
 
 def feiltekst(feil: InndataFeil) -> str:

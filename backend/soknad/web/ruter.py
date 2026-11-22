@@ -593,10 +593,13 @@ def _uten_mappe(filnavn):
 def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
     """Viser innleggingen med det som er lagret i søknaden. feil er i samme rekkefølge som
     feltene på siden, høyst én per felt. ki_feil er teksten til en KI-feil, som står øverst i
-    feilboksen, uten lenker, over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt».
+    feilboksen over «Det du har lagt inn, er ikke borte.» og «Prøv på nytt».
     prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle KI-kallene er brukt
-    (NFR-11). Feltene, tittelen og overskriften er de for modusen (FR-8): i Korrektur står
-    brevfeltet mellom CV og annonse.
+    (NFR-11). Da står lenken «Lag ny søknad» til startsiden i stedet. har_brev er sann når
+    søknaden har et brev (ferdig_brev), og da er lenken «Gå til brevet» med teksten fra
+    brevsiden (KI_KALL_BRUKT_BREV), så brevet ikke slettes uten spørsmål (retro 8, A1). soknad
+    er søknaden etter sett_inndata. Er feltene endret, er brevet alt slettet. Feltene, tittelen
+    og overskriften er de for modusen (FR-8): i Korrektur står brevfeltet mellom CV og annonse.
 
     Et felt med filnavn (en opplastet PDF, story 6.1) vises med filnavnet, og tekstboksen er
     tom. Teksten fra PDF-en blir da bare i økten, og «Sjekk CV-en min» uten ny fil bruker den.
@@ -623,6 +626,7 @@ def _vis_innlegging(soknad, feil, ki_feil=None, prov_pa_nytt=True):
         skjemafeil=skjemafeil,
         ki_feil=ki_feil,
         prov_pa_nytt=prov_pa_nytt,
+        har_brev=ferdig_brev(soknad) is not None,
     )
 
 
@@ -636,7 +640,9 @@ def _vis_resultat(soknad, ki_feil=None, prov_pa_nytt=True):
     (NFR-11). Knappen videre er «Oppdater søknadsbrevet mitt» i Korrektur og «Lag
     søknadsbrevet mitt» ellers. har_brev er sann når søknaden alt har et brev (ferdig_brev).
     Da spør vinduet «Vil du ha et nytt forslag?» før knappen videre sender skjemaet (FR-25,
-    retro 3)."""
+    retro 3). Når alle KI-kallene er brukt, er lenken i feilboksen «Lag ny søknad» til
+    startsiden uten brev, og «Gå til brevet» med teksten fra brevsiden (KI_KALL_BRUKT_BREV)
+    med brev, så brevet ikke slettes uten spørsmål (NFR-11, retro 8, A1)."""
     treff = tell_treff(list(soknad.nokkelord), soknad.cv.tekst)
     korrektur = soknad.modus == Modus.KORREKTUR
     return render_template(
@@ -661,9 +667,11 @@ def _vis_brev(soknad, avsnitt, fil_feil=None, ki_feil=None, prov_pa_nytt=True):
     (UX-DR17). ki_feil er teksten til en KI-feil fra «Nytt
     forslag», som står øverst i feilboksen over «Brevet du hadde, er beholdt.» og «Prøv på
     nytt» (FR-25, FR-28). prov_pa_nytt=False tar bort «Prøv på nytt», for meldingen om at alle
-    KI-kallene er brukt (NFR-11). avsnitt er brevet fra ferdig_brev, det samme som i Word- og
-    PDF-fila: i Full generering med hilsen og navn til slutt, i Korrektur det forbedrede
-    brevet. Overskriften er den for modusen.
+    KI-kallene er brukt (NFR-11). Da står KI_KALL_BRUKT_BREV i boksen i stedet for ki_feil,
+    fordi siden ikke har noen vei til startsiden før brevet er lastet ned (retro 8, A6).
+    avsnitt er brevet fra ferdig_brev, det samme som i Word- og PDF-fila: i Full generering
+    med hilsen og navn til slutt, i Korrektur det forbedrede brevet. Overskriften er den for
+    modusen.
     I Korrektur får malen også visning (korrektur_visning): de samme avsnittene med hver
     setning merket som endret eller uendret, og antallet fjernede setninger, til markeringene
     (FR-23, story 5.3). Filene har ingen markeringer. I Full generering er visning None."""

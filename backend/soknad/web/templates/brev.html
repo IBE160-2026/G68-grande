@@ -36,9 +36,10 @@
 {#- KI-feil fra «Nytt forslag» (FR-25, FR-28): som på resultatsiden. Det gamle brevet står
     under. «Prøv på nytt» står utenfor skjemaet, men sender det med form= som «Nytt forslag»
     og viser ventetegnet. Den spør ikke på nytt, for brukeren har alt sagt ja. Meldingen om at
-    alle KI-kallene er brukt, står i samme boks, men uten knappen (NFR-11). #}
+    alle KI-kallene er brukt, står i samme boks, men uten knappen og med en egen tekst om å
+    laste ned brevet (KI_KALL_BRUKT_BREV, NFR-11, retro 8, A6). #}
 <div class="feilboks" id="feilboks" tabindex="-1" autofocus>
-  <p class="feilboks-overskrift">{{ ki_feil }}</p>
+  <p class="feilboks-overskrift">{{ ki_feil if prov_pa_nytt else tekster.KI_KALL_BRUKT_BREV }}</p>
   <p class="feilboks-tekst">{{ tekster.KI_FEIL_BEHOLDT_BREV }}</p>
   {%- if prov_pa_nytt %}
   <p class="feilboks-knapp">

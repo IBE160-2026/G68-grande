@@ -1232,6 +1232,14 @@ def test_ux_dr7_lenken_i_feilboksen_gir_fokus_etter_tilstanden():
     assert 'limeboks.querySelector("textarea")' in kropp
 
 
+def test_ux_dr7_bare_lenker_til_et_felt_gir_fokus():
+    """UX-DR7/NFR-11 (retro 8, A7): skriptet fanger bare lenker til et felt (href="#...") i
+    feilboksen, ikke «Lag ny søknad» og «Gå til brevet», som er vanlige lenker til en annen
+    side."""
+    assert """document.querySelectorAll('.feilboks a[href^="#"]')""" in JS
+    assert 'querySelectorAll(".feilboks a")' not in JS
+
+
 # --- Laste opp PDF: CSS (story 6.1, NFR-7, UX-DR8) ---
 
 
