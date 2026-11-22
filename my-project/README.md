@@ -104,6 +104,7 @@ Hvert dokument har sin egen mappe, nummerert i den rekkefølgen dokumentene ble 
 | [`testplan.md`](testplan.md) | Testplanen: resultatet for suksesskriteriene som ikke testes automatisk, blant annet tre kjøringer med ekte KI mot fasiten, og hva en søknad koster |
 | [`testkjoringer/`](testkjoringer/) | KI-svarene og loggen (tokens og pris) fra hver kjøring med ekte KI i testplanen, så de kan sjekkes i etterkant. Kjøring 1 er også de ferdige svarene i `backend/testdata/` |
 | [`prompt-logg.md`](prompt-logg.md) | De viktigste forespørslene jeg har gitt KI-en (Claude Code) underveis, for alle dokumentene |
+| [`prompt-logg-kort.md`](prompt-logg-kort.md) | Kort utgave av prompt-loggen for sensor: de viktigste valgene mine og KI-feilene for hele prosjektet |
 | [`todo.md`](todo.md) | TO DO-liste: hva som er gjort og hva som gjenstår, krysses av underveis |
 | [`../.logs/kristine/`](../.logs/kristine/) | Sesjonsloggene: hva som ble gjort i hver arbeidsøkt, og listen over åpne punkter (`issues.md`). Ligger i roten av repoet, fordi faglærers regler sier det |
 

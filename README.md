@@ -196,6 +196,7 @@ Lagene er beskrevet i [arkitekturen](my-project/5-arkitektur/arkitektur.md): `we
 
 - [Oversikt over alle dokumentene](my-project/README.md): hvert dokument med utkast, tilbakemeldinger, gjennomganger og beslutningslogger
 - [Prompt-logg](my-project/prompt-logg.md): de viktigste forespørslene jeg har gitt KI-en underveis
+- [Kort prompt-logg](my-project/prompt-logg-kort.md): de viktigste valgene mine og KI-feilene for hele prosjektet, på én side
 - [Testplan](my-project/testplan.md): testene som gjøres for hånd og med ekte KI, med dato og resultat
 - [Mine valg og KI-feil i UX](my-project/3-ux/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil KI-en gjorde
 - [Mine valg og KI-feil i arkitekturen](my-project/5-arkitektur/mine-valg-og-ki-feil.md): hva jeg bestemte selv, og hvilke feil gjennomgangen fant

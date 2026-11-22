@@ -8,7 +8,7 @@ status: complete
 preset: 'standard'
 validation: 'normal'
 created: '2026-10-27'
-updated: '2026-11-03'
+updated: '2026-11-22'
 claims_verified: 8
 claims_unverified: 11
 claims_overturned: 1
@@ -19,6 +19,15 @@ claims_overturned: 1
 **Beslutningen denne researchen skal støtte:** 1) Stemmer det som står under «Hva gjør dette annerledes» i product brief (åpen telleregel for nøkkelordtreff, Korrektur med markerte endringer, forklaringer for studenter)? 2) Hva gjør konkurrentene bra som vi kan lære av, uten å utvide omfanget?
 
 **Merk:** Analysen ble gjort 27. oktober 2026, etter at product brief, PRD og UX var ferdige. Den viser om valgene holder, og hva vi kan ta med oss videre. Først endret den ingen av dokumentene. 3. november 2026 ble to ting lagt inn i PRD-en med utgangspunkt i analysen: en setning under «Hva gjør dette annerledes» om at ingen av konkurrentene støtter norsk eller KI-korrektur av eget brev med markerte endringer (anbefaling 1), og et krav om at README skal ha kjente begrensninger (NFR-8, anbefaling 6).
+
+## Ny sjekk før levering (22. november 2026)
+
+Påstandene om norsk, korrektur av eget brev og telleregelen ble sjekket på nytt 22. november 2026, med nettsøk og ved å lese sidene på nytt. **Differensieringen holder fortsatt for alle fire.**
+
+- **Norsk:** fortsatt ingen. Jobscan er «only available in English» [5]. Rezi har de samme 9 språkene som før, og norsk er ikke med (siden er oppdatert 13. august 2026) [11]. Kickresume har de samme 8 språkene for oversetting, og skriver «More languages coming soon» [26]. Teal-sidene blokkerte lesing også denne gangen, så Teal står fortsatt som «trolig nei».
+- **KI-korrektur av eget brev med markerte endringer:** fortsatt ingen av de fire. Jobscan lager et nytt brev fra CV-en og annonsen, og «Rewrite» gir et nytt utkast [1]. Hos Rezi kan du laste opp ditt eget brev bare «to keep it organized with your resumes» [8]. Kickresume lar KI-en skrive om deler av brevet den selv har laget [22]. **Nytt hos Teal:** en «Cover Letter Checker» som gir tilbakemelding på struktur, tone og resultater i brevet [36]. Den gir tilbakemelding, men ifølge søkeutdraget skriver den ikke om brevet med markerte endringer. Siden kunne ikke leses, så sikkerheten er lav.
+- **Telleregel:** fortsatt ingen. Jobscan lister de samme faktorene uten vekter (og skriver fortsatt «four priorities», men lister fem) [3]. Rezi har fem kategorier og poengsummer i tre nivåer, men ingen formel [9].
+- **Utenfor de fire:** søket fant et lite verktøy på Product Hunt (Zoevera Cover Letter Checker) som sier at det skriver om brevet med endringene markert [37]. Det er leverandørens egen påstand, verktøyet er på engelsk, og det er ikke en av de fire konkurrentene i analysen. Det viser at ideen med markerte endringer finnes, men ikke på norsk.
 
 ## Sammendrag
 
@@ -142,6 +151,10 @@ Anbefalingene er læringspunkter til arkitektur og stories. Anbefaling 1 og 6 f�
 | [33] | Teal: KI forbedrer bare brev den selv har laget | [Unite.AI](https://www.unite.ai/tealhq-review) | udatert | 2026-10-27 | lav |
 | [34] | Jobscan anbefaler 75 % | [Jobscan](https://jobscan.co/jobscan-tutorial) (søkeutdrag) | udatert | 2026-10-27 | middels |
 | [35] | Teal posisjonering: samlet organisator, «Most tools free» | [Teal](https://www.tealhq.com/pricing) (søkeutdrag) | udatert | 2026-10-27 | middels |
+| [36] | Teal Cover Letter Checker: tilbakemelding på struktur, tone og resultater | [Teal](https://tealhq.com/tools/cover-letter-checker) (søkeutdrag, siden blokkerte lesing) | udatert | 2026-11-22 | lav |
+| [37] | Zoevera: omskriving av søknadsbrev med markerte endringer (leverandørens påstand) | [Product Hunt](https://www.producthunt.com/p/resume-match-bot/resume-zoevera-com-cover-letter-checker) (søkeutdrag) | udatert | 2026-11-22 | lav |
+
+Kildene [1], [3], [5], [8], [9], [11], [22] og [26] ble lest på nytt 22. november 2026 til den nye sjekken.
 
 ## Når påstandene bør sjekkes på nytt
 
@@ -151,10 +164,11 @@ Grenser: funksjoner og pris 3 måneder, brukeromtaler 12 måneder. Datoene er re
 |---|---|
 | Generiske KI-tekster er en gjentakende klage (eldste anmeldelse juli 2025) | 2026-07-01 (allerede passert) |
 | Ingen publiserer telleregel (Rezi-dokumentet er fra juli 2026, men siden ble lest 27. oktober) | 2026-10-16 (allerede passert) |
-| Ingen har KI-korrektur av eget brev med markerte endringer | 2026-11-07 |
-| Ingen støtter norsk | 2026-11-13 |
+| Ingen har KI-korrektur av eget brev med markerte endringer | 2026-11-07 (sjekket på nytt 2026-11-22, holder. Neste: 2027-02-22) |
+| Ingen støtter norsk | 2026-11-13 (sjekket på nytt 2026-11-22, holder. Neste: 2027-02-22) |
+| Ingen publiserer telleregel | sjekket på nytt 2026-11-22, holder. Neste: 2027-02-22 |
 | Teal+ priser | 2026-12-26 |
 | Kickresume, Rezi og Jobscan priser og gratistilbud | 2027-01-27 |
 | Faktura og oppsigelse er den vanligste klagen | 2027-09-01 |
 
-To påstander har passert grensen fordi kildene er eldre, selv om sidene ble lest i dag. Den tidligste nye sjekken er **7. november 2026**. Det passer å sjekke korrektur-påstanden og norsk-påstanden på nytt før innleveringen 15. desember.
+To påstander har passert grensen fordi kildene er eldre, selv om sidene ble lest i dag. Den tidligste nye sjekken er **7. november 2026**. Det passer å sjekke korrektur-påstanden og norsk-påstanden på nytt før innleveringen 15. desember (gjort 22. november 2026, se «Ny sjekk før levering» øverst).
